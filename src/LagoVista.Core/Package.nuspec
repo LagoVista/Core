@@ -18,7 +18,7 @@
   </metadata>
   <files>
     <file src="readme.txt" target="" />
-    <file src="bin\release\*.dll" target="lib\portable-net451+netcore451" />
+    <file src="bin\release\portable46-net451+win81\*.dll" target="lib\portable46-net451+win81" />
     <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
   </files>
 </package>
