@@ -1,5 +1,6 @@
-﻿$children = gci ./ -recurse *.nuspec 
- foreach( $child in $children)
+﻿Param([string]$preRelease,[string]$major,[string]$minor)
+$children = gci ./ -recurse *.nuspec 
+foreach( $child in $children)
 {
     $nuspecFile = gi $child.fullName
     [xml] $content = Get-Content $nuspecFile
