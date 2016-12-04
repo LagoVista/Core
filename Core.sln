@@ -15,6 +15,13 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LagoVista.Core.Authenticati
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LagoVista.Core.Networking", "src\LagoVista.Core.Networking\LagoVista.Core.Networking.xproj", "{AF7596F8-2E2F-4FC1-8516-235C92B3A5AA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{236D95BF-5F2A-4EA8-9E93-86AA7051AA6D}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+		README.md = README.md
+		UpdateNuspecVersion.ps1 = UpdateNuspecVersion.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
