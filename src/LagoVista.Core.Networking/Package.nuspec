@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LagoVista.Core.Networking</id>
+    <version>0.8.1-alpha01121</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>Common Network Functionality and Interfaces for Building Apps with the LagoVista IoT and Devices Framework</description>
+    <releaseNotes>Early Unstable Release</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>HomeAutomation IoT</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="9.0.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="readme.txt" target="" />
+    <file src="bin\release\pcl\*.dll" target="lib\portable-net451+netcore451" />
+    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+  </files>
+</package>

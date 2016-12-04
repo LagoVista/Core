@@ -1,0 +1,5 @@
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\bin\Debug\LagoVista.Common.Net.dll
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\bin\Debug\LagoVista.Common.Net.pdb
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\obj\Debug\LagoVista.Common.Net.csprojResolveAssemblyReference.cache
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\obj\Debug\LagoVista.Common.Net.dll
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\obj\Debug\LagoVista.Common.Net.pdb

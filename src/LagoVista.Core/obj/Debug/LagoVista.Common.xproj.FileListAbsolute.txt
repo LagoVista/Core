@@ -1,0 +1,3 @@
+D:\LagoVista\Common\LagoVista.Common\src\LagoVista.Common\bin\LagoVista.Common.pdb
+D:\LagoVista\Common\LagoVista.Common\src\LagoVista.Common\obj\Debug\LagoVista.Common.dll
+D:\LagoVista\Common\LagoVista.Common\src\LagoVista.Common\obj\Debug\LagoVista.Common.pdb

@@ -1,0 +1,16 @@
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Security.dll
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Security.pdb
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.dll
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Net.dll
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Net.pdb
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.pdb
+D:\LagoVista\Common\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.csprojResolveAssemblyReference.cache
+D:\LagoVista\Common\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.dll
+D:\LagoVista\Common\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.pdb
+D:\LagoVista\Common\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.dll.mdb
+D:\LagoVista\Common\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Security.dll.mdb
+D:\LagoVista\Common\lagovista.common.security\src\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Security.dll
+D:\LagoVista\Common\lagovista.common.security\src\LagoVista.Common.Security\bin\Debug\LagoVista.Common.Security.pdb
+D:\LagoVista\Common\lagovista.common.security\src\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.csprojResolveAssemblyReference.cache
+D:\LagoVista\Common\lagovista.common.security\src\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.dll
+D:\LagoVista\Common\lagovista.common.security\src\LagoVista.Common.Security\obj\Debug\LagoVista.Common.Security.pdb

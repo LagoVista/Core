@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Key_Help" xml:space="preserve">
+    <value>The key is used to identify this item in scripts and must be unique with respect to it's parent. One a key has been assigned, it can not be changed.</value>
+  </data>
+  <data name="Common_Key_Validation" xml:space="preserve">
+    <value>The key must use only letters and numbers, and must be lowercase.</value>
+  </data>
+  <data name="Concurrency_Error" xml:space="preserve">
+    <value>Concurrency Error</value>
+  </data>
+  <data name="Concurrency_ErrorMessage" xml:space="preserve">
+    <value>Your changes could not be applied, this record was updated by [FULL_USER_NAME] at [DATESTAMP] </value>
+  </data>
+  <data name="CreatedByIdInvalidFormat" xml:space="preserve">
+    <value>Created By - Id is invalid format, it must be a 32 chracter string froma  guid without the -'s</value>
+  </data>
+  <data name="CreatedByIdNotNullOrEmpty" xml:space="preserve">
+    <value>Created By - Id Property must not be null or empty</value>
+  </data>
+  <data name="CreatedByNotNull" xml:space="preserve">
+    <value>Created By must not be null</value>
+  </data>
+  <data name="CreatedByTextNotNullOrEmpty" xml:space="preserve">
+    <value>Created By - Text Property must not be null or empty</value>
+  </data>
+  <data name="CreationDateInvalidFormat" xml:space="preserve">
+    <value>Creation Date must be JSON date notation yyyy-MM-ddTHH:mm:ss.ffffZ</value>
+  </data>
+  <data name="CreationDateRequired" xml:space="preserve">
+    <value>Creation Date is Required</value>
+  </data>
+  <data name="Entity_Header_MissingId_System" xml:space="preserve">
+    <value>[NAME] missing id value on property header.</value>
+  </data>
+  <data name="Entity_Header_MissingText_System" xml:space="preserve">
+    <value>[NAME] missing text value on property header.</value>
+  </data>
+  <data name="Entity_Header_Null_System" xml:space="preserve">
+    <value>[NAME] entity header property must not be null</value>
+  </data>
+  <data name="IDIsRequired" xml:space="preserve">
+    <value>Missing ID Value</value>
+  </data>
+  <data name="IDMustNotBeEmptyGuid" xml:space="preserve">
+    <value>ID must not be empty guid 00000000-0000-0000-0000-000000000000</value>
+  </data>
+  <data name="IDMustNotBeZero" xml:space="preserve">
+    <value>ID must not be 0</value>
+  </data>
+  <data name="LastUpdateDateInvalidFormat" xml:space="preserve">
+    <value>Last Update Date must be JSON date notation yyyy-MM-ddTHH:mm:ss.ffffZ</value>
+  </data>
+  <data name="LastUpdatedByIdInvalidFormat" xml:space="preserve">
+    <value>Last Updated By - Id is invalid format it must be a 32 character string from a guid without the -'s</value>
+  </data>
+  <data name="LastUpdatedByIdNotNullOrEmpty" xml:space="preserve">
+    <value>Last Updated By - Id Property must not be null or empty</value>
+  </data>
+  <data name="LastUpdatedByNotNull" xml:space="preserve">
+    <value>Last Updated By must not be null</value>
+  </data>
+  <data name="LastUpdatedByTextNotNullOrEmpty" xml:space="preserve">
+    <value>Last Updated By - Text property must not be null or empty</value>
+  </data>
+  <data name="LastUpdatedDateRequired" xml:space="preserve">
+    <value>Last Update Date is a Required System Field</value>
+  </data>
+  <data name="PropertyIsRequired" xml:space="preserve">
+    <value>[PROPERTYLABEL] is a required field.</value>
+  </data>
+  <data name="SystemMissingProperty" xml:space="preserve">
+    <value>Missing Property [PROPERTYNAME]</value>
+  </data>
+  <data name="Validation_RegEx_Namespace" xml:space="preserve">
+    <value>Namespaces must be at least 6 characters and a maximum of 30.  Namespaces may only contains lower case letters and numbers.</value>
+  </data>
+  <data name="ValueLength_Between" xml:space="preserve">
+    <value>[PROPERTY] must be between [MIN] and [MAX] characters</value>
+  </data>
+  <data name="ValueLength_TooLong" xml:space="preserve">
+    <value>[PROPERTY] must be no more than [MAX] characters</value>
+  </data>
+  <data name="ValueLength_TooShort" xml:space="preserve">
+    <value>[PROPERTY] must be at least [MIN] characters</value>
+  </data>
+</root>

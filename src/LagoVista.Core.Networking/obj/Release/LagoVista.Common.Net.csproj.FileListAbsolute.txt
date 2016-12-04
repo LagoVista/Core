@@ -1,0 +1,4 @@
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\bin\Release\LagoVista.Common.Net.dll
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\bin\Release\LagoVista.Common.Net.pdb
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\obj\Release\LagoVista.Common.Net.dll
+D:\LagoVista\Common\lagovista.common.net\src\LagoVista.Common.Net\obj\Release\LagoVista.Common.Net.pdb
