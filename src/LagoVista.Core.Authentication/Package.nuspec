@@ -2,12 +2,12 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Authentication</id>
-    <version>0.8.1-alpha01121</version>
+    <version>0.8.6-alpha00392</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
-    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>    
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Common Authentication for Building Apps with the LagoVista IoT and Devices Framework</description>
     <releaseNotes>Initial Release</releaseNotes>
     <copyright>Copyright 2016</copyright>
