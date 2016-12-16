@@ -1,9 +1,6 @@
-#:D:\LagoVista\Core\tests\LagoVista.Core.Tests\LagoVista.Core.Tests.xproj
-D:\LagoVista\Core\tests\LagoVista.Core.Tests\LagoVista.Core.Tests.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
-#:D:\LagoVista\Core\src\LagoVista.Core.Networking\LagoVista.Core.Networking.xproj
-D:\LagoVista\Core\src\LagoVista.Core.Networking\LagoVista.Core.Networking.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
-#:D:\LagoVista\Core\src\LagoVista.Core.Authentication\LagoVista.Core.Authentication.xproj
-D:\LagoVista\Core\src\LagoVista.Core.Authentication\LagoVista.Core.Authentication.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
-D:\LagoVista\Core\src\LagoVista.Core.Authentication\LagoVista.Core.Authentication.xproj|D:\LagoVista\Core\src\LagoVista.Core.Networking\LagoVista.Core.Networking.xproj
-D:\LagoVista\Core\src\LagoVista.Core.Networking\LagoVista.Core.Networking.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
-#:D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
+#:D:\LagoVista\Core\src\LagoVista.DocBuilder\LagoVista.DocBuilder.xproj
+D:\LagoVista\Core\src\LagoVista.DocBuilder\LagoVista.DocBuilder.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
+#:D:\LagoVista\Core\tests\LagoVista.DocBuilder.Tests\LagoVista.DocBuilder.Tests.xproj
+D:\LagoVista\Core\tests\LagoVista.DocBuilder.Tests\LagoVista.DocBuilder.Tests.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj
+D:\LagoVista\Core\tests\LagoVista.DocBuilder.Tests\LagoVista.DocBuilder.Tests.xproj|D:\LagoVista\Core\src\LagoVista.DocBuilder\LagoVista.DocBuilder.xproj
+D:\LagoVista\Core\src\LagoVista.DocBuilder\LagoVista.DocBuilder.xproj|D:\LagoVista\Core\src\LagoVista.Core\LagoVista.Core.xproj

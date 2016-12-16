@@ -136,7 +136,6 @@ namespace LagoVista.Core.ServiceCommon
             return GetType().ToString();
         }
 
-
         protected void Log(String message, params object[] args)
         {
             if (ShowDiagnostics)
