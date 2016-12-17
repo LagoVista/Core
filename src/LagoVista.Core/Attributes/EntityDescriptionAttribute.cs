@@ -12,12 +12,15 @@ namespace LagoVista.Common.Attributes
         private String _description;
         private String _domain;
 
-        public EntityDescriptionAttribute(String name = "", String description = "", String domain = "")
+        public EntityDescriptionAttribute(String name = "", String description = "", String domain = null)
         {
             _name = name;
             _description = description;
             _domain = domain;
         }
+
+    //    [DomainDescription()]
+        public const string Foo = "FO";
 
         public String Name { get { return _name; } }
         public String Description { get { return _description; } }

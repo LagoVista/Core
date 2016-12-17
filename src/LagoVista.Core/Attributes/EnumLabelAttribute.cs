@@ -18,4 +18,11 @@ namespace LagoVista.Common.Attributes
         public String Help { get; private set; }
         public Type ResourceType { get; private set; }
     }
+
+    [EntityDescription(domain: null)]
+    public class MyFoo
+    {
+
+    }
+
 }
