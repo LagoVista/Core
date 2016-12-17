@@ -8,10 +8,13 @@ namespace LagoVista.Common.Attributes
     [AttributeUsage(AttributeTargets.Field)]
     public class DomainDescriptionAttribute : Attribute
     {
-        public DomainDescriptionAttribute(String name, String description)
+        private String _name;
+        private String _description;
+
+        public DomainDescriptionAttribute(String Name = "", String Description = "")
         {
-            Name = name;
-            Description = description;
+            _name = Name;
+            _description = Description;
         }
 
         public String Name { get; private set; }

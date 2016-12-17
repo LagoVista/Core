@@ -5,24 +5,22 @@ namespace LagoVista.Common.Attributes
 
     public class EnumLabelAttribute : Attribute
     {
-        public EnumLabelAttribute(String labelResource = "", Type resourceType = null, String id = "", String help = "")
+        private Type _resourceType;
+        private String _labelResource;
+        private String _id;
+        private String _help;
+
+        public EnumLabelAttribute(String LabelResource = "", Type ResourceType = null, String Id = "", String HelpResource = "")
         {
-            LabelResource = labelResource;
-            Id = id;
-            Help = help;
-            ResourceType = resourceType;
+            _labelResource = LabelResource;
+            _id = Id;
+            _resourceType = ResourceType;
+            _help = Help;
         }
 
-        public String LabelResource { get; private set; }
-        public String Id { get; private set; }
-        public String Help { get; private set; }
-        public Type ResourceType { get; private set; }
+        public String LabelResource { get { return _labelResource; } }
+        public String Id { get { return _id; } }
+        public String Help { get { return _help; } }
+        public Type ResourceType { get { return _resourceType; } }
     }
-
-    [EntityDescription(domain: null)]
-    public class MyFoo
-    {
-
-    }
-
 }
