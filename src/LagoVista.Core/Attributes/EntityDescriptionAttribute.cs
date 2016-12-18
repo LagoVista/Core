@@ -19,9 +19,6 @@ namespace LagoVista.Core.Attributes
             _domain = Domain;
         }
 
-    //    [DomainDescription()]
-        public const string Foo = "FO";
-
         public String Name { get { return _name; } }
         public String Description { get { return _description; } }
         public String Domain { get { return _domain; } }
