@@ -9,25 +9,21 @@ namespace LagoVista.Core.Attributes
     [AttributeUsage(AttributeTargets.Field)]
     public class DomainDescriptionAttribute : Attribute
     {
-        private String _name;
-        private String _description;
         private String _key;
-        private VersionInfo _currentVersion;
-        private List<VersionInfo> _versionHistory;
 
-        public DomainDescriptionAttribute(String Name = "", String Description = "", String Key = "", VersionInfo currentVersion = null, List<VersionInfo> versionHistory = null)
+        public DomainDescriptionAttribute(String Key)
         {
-            _name = Name;
-            _description = Description;
             _key = Key;
-            _currentVersion = currentVersion;
-            _versionHistory = versionHistory;
         }
 
-        public String Name { get; private set; }
         public String Key { get; private set; }
-        public String Description { get; private set; }
-        public VersionInfo CurrentVersion { get; private set; }
-        public List<VersionInfo> VersionHistory { get; private set; }
+    }
+
+    public class DomainDescription
+    {
+        public String Description { get; set; }
+        public String Name { get; set; }
+        public VersionInfo CurrentVersion { get; set; }
+        public List<VersionInfo> VersionHistory { get; set; }
     }
 }
