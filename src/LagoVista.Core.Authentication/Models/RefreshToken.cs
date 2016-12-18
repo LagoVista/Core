@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Authentication.Models
 {
     [EntityDescription(Name: "Refresh Token", Domain: Domains.AuthenticationDomain)]
-    public class RefreshToken
+    public class RefreshToken : TableStorageEntity
     {
         public string Subject { get; set; }
         public string ClientId { get; set; }
