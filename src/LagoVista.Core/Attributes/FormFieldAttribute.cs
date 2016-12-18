@@ -22,6 +22,8 @@ namespace LagoVista.Core.Attributes
         Password,
         Email,
         Bool,
+        ChildList,
+        ChildItem,
         NodeScript,
         JsonDateTime,
         NameSpace,
