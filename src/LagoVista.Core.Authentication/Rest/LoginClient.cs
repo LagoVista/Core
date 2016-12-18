@@ -56,7 +56,7 @@ namespace LagoVista.Core.Authentication.Rest
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContents = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<LoginResponse>(responseContents);
+                    var result = JsonConvert.DeserializeObject<AuthResponse>(responseContents);
                     return new APIResponse<ILoginResponse>(result);
                 }
                 else

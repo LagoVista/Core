@@ -9,6 +9,7 @@ namespace LagoVista.Core.Interfaces
     public interface IRemoteLoginModel
     {
         string Email { get; set; }
+        string UserName { get; set; }
         string GrantType { get; set; }
         string Password { get; set; }
         string RefreshToken { get; set; }
