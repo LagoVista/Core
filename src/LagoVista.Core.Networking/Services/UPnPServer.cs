@@ -1,40 +1,38 @@
-﻿using LagoVista.Core.Networking.Interfaces;
+﻿using LagoVista.Core.IOC;
+using LagoVista.Core.Networking.Interfaces;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.ServiceCommon;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking
 {
-    public class SSDPDiscovery : ServiceBase
+    public abstract class SSDPDiscovery : ServiceBase
     {
-        SSDPDiscoveryConfiguration _config;
         const uint BUFFER_SIZE = 8192;
         String _udn;
-        int _metaDataPort;
+        IAPIServer _metaDataServer;
+        INetworkListener _ssdpListener;
 
-        public event EventHandler<String> RESTEvent;
-
-        
         private String GetDiscoveryPayload()
         {
+            var config = GetSSDPConfig();
 
             var bldr = new StringBuilder();
             bldr.AppendLine("HTTP/1.1 200 OK");
-            bldr.AppendLine(string.Format("ST: urn:schemas-upnp-org:device:{0}:1", _config.DeviceType));
+            bldr.AppendLine(string.Format("ST: urn:schemas-upnp-org:device:{0}:1", config.DeviceType));
             bldr.AppendLine("CACHE-CONTROL: max-age=90");
             bldr.AppendLine("EXT");
-            bldr.AppendLine(String.Format("USN: uuid:{0}::urn:schemas-upnp-org:device:{1}:1", _udn, _config.DeviceType));
+            bldr.AppendLine(String.Format("USN: uuid:{0}::urn:schemas-upnp-org:device:{1}:1", _udn, config.DeviceType));
             bldr.AppendLine("SERVER: Win10IoT, UPnP/1.0");
-            bldr.AppendLine(String.Format("LOCATION: http://{0}:{1}/xml/props.xml", PlatformSupport.Services.Network.GetIPV4Address(), _metaDataPort));
+            bldr.AppendLine(String.Format("LOCATION: http://{0}:{1}/xml/props.xml", PlatformSupport.Services.Network.GetIPV4Address(), GetMetaDataServerPort()));
             bldr.AppendLine("");
 
             return bldr.ToString();
         }
+
+
 
         protected async Task WriteResponseAsync(IStreamConnection connection, string contentType, int responseCode, String responseContent)
         {
@@ -44,8 +42,11 @@ namespace LagoVista.Core.Networking
                               "Connection: close\r\n\r\n",
                               responseCode, responseContent.Length, contentType);
 
-            await connection.GetStreamWriterAsync().WriteAsync(header);
-            await connection.GetStreamWriterAsync().WriteAsync(responseContent);
+            using (var writer = await connection.GetStreamWriterAsync())
+            {
+                await writer.WriteAsync(header);
+                await writer.WriteAsync(responseContent);
+            }
         }
 
         private const string DefaultPage = @"<html>
@@ -60,117 +61,145 @@ Path not found.
 
         public SSDPDiscovery()
         {
-       /*     _udn = (string)Windows.Storage.ApplicationData.Current.LocalSettings.Values["UDN"];
+            /*     _udn = (string)Windows.Storage.ApplicationData.Current.LocalSettings.Values["UDN"];
+                 if (String.IsNullOrEmpty(_udn))
+                     _udn = Guid.NewGuid().ToString();
+
+                 Windows.Storage.ApplicationData.Current.LocalSettings.Values["UDN"] = _udn;
+
+                 _ssdpDiscoveryListener = new DatagramSocket();
+                 _ssdpDiscoveryListener.MessageReceived += _socket_MessageReceived;
+
+                 _webListener = new StreamSocketListener();
+                 _webListener.ConnectionReceived += ProcessRequestAsync;*/
+        }
+
+
+        public async override Task InitAsync()
+        {
+            _ssdpListener = SLWIOC.Get<INetworkListener>();
+            _ssdpListener.Start();
+            _ssdpListener.ConnectionReceived += _ssdpListener_ConnectionReceived;
+
+            _metaDataServer = SLWIOC.Get<IAPIServer>();
+
+            _udn = await PlatformSupport.Services.Storage.GetKVPAsync<String>("UDN");
             if (String.IsNullOrEmpty(_udn))
+            {
                 _udn = Guid.NewGuid().ToString();
-
-            Windows.Storage.ApplicationData.Current.LocalSettings.Values["UDN"] = _udn;
-
-            _ssdpDiscoveryListener = new DatagramSocket();
-            _ssdpDiscoveryListener.MessageReceived += _socket_MessageReceived;
-
-            _webListener = new StreamSocketListener();
-            _webListener.ConnectionReceived += ProcessRequestAsync;*/
-        }
-
- /*       public void InitAsync()
-        {
-            
-        }
-
-        private void _ssdpDiscoveryListener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
-        {
-        }
-
-        private async Task SendDeviceInfo(HostName ip, String port, IOutputStream outputStream, DatagramSocket originalSocket)
-        {
-            LogDetails("Sending SSDP Device Response To: {0}:{1}", ip, port);
-
-            try
-            {
-                var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(GetDiscoveryPayload(), Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
-                await outputStream.WriteAsync(buffer);
+                await PlatformSupport.Services.Storage.StoreKVP("UDN", _udn);
             }
-            catch (Exception ex)
-            {
-                LogException("SendDeviceInfo", ex);
 
-                if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
-                    LogException("SendDeviceInfo.Hesult", new Exception("Unknown Error" + ex.HResult));
+            await base.InitAsync();
+        }
+
+        private async void _ssdpListener_ConnectionReceived(object sender, IStreamConnection connection)
+        {
+            using (var writer = await connection.GetStreamWriterAsync())
+            {
+                await writer.WriteAsync(GetDiscoveryPayload());
             }
         }
 
+        /*       public void InitAsync()
+               {
 
-        private async void _socket_MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
-        {
-            var result = args.GetDataStream();
-            var resultStream = result.AsStreamForRead(1024);
+               }
 
-            using (var reader = new StreamReader(resultStream))
-            {
-                var text = await reader.ReadToEndAsync();
+               private void _ssdpDiscoveryListener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+               {
+               }
 
-                if (text.StartsWith("M-SEARCH"))
-                {
-                    var outputStream = await sender.GetOutputStreamAsync(args.RemoteAddress, args.RemotePort);
+               private async Task SendDeviceInfo(HostName ip, String port, IOutputStream outputStream, DatagramSocket originalSocket)
+               {
+                   LogDetails("Sending SSDP Device Response To: {0}:{1}", ip, port);
 
-                    LogDetails(text);
-                    await SendDeviceInfo(args.RemoteAddress, args.RemotePort, outputStream, sender);
-                }
+                   try
+                   {
+                       var buffer = Windows.Security.Cryptography.CryptographicBuffer.ConvertStringToBinary(GetDiscoveryPayload(), Windows.Security.Cryptography.BinaryStringEncoding.Utf8);
+                       await outputStream.WriteAsync(buffer);
+                   }
+                   catch (Exception ex)
+                   {
+                       LogException("SendDeviceInfo", ex);
 
-            }
-        }
+                       if (SocketError.GetStatus(ex.HResult) == SocketErrorStatus.Unknown)
+                           LogException("SendDeviceInfo.Hesult", new Exception("Unknown Error" + ex.HResult));
+                   }
+               }
 
 
-        public async void MakeDiscoverable(int metaDataPort, SSDPDiscoveryConfiguration config)
-        {
-            _config = config;
+               private async void _socket_MessageReceived(DatagramSocket sender, DatagramSocketMessageReceivedEventArgs args)
+               {
+                   var result = args.GetDataStream();
+                   var resultStream = result.AsStreamForRead(1024);
 
-            _metaDataPort = metaDataPort;
-            await _webListener.BindServiceNameAsync(metaDataPort.ToString());
-            await _ssdpDiscoveryListener.BindEndpointAsync(null, "1900");
-            _ssdpDiscoveryListener.JoinMulticastGroup(new HostName("239.255.255.250"));
-        }
+                   using (var reader = new StreamReader(resultStream))
+                   {
+                       var text = await reader.ReadToEndAsync();
 
-        private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
-        {
-            var socket = args.Socket;
+                       if (text.StartsWith("M-SEARCH"))
+                       {
+                           var outputStream = await sender.GetOutputStreamAsync(args.RemoteAddress, args.RemotePort);
 
-            try
-            {
-                var request = new StringBuilder();
-                using (var input = socket.InputStream)
-                {
-                    var data = new byte[BUFFER_SIZE];
-                    var buffer = data.AsBuffer();
-                    var dataRead = BUFFER_SIZE;
-                    while (dataRead == BUFFER_SIZE)
-                    {
-                        await input.ReadAsync(buffer, BUFFER_SIZE, InputStreamOptions.Partial);
-                        request.Append(Encoding.UTF8.GetString(data, 0, data.Length));
-                        dataRead = buffer.Length;
-                    }
-                }
+                           LogDetails(text);
+                           await SendDeviceInfo(args.RemoteAddress, args.RemotePort, outputStream, sender);
+                       }
 
-                using (var output = socket.OutputStream)
-                {
-                    if (request.ToString().ToLower().Contains("favicon"))
-                        await WriteResponseAsync(socket, "text", 404, "NOT FOUND");
-                    else
-                    {
-                        var requestMethod = request.ToString().Split('\n')[0];
-                        var requestParts = requestMethod.Split(' ');
+                   }
+               }
 
-                        await Process(socket, requestParts[0], requestParts[1]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogException("ProcessRequestAsync", ex);
-            }
-        }
-        */
+
+               public async void MakeDiscoverable(int metaDataPort, SSDPDiscoveryConfiguration config)
+               {
+                   _config = config;
+
+                   _metaDataPort = metaDataPort;
+                   await _webListener.BindServiceNameAsync(metaDataPort.ToString());
+                   await _ssdpDiscoveryListener.BindEndpointAsync(null, "1900");
+                   _ssdpDiscoveryListener.JoinMulticastGroup(new HostName("239.255.255.250"));
+               }
+
+               private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+               {
+                   var socket = args.Socket;
+
+                   try
+                   {
+                       var request = new StringBuilder();
+                       using (var input = socket.InputStream)
+                       {
+                           var data = new byte[BUFFER_SIZE];
+                           var buffer = data.AsBuffer();
+                           var dataRead = BUFFER_SIZE;
+                           while (dataRead == BUFFER_SIZE)
+                           {
+                               await input.ReadAsync(buffer, BUFFER_SIZE, InputStreamOptions.Partial);
+                               request.Append(Encoding.UTF8.GetString(data, 0, data.Length));
+                               dataRead = buffer.Length;
+                           }
+                       }
+
+                       using (var output = socket.OutputStream)
+                       {
+                           if (request.ToString().ToLower().Contains("favicon"))
+                               await WriteResponseAsync(socket, "text", 404, "NOT FOUND");
+                           else
+                           {
+                               var requestMethod = request.ToString().Split('\n')[0];
+                               var requestParts = requestMethod.Split(' ');
+
+                               await Process(socket, requestParts[0], requestParts[1]);
+                           }
+                       }
+                   }
+                   catch (Exception ex)
+                   {
+                       LogException("ProcessRequestAsync", ex);
+                   }
+               }
+               */
+
 
         private async Task Process(IStreamConnection socket, String method, String path)
         {
@@ -194,8 +223,14 @@ Path not found.
             return true;
         }
 
+        protected abstract SSDPDiscoveryConfiguration GetSSDPConfig();
+
+        protected abstract int GetMetaDataServerPort();
+
         private String GetDeviceProps()
         {
+            var _config = GetSSDPConfig();
+
             String _deviceXML =
           @"<?xml version=""1.0""?>
 <root xmlns=""urn:schemas-upnp-org:device-1-0"" >
@@ -236,5 +271,7 @@ Path not found.
 
             return _deviceXML;
         }
+
+
     }
 }

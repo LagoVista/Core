@@ -14,8 +14,8 @@ namespace LagoVista.Core.Networking.Interfaces
 
     public interface IStreamConnection : IDisposable
     {
-        IStreamWriter GetStreamWriterAsync();
-        IStreamReader GetStreamReaderAsync();
+        Task<IStreamWriter> GetStreamWriterAsync();
+        Task<IStreamReader> GetStreamReaderAsync();
         Task<bool> ConnectAsync(ConnectionTypes connectionType);
         Task CloseAsync();
         bool IsConnected { get; }

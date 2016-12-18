@@ -34,7 +34,7 @@ namespace LagoVista.Core.Networking.Interfaces
 
     }
 
-    public interface IWebServer
+    public interface IAPIServer
     {
         event EventHandler<HttpRequestMessage> MessageReceived;
 

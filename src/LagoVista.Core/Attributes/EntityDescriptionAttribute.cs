@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LagoVista.Common.Attributes
+namespace LagoVista.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class EntityDescriptionAttribute : Attribute

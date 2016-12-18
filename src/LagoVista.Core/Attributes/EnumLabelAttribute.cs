@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LagoVista.Common.Attributes
+namespace LagoVista.Core.Attributes
 {
 
     public class EnumLabelAttribute : Attribute
