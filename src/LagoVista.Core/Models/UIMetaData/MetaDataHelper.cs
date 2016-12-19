@@ -10,8 +10,8 @@ namespace LagoVista.Core.Models.UIMetaData
         static MetaDataHelper _instance = new MetaDataHelper();
         public static MetaDataHelper Instance { get { return _instance; } }
 
-        public List<Assembly> _assemblies = new List<Assembly>();
-        public Dictionary<string, DomainDescription> _domains = new Dictionary<string, DomainDescription>();
+        private List<Assembly> _assemblies = new List<Assembly>();
+        private Dictionary<string, DomainDescription> _domains = new Dictionary<string, DomainDescription>();
 
         public void RegisterAssembly(Assembly assembly)
         {
@@ -42,5 +42,7 @@ namespace LagoVista.Core.Models.UIMetaData
             }
             _assemblies.Add(assembly);
         }
+
+         public List<DomainDescription> Domains { get { return _domains.Values.ToList(); } }
     }
 }
