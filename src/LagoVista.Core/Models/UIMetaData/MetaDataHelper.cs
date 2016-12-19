@@ -23,8 +23,10 @@ namespace LagoVista.Core.Models.UIMetaData
                 {
                     if(property.PropertyType == typeof(DomainDescription))
                     {
-                        var domainDescription = property.GetValue(null) as DomainDescription;
-                        _domains.Add(domainDescription.Name, domainDescription);
+                        var attrDomainDescription = property.GetCustomAttribute<DomainDescriptionAttribute>();
+
+                        var domainDescription = property.GetValue(null,null) as DomainDescription;
+                        _domains.Add(attrDomainDescription.Key, domainDescription);
                     }
                 }
             }

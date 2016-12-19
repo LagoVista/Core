@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Attributes
 {
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class DomainDescriptionAttribute : Attribute
     {
         private String _key;
@@ -16,6 +17,6 @@ namespace LagoVista.Core.Attributes
             _key = Key;
         }
 
-        public String Key { get; private set; }
+        public String Key { get { return _key; } }
     }
 }

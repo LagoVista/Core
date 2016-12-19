@@ -59,7 +59,7 @@ namespace LagoVista.Core.Attributes
         private string _compareTo;
         private string _pickerFor;
         private string _compareToMsgResource;
-        private string _namespceUniqueMessageResource;
+        private string _namespaceUniqueMessageResource;
         private FieldTypes _fieldType;
         private string _pickerType;
         private NamespaceTypes _namespaceType;
@@ -102,7 +102,7 @@ namespace LagoVista.Core.Attributes
             _maxLength = MaxLength < 0 ? (int?)null : MaxLength;
             _compareTo = CompareTo;
             _compareToMsgResource = CompareToMsgResource;
-            _namespceUniqueMessageResource = NamespaceUniqueMessageResource;
+            _namespaceUniqueMessageResource = NamespaceUniqueMessageResource;
             _namespaceType = NamespaceType;
            
         }
@@ -112,7 +112,7 @@ namespace LagoVista.Core.Attributes
         public String HelpResource { get { return _helpResource; } }
         public String LabelDisplayResource { get { return _labelDisplayResource; } }
         public String RequiredMessageResource { get {return _requiredMessageResources; } }
-        public String NamespaceUniqueMessageResource { get { return _namespceUniqueMessageResource; } }
+        public String NamespaceUniqueMessageResource { get { return _namespaceUniqueMessageResource; } }
         public String RegExValidation { get { return _regExValidation; } }
         public String RegExValidationMessageResource { get { return _regExValidationMessageResource; } }
         public bool IsRequired { get { return _isRequired; } }

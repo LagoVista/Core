@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using static LagoVista.Core.Attributes.EntityDescriptionAttribute;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
@@ -11,6 +12,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public static EntityDescription Create(Type entityType, EntityDescriptionAttribute attr)
         {
             var entityDescription = new EntityDescription();
+            entityDescription.Elements = new List<FormField>();
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -34,10 +36,14 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.UserHelp = userHelpProperty.GetValue(userHelpProperty.DeclaringType, null) as String;
 
             entityDescription.DomainName = attr.Domain;
-            entityDescription.Elements = new List<FormField>();
+            
+
+            entityDescription.EntityType = attr.EntityType;
 
             return entityDescription;
         }
+
+        public EntityTypes EntityType { get; set; }
 
         public String Name { get; set; }
         public String Description { get; set; }
