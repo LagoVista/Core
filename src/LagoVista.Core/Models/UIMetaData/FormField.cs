@@ -22,7 +22,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string RegExMessage { get; private set; }
         public String Name { get; private set; }
         public String Value { get; private set; }
-
+        public bool IsUserEditable { get; private set; }
+        public String DataType { get; private set; }
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
         
@@ -50,6 +51,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
+            field.IsUserEditable = attr.IsUserEditable;
             field.FieldType = attr.FieldType.ToString();
             field.Name = name;
             field.MinLength = attr.MinLength;

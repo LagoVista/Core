@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Utils
+namespace LagoVista.Core.Networking.Models
 {
     public class JSONRPCMessage
     {

@@ -18,23 +18,4 @@ namespace LagoVista.Core.Attributes
 
         public String Key { get; private set; }
     }
-
-    public class DomainDescription
-    {
-        public String Description { get; set; }
-        public String Name { get; set; }
-        public VersionInfo CurrentVersion { get; set; }
-        public List<VersionInfo> VersionHistory { get; set; }
-
-        public enum DomainTypes
-        {
-            Dto,
-            BusinessObject,
-            Storage,
-            UserInterface
-        }
-
-        public DomainTypes DomainTyep { get; set; }
-
-    }
 }
