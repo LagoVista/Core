@@ -22,9 +22,8 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
-            entityDescription.ClassName = entityType.Name;
+            entityDescription.Name = entityType.Name;
             entityDescription.Description = attr.Description;
-            entityDescription.Name = attr.Name;
             entityDescription.DomainName = attr.Domain;
             entityDescription.UserHelp = attr.UserHelp;
             entityDescription.Title = attr.Title;
@@ -33,7 +32,6 @@ namespace LagoVista.Core.Models.UIMetaData
             return entityDescription;
         }
 
-        public String ClassName { get; set; }
         public String Name { get; set; }
         public String Description { get; set; }
         public String DomainName { get; set; }
