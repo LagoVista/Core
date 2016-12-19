@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Authentication.Models
 {
-    [EntityDescription(Name: "Refresh Token", Domain: Domains.AuthenticationDomain)]
+//    [EntityDescription(Name: "Refresh Token", Domain: Domains.AuthenticationDomain)]
     public class RefreshToken : TableStorageEntity
     {
         public string Subject { get; set; }

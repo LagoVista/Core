@@ -9,28 +9,25 @@ namespace LagoVista.Core.Attributes
     public class EntityDescriptionAttribute : Attribute
     {
         Type _resourceType;
-
-        private String _name;
-        private String _description;
+        
+        private String _descriptionResource;
         private String _domain;
-        private String _title;
-        private String _userHelp;
+        private String _titleResource;
+        private String _userHelpResource;
 
-        public EntityDescriptionAttribute(String Name = "", String Description = "", String Domain = null, String Title="", String UserHelp="", Type ResourceType = null)
+        public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, Type ResourceType)
         {
-            _name = Name;
-            _description = Description;
-            _title = Title;
-            _userHelp = UserHelp;
+            _descriptionResource = DescriptionResource;
+            _titleResource = TitleResource;
+            _userHelpResource = UserHelpResource;
             _domain = Domain;
             _resourceType = ResourceType;
         }
-
-        public String Name { get { return _name; } }
-        public String Description { get { return _description; } }
+        
+        public String DescriptionResource { get { return _descriptionResource; } }
         public String Domain { get { return _domain; } }
-        public String UserHelp { get { return _userHelp; } }
-        public String Title { get { return _title; } }
+        public String UserHelpResource { get { return _userHelpResource; } }
+        public String TitleResource { get { return _titleResource; } }
         public Type ResourceType { get { return _resourceType; } }
     }
 }

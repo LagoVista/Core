@@ -21,12 +21,19 @@ namespace LagoVista.Core.Models.UIMetaData
                     entityDescription.Elements.Add(FormField.Create(property.Name.ToLower(), fieldAttributes.First()));
                 }
             }
-
+           
             entityDescription.Name = entityType.Name;
-            entityDescription.Description = attr.Description;
+
+            var titleProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.DescriptionResource);
+            entityDescription.Title = titleProperty.GetValue(titleProperty.DeclaringType, null) as String;
+
+            var descriptionProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.DescriptionResource);
+            entityDescription.Description = descriptionProperty.GetValue(descriptionProperty.DeclaringType, null) as String;
+
+            var userHelpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.DescriptionResource);
+            entityDescription.UserHelp = userHelpProperty.GetValue(userHelpProperty.DeclaringType, null) as String;
+
             entityDescription.DomainName = attr.Domain;
-            entityDescription.UserHelp = attr.UserHelp;
-            entityDescription.Title = attr.Title;
             entityDescription.Elements = new List<FormField>();
 
             return entityDescription;

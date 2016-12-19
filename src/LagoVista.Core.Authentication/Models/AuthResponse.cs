@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Authentication.Models
 {
-    [EntityDescription(Name: "Authentication Response", Description: "The Authentication Response will be returned from the server in give a authentication reqeust.", Domain: Domains.AuthenticationDomain)]
+ //   [EntityDescription(Name: "Authentication Response", Description: "The Authentication Response will be returned from the server in give a authentication reqeust.", Domain: Domains.AuthenticationDomain)]
 
     public class AuthResponse : ILoginResponse
     {

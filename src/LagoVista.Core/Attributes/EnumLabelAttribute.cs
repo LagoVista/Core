@@ -7,20 +7,20 @@ namespace LagoVista.Core.Attributes
     {
         private Type _resourceType;
         private String _labelResource;
-        private String _id;
-        private String _help;
+        private String _key;
+        private String _helpResource;
 
-        public EnumLabelAttribute(String LabelResource = "", Type ResourceType = null, String Id = "", String HelpResource = "")
+        public EnumLabelAttribute(String Key, String LabelResource, Type ResourceType, String HelpResource = "")
         {
             _labelResource = LabelResource;
-            _id = Id;
+            _key = Key;
             _resourceType = ResourceType;
-            _help = Help;
+            _helpResource = HelpResource;
         }
 
         public String LabelResource { get { return _labelResource; } }
-        public String Id { get { return _id; } }
-        public String Help { get { return _help; } }
+        public String Key { get { return _key; } }
+        public String HelpResource { get { return _helpResource; } }
         public Type ResourceType { get { return _resourceType; } }
     }
 }
