@@ -13,6 +13,9 @@ namespace LagoVista.Core.Models.UIMetaData
         private List<Assembly> _assemblies = new List<Assembly>();
         private Dictionary<string, DomainDescription> _domains = new Dictionary<string, DomainDescription>();
 
+        private List<EntityDescription> _entities = new List<EntityDescription>();
+        private List<EntitySummary> _entitySummaries = new List<EntitySummary>();
+
         public void RegisterAssembly(Assembly assembly)
         {
             foreach (var type in assembly.DefinedTypes)
@@ -39,11 +42,17 @@ namespace LagoVista.Core.Models.UIMetaData
                 {
                     var entityDescription = EntityDescription.Create(type.AsType(), attr);
                     entityDescription.Domain = _domains[entityDescription.DomainName];
+                    _entities.Add(entityDescription);
+                    _entitySummaries.Add(EntitySummary.Create(entityDescription));
                 }
             }
             _assemblies.Add(assembly);
         }
 
          public List<DomainDescription> Domains { get { return _domains.Values.ToList(); } }
+
+        public List<EntityDescription> Entities { get { return _entities; } }
+
+        public List<EntitySummary> EntitySummaries { get { return _entitySummaries; } }
     }
 }

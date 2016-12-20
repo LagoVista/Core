@@ -9,7 +9,7 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         public DomainDescription()
         {
-            Entities = new List<EntityDescription>();
+
         }
 
         public String Key { get; set; }
@@ -24,11 +24,11 @@ namespace LagoVista.Core.Models.UIMetaData
             Dto,
             BusinessObject,
             Storage,
-            UserInterface
+            UserInterface,
+            Service,
+            Manager
         }
 
         public DomainTypes DomainType { get; set; }
-
-        public List<EntityDescription> Entities { get; private set; }
     }
 }
