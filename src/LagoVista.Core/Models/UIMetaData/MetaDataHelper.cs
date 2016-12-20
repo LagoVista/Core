@@ -26,6 +26,7 @@ namespace LagoVista.Core.Models.UIMetaData
                         var attrDomainDescription = property.GetCustomAttribute<DomainDescriptionAttribute>();
 
                         var domainDescription = property.GetValue(null,null) as DomainDescription;
+                        domainDescription.Key = domainDescription.Key;
                         _domains.Add(attrDomainDescription.Key, domainDescription);
                     }
                 }

@@ -12,6 +12,8 @@ namespace LagoVista.Core.Models.UIMetaData
             Entities = new List<EntityDescription>();
         }
 
+        public String Key { get; set; }
+
         public String Description { get; set; }
         public String Name { get; set; }
         public VersionInfo CurrentVersion { get; set; }
