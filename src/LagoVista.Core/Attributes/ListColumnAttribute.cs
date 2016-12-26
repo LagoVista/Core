@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace LagoVista.Core.Attributes
+{
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class ListColumnAttribute : Attribute
+    {
+        private string _headerResource;
+        private string _helpResource;
+        private int? _ordinal;
+        private bool _visible;
+        private bool _sortable;
+        private TextAlignment _alignment;
+        private string _formatString;
+        private Type _resourceType;
+
+
+        public enum TextAlignment
+        {
+            Left,
+            Center,
+            Right
+        }
+
+        public ListColumnAttribute(String HeaderResource = "", String HelpResources = "", int? Ordinal = null, bool Visible=true, bool Sortable=false, String FormatString = "", TextAlignment Alignment = TextAlignment.Left, Type ResourceType = null)
+        {
+            _headerResource = HeaderResource;
+            _helpResource = HelpResources;
+            _ordinal = Ordinal;
+            _visible = Visible;
+            _sortable = Sortable;
+            _alignment = Alignment;
+            _formatString = FormatString;
+            _resourceType = ResourceType;
+        }
+
+        public String HelpResource { get { return _helpResource; } }
+        public String HeaderResource { get { return _headerResource; } }
+        public int? Ordinal { get { return _ordinal; } }
+        public bool Visible { get { return _visible; } }
+        public bool Sortable { get { return _sortable; } }
+        public TextAlignment Alignment { get { return _alignment; } }
+        public String FormatString { get { return _formatString; } }
+
+        public Type ResourceType { get { return _resourceType; } }
+    }
+}

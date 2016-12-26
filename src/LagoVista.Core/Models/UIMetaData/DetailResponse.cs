@@ -9,6 +9,9 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         private DetailResponse() { }
 
+        public string Title { get; set; }
+        public string Help { get; set; }
+
         public IDictionary<string, FormField> View { get; set; }
 
         public TModel Model { get; set; }
