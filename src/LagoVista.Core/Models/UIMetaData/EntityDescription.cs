@@ -13,6 +13,7 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             var entityDescription = new EntityDescription();
             entityDescription.Elements = new List<FormField>();
+            entityDescription.ListColumns = new List<ListColumn>();
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -21,6 +22,12 @@ namespace LagoVista.Core.Models.UIMetaData
                 if (fieldAttributes.Any())
                 {
                     entityDescription.Elements.Add(FormField.Create(property.Name.ToLower(), fieldAttributes.First()));
+                }
+
+                var listAttributes = property.GetCustomAttributes<ListColumnAttribute>();
+                if(listAttributes.Any())
+                {
+                    entityDescription.ListColumns.Add(ListColumn.Create(property.Name.ToLower(), listAttributes.First()));
                 }
             }
            
@@ -53,5 +60,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public String Title { get; set; }
 
         public List<FormField> Elements { get; private set; }
+
+        public List<ListColumn> ListColumns { get; private set; }
     }
 }
