@@ -26,11 +26,11 @@ namespace LagoVista.Core.Attributes
             Right
         }
 
-        public ListColumnAttribute(String HeaderResource = "", String HelpResources = "", int? Ordinal = null, bool Visible=true, bool Sortable=false, String FormatString = "", TextAlignment Alignment = TextAlignment.Left, Type ResourceType = null)
+        public ListColumnAttribute(String HeaderResource = "", String HelpResources = "", int Ordinal = -1, bool Visible = true, bool Sortable = false, String FormatString = "", TextAlignment Alignment = TextAlignment.Left, Type ResourceType = null)
         {
             _headerResource = HeaderResource;
             _helpResource = HelpResources;
-            _ordinal = Ordinal;
+            _ordinal = Ordinal >= 0 ? Ordinal : (int?)null;
             _visible = Visible;
             _sortable = Sortable;
             _alignment = Alignment;
