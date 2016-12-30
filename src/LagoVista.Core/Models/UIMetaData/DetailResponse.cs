@@ -21,8 +21,13 @@ namespace LagoVista.Core.Models.UIMetaData
             var response = new DetailResponse<TModel>();
             response.Model = model;
             var viewItems = new Dictionary<string, FormField>();
+            var attr = typeof(TModel).GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
+            var entity = EntityDescription.Create(typeof(TModel), attr);
 
-            var properties = typeof(TModel).GetTypeInfo().DeclaredProperties;
+            response.Title = entity.Title;
+            response.Help = entity.UserHelp;
+       
+            var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
             {
                 var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
