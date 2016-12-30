@@ -10,8 +10,9 @@ namespace LagoVista.Core.Tests.UIMetaData
     [EntityDescription(Domains.MetaData1, MetaDataResources.Names.Model3_Title, MetaDataResources.Names.Model3_Help, MetaDataResources.Names.Model3_Description, EntityDescriptionAttribute.EntityTypes.BusinessObject, typeof(MetaDataResources))]
     public class ListModel
     {
-        [ListColumn(Domains.MetaData1, MetaDataResources.Names.Field3_Column_Header)]
+        [ListColumn(MetaDataResources.Names.Field3_Column_Header, ResourceType: (typeof(MetaDataResources)))]
         public String Prop1 { get; set; }
+        [ListColumn(MetaDataResources.Names.Field3_Column_Header, ResourceType:(typeof(MetaDataResources)))]
         public String Prop2 { get; set; }
 
     }

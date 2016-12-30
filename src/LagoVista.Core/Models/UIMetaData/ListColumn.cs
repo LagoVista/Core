@@ -23,10 +23,10 @@ namespace LagoVista.Core.Models.UIMetaData
             var headerProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HeaderResource);
             field.Header = (string)headerProperty.GetValue(headerProperty.DeclaringType, null);
             
-            if(attr.HelpResource != null)
+            if(!String.IsNullOrEmpty(attr.HelpResource))
             {
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
-                field.Help = (string)headerProperty.GetValue(helpProperty.DeclaringType, null);
+                field.Help = (string)helpProperty.GetValue(helpProperty.DeclaringType, null);
             }
 
             field.FieldName = name;

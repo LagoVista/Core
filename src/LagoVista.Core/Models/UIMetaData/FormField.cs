@@ -47,7 +47,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
                 else
                 {
-                    field.RequiredMessage = ValidationResource.PropertyIsRequired.Replace("[FIELDNAME]", field.Label);
+                    field.RequiredMessage = ValidationResource.PropertyIsRequired.Replace(Tokens.PROPERTY_LABEL, field.Label);
                 }
             }
 

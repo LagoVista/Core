@@ -59,7 +59,7 @@ namespace LagoVista.Core.Tests.Resources.Models
 //Models:ValidationResources:FirstNameLabel
 
 		public static string FirstNameLabel { get { return GetResourceString("FirstNameLabel"); } }
-//UIMetaData:MetaDataResources:Enum1_Help
+//UIMetaData:MetaDataResources:BaseField1
 
 		public static class Names
 		{
@@ -121,6 +121,18 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 			return new HtmlString(str);
         }*/
 		
+		public static string BaseField1 { get { return GetResourceString("BaseField1"); } }
+//UIMetaData:MetaDataResources:BaseField1_Help
+
+		public static string BaseField1_Help { get { return GetResourceString("BaseField1_Help"); } }
+//UIMetaData:MetaDataResources:BaseField1_Requied
+
+		public static string BaseField1_Requied { get { return GetResourceString("BaseField1_Requied"); } }
+//UIMetaData:MetaDataResources:BaseField1_WM
+
+		public static string BaseField1_WM { get { return GetResourceString("BaseField1_WM"); } }
+//UIMetaData:MetaDataResources:Enum1_Help
+
 		public static string Enum1_Help { get { return GetResourceString("Enum1_Help"); } }
 //UIMetaData:MetaDataResources:Enum1_Label
 
@@ -212,6 +224,10 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 
 		public static class Names
 		{
+			public const string BaseField1 = "BaseField1";
+			public const string BaseField1_Help = "BaseField1_Help";
+			public const string BaseField1_Requied = "BaseField1_Requied";
+			public const string BaseField1_WM = "BaseField1_WM";
 			public const string Enum1_Help = "Enum1_Help";
 			public const string Enum1_Label = "Enum1_Label";
 			public const string Enum2_Help = "Enum2_Help";
