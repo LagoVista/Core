@@ -21,7 +21,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string RegEx { get; private set; }
         public string RegExMessage { get; private set; }
         public String Name { get; private set; }
-        public String Value { get; private set; }
+        public String Value { get; set; }
         public bool IsUserEditable { get; private set; }
         public String DataType { get; private set; }
         public int? MinLength { get; set; }

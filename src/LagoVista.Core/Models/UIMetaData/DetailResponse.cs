@@ -33,7 +33,15 @@ namespace LagoVista.Core.Models.UIMetaData
                 var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
                 if (fieldAttributes.Any())
                 {
-                    viewItems.Add(property.Name.ToLower(), FormField.Create(property.Name.ToLower(), fieldAttributes.First()));
+                    var field = FormField.Create(property.Name.ToLower(), fieldAttributes.First());
+                    var defaultValue = property.GetValue(model);
+                    if (defaultValue != null)
+                    {
+                        field.Value = defaultValue.ToString();
+                    }
+
+                    var name = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
+                    viewItems.Add(name, field);
                 }
             }
             response.View = viewItems;
