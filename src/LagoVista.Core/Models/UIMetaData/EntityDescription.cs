@@ -21,13 +21,13 @@ namespace LagoVista.Core.Models.UIMetaData
                 var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
                 if (fieldAttributes.Any())
                 {
-                    entityDescription.Elements.Add(FormField.Create(property.Name.ToLower(), fieldAttributes.First()));
+                    entityDescription.Elements.Add(FormField.Create(property.Name, fieldAttributes.First()));
                 }
 
                 var listAttributes = property.GetCustomAttributes<ListColumnAttribute>();
                 if(listAttributes.Any())
                 {
-                    entityDescription.ListColumns.Add(ListColumn.Create(property.Name.ToLower(), listAttributes.First()));
+                    entityDescription.ListColumns.Add(ListColumn.Create(property.Name, listAttributes.First()));
                 }
             }
            
