@@ -27,9 +27,9 @@ namespace LagoVista.Core.Validation
             Errors.Add(new ValidationMessage(error, true));
         }
 
-        public ActionResult<T> ToActionResult<T>(T result)
+        public InvokeResult<T> ToActionResult<T>(T result)
         {
-            return new ActionResult<T>()
+            return new InvokeResult<T>()
             {
                 Errors = Errors,
                 Result = result,
@@ -37,9 +37,9 @@ namespace LagoVista.Core.Validation
             };
         }
 
-        public ActionResult ToActionResult()
+        public InvokeResult ToActionResult()
         {
-            return new ActionResult()
+            return new InvokeResult()
             {
                 Errors = Errors,
                 Warnings = Warnings,
@@ -48,14 +48,14 @@ namespace LagoVista.Core.Validation
 
     }
 
-    public class ActionResult<T> : ValidationResult
+    public class InvokeResult<T> : ValidationResult
     {
         public T Result { get; set; }
 
         
     }
 
-    public class ActionResult : ValidationResult
+    public class InvokeResult : ValidationResult
     {
 
     }
