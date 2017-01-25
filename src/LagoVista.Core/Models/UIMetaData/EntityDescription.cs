@@ -34,13 +34,26 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.Name = entityType.Name;
 
             var titleProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.TitleResource);
-            entityDescription.Title = titleProperty.GetValue(titleProperty.DeclaringType, null) as String;
+            if (titleProperty != null)
+            {
+                entityDescription.Title = titleProperty.GetValue(titleProperty.DeclaringType, null) as String;
+            }
+            else
+            {
+                entityDescription.Title = entityType.Name;
+            }
 
             var descriptionProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.DescriptionResource);
-            entityDescription.Description = descriptionProperty.GetValue(descriptionProperty.DeclaringType, null) as String;
+            if (descriptionProperty != null)
+            {
+                entityDescription.Description = descriptionProperty.GetValue(descriptionProperty.DeclaringType, null) as String;
+            }
 
             var userHelpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
-            entityDescription.UserHelp = userHelpProperty.GetValue(userHelpProperty.DeclaringType, null) as String;
+            if (userHelpProperty != null)
+            {
+                entityDescription.UserHelp = userHelpProperty.GetValue(userHelpProperty.DeclaringType, null) as String;
+            }
 
             entityDescription.DomainName = attr.Domain;
             

@@ -21,7 +21,14 @@ namespace LagoVista.Core.Models.UIMetaData
             var field = new ListColumn();
 
             var headerProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HeaderResource);
-            field.Header = (string)headerProperty.GetValue(headerProperty.DeclaringType, null);
+            if (headerProperty != null)
+            {
+                field.Header = (string)headerProperty.GetValue(headerProperty.DeclaringType, null);
+            }
+            else
+            {
+                field.Header = name;
+            }
             
             if(!String.IsNullOrEmpty(attr.HelpResource))
             {
