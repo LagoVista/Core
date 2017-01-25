@@ -26,6 +26,38 @@ namespace LagoVista.Core.Validation
         {
             Errors.Add(new ValidationMessage(error, true));
         }
+
+        public ActionResult<T> ToActionResult<T>(T result)
+        {
+            return new ActionResult<T>()
+            {
+                Errors = Errors,
+                Result = result,
+                Warnings = Warnings,
+            };
+        }
+
+        public ActionResult ToActionResult()
+        {
+            return new ActionResult()
+            {
+                Errors = Errors,
+                Warnings = Warnings,
+            };
+        }
+
+    }
+
+    public class ActionResult<T> : ValidationResult
+    {
+        public T Result { get; set; }
+
+        
+    }
+
+    public class ActionResult : ValidationResult
+    {
+
     }
 
     public class ValidationMessage
