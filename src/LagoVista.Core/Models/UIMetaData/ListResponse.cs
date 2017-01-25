@@ -27,11 +27,21 @@ namespace LagoVista.Core.Models.UIMetaData
 
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttribute<EntityDescriptionAttribute>();
 
-            var titleProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.TitleResource);
-            response.Title = titleProperty.GetValue(titleProperty.DeclaringType, null) as String;
+            if (attr != null)
+            {
+                var titleProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.TitleResource);
+                response.Title = titleProperty != null ? titleProperty.GetValue(titleProperty.DeclaringType, null) as String : typeof(TModel).Name;
 
-            var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
-            response.Help = titleProperty.GetValue(titleProperty.DeclaringType, null) as String;
+                var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
+                if (helpProperty != null)
+                {
+                    response.Help = helpProperty.GetValue(helpProperty.DeclaringType, null) as String;
+                }
+            }
+            else
+            {
+                response.Title = typeof(TModel).Name;
+            }
 
             var columns = new List<ListColumn>();
             var properties = typeof(TModel).GetRuntimeProperties();
