@@ -44,6 +44,7 @@ namespace LagoVista.Core.Attributes
     public class FormFieldAttribute : Attribute
     {
         Type _resourceType;
+        Type _enumType;
 
         private string _labelDisplayResource;
         private string _columnHeaderDisplayResource;
@@ -83,7 +84,8 @@ namespace LagoVista.Core.Attributes
                                   bool IsRequired = false,
                                   bool IsUserEditable = true,
                                   FieldTypes FieldType = FieldTypes.Text,
-                                  Type ResourceType = null)
+                                  Type ResourceType = null,
+                                  Type EnumType = null)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -104,7 +106,7 @@ namespace LagoVista.Core.Attributes
             _compareToMsgResource = CompareToMsgResource;
             _namespaceUniqueMessageResource = NamespaceUniqueMessageResource;
             _namespaceType = NamespaceType;
-           
+            _enumType = EnumType;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -125,6 +127,7 @@ namespace LagoVista.Core.Attributes
         public int? MinLength { get { return _minLength; } }
         public int? MaxLength { get { return _maxLength; } }
         public NamespaceTypes NamespaceType { get { return _namespaceType; } }
+        public Type EnumType { get { return _enumType; } }
     }
 
     public class SelectListItem
