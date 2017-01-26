@@ -20,9 +20,13 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             var field = new ListColumn();
 
-            var headerProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HeaderResource);
-            if (headerProperty != null)
+            if (!String.IsNullOrEmpty(attr.HeaderResource))
             {
+                if(attr.ResourceType == null)
+                {
+                    throw new NullReferenceException("Missing Resource Type on Property " + name);
+                }
+                var headerProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HeaderResource);
                 field.Header = (string)headerProperty.GetValue(headerProperty.DeclaringType, null);
             }
             else
@@ -32,6 +36,11 @@ namespace LagoVista.Core.Models.UIMetaData
             
             if(!String.IsNullOrEmpty(attr.HelpResource))
             {
+                if (attr.ResourceType == null)
+                {
+                    throw new NullReferenceException("Missing Resource Type on Property " + name);
+                }
+
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
                 field.Help = (string)helpProperty.GetValue(helpProperty.DeclaringType, null);
             }
