@@ -4,16 +4,16 @@ using System.Reflection;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
-    public class EnumLabel
+    public class EnumDescription
     {
         public String Name { get; set; }
         public String Key { get; set; }
         public String Label { get; set; }
         public String Help { get; set; }
 
-        public static EnumLabel Create(EnumLabelAttribute attr, String name)
+        public static EnumDescription Create(EnumLabelAttribute attr, String name)
         {
-            var enumLabel = new EnumLabel();
+            var enumLabel = new EnumDescription();
             enumLabel.Key = attr.Key;
             enumLabel.Name = name;
 
@@ -22,7 +22,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if(!String.IsNullOrEmpty(attr.HelpResource))
             {
-                var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelResource);
+                var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
                 enumLabel.Help = helpProperty.GetValue(helpProperty.DeclaringType, null) as String;
             }
 

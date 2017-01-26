@@ -27,7 +27,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
 
-        public List<EntityHeader> Options { get; set; }
+        public List<EnumDescription> Options { get; set; }
         
         public static  FormField Create(String name, FormFieldAttribute attr)
         {
@@ -59,10 +59,19 @@ namespace LagoVista.Core.Models.UIMetaData
             field.MinLength = attr.MinLength;
             field.MaxLength = attr.MaxLength;
 
-            field.Options = new List<EntityHeader>();
+            field.Options = new List<EnumDescription>();
             if(attr.EnumType != null)
             {
                 var values = Enum.GetValues(attr.EnumType);
+                for (var idx = 0; idx < values.GetLength(0); ++idx)
+                {
+                    var value = values.GetValue(idx).ToString();
+
+                    var enumMember = attr.EnumType.GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == value.ToString()).FirstOrDefault();
+                    var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
+
+                    field.Options.Add(EnumDescription.Create(enumAttr, value));
+                }
             }
 
             if(attr.FieldType == FieldTypes.NameSpace)

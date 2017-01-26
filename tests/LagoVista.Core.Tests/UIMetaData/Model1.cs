@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
 using LagoVista.Core.Tests.Resources.UIMetaData;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace LagoVista.Core.Tests.UIMetaData
         {
             [EnumLabel("ENUM1", MetaDataResources.Names.Enum1_Label, typeof(MetaDataResources), MetaDataResources.Names.Enum1_Help)]
             EnumValue1,
-            [EnumLabel("ENUM1", MetaDataResources.Names.Enum1_Label, typeof(MetaDataResources), MetaDataResources.Names.Enum1_Help)]
+            [EnumLabel("ENUM2", MetaDataResources.Names.Enum2_Label, typeof(MetaDataResources), MetaDataResources.Names.Enum2_Help)]
             EnumValue2,
-            [EnumLabel("ENUM1", MetaDataResources.Names.Enum3_Label, typeof(MetaDataResources), MetaDataResources.Names.Enum3_Help)]
+            [EnumLabel("ENUM3", MetaDataResources.Names.Enum3_Label, typeof(MetaDataResources), MetaDataResources.Names.Enum3_Help)]
             EnumValue3
         }
 
@@ -29,5 +30,9 @@ namespace LagoVista.Core.Tests.UIMetaData
         public String Field3 { get; set; }
         [FormField(LabelResource: MetaDataResources.Names.Field4_Label, ResourceType: typeof(MetaDataResources))]
         public String Field4 { get; set; }
+
+
+        [FormField(LabelResource: MetaDataResources.Names.Field4_Label, FieldType:FieldTypes.Picker, EnumType:typeof(EnumValues), ResourceType: typeof(MetaDataResources))]
+        public EntityHeader EnumField { get; set; }
     }
 }

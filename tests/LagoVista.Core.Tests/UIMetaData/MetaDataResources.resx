@@ -130,22 +130,22 @@
     <value>WaterMark Field One</value>
   </data>
   <data name="Enum1_Help" xml:space="preserve">
-    <value>Enum 1 Help</value>
+    <value>This is the help field on enum One</value>
   </data>
   <data name="Enum1_Label" xml:space="preserve">
-    <value>Enum 1</value>
+    <value>Enum 1 Label</value>
   </data>
   <data name="Enum2_Help" xml:space="preserve">
-    <value>Enum 2 Help</value>
+    <value>A different help field on enum two</value>
   </data>
   <data name="Enum2_Label" xml:space="preserve">
-    <value>Enum 2</value>
+    <value>Label for Enum 2</value>
   </data>
   <data name="Enum3_Help" xml:space="preserve">
-    <value>Enum 3 Help</value>
+    <value>Very different help on enum three</value>
   </data>
   <data name="Enum3_Label" xml:space="preserve">
-    <value>Enum 3 Label</value>
+    <value>Third Enum Label</value>
   </data>
   <data name="Field1_Help" xml:space="preserve">
     <value>This is field 1 help</value>
