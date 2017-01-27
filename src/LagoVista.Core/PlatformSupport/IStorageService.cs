@@ -17,21 +17,21 @@ namespace LagoVista.Core.PlatformSupport
 
     public interface IStorageService
     {
-        Task<Uri> StoreAsync(Stream stream, String fileName,Locations location = Locations.Default, String folder = "");
+        Task<string> StoreAsync(Stream stream, String fileName,Locations location = Locations.Default, String folder = "");
         Task<Stream> Get(Uri rui);
         Task<Stream> Get(String fileName, Locations location = Locations.Default, String folder = "");
         Task<T> GetKVPAsync<T>(String key, T defaultValue = default(T)) where T : class;
         Task StoreKVP<T>(String key, T value) where T : class;
         Task<bool> HasKVPAsync(String key);
         Task ClearKVP(String key);
-        Task StoreAsync<TObject>(TObject instance, string fileName) where TObject : class;
+        Task<string> StoreAsync<TObject>(TObject instance, string fileName) where TObject : class;
         Task<TObject> GetAsync<TObject>(string fileName) where TObject : class;
         Task<String> ReadAllTextAsync(String fileName);
-        Task WriteAllTextAsync(String fileName, string text);
+        Task<string> WriteAllTextAsync(String fileName, string text);
         Task<List<string>> ReadAllLinesAsync(String fileName);
-        Task WriteAllLinesAsync(String fileName, List<string> text);
+        Task<string> WriteAllLinesAsync(String fileName, List<string> text);
         Task<List<string>> ReadAllBytesAsync(String fileName);
-        Task WriteAllBytesAsync(String fileName, List<string> text);
+        Task<string> WriteAllBytesAsync(String fileName, List<string> text);
     }
 }
     
