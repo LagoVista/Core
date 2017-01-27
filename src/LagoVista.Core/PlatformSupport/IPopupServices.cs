@@ -19,6 +19,6 @@ namespace LagoVista.Core.PlatformSupport
 
         Task<String> PromptForStringAsync(String label, String defaultvalue = null, string help = "", bool isRequired = false);
         Task<int?> PromptForIntAsync(String label, int? defaultvalue = null, string help = "", bool isRequired = false);
-        Task<decimal?> PromptForDecimalAsync(String label, decimal? defaultvalue = null, string help = "", bool isRequired = false);
+        Task<double?> PromptForDoubleAsync(String label, double? defaultvalue = null, string help = "", bool isRequired = false);
     }
 }
