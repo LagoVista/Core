@@ -18,7 +18,7 @@ namespace LagoVista.Core.PlatformSupport
         Task<String> ShowSaveFileAsync(string fileMask = "", string defaultFileName = "");
 
         Task<String> PromptForStringAsync(String label, String defaultvalue = "");
-        Task<int> PromptForIntAsync(String label, int defaultvalue = 0);
-        Task<decimal> PromptForDecimalAsync(String label, decimal defaultvalue = 0);
+        Task<int?> PromptForIntAsync(String label, int defaultvalue = 0);
+        Task<decimal?> PromptForDecimalAsync(String label, decimal defaultvalue = 0);
     }
 }
