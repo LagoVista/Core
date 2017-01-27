@@ -39,7 +39,7 @@ namespace LagoVista.Core
         private static readonly char[] captials = new[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
         private static readonly string[] roadTypeAbbreviations = new[] { "ALY.", "ANX.", "ARC.", "AVE.", "BCH.", "BG.", "BGS.", "BLF.", "BLFS.", "BLVD.", "BND.", "BR.", "BRG.", "BRK.", "BRKS.", "BTM.", "BYP.", "BYU.", "CIR.", "CIRS.", "CLB.", "CLF.", "CLFS.", "CMN.", "COR.", "CORS.", "CP.", "CPE.", "CRES.", "CRK.", "CRSE.", "CRST.", "CSWY.", "CT.", "CTR.", "CTRS.", "CTS.", "CURV.", "CV.", "CVS.", "CYN.", "DL.", "DM.", "DR.", "DRS.", "DV.", "EST.", "ESTS.", "EXPY.", "EXT.", "EXTS.", "FALL.", "FLD.", "FLDS.", "FLS.", "FLT.", "FLTS.", "FRD.", "FRDS.", "FRG.", "FRGS.", "FRK.", "FRKS.", "FRST.", "FRY.", "FT.", "FWY.", "GDN.", "GDNS.", "GLN.", "GLNS.", "GRN.", "GRNS.", "GRV.", "GRVS.", "GTWY.", "HBR.", "HBRS.", "HL.", "HLS.", "HOLW.", "HTS.", "HVN.", "HWY.", "I.", "INLT.", "IS.", "ISLE.", "ISS.", "JCT.", "JCTS.", "KNL.", "KNLS.", "KY.", "KYS.", "LAND.", "LCK.", "LCKS.", "LDG.", "LF.", "LGT.", "LGTS.", "LK.", "LKS.", "LN.", "LNDG.", "LOOP.", "MALL.", "MDW.", "MDWS.", "MEWS.", "MHD.", "ML.", "MLS.", "MNR.", "MNRS.", "MSN.", "MT.", "MTN.", "MTNS.", "MTWY.", "NCK.", "OPAS.", "ORCH.", "OVAL.", "PARK.", "PARK.", "PASS.", "PATH.", "PIKE.", "PKWY.", "PKWY.", "PL.", "PLN.", "PLNS.", "PLZ.", "PNE.", "PNES.", "PR.", "PRT.", "PRTS.", "PSGE.", "PT.", "PTS.", "RADL.", "RAMP.", "RD.", "RDG.", "RDGS.", "RDS.", "RIV.", "RNCH.", "ROW.", "RPD.", "RPDS.", "RST.", "RTE.", "RUE.", "RUN.", "SHL.", "SHLS.", "SHR.", "SHRS.", "SKWY.", "SMT.", "SPG.", "SPGS.", "SPUR.", "SQ.", "SQS.", "ST.", "STA.", "STRM.", "STS.", "TER.", "TPKE.", "TRAK.", "TRCE.", "TRL.", "TRWY.", "TUNL.", "UN.", "UNS.", "UPAS.", "VIA.", "VIS.", "VL.", "VLG.", "VLGS.", "VLY.", "VLYS.", "VW.", "VWS.", "WALK.", "WALK.", "WALL.", "WAY.", "WAYS.", "WL.", "WLS.", "XING.", "XRD." };
 
-        private const string JSON_DATE_FORMAT = "yyyy-MM-ddTHH\\:mm\\:ss.ffffZ";
+        private const string JSON_DATE_FORMAT = "yyyy-MM-ddTHH\\:mm\\:ss.fffZ";
 
         public static bool IsEmpty(this string value)
         {
@@ -83,7 +83,7 @@ namespace LagoVista.Core
                 return false;
             }
 
-            return Regex.IsMatch(date, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{4}Z");
+            return Regex.IsMatch(date, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3,4}Z");
         }
 
         public static bool IsValidId(this string value)

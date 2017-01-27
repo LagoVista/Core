@@ -25,6 +25,13 @@ namespace LagoVista.Core.Validation
         public static ValidationResult Validate(IValidateable entity, Actions action = Actions.Any)
         {
             var result = new ValidationResult();
+        
+            if (entity == null)
+            {
+                result.AddSystemError("Null Value Provided");
+                return result;
+            }
+
             ValidateAuditInfo(result, entity);
             ValidateId(result, entity);
 
