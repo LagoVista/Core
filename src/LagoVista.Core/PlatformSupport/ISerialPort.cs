@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,8 +9,7 @@ namespace LagoVista.Core.PlatformSupport
 {
     public interface ISerialPort : IDisposable
     {
-        Task<bool> OpenAsync(String portName, int baudRate);
-        Task<Stream> GetStreamAsync();
+        Task<Stream> OpenAsync(SerialPortInfo serialPortInfo);
         bool IsConnected { get; }
         Task CloseAsync();
     }

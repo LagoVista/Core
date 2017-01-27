@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Models.Drawing
 {
-    public class Point2D
+    public class Point2D<T>
     {
+        public T X { get; set; }
+        public T Y { get; set; }
     }
 }

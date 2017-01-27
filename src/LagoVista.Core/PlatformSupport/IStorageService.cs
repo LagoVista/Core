@@ -25,5 +25,9 @@ namespace LagoVista.Core.PlatformSupport
         Task ClearKVP(String key);
         Task StoreAsync<TObject>(TObject instance, string fileName) where TObject : class;
         Task<TObject> GetAsync<TObject>(string fileName) where TObject : class;
+        Task<String> ReadAllTextAsync(String fileName);
+        Task WriteAllTextAsync(String fileName, string text);
+        Task<List<string>> ReadAllLinesAsync(String fileName);
+        Task WriteAllLinesAsync(String fileName, List<string> text);
     }
 }
