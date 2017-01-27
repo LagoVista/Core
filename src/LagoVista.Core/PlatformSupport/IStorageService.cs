@@ -9,6 +9,7 @@ namespace LagoVista.Core.PlatformSupport
 {
     public enum Locations
     {
+        Default,
         Local,
         Roaming,
         Temp
@@ -16,9 +17,9 @@ namespace LagoVista.Core.PlatformSupport
 
     public interface IStorageService
     {
-        Task<Uri> StoreAsync(Stream stream, Locations location, String fileName, String folder = "");
+        Task<Uri> StoreAsync(Stream stream, String fileName,Locations location = Locations.Default, String folder = "");
         Task<Stream> Get(Uri rui);
-        Task<Stream> Get(Locations location, String fileName, String folder = "");
+        Task<Stream> Get(String fileName, Locations location = Locations.Default, String folder = "");
         Task<T> GetKVPAsync<T>(String key, T defaultValue = default(T)) where T : class;
         Task StoreKVP<T>(String key, T value) where T : class;
         Task<bool> HasKVPAsync(String key);
@@ -31,3 +32,4 @@ namespace LagoVista.Core.PlatformSupport
         Task WriteAllLinesAsync(String fileName, List<string> text);
     }
 }
+    
