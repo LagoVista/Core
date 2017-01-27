@@ -78,7 +78,7 @@ namespace LagoVista.Core
 
         public static bool IsValidJSONDate(this string date)
         {
-            if(date.Length != 25 || date.Length != 24)
+            if(date.Length != 25 && date.Length != 24)
             {
                 return false;
             }
