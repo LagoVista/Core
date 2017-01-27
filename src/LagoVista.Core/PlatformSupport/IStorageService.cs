@@ -30,8 +30,8 @@ namespace LagoVista.Core.PlatformSupport
         Task<string> WriteAllTextAsync(String fileName, string text);
         Task<List<string>> ReadAllLinesAsync(String fileName);
         Task<string> WriteAllLinesAsync(String fileName, List<string> text);
-        Task<List<string>> ReadAllBytesAsync(String fileName);
-        Task<string> WriteAllBytesAsync(String fileName, List<string> text);
+        Task<byte[]> ReadAllBytesAsync(String fileName);
+        Task<string> WriteAllBytesAsync(String fileName, byte[] buffer);
     }
 }
     
