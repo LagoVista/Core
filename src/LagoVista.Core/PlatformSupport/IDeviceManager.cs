@@ -11,6 +11,6 @@ namespace LagoVista.Core.PlatformSupport
     {
         Task<ObservableCollection<SerialPortInfo>> GetSerialPortsAsync();
 
-        Task<ISerialPort> GetSerialPortAysnc(SerialPortInfo portInfo);
+        ISerialPort CreateSerialPort(SerialPortInfo portInfo);
     }
 }
