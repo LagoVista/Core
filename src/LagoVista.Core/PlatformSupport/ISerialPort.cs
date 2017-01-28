@@ -13,6 +13,8 @@ namespace LagoVista.Core.PlatformSupport
         bool IsConnected { get; }
         Task WriteAsync<T>(T contents);
 
+        bool BytesAvailable { get; }
+
         Task<byte?> ReadByteAsync();
         Task<byte[]> ReadBufferAsync();
         Task<string> ReadStringAsync();
