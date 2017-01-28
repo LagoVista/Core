@@ -9,5 +9,10 @@ namespace LagoVista.Core.Models
     {
         public String Id { get; set; }
         public String Name { get; set; }
+
+        public int BaudRate { get; set; }
+        public bool Parity { get; set; }
+        public int DataBits { get; set; }
+        public int StopBits { get; set; }
     }
 }

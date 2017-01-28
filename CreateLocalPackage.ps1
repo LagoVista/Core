@@ -1,8 +1,8 @@
+$scriptPath = Split-Path $MyInvocation.MyCommand.Path
+Set-Location $scriptPath
+
 dotnet restore
 dotnet build ./**/project.json -c release 
-
-$scriptPath = Split-Path $MyInvocation.MyCommand.Path
-Write-Output $scriptPath
 
 . ./UpdateNuspecVersion.ps1 -preRelease alpha -major 0 -minor 8
 
