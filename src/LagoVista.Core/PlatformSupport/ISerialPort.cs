@@ -13,4 +13,5 @@ namespace LagoVista.Core.PlatformSupport
         bool IsConnected { get; }
         Task CloseAsync();
     }
+
 }

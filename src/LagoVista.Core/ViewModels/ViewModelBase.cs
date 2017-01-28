@@ -266,9 +266,10 @@ namespace LagoVista.Core.ViewModels
             set { Set(ref _busyMessage, value); }
         }
 
-        public void LogTelemetry(String msg, params KeyValuePair<string, string>[] args)
+        public void LogTelemetry(String msg, [CallerMemberName] string area = "", params KeyValuePair<string, string>[] args)
         {
-
+            area = $"{this.GetType().Name}_{area}";
+            Logger.Log(LogLevel.Message, area, msg, args);
         }
        
         public virtual void TransitionCompleted()
@@ -284,6 +285,11 @@ namespace LagoVista.Core.ViewModels
         public IPopupServices Popups
         {
             get { return IOC.SLWIOC.Get<IPopupServices>(); }
+        }
+        
+        public ILogger Logger
+        {
+            get { return IOC.SLWIOC.Get<ILogger>(); }
         }
 
         public void CloseScreen()
