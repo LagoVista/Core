@@ -9,8 +9,14 @@ namespace LagoVista.Core.PlatformSupport
 {
     public interface ISerialPort : IDisposable
     {
-        Task<Stream> OpenAsync(SerialPortInfo serialPortInfo);
+        Task<bool> OpenAsync(SerialPortInfo serialPortInfo);
         bool IsConnected { get; }
+        Task WriteAsync<T>(T contents);
+
+        Task<byte?> ReadByteAsync();
+        Task<byte[]> ReadBufferAsync();
+        Task<string> ReadStringAsync();
+         
         Task CloseAsync();
     }
 }
