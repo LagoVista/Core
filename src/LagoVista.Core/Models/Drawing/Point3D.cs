@@ -7,6 +7,11 @@ namespace LagoVista.Core.Models.Drawing
 {
     public class Point3D<T>
     {
+        public Point3D()
+        {
+
+        }
+
         public Point3D(T x, T y, T z)
         {
             X = x;
