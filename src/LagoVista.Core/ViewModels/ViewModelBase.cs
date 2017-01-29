@@ -1,5 +1,5 @@
 ﻿#region License
-/*Copyright (c) 2013, Karl Sparwald
+/*Copyright (c) 2017, Software Logistics, LLC
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that 
