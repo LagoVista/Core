@@ -210,8 +210,7 @@ namespace LagoVista.Core.ViewModels
 
         public IDispatcherServices DispatcherServices
         {
-            get;
-            set;
+            get { return IOC.SLWIOC.Get<IDispatcherServices>(); }
         }
 
         public bool SectionVisibility
