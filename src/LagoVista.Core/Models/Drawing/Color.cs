@@ -5,13 +5,85 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Models.Drawing
 {
-    public interface IColor
+    public class Color
     {
-        byte A { get; set; }
-        byte R { get; set; }
-        byte G { get; set; }
-        byte B { get; set; }
+        public byte A { get; set; }
+        public byte R { get; set; }
+        public byte G { get; set; }
+        public byte B { get; set; }
 
-        String HexString { get; }
+        public String HexString
+        {
+            get
+            {
+                if (A < 0xFF)
+                {
+                    return String.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", A, R, G, B);
+                }
+                else
+                {
+                    return String.Format("#{0:X2}{1:X2}{2:X2}", R, G, B);
+                }
+            }
+        }
+
+        public static Color CreateColor(byte a, byte r, byte g, byte b)
+        {
+            return new Drawing.Color()
+            {
+                A = a,
+                R = r,
+                B = b,
+                G = g,
+            };
+        }
+
+        public static Color CreateColor(byte r, byte g, byte b)
+        {
+            return Color.CreateColor(0xFF, r, g, b);
+        }
+
+        public static Color CreateFromHexString(String color)
+        {
+            try
+            {
+                if (color.Length == 9)
+                {
+                    return new Color()
+                    {
+                        A = Byte.Parse(color.Substring(1, 2), System.Globalization.NumberStyles.HexNumber),
+                        R = Byte.Parse(color.Substring(3, 2), System.Globalization.NumberStyles.HexNumber),
+                        G = Byte.Parse(color.Substring(5, 2), System.Globalization.NumberStyles.HexNumber),
+                        B = Byte.Parse(color.Substring(7, 2), System.Globalization.NumberStyles.HexNumber),
+                    };
+                }
+                else if (color.Length == 7)
+                {
+                    return new Color()
+                    {
+                        A = 0xFF,
+                        R = Byte.Parse(color.Substring(1, 2), System.Globalization.NumberStyles.HexNumber),
+                        G = Byte.Parse(color.Substring(3, 2), System.Globalization.NumberStyles.HexNumber),
+                        B = Byte.Parse(color.Substring(5, 2), System.Globalization.NumberStyles.HexNumber),
+                    };
+                }
+                else if (color.Length == 4)
+                {
+                    return new Color()
+                    {
+                        A = 0xFF,
+                        R = Byte.Parse(color.Substring(1, 1), System.Globalization.NumberStyles.HexNumber),
+                        G = Byte.Parse(color.Substring(2, 1), System.Globalization.NumberStyles.HexNumber),
+                        B = Byte.Parse(color.Substring(3, 1), System.Globalization.NumberStyles.HexNumber),
+                    };
+                }
+                throw new Exception($"Could not parse {color} has hex string of #AARRGGBB, $RRGGBB or $RGB");
+            }
+            catch (Exception)
+            {
+                throw new Exception($"Could not parse {color} has hex string of #AARRGGBB, $RRGGBB or $RGB");
+
+            }
+        }
     }
 }
