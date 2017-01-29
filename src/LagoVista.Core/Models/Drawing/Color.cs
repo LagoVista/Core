@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Models.Drawing
 {
-    public class Color
+    public interface IColor
     {
-        public byte A { get; set; }
-        public byte R { get; set; }
-        public byte G { get; set; }
-        public byte B { get; set; }
+        byte A { get; set; }
+        byte R { get; set; }
+        byte G { get; set; }
+        byte B { get; set; }
+
+        String HexString { get; }
     }
 }
