@@ -1,54 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LagoVista.Core.Commanding
 {
     public class RelayCommand : ICommand
     {
-        #region Events
-
         public event EventHandler CanExecuteChanged;
 
-        #endregion
-
-        #region Fields
-
-        readonly Action _noParamsExecute;
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
-
-
-        #endregion // Fields
-
-        #region Constructors
+        readonly Action _execute;
+        readonly Action<object> _executeParam;
+        readonly Func<object, bool> _canExecuteParam;
+        readonly Func<bool> _canExecute;
 
         public RelayCommand(Action execute)        
         {
-            _noParamsExecute = execute;
+            _execute = execute;
         }
 
         public RelayCommand(Action<object> execute)
-            : this(execute, null)
         {
+            _executeParam = execute;
         }
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
+        {
+            _executeParam = execute;
+            _canExecuteParam = canExecute;
+        }
+
+        public RelayCommand(Action execute, Func<bool> canExecute)
         {
             _execute = execute;
-            this._canExecute = canExecute;
+            _canExecute = canExecute;
         }
 
-        #endregion
-
-        #region ICommand Members
-
-        public bool CanExecute(object parameter)
+        public virtual bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            if(_canExecute != null)
+            {
+                return _canExecute();
+            }
+
+            if(_canExecuteParam != null)
+            {
+                return _canExecuteParam(parameter);
+            }
+
+            return true;
         }
 
         public void RaiseCanExecuteChanged()
@@ -58,13 +56,11 @@ namespace LagoVista.Core.Commanding
 
         public void Execute(object parameter)
         {
-            if (_noParamsExecute != null)
-                _noParamsExecute();
+            if (_executeParam != null && (_canExecuteParam == null || _canExecuteParam(parameter)))
+                _executeParam(parameter);
 
-            if(_execute != null)
-                _execute(parameter);
+            if(_execute != null && (_canExecute == null || _canExecute()))
+                _execute();
         }
-
-        #endregion
     }
 }

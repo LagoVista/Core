@@ -277,6 +277,11 @@ namespace LagoVista.Core.ViewModels
 
         }
 
+        public IDeviceManager DeviceManager
+        {
+            get { return IOC.SLWIOC.Get<IDeviceManager>(); }
+        }
+
         public IStorageService Storage
         {
             get { return IOC.SLWIOC.Get<IStorageService>(); }

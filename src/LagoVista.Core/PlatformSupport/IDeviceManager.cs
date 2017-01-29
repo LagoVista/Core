@@ -10,5 +10,7 @@ namespace LagoVista.Core.PlatformSupport
     public interface IDeviceManager
     {
         Task<ObservableCollection<SerialPortInfo>> GetSerialPortsAsync();
+
+        ISerialPort CreateSerialPort(SerialPortInfo portInfo);
     }
 }
