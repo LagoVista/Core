@@ -14,6 +14,7 @@ namespace LagoVista.Core.PlatformSupport
         public static ITimerFactory TimerFactory { get { return IOC.SLWIOC.Get<ITimerFactory>(); } }
         public static INetworkService Network { get { return IOC.SLWIOC.Get<INetworkService>(); } }
         public static ILogger Logger { get { return IOC.SLWIOC.Get<ILogger>(); } }
+        public static IPopupServices Popups { get { return IOC.SLWIOC.Get<IPopupServices>(); } }
         public static IBindingHelper BindingHelper { get { return IOC.SLWIOC.Get<IBindingHelper>(); } }
         public static IDirectoryServices DirectoryServices { get { return IOC.SLWIOC.Get<IDirectoryServices>(); } }
     }
