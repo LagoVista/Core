@@ -35,6 +35,11 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
+                if (attr.ResourceType == null)
+                {
+                    throw new Exception($"Building Metadata - label is defined, but Resource Type is not defined on {name} {attr.LabelDisplayResource}");
+                }
+
                 var labelProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelDisplayResource);
                 field.Label = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
             }
@@ -44,6 +49,11 @@ namespace LagoVista.Core.Models.UIMetaData
             {
                 if (!String.IsNullOrEmpty(attr.RequiredMessageResource))
                 {
+                    if (attr.ResourceType == null)
+                    {
+                        throw new Exception($"Building Metadata - required message is defined, but Resource Type is not defined on {name} {attr.LabelDisplayResource}");
+                    }
+
                     var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RequiredMessageResource);
                     field.RequiredMessage = (string)validationProperty.GetValue(validationProperty.DeclaringType, null);
                 }
@@ -88,12 +98,22 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if (!String.IsNullOrEmpty(attr.WaterMark))
             {
+                if (attr.ResourceType == null)
+                {
+                    throw new Exception($"Building Metadata - watermark is defined, but Resource Type is not defined on {name} {attr.WaterMark}");
+                }
+
                 var placeholderProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.WaterMark);
                 field.Watermark = placeholderProperty == null ? String.Empty : (string)placeholderProperty.GetValue(placeholderProperty.DeclaringType, null);
             }
 
             if(!String.IsNullOrEmpty(attr.HelpResource))
             {
+                if (attr.ResourceType == null)
+                {
+                    throw new Exception($"Building Metaata - watermark is defined, but Resource Type is not defined on {name} {attr.HelpResource}");
+                }
+
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
                 field.Help = helpProperty == null ? String.Empty : (string)helpProperty.GetValue(helpProperty.DeclaringType, null);
             }
