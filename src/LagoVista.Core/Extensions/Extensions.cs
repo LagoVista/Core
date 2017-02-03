@@ -78,12 +78,12 @@ namespace LagoVista.Core
 
         public static bool IsValidJSONDate(this string date)
         {
-            if(date.Length != 25 && date.Length != 24)
+            if(date.Length <= 25 && date.Length >= 22)
             {
                 return false;
             }
 
-            return Regex.IsMatch(date, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3,4}Z");
+            return Regex.IsMatch(date, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{0,4}Z");
         }
 
         public static bool IsValidId(this string value)
