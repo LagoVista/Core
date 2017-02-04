@@ -8,6 +8,6 @@ namespace LagoVista.Core.Interfaces
     public interface INoSQLEntity
     {
         String DatabaseName { get; set; }
-        String CollectionName { get; set; }
+        String EntityType { get; set; }
     }
 }
