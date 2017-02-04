@@ -179,7 +179,7 @@ namespace LagoVista.Core.Validation
                 }
                 else if (!auditableModel.CreationDate.IsValidJSONDate())
                 {
-                    result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat);
+                    result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat + " " + auditableModel.CreationDate);
                 }
 
                 if (String.IsNullOrEmpty(auditableModel.LastUpdatedDate))
@@ -188,7 +188,7 @@ namespace LagoVista.Core.Validation
                 }
                 else if (!auditableModel.LastUpdatedDate.IsValidJSONDate())
                 {
-                    result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat);
+                    result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate);
                 }
 
                 if (auditableModel.LastUpdatedBy == null)
