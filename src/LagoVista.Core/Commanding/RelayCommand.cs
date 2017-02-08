@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.IOC;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -114,4 +115,67 @@ namespace LagoVista.Core.Commanding
             return new RelayCommand(asyncAction);
         }
     }
+
+    public class RelayCommand<TParam> 
+    {
+        TParam _parameter;
+        Action<TParam> _cmdAction;
+        Func<TParam, bool> _canExecuteParam;
+
+        public event EventHandler CanExecuteChanged;
+
+        public static RelayCommand<TParam> Create(Action<TParam> action, TParam parameter)
+        {
+            return new RelayCommand<TParam>() { _parameter = parameter, _cmdAction = action };
+        }
+
+        public static RelayCommand<TParam> Create(Action<TParam> action, TParam parameter, Func<TParam, bool> canExecute)
+        {
+            return new RelayCommand<TParam>() { _parameter = parameter, _cmdAction = action, _canExecuteParam = canExecute };
+        }        
+
+        public void RaiseCanExecuteChanged()
+        {
+            IDispatcherServices dispatcher;
+            if (SLWIOC.TryResolve(out dispatcher))
+            {
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private bool _enabled = true;
+        public bool Enabled
+        {
+            get { return _enabled; }
+            set
+            {
+                if (_enabled != value)
+                {
+                    _enabled = value;
+                    RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            if (!Enabled)
+                return false;
+
+            if (_canExecuteParam != null)
+                return _canExecuteParam((TParam)parameter);
+
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            _cmdAction((TParam)parameter);
+        }
+    }
+
 }

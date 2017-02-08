@@ -96,6 +96,20 @@ namespace LagoVista.Core.IOC
         }
 
 
+        public static bool TryResolve<T>(out T value) where T : class
+        {
+            if (_registeredInstances.Keys.Contains(typeof(T)))
+            {
+                value = _registeredInstances[typeof(T)] as T;
+                return true;
+            }
+            else
+            {
+                value = null;
+                return false;
+            }
+        }
+
         public static bool TryResolve(Type type, out object value)
         {
             if(_registeredInstances.Keys.Contains(type))
