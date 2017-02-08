@@ -31,6 +31,7 @@ namespace LagoVista.Core.Networking.Models
     {
         public string ServiceType { get; set; }
         public string ServiceId { get; set; }
+        public string SCPDURL { get; set; }
         public string ControlUrl { get; set; }
         public string EventUrl { get; set; }
     }
