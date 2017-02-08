@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.PlatformSupport;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,5 +13,7 @@ namespace LagoVista.Core.Networking.Interfaces
         void RegisterAPIHandler(IApiHandler handler);
 
         bool ShowDiagnostics { get; set; }
+
+        ILogger Logger { get; set; }
     }
 }

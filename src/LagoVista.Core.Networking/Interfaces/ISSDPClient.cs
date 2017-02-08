@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using LagoVista.Core.Networking.Models;
+using LagoVista.Core.PlatformSupport;
 
 namespace LagoVista.Core.Networking.Interfaces
 {
@@ -13,5 +14,7 @@ namespace LagoVista.Core.Networking.Interfaces
         void Cancel();
 
         bool ShowDiagnostics { get; set; }
+
+        ILogger Logger { get; set; }
     }
 }
