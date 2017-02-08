@@ -15,5 +15,7 @@ namespace LagoVista.Core.Networking.Interfaces
         bool ShowDiagnostics { get; set; }
 
         ILogger Logger { get; set; }
+
+        string DefaultPageHtml { get; set; }
     }
 }
