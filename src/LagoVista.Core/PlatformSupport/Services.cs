@@ -8,6 +8,7 @@ namespace LagoVista.Core.PlatformSupport
 {
     public static class Services
     {
+        public static IDeviceManager DeviceManager { get { return IOC.SLWIOC.Get<IDeviceManager>(); } }
         public static IImaging Imaging { get { return IOC.SLWIOC.Get<IImaging>(); } }
         public static IStorageService Storage { get { return IOC.SLWIOC.Get<IStorageService>(); } }
         public static IDispatcherServices DispatcherServices { get { return IOC.SLWIOC.Get<IDispatcherServices>(); } }
