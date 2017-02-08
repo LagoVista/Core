@@ -9,7 +9,7 @@ namespace LagoVista.Core.Networking.Interfaces
     {
         event EventHandler<uPnPDevice> NewDeviceFound;
 
-        Task SsdpQueryAsync(string filter = "ssdp:all", int seconds = 5);
+        Task SsdpQueryAsync(string filter = "ssdp:all", int seconds = 5, int port = 1900);
 
         void Cancel();
 

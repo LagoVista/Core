@@ -10,7 +10,10 @@ namespace LagoVista.Core.Networking.Models
         public UPNPConfiguration()
         {
             Services = new List<UPNPService>();
+            UdpListnerPort = 1900;
         }
+
+        public int UdpListnerPort { get; set; }
 
         public string DeviceType { get; set; }
         public string PresentationUrl { get; set; }
