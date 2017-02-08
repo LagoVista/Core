@@ -4,7 +4,7 @@ using LagoVista.Core.Networking.Models;
 
 namespace LagoVista.Core.Networking.Interfaces
 {
-    public interface ISSDPFinder
+    public interface ISSDPClient
     {
         event EventHandler<uPnPDevice> NewDeviceFound;
 

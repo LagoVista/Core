@@ -22,7 +22,6 @@ namespace LagoVista.Core.Networking.Models
         public string ModelNumber { get; set; }
         public string ModelUrl { get; set; }
         public string SerialNumber { get; set; }
-
         public string DefaultPageHtml { get; set; }
 
         public List<UPNPService> Services { get; private set; }

@@ -17,5 +17,23 @@ namespace LagoVista.Core.Networking.Services
 
             throw new Exception("Nothing registered for type ISSDPServer.");
         }
+
+        public static IWebServer CreateWebServer()
+        {
+            IWebServer webServer;
+            if (SLWIOC.TryResolve(out webServer))
+                return webServer;
+
+            throw new Exception("Nothing registered for type IWebServer.");
+        }
+
+        public static ISSDPClient CreateSSDPClient()
+        {
+            ISSDPClient ssdpClient;
+            if (SLWIOC.TryResolve(out ssdpClient))
+                return ssdpClient;
+
+            throw new Exception("Nothing registered for type ISSDPClient.");
+        }
     }
 }

@@ -167,14 +167,14 @@ namespace LagoVista.Core.Commanding
                 return false;
 
             if (_canExecuteParam != null)
-                return _canExecuteParam((TParam)parameter);
+                return _canExecuteParam(_parameter);
 
             return true;
         }
 
         public void Execute(object parameter)
         {
-            _cmdAction((TParam)parameter);
+            _cmdAction(_parameter);
         }
     }
 

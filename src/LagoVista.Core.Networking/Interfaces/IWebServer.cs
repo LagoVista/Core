@@ -10,5 +10,7 @@ namespace LagoVista.Core.Networking.Interfaces
         void StartServer(int port);
         int Port { get; }
         void RegisterAPIHandler(IApiHandler handler);
+
+        bool ShowDiagnostics { get; set; }
     }
 }
