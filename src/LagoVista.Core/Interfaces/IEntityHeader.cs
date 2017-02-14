@@ -12,9 +12,9 @@ namespace LagoVista.Core.Interfaces
         bool IsEmpty();
     }
 
-    public interface IEntityHeader<T> : IEntityHeader
+    public interface IEntityHeader<T> : IEntityHeader 
     {
         T Value { get; set; }
-        bool HasValue { get; set; }
+        bool HasValue { get; }
     }
 }

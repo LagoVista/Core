@@ -123,4 +123,18 @@ namespace LagoVista.Core.Models
             return (hdr1.Id == hdr2.Id && hdr1.Text == hdr2.Text);
         }
     }
+
+    public class EntityHeader<T> : EntityHeader, IEntityHeader<T>
+    {
+        public bool HasValue
+        {
+            get { return Value == null; }
+        }
+
+        public T Value
+        {
+            get; set;
+        }
+    }
+
 }
