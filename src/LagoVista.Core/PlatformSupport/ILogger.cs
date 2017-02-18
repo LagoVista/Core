@@ -8,7 +8,9 @@ namespace LagoVista.Core.PlatformSupport
 {
     public enum LogLevel
     {
+        UserEntryError,
         Error,
+        UnhandledException,
         Warning,
         Message,
         Verbose,
