@@ -39,6 +39,11 @@ namespace LagoVista.Core.IOC
             _registeredTypes.Add(typeof(I), instanceType);
         }
 
+        public static void Register<I,T>()
+        {
+            _registeredTypes.Add(typeof(I), typeof(T));
+        }
+
         public static TNewInstance Create<TNewInstance>() where TNewInstance : class
         {
             var type = _registeredTypes[typeof(TNewInstance)];

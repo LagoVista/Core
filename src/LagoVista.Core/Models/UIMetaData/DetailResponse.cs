@@ -33,15 +33,16 @@ namespace LagoVista.Core.Models.UIMetaData
                 var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
                 if (fieldAttributes.Any())
                 {
-                    var field = FormField.Create(property.Name.ToLower(), fieldAttributes.First());
+                    var camelCaseName = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
+                    var field = FormField.Create(camelCaseName, fieldAttributes.First());
                     var defaultValue = property.GetValue(model);
                     if (defaultValue != null)
                     {
                         //field.Value = defaultValue.ToString();
                     }
 
-                    var name = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
-                    viewItems.Add(name, field);
+                    
+                    viewItems.Add(camelCaseName, field);
                 }
             }
             response.View = viewItems;

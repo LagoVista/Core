@@ -15,7 +15,6 @@ namespace LagoVista.Core.Commanding
         readonly Action<object> _executeParam;
         readonly Func<object, bool> _canExecuteParam;
         readonly Func<bool> _canExecute;
-        readonly Func<Task> _asyncAction;
 
 
         public RelayCommand(Action execute)
@@ -26,11 +25,6 @@ namespace LagoVista.Core.Commanding
         public RelayCommand(Action<object> execute)
         {
             _executeParam = execute;
-        }
-
-        public RelayCommand(Func<Task> asyncActionte)
-        {
-            _asyncAction = asyncActionte;
         }
 
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
@@ -89,10 +83,6 @@ namespace LagoVista.Core.Commanding
             {
                 _execute();
             }
-            else if (_asyncAction != null)
-            {
-                _asyncAction.Invoke();
-            }
         }
 
         public static RelayCommand Create(Action<object> action)
@@ -108,12 +98,7 @@ namespace LagoVista.Core.Commanding
         public static RelayCommand Create(Action action)
         {
             return new RelayCommand(action);
-        }
-
-        public static RelayCommand CreateAsync(Func<Task> asyncAction)
-        {
-            return new RelayCommand(asyncAction);
-        }
+        }        
     }
 
     public class RelayCommand<TParam> 
@@ -167,14 +152,14 @@ namespace LagoVista.Core.Commanding
                 return false;
 
             if (_canExecuteParam != null)
-                return _canExecuteParam((TParam)parameter);
+                return _canExecuteParam(_parameter);
 
             return true;
         }
 
         public void Execute(object parameter)
         {
-            _cmdAction((TParam)parameter);
+            _cmdAction(_parameter);
         }
     }
 
