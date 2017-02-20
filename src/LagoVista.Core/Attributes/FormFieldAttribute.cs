@@ -29,7 +29,8 @@ namespace LagoVista.Core.Attributes
         NameSpace,
         CheckBox,
         OptionsList,
-        GeoLocation
+        GeoLocation,
+        EntityHeaderPicker,
     }
 
     public enum NamespaceTypes
