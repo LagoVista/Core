@@ -16,7 +16,15 @@ namespace LagoVista.Core.Models
 
         public bool IsEmpty()
         {
-            return String.IsNullOrEmpty(Id) && String.IsNullOrEmpty(Text);
+            return (String.IsNullOrEmpty(Id) && String.IsNullOrEmpty(Text)) || Id == "-1";
+        }
+
+        public static EntityHeader Empty
+        {
+            get
+            {
+                return new EntityHeader() { Id = "-1" };
+            }
         }
 
         public static EntityHeader Create(String id, string text)
@@ -40,12 +48,12 @@ namespace LagoVista.Core.Models
 
         public static bool IsNullOrEmpty(EntityHeader header)
         {
-            if(header == null)
+            if (header == null)
             {
                 return true;
             }
 
-            if(header.IsEmpty())
+            if (header.IsEmpty())
             {
                 return true;
             }
