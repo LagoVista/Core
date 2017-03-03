@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "System.Runtime.Serialization.Primitives": "4.3.0",
+    "Xunit": "2.2.0-beta4-build3444",
+    "dotnet-test-Xunit": "2.2.0-preview2-build1029",
+    "Newtonsoft.Json": "9.0.2-beta1",
+    "LagoVista.Core": "1.0.0-*"
+  },
+  "testRunner": "Xunit",
+  "frameworks": {
+    "net461": {
+      "dependencies": {
+      },
+      "imports": [
+        "dotnet5.4",
+        "portable-net451+win8"
+      ]
+      }
+    }
+}
+   
