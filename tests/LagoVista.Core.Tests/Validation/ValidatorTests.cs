@@ -292,7 +292,7 @@ namespace LagoVista.Core.Tests.Validation
             var result = Validator.Validate(auditEntity);
             Assert.False(result.IsValid);
             WriteResults(result);
-            Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreationDateInvalidFormat, result.Errors.First().Message);
+            Assert.True(result.Errors.First().Message.Contains(LagoVista.Core.Resources.ValidationResource.CreationDateInvalidFormat));
         }
 
 
@@ -304,7 +304,7 @@ namespace LagoVista.Core.Tests.Validation
             var result = Validator.Validate(auditEntity);
             Assert.False(result.IsValid);
             WriteResults(result);
-            Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat, result.Errors.First().Message);
+            Assert.True(result.Errors.First().Message.Contains(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat));
         }
 
         [Fact]
