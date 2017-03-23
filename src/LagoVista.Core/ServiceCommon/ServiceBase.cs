@@ -97,7 +97,6 @@ namespace LagoVista.Core.ServiceCommon
             set { Set(ref _connectionSettings, value); }
         }
 
-        private bool _hasAuthInfo = false;
         public bool HasAuthInfo
         {
             get { return ConnectionSettings.ValidationAction(); }
