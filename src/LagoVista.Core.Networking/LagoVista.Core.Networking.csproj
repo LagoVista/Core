@@ -1,27 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>portable46-net451+win81;netstandard1.2</TargetFrameworks>
-    <AssemblyName>LagoVista.Core.Networking</AssemblyName>
-    <PackageId>LagoVista.Core.Networking</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+  
+   <PropertyGroup> 
+   <TargetFrameworks>netstandard1.2</TargetFrameworks>
+    <Description>Core Methods for Authentication</Description>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <FileVersion>0.8.0.0</FileVersion>
+    <Company>Software Logistics, LLC</Company>
+    <Authors>Software Logistics, LLC</Authors>
+    <Version>0.8</Version>
+    <Product>LagoVista IoT and Home Automation Frameworks</Product>
   </PropertyGroup>
 
+  
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
   </ItemGroup>
 
+  
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.2-beta1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
   </ItemGroup>
-
 </Project>
