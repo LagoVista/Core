@@ -7,7 +7,6 @@ namespace LagoVista.Core.Authentication.Models
 {
     public class AuthorizationResponse
     {
-
         public bool IsAuthorized { get; private set; }
         public static AuthorizationResponse Authorized { get { return new AuthorizationResponse() { IsAuthorized = true }; } }
 
