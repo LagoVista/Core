@@ -61,7 +61,7 @@ namespace LagoVista.Core.ViewModels
         RelayCommand _closeScreenCommand;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public IViewModelNavigation ViewModelNavigation { get; set; }
+        public IViewModelNavigation ViewModelNavigation { get { return IOC.SLWIOC.Get<IViewModelNavigation>(); } }
 
         protected void OnPropertyChanged<TResult>(Expression<Func<TResult>> propertyExpression)
         {
@@ -157,10 +157,6 @@ namespace LagoVista.Core.ViewModels
             }
         }
 
-        #endregion
-
-        #region IDataErrorInfo Member
-
         public void SetParameter(Object parameter)
         {
             _navigationParameter = parameter;
@@ -221,7 +217,7 @@ namespace LagoVista.Core.ViewModels
 
         public void ShowViewModel<T>(Object args = null)
         {
-            ViewModelNavigation.Navigate(new ViewModelLaunchArgs()
+            IOC.SLWIOC.Get<IViewModelNavigation>().Navigate(new ViewModelLaunchArgs()
             {
                 ViewModelType = typeof(T),
                 Parameter = args

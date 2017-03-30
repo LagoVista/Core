@@ -27,7 +27,7 @@ namespace LagoVista.Core.Networking.Rest
             _tokenManager = tokenManager;
         }
 
-        public async Task<IAPIResponse> DeleteAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
+        public async Task<APIResponse> DeleteAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
         {
             if(!await _tokenManager.ValidateTokenAsync(_authManager, cancellationTokenSource))
             {
@@ -48,32 +48,32 @@ namespace LagoVista.Core.Networking.Rest
             }
         }
 
-        public Task<IAPIResponse> GetAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
+        public Task<APIResponse> GetAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
         {
             throw new NotImplementedException();
         }
 
-        public Task<IAPIResponse<TResponse>> GetAsync<TModel, TResponse>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase where TResponse : ModelBase
+        public Task<APIResponse<TResponse>> GetAsync<TModel, TResponse>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase where TResponse : ModelBase
         {
             throw new NotImplementedException();
         }
 
-        public Task<IAPIResponse> PostAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
+        public Task<APIResponse> PostAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
         {
             throw new NotImplementedException();
         }
 
-        public Task<IAPIResponse<TResponse>> PostAsync<TModel, TResponse>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase where TResponse : ModelBase
+        public Task<APIResponse<TResponse>> PostAsync<TModel, TResponse>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase where TResponse : ModelBase
         {
             throw new NotImplementedException();
         }
 
-        public Task<IAPIResponse> PutAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
+        public Task<APIResponse> PutAsync<TModel>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase
         {
             throw new NotImplementedException();
         }
 
-        public Task<IAPIResponse<TResponse>> PutAsync<TModel, TResponse>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase where TResponse : ModelBase
+        public Task<APIResponse<TResponse>> PutAsync<TModel, TResponse>(string path, TModel model, CancellationTokenSource cancellationTokenSource = null) where TModel : ModelBase where TResponse : ModelBase
         {
             throw new NotImplementedException();
         }

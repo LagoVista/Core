@@ -5,7 +5,15 @@ using Newtonsoft.Json;
 
 namespace LagoVista.Core.Networking.Models
 {
-    public class APIResponse : IAPIResponse
+    public enum ResponeStatus
+    {
+        ClientException = -1,
+        Ok = 1,
+        Failed = 0
+    }
+
+
+    public class APIResponse 
     {
         public HttpStatusCode StatusCode { get; protected set; }
 
@@ -46,7 +54,7 @@ namespace LagoVista.Core.Networking.Models
     }
 
 
-    public class APIResponse<TResult> : APIResponse, IAPIResponse<TResult> where TResult: class
+    public class APIResponse<TResult> : APIResponse where TResult: class
     {
         public APIResponse(TResult result)
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Authentication.Models
 {
   //  [EntityDescription(Name:"Authentication Request", Description:"The Authentication Request contains fields necessary to authenticate against a server resource or get a refresh token.", Domain:Domains.AuthenticationDomain)]
-    public class AuthRequest : IRemoteLoginModel
+    public class AuthRequest 
     {
         public string GrantType { get; set; }
         public String Email { get; set; }

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Authentication.Rest
 {
-    public class AuthClient : IAuthClient
+    public class AuthClient 
     {
         private const string PATH = "/api/v1/token";
 
@@ -29,7 +29,7 @@ namespace LagoVista.Core.Authentication.Rest
             _networkService = networkService;
         }
 
-        public async Task<IAPIResponse<ILoginResponse>> LoginAsync(IRemoteLoginModel loginInfo, CancellationTokenSource cancellationTokenSource = null)
+        public async Task<APIResponse<AuthResponse>> LoginAsync(AuthRequest loginInfo, CancellationTokenSource cancellationTokenSource = null)
         {
             if(cancellationTokenSource == null)
             {
@@ -57,29 +57,29 @@ namespace LagoVista.Core.Authentication.Rest
                 {
                     var responseContents = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<AuthResponse>(responseContents);
-                    return new APIResponse<ILoginResponse>(result);
+                    return new APIResponse<AuthResponse>(result);
                 }
                 else
                 {
-                    return APIResponse<ILoginResponse>.FromFailedStatusCode(response.StatusCode);
+                    return APIResponse<AuthResponse>.FromFailedStatusCode(response.StatusCode);
                 }
             }
             catch(Exception ex)
             {
                 var json = JsonConvert.SerializeObject(formContent);
                 _logger.LogException("AuthClient_LoginAsync", ex, new System.Collections.Generic.KeyValuePair<string, string>("json", json));
-                return APIResponse<ILoginResponse>.FromException(ex);
+                return APIResponse<AuthResponse>.FromException(ex);
             }
         }
 
-        public Task<IAPIResponse> ResetPasswordAsync(String emailAddress, CancellationTokenSource cancellationTokenSource = null)
+        public Task<APIResponse> ResetPasswordAsync(String emailAddress, CancellationTokenSource cancellationTokenSource = null)
         {
             if (cancellationTokenSource == null)
             {
                 cancellationTokenSource = new CancellationTokenSource();
             }
 
-            return Task.FromResult<IAPIResponse>(null);
+            return Task.FromResult<APIResponse>(null);
         }
 
     }
