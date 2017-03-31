@@ -28,18 +28,19 @@ This template if free for redistribution in accordance with the same license.
 <#@ import namespace="EnvDTE" #>
 <#@ import namespace="EnvDTE80" #>
 <#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<# WriteLine("/*" + DateTime.Now.ToString() + "*/"); #>
 <#
    var serviceProvider = Host as IServiceProvider;
+
     if (serviceProvider != null) {
-        Dte = serviceProvider.GetService(typeof(SDTE)) as DTE;
+		Dte = serviceProvider.GetService(typeof(SDTE)) as DTE;
     }
 
-    // Fail if we couldn't get the DTE. This can happen when trying to run in TextTransform.exe
-    if (Dte == null) {
+	if (Dte == null) {
         throw new Exception("T4MVC can only execute through the Visual Studio host");
     }
-
-    Project = GetProjectContainingT4File(Dte);
+   
+  Project = GetProjectContainingT4File(Dte);
 
     if (Project == null) {
         Error("Could not find the VS Project containing the T4 file.");
@@ -103,7 +104,7 @@ try{
 	
 		//Emit code for the ResourceManager property and GetResourceString method for the current class
 		#>
-        private static global::System.Resources.ResourceManager resourceMan;
+        private static global::System.Resources.ResourceManager _resourceManager;
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
@@ -113,12 +114,12 @@ try{
 		{
             get 
 			{
-                if (object.ReferenceEquals(resourceMan, null)) 
+                if (object.ReferenceEquals(_resourceManager, null)) 
 				{
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("<#=string.Format("{0}.{1}{2}", RootNamespace, entry.Path + "." + entry.File, entry.Type) #>", typeof(<#=entry.File#>).GetTypeInfo().Assembly);
-                    resourceMan = temp;
+                    _resourceManager = temp;
                 }
-                return resourceMan;
+                return _resourceManager;
             }
         }
         
@@ -207,6 +208,7 @@ catch(Exception ex)
 }
 #>
 }
+
 <#+
     const string Kind_PhysicalFolder = "{6BB5F8EF-4483-11D3-8BCF-00C04F8EC28C}";
 	bool AlwaysKeepTemplateDirty = true;
@@ -301,6 +303,7 @@ string ConvertToPascalCase(string phrase)
 	return sb.ToString();
 }
 
+
 void EmitNamesInnerClass(List<string> names)
 {
 	if(names.Any())
@@ -321,14 +324,14 @@ Project GetProjectContainingT4File(DTE dte) {
     ProjectItem projectItem = dte.Solution.FindProjectItem(Host.TemplateFile);
 
     // If the .tt file is not opened, open it
-    if (projectItem.Document == null)
-        projectItem.Open(Constants.vsViewKindCode);
+//    if (projectItem.Document == null)
+  //      projectItem.Open(Constants.vsViewKindCode);
 
     if (AlwaysKeepTemplateDirty) {
         // Mark the .tt file as unsaved. This way it will be saved and update itself next time the
         // project is built. Basically, it keeps marking itself as unsaved to make the next build work.
         // Note: this is certainly hacky, but is the best I could come up with so far.
-        projectItem.Document.Saved = false;
+    //    projectItem.Document.Saved = false;
     }
 
     return projectItem.ContainingProject;
@@ -343,4 +346,5 @@ struct ResourceEntry
 	public string Value { get; set; }
 	public string Comment { get; set; }
 }
+
 #>

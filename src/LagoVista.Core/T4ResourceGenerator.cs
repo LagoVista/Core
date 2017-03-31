@@ -594,10 +594,17 @@ namespace LagoVista.Core.Resources
 		public static string Common_PleaseWait { get { return GetResourceString("Common_PleaseWait"); } }
 //Resources:LagoVistaCommonStrings:Common_Yes
 
-		public static string Common_Yes { get { return GetResourceString("Common_Yes"); } }
-//Resources:LagoVistaCommonStrings:ErrorMakingCall
+		public static string Common_Key { get { return GetResourceString("Common_Key"); } }
 
-		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
+        public static string Common_Description { get { return GetResourceString("Common_Description"); } }
+
+        public static string Common_Name { get { return GetResourceString("Common_Name"); } }
+        public static string Common_IsPublic { get { return GetResourceString("Common_IsPublic"); } }
+
+        public static string Common_Yes { get { return GetResourceString("Common_Yes"); } }
+        //Resources:LagoVistaCommonStrings:ErrorMakingCall
+
+        public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
 //Resources:LagoVistaCommonStrings:NoConnection
 
 		public static string NoConnection { get { return GetResourceString("NoConnection"); } }
@@ -605,7 +612,11 @@ namespace LagoVista.Core.Resources
 
 		public static class Names
 		{
-			public const string Common_Loading = "Common_Loading";
+            public const string Common_Key = "Common_Key";
+            public const string Common_Description = "Common_Description";
+            public const string Common_Name = "Common_Name";
+            public const string Common_IsPublic = "Common_IsPublic";
+            public const string Common_Loading = "Common_Loading";
 			public const string Common_No = "Common_No";
 			public const string Common_PleaseWait = "Common_PleaseWait";
 			public const string Common_Yes = "Common_Yes";
