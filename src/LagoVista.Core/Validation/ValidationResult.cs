@@ -45,7 +45,6 @@ namespace LagoVista.Core.Validation
                 Warnings = Warnings,
             };
         }
-
     }
 
     public class InvokeResult<T> : ValidationResult
@@ -57,7 +56,10 @@ namespace LagoVista.Core.Validation
 
     public class InvokeResult : ValidationResult
     {
-
+        public static InvokeResult Success
+        {
+            get { return new InvokeResult(); }
+        }
     }
 
     public class ValidationMessage
