@@ -66,12 +66,22 @@ namespace LagoVista.Core.Managers
             }
         }
 
-        protected Task<AuthorizeResult> AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org = null)
+        protected Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org = null)
         {
+            //TODO: WHen doing the check simply thow an exception if in use.                
+
             return Task.FromResult(AuthorizeResult.Authorized);
         }
 
         protected Task<DependentObjectCheckResult> CheckDepenenciesAsync(Object instance)
+        {
+            return Task.FromResult(new DependentObjectCheckResult()
+            {
+
+            });
+        }
+
+        protected Task ConfirmNoDepenenciesAsync(Object instance)
         {
             return Task.FromResult(new DependentObjectCheckResult()
             {
