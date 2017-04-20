@@ -12,6 +12,6 @@ namespace LagoVista.Core.Models
         } = false;
 
 
-        public IEnumerable<SummaryData> DependentObjects { get; }
+        public List<SummaryData> DependentObjects { get; }
     }
 }
