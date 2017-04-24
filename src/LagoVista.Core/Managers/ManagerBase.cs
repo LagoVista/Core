@@ -16,11 +16,15 @@ namespace LagoVista.Core.Managers
     {
         readonly ILogger _logger;
         readonly IAppConfig _appConfig;
+        readonly IDependencyManager _dependencyManager;
+        readonly ISecurity _security;
 
-        public ManagerBase(ILogger logger, IAppConfig appConfig)
+        public ManagerBase(ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security)
         {
             _appConfig = appConfig;
             _logger = logger;
+            _dependencyManager = dependencyManager;
+            _security = security;
         }
 
         public IAppConfig AppConfig { get { return _appConfig; } }
@@ -68,40 +72,46 @@ namespace LagoVista.Core.Managers
 
         protected Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org = null)
         {
-            //TODO: WHen doing the check simply thow an exception if in use.                
-
-            return Task.FromResult(AuthorizeResult.Authorized);
+            return _security.AuthorizeAsync(ownedEntity, action, user, org);
         }
 
-        protected Task<DependentObjectCheckResult> CheckDepenenciesAsync(Object instance)
+        protected Task<DependentObjectCheckResult> CheckForDepenenciesAsync(Object instance)
         {
-            return Task.FromResult(new DependentObjectCheckResult()
+            return _dependencyManager.CheckForDependenciesAsync(instance);
+        }
+
+        protected async Task ConfirmNoDepenenciesAsync(Object instance)
+        {
+            var dependants = await _dependencyManager.CheckForDependenciesAsync(instance);
+            if(dependants.IsInUse)
             {
-
-            });
+                throw new InUseException(dependants);
+            }
         }
 
-        protected Task ConfirmNoDepenenciesAsync(Object instance)
+        /// <summary>
+        /// To be called when an object is renamed, will go through any objects that rely on this object and rename the entity header column.
+        /// </summary>
+        /// <param name="newName"></param>
+        /// <returns></returns>
+        protected Task RenameDependentObjectsAsync(object instance, string newName)
         {
-            return Task.FromResult(new DependentObjectCheckResult()
-            {
-
-            });
+            return _dependencyManager.RenameDependentObjectsAsync(instance, newName);
         }
 
-        protected Task<AuthorizeResult> AuthorizeOrgAccess(string userId, string orgId, Type entityType = null)
+        protected Task AuthorizeOrgAccess(string userId, string orgId, Type entityType = null)
         {
-            return Task.FromResult(AuthorizeResult.Authorized);
+            return _security.AuthorizeOrgAccess(userId, orgId, entityType);
         }
 
-        protected Task<AuthorizeResult> AuthorizeOrgAccess(EntityHeader user, string orgId, Type entityType = null)
+        protected Task AuthorizeOrgAccess(EntityHeader user, string orgId, Type entityType = null)
         {
-            return Task.FromResult(AuthorizeResult.Authorized);
+            return _security.AuthorizeOrgAccess(user, orgId, entityType);
         }
 
-        protected Task<AuthorizeResult> AuthorizeOrgAccess(EntityHeader user, EntityHeader org, Type entityType = null)
+        protected Task AuthorizeOrgAccess(EntityHeader user, EntityHeader org, Type entityType = null)
         {
-            return Task.FromResult(AuthorizeResult.Authorized);
+            return _security.AuthorizeOrgAccess(user, org, entityType);
         }
 
     }
