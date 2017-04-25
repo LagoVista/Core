@@ -14,7 +14,6 @@
     <tags>HomeAutomation IoT</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="10.0.1" />
-      <dependency id="LagoVista.Core" version="0.8.0" />
     </dependencies>
   </metadata>
   <files>
