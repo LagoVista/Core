@@ -84,6 +84,8 @@ namespace LagoVista.Core.Validation
 
         public string Message { get; private set; }
 
+        public string Details { get;  set; }
+
         public override string ToString()
         {
             return Message;
