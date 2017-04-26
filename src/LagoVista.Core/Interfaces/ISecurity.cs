@@ -9,7 +9,7 @@ namespace LagoVista.Core.Interfaces
 {
     public interface ISecurity
     {
-        Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org = null);
+        Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, string actionName);
         Task AuthorizeOrgAccess(EntityHeader user, EntityHeader org, Type entityType = null);
         Task AuthorizeOrgAccess(EntityHeader user, string orgId, Type entityType = null);
         Task AuthorizeOrgAccess(string userId, string orgId, Type entityType = null);

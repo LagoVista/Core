@@ -61,7 +61,7 @@ namespace LagoVista.Core.Tests.Validation
         public void IsRequired_Valid()
         {
             var result = Validator.Validate(GetValidModel());
-            Assert.True(result.IsValid);
+            Assert.True(result.Successful);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace LagoVista.Core.Tests.Validation
             var model = GetValidModel();
             model.SystemRequired = null;
             var result = Validator.Validate(model);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
         }
 
         [Fact]
@@ -104,28 +104,28 @@ namespace LagoVista.Core.Tests.Validation
         public void JsonDateValidation_Valid()
         {
             var jsonDate = DateTime.Now.ToJSONString();
-            Assert.True(jsonDate.IsValidJSONDate());
+            Assert.True(jsonDate.SuccessfulJSONDate());
         }
 
         [Fact]
         public void JsonDateValidation_Invalid()
         {
             var jsonDate = "ABC" + DateTime.Now.ToJSONString() + "XYZ";
-            Assert.False(jsonDate.IsValidJSONDate());
+            Assert.False(jsonDate.SuccessfulJSONDate());
         }
 
         [Fact]
         public void IdValidation_Valid()
         {
             var jsonDate = Guid.NewGuid().ToId();
-            Assert.True(jsonDate.IsValidId());
+            Assert.True(jsonDate.SuccessfulId());
         }
 
         [Fact]
         public void IdValidation_Invalid()
         {
             var jsonDate = Guid.NewGuid().ToId() + "XYZ";
-            Assert.False(jsonDate.IsValidId());
+            Assert.False(jsonDate.SuccessfulId());
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace LagoVista.Core.Tests.Validation
             var idEntity = new Models.IdValidationModel();
             idEntity.Id = Guid.NewGuid().ToId();
             var result = Validator.Validate(idEntity);
-            Assert.True(result.IsValid);
+            Assert.True(result.Successful);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace LagoVista.Core.Tests.Validation
             var idEntity = new Models.IdValidationModel();
             idEntity.Id = null;
             var result = Validator.Validate(idEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace LagoVista.Core.Tests.Validation
             var idEntity = new Models.IdValidationModel();
             idEntity.Id = Guid.Empty.ToId();
             var result = Validator.Validate(idEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace LagoVista.Core.Tests.Validation
             var idEntity = new Models.IdValidationModel();
             idEntity.Id = "0";
             var result = Validator.Validate(idEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
         }
 
         [Fact]
@@ -170,7 +170,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
 
             var result = Validator.Validate(auditEntity);
-            Assert.True(result.IsValid);
+            Assert.True(result.Successful);
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.CreatedBy = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreatedByNotNull, result.Errors.First().Message);
         }
@@ -190,7 +190,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedBy = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdatedByNotNull, result.Errors.First().Message);
         }
@@ -201,7 +201,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.CreatedBy.Id = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreatedByIdNotNullOrEmpty, result.Errors.First().Message);
         }
@@ -212,7 +212,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedBy.Id = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdatedByIdNotNullOrEmpty, result.Errors.First().Message);
         }
@@ -223,7 +223,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.CreatedBy.Id += "INVALID";
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreatedByIdInvalidFormat, result.Errors.First().Message);
         }
@@ -234,7 +234,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedBy.Id += "INVALID";
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdatedByIdInvalidFormat, result.Errors.First().Message);
         }
@@ -245,7 +245,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.CreatedBy.Text = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreatedByTextNotNullOrEmpty, result.Errors.First().Message);
         }
@@ -256,7 +256,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedBy.Text = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdatedByTextNotNullOrEmpty, result.Errors.First().Message);
         }
@@ -267,7 +267,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.CreationDate = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreationDateRequired, result.Errors.First().Message);
         }
@@ -279,7 +279,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedDate = null;
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdatedDateRequired, result.Errors.First().Message);
         }
@@ -290,7 +290,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.CreationDate += "INVALID";
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreationDateInvalidFormat, result.Errors.First().Message);
         }
@@ -302,7 +302,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedDate += "INVALID";
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat, result.Errors.First().Message);
         }
@@ -312,7 +312,7 @@ namespace LagoVista.Core.Tests.Validation
         {
             var strModel = GetValidStringLengthModel();
             var result = Validator.Validate(strModel);
-            Assert.True(result.IsValid);
+            Assert.True(result.Successful);
         }
 
         [Fact]
@@ -321,7 +321,7 @@ namespace LagoVista.Core.Tests.Validation
             var strModel = GetValidStringLengthModel();
             strModel.MinStringLength_5 = "FOO";
             var result = Validator.Validate(strModel);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
         }
 
@@ -331,7 +331,7 @@ namespace LagoVista.Core.Tests.Validation
             var strModel = GetValidStringLengthModel();
             strModel.MaxStringLength_15 = "KEVIN D WOLF KEVIN D WOLF";
             var result = Validator.Validate(strModel);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
         }
 
@@ -341,7 +341,7 @@ namespace LagoVista.Core.Tests.Validation
             var strModel = GetValidStringLengthModel();
             strModel.BetweenStringLength_5_15 = "FOO";
             var result = Validator.Validate(strModel);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
         }
 
@@ -351,7 +351,7 @@ namespace LagoVista.Core.Tests.Validation
             var strModel = GetValidStringLengthModel();
             strModel.BetweenStringLength_5_15 = "KEVIN D WOLF KEVIN D WOLF";
             var result = Validator.Validate(strModel);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
             WriteResults(result);
         }
 
@@ -360,7 +360,7 @@ namespace LagoVista.Core.Tests.Validation
         {
             var entityHeader = GetValidEntityHeader();
             var result = Validator.Validate(entityHeader);
-            Assert.True(result.IsValid);
+            Assert.True(result.Successful);
         }
 
         [Fact]
@@ -369,7 +369,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.NotRequired = null;
             var result = Validator.Validate(entityHeader);
-            Assert.True(result.IsValid);
+            Assert.True(result.Successful);
         }
 
         [Fact]
@@ -378,7 +378,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.SystemRequired = null;
             var result = Validator.Validate(entityHeader);            
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_Null_System.Replace("[NAME]", nameof(entityHeader.SystemRequired)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -391,7 +391,7 @@ namespace LagoVista.Core.Tests.Validation
             entityHeader.SystemRequired.Id = null;
             entityHeader.SystemRequired.Text = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_Null_System.Replace("[NAME]", nameof(entityHeader.SystemRequired)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -404,7 +404,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.SystemRequired.Id = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_MissingId_System.Replace("[NAME]", nameof(entityHeader.SystemRequired)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -417,7 +417,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.SystemRequired.Text = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_MissingText_System.Replace("[NAME]", nameof(entityHeader.SystemRequired)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -429,7 +429,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.UserRequired = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", ValidationResources.FirstNameLabel), result.Errors.First().Message);
             Assert.False(result.Errors.First().SystemError);
@@ -442,7 +442,7 @@ namespace LagoVista.Core.Tests.Validation
             entityHeader.UserRequired.Id = null;
             entityHeader.UserRequired.Text = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", ValidationResources.FirstNameLabel), result.Errors.First().Message);
             Assert.False(result.Errors.First().SystemError);
@@ -455,7 +455,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.UserRequired.Id = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_MissingId_System.Replace("[NAME]", nameof(entityHeader.UserRequired)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -467,7 +467,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.UserRequired.Text = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_MissingText_System.Replace("[NAME]", nameof(entityHeader.UserRequired)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -479,7 +479,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.UseRequiredCustomMessage = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(ValidationResources.CustomValidationMessage, result.Errors.First().Message);
             Assert.False(result.Errors.First().SystemError);
@@ -492,7 +492,7 @@ namespace LagoVista.Core.Tests.Validation
             entityHeader.UseRequiredCustomMessage.Id = null;
             entityHeader.UseRequiredCustomMessage.Text = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(ValidationResources.CustomValidationMessage, result.Errors.First().Message);
             Assert.False(result.Errors.First().SystemError);
@@ -505,7 +505,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.UseRequiredCustomMessage.Id = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_MissingId_System.Replace("[NAME]", nameof(entityHeader.UseRequiredCustomMessage)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);
@@ -517,7 +517,7 @@ namespace LagoVista.Core.Tests.Validation
             var entityHeader = GetValidEntityHeader();
             entityHeader.UseRequiredCustomMessage.Text = null;
             var result = Validator.Validate(entityHeader);
-            Assert.False(result.IsValid);
+            Assert.False(result.Successful);
 
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.Entity_Header_MissingText_System.Replace("[NAME]", nameof(entityHeader.UseRequiredCustomMessage)), result.Errors.First().Message);
             Assert.True(result.Errors.First().SystemError);

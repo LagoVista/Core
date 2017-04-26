@@ -76,12 +76,12 @@ namespace LagoVista.Core
             }
         }
 
-        public static bool IsValidJSONDate(this string date)
+        public static bool SuccessfulJSONDate(this string date)
         {
             return Regex.IsMatch(date, @"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d{0,4}Z");
         }
 
-        public static bool IsValidId(this string value)
+        public static bool SuccessfulId(this string value)
         {
             return value.Length == 32;
         }

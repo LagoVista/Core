@@ -14,7 +14,7 @@ namespace LagoVista.Core.Validation
             Errors = new List<ErrorMessage>();
         }
 
-        public bool IsValid { get { return Errors.Count == 0; } }
+        public bool Successful { get { return Errors.Count == 0; } }
         public List<ErrorMessage> Warnings { get; private set; }
         public List<ErrorMessage> Errors { get; private set; }
 

@@ -177,7 +177,7 @@ namespace LagoVista.Core.Validation
                 {
                     result.AddSystemError(Resources.ValidationResource.CreationDateRequired);
                 }
-                else if (!auditableModel.CreationDate.IsValidJSONDate())
+                else if (!auditableModel.CreationDate.SuccessfulJSONDate())
                 {
                     result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat + " " + auditableModel.CreationDate);
                 }
@@ -186,7 +186,7 @@ namespace LagoVista.Core.Validation
                 {
                     result.AddSystemError(Resources.ValidationResource.LastUpdatedDateRequired);
                 }
-                else if (!auditableModel.LastUpdatedDate.IsValidJSONDate())
+                else if (!auditableModel.LastUpdatedDate.SuccessfulJSONDate())
                 {
                     result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate);
                 }
@@ -201,7 +201,7 @@ namespace LagoVista.Core.Validation
                     {
                         result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdNotNullOrEmpty);
                     }
-                    else if (!auditableModel.LastUpdatedBy.Id.IsValidId())
+                    else if (!auditableModel.LastUpdatedBy.Id.SuccessfulId())
                     {
                         result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdInvalidFormat);
                     }
@@ -222,7 +222,7 @@ namespace LagoVista.Core.Validation
                     {
                         result.AddSystemError(Resources.ValidationResource.CreatedByIdNotNullOrEmpty);
                     }
-                    else if (!auditableModel.CreatedBy.Id.IsValidId())
+                    else if (!auditableModel.CreatedBy.Id.SuccessfulId())
                     {
                         result.AddSystemError(Resources.ValidationResource.CreatedByIdInvalidFormat);
                     }

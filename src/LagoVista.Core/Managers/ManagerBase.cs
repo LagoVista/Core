@@ -64,15 +64,15 @@ namespace LagoVista.Core.Managers
         protected void ValidationCheck(IValidateable entity, Actions action)
         {
             var result = Validator.Validate(entity, action);
-            if (!result.IsValid)
+            if (!result.Successful)
             {
                 throw new ValidationException("Invalid Data", result.Errors);
             }
         }
 
-        protected Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org = null)
+        protected Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, String actionName = null)
         {
-            return _security.AuthorizeAsync(ownedEntity, action, user, org);
+            return _security.AuthorizeAsync(ownedEntity, action, user, org, actionName);
         }
 
         protected Task<DependentObjectCheckResult> CheckForDepenenciesAsync(Object instance)

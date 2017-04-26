@@ -17,6 +17,7 @@ namespace LagoVista.Core.Models
             Update,
             Delete,
             GetForOrgs,
+            Perform
         }
 
 

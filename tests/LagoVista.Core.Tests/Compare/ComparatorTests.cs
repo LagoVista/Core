@@ -111,7 +111,7 @@ namespace LagoVista.Core.Tests.Compare
             var result = Comparator.Compare(objA, objB, user);
             Assert.Equal(user.Id, result.User.Id);
             Assert.Equal(user.Text, result.User.Text);
-            Assert.True(result.DateStamp.IsValidJSONDate());
+            Assert.True(result.DateStamp.SuccessfulJSONDate());
         }
 
         public ComparatorModelSimple GetSimpleModel(String id)
