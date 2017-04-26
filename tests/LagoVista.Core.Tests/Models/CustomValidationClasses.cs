@@ -108,7 +108,7 @@ namespace LagoVista.Core.Tests.Models
             Called++;
             if (String.IsNullOrEmpty(Field) && action == Actions.Create)
             {
-                result.Errors.Add(new ValidationMessage("ERROR", true));
+                result.Errors.Add(new ErrorMessage("ERROR", true));
             }
         }
     }
@@ -124,7 +124,7 @@ namespace LagoVista.Core.Tests.Models
             Called++;
             if (String.IsNullOrEmpty(Field) && action == Actions.Update)
             {
-                result.Errors.Add(new ValidationMessage("ERROR", true));
+                result.Errors.Add(new ErrorMessage("ERROR", true));
             }
         }
     }

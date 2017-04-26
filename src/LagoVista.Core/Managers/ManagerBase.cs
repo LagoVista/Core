@@ -50,9 +50,9 @@ namespace LagoVista.Core.Managers
         {
             if (fromRepo.LastUpdatedDate != updatedDateStamp)
             {
-                throw new ValidationException(ValidationResource.Concurrency_Error, new System.Collections.Generic.List<Core.Validation.ValidationMessage>()
+                throw new ValidationException(ValidationResource.Concurrency_Error, new System.Collections.Generic.List<Core.Validation.ErrorMessage>()
                 {
-                    new Core.Validation.ValidationMessage(
+                    new Core.Validation.ErrorMessage(
                         ValidationResource.Concurrency_ErrorMessage
                             .Replace(Tokens.VALIDATION_USER_FULL_NAME, fromRepo.LastUpdatedBy.Text)
                             .Replace(Tokens.VALIDATION_DATESTAMP, fromRepo.LastUpdatedDate),

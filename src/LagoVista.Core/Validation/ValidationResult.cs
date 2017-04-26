@@ -10,21 +10,21 @@ namespace LagoVista.Core.Validation
     {
         public ValidationResult()
         {
-            Warnings = new List<ValidationMessage>();
-            Errors = new List<ValidationMessage>();
+            Warnings = new List<ErrorMessage>();
+            Errors = new List<ErrorMessage>();
         }
 
         public bool IsValid { get { return Errors.Count == 0; } }
-        public List<ValidationMessage> Warnings { get; private set; }
-        public List<ValidationMessage> Errors { get; private set; }
+        public List<ErrorMessage> Warnings { get; private set; }
+        public List<ErrorMessage> Errors { get; private set; }
 
         internal void AddUserError(String error)
         {
-            Errors.Add(new ValidationMessage(error));
+            Errors.Add(new ErrorMessage(error));
         }
         internal void AddSystemError(String error)
         {
-            Errors.Add(new ValidationMessage(error, true));
+            Errors.Add(new ErrorMessage(error, true));
         }
 
         public InvokeResult<T> ToActionResult<T>(T result)
@@ -62,13 +62,22 @@ namespace LagoVista.Core.Validation
         }
     }
 
-    public class ValidationMessage
+    public class ErrorMessage
     {
-        public ValidationMessage(String message, bool systemError = false)
+        public ErrorMessage(String message, bool systemError = false)
         {
             Message = message;
             SystemError = systemError;
         }
+
+        public ErrorMessage(String errorCode, String message, bool systemError = false)
+        {
+            ErrorCode = errorCode;
+            Message = message;
+            SystemError = systemError;
+        }
+
+        public string ErrorCode { get; private set; }
 
         public bool SystemError { get; private set; }
 

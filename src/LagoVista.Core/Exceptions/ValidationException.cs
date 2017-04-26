@@ -9,21 +9,21 @@ namespace LagoVista.Core.Exceptions
 {
     public class ValidationException : System.Exception
     {
-        public ValidationException(String message, List<ValidationMessage> errs) : base(message)
+        public ValidationException(String message, List<ErrorMessage> errs) : base(message)
         {
             Errors = errs;
         }
 
-        public ValidationException(String message, ValidationMessage err) : base(message)
+        public ValidationException(String message, ErrorMessage err) : base(message)
         {
-            Errors = new List<ValidationMessage>() { err };
+            Errors = new List<ErrorMessage>() { err };
         }
 
         public ValidationException(String message, bool systemError, string err) : base(message)
         {
-            Errors = new List<ValidationMessage>() { new ValidationMessage(err, systemError)  };
+            Errors = new List<ErrorMessage>() { new ErrorMessage(err, systemError)  };
         }
   
-        public List<ValidationMessage> Errors { get; private set; }
+        public List<ErrorMessage> Errors { get; private set; }
     }
 }
