@@ -8,16 +8,15 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-    <description>Common Interfaces and Functionality for LagoVista IoT and Devices Framework</description>
-    <releaseNotes>Early Unstable Release</releaseNotes>
-    <copyright>Copyright 2016</copyright>
-    <tags>HomeAutomation IoT</tags>
+    <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
+    <releaseNotes>Pre-release Software</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>HomeAutomation IoT LagoVista</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="10.0.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="readme.txt" target="" />
     <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
   </files>
 </package>
