@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.2</TargetFrameworks>
     <Description>Core Methods for Authentication</Description>
@@ -10,18 +9,14 @@
     <Version>0.8</Version>
     <Product>LagoVista IoT and Home Automation Frameworks</Product>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
     <ProjectReference Include="..\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-
 </Project>

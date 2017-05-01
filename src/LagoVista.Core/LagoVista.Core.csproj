@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.2</TargetFramework>
     <Description>Core Interfaces and Functions for LagoVista Library</Description>
@@ -10,19 +9,16 @@
     <Version>0.8</Version>
     <Product>LagoVista IoT and Home Automation Frameworks</Product>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="T4ResourceGenerator.tt">
-      <Generator></Generator>
+      <Generator>
+      </Generator>
     </None>
   </ItemGroup>
-
 </Project>
