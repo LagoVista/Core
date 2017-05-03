@@ -8,10 +8,14 @@ namespace LagoVista.Core.Validation
 {
     public class ValidationResult
     {
+        public String ResultId { get; set; }
+
+
         public ValidationResult()
         {
             Warnings = new List<ErrorMessage>();
             Errors = new List<ErrorMessage>();
+            ResultId = Guid.NewGuid().ToId();
         }
 
         public bool Successful { get { return Errors.Count == 0; } }
