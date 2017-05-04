@@ -8,6 +8,8 @@
     <Authors>Software Logistics, LLC</Authors>
     <Version>0.8</Version>
     <Product>LagoVista IoT and Home Automation Frameworks</Product>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>LagoVista.Core.Authentication.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />

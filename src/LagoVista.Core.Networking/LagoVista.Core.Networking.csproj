@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.2</TargetFrameworks>
     <Description>Core Methods for Authentication</Description>
@@ -8,6 +8,8 @@
     <Authors>Software Logistics, LLC</Authors>
     <Version>0.8</Version>
     <Product>LagoVista IoT and Home Automation Frameworks</Product>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>LagoVista.Core.Networking.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
