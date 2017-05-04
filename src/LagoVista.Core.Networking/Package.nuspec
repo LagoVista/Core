@@ -17,7 +17,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="readme.txt" target="" />
     <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
   </files>
 </package>
