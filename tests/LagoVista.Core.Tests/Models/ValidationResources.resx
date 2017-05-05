@@ -120,6 +120,21 @@
   <data name="CustomValidationMessage" xml:space="preserve">
     <value>This field is required and should be present</value>
   </data>
+  <data name="EnumFive" xml:space="preserve">
+    <value>Five</value>
+  </data>
+  <data name="EnumFour" xml:space="preserve">
+    <value>Four</value>
+  </data>
+  <data name="EnumOne" xml:space="preserve">
+    <value>One</value>
+  </data>
+  <data name="EnumThree" xml:space="preserve">
+    <value>Three</value>
+  </data>
+  <data name="EnumTwo" xml:space="preserve">
+    <value>Two</value>
+  </data>
   <data name="FirstNameLabel" xml:space="preserve">
     <value>First Name</value>
   </data>

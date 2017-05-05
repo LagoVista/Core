@@ -1,12 +1,22 @@
 ﻿using System;
 using LagoVista.Core.Interfaces;
+using System.Reflection;
+using System.Linq;
 using LagoVista.Core.Exceptions;
+using LagoVista.Core.Attributes;
 
 namespace LagoVista.Core.Models
 {
     public class EntityHeader : IEntityHeader
     {
-        public String Id { get; set; }
+
+        private String _id;
+
+        public virtual String Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
         public String Text { get; set; }
 
         public override string ToString()
@@ -136,12 +146,46 @@ namespace LagoVista.Core.Models
     {
         public bool HasValue
         {
-            get { return Value == null; }
+            get { return !String.IsNullOrEmpty(Id); }
         }
 
+        private T _value;
         public T Value
         {
-            get; set;
+            get { return _value; }
+            set
+            {
+                /* If this is an enum the actual type should get set with the key from the enum rather than this value */
+                if (!typeof(T).GetTypeInfo().IsEnum)
+                {
+                    _value = value;
+                }
+            }
+        }
+
+        public override String Id
+        {
+            get { return base.Id; }
+            set
+            {
+                base.Id = value;
+                if(typeof(T).GetTypeInfo().IsEnum)
+                {
+                    var enumValues = Enum.GetValues(typeof(T));
+
+                    for (var idx = 0; idx < enumValues.GetLength(0); ++idx)
+                    {
+                        var enumValue = enumValues.GetValue(idx).ToString();
+
+                        var enumMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
+                        var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
+                        if(enumAttr.Key == Id)
+                        {
+                            _value = (T)(enumValues.GetValue(idx));
+                        }
+                    }
+                }
+            }
         }
     }
 

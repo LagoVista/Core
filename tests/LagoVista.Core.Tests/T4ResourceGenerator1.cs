@@ -56,6 +56,21 @@ namespace LagoVista.Core.Tests.Resources.Models
         }*/
 		
 		public static string CustomValidationMessage { get { return GetResourceString("CustomValidationMessage"); } }
+//Models:ValidationResources:EnumFive
+
+		public static string EnumFive { get { return GetResourceString("EnumFive"); } }
+//Models:ValidationResources:EnumFour
+
+		public static string EnumFour { get { return GetResourceString("EnumFour"); } }
+//Models:ValidationResources:EnumOne
+
+		public static string EnumOne { get { return GetResourceString("EnumOne"); } }
+//Models:ValidationResources:EnumThree
+
+		public static string EnumThree { get { return GetResourceString("EnumThree"); } }
+//Models:ValidationResources:EnumTwo
+
+		public static string EnumTwo { get { return GetResourceString("EnumTwo"); } }
 //Models:ValidationResources:FirstNameLabel
 
 		public static string FirstNameLabel { get { return GetResourceString("FirstNameLabel"); } }
@@ -64,6 +79,11 @@ namespace LagoVista.Core.Tests.Resources.Models
 		public static class Names
 		{
 			public const string CustomValidationMessage = "CustomValidationMessage";
+			public const string EnumFive = "EnumFive";
+			public const string EnumFour = "EnumFour";
+			public const string EnumOne = "EnumOne";
+			public const string EnumThree = "EnumThree";
+			public const string EnumTwo = "EnumTwo";
 			public const string FirstNameLabel = "FirstNameLabel";
 		}
 	}

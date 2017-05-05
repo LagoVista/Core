@@ -68,6 +68,11 @@ namespace LagoVista.Core.Validation
 
     public class ErrorMessage
     {
+        public ErrorMessage()
+        {
+
+        }
+
         public ErrorMessage(String message, bool systemError = false)
         {
             Message = message;
@@ -81,12 +86,12 @@ namespace LagoVista.Core.Validation
             SystemError = systemError;
         }
 
-        public string ErrorCode { get; private set; }
+        public string ErrorCode { get; set; }
 
-        public bool SystemError { get; private set; }
+        public bool SystemError { get; set; }
 
 
-        public string Message { get; private set; }
+        public string Message { get; set; }
 
         public string Details { get;  set; }
 

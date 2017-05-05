@@ -44,6 +44,9 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MSTest.TestFramework.1.1.17\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
@@ -64,6 +67,7 @@
     <Compile Include="IOC\DependencyInjectionTests.cs" />
     <Compile Include="Models\ComparatorModel.cs" />
     <Compile Include="Models\CustomValidationClasses.cs" />
+    <Compile Include="Models\EnumEntityHeaderRestore.cs" />
     <Compile Include="Models\IoCModels.cs" />
     <Compile Include="Models\ValidationModel.cs" />
     <Compile Include="Operators\EntityHeaderEqualsOperatorTests.cs" />
