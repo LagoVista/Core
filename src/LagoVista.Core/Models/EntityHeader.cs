@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Linq;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Attributes;
+using System.Text;
 
 namespace LagoVista.Core.Models
 {
@@ -162,29 +163,46 @@ namespace LagoVista.Core.Models
                 }
             }
         }
-       
+
         public override String Id
         {
             get { return base.Id; }
             set
             {
-                base.Id = value;
-                if(typeof(T).GetTypeInfo().IsEnum)
+                if (typeof(T).GetTypeInfo().IsEnum)
                 {
+                    if (String.IsNullOrEmpty(value))
+                    {
+                        base.Id = String.Empty;
+                        base.Text = String.Empty;
+                        return;
+                    }
+                    var str = new StringBuilder();
                     var enumValues = Enum.GetValues(typeof(T));
-
                     for (var idx = 0; idx < enumValues.GetLength(0); ++idx)
                     {
                         var enumValue = enumValues.GetValue(idx).ToString();
-
+                        
                         var enumMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
                         var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
-                        if(enumAttr.Key == Id)
+                        str.Append(enumAttr.Key);
+                        str.Append(",");
+                        if (enumAttr.Key == value)
                         {
+                            base.Id = value;
                             _value = (T)(enumValues.GetValue(idx));
+                            return;
                         }
                     }
+
+                    /* If we made it here, we attempted to assign an invalid id, so reset values to null */
+                    throw new InvalidCastException($"Attempt to Assign Incorrect Value to an Enum Based EntityHeader.  EnumType: [{typeof(T)}], Assgined Value [{value}], Allowable Values: [{str.ToString().TrimEnd(',')}].");
                 }
+                else
+                {
+                    base.Id = value;
+                }
+
             }
         }
     }

@@ -2,6 +2,7 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Tests.Resources.Models;
+using LagoVista.Core.Tests.Resources.UIMetaData;
 using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,16 @@ namespace LagoVista.Core.Tests.Models
         public string LastUpdatedDate { get; set; }
     }
 
+    public enum EnumFortTesting
+    {
+        [EnumLabel("value1", LabelResource: MetaDataResources.Names.EntityHeader_Enum_Value1, ResourceType: typeof(ValidationResources))]
+        Value1,
+        [EnumLabel("value2", LabelResource: MetaDataResources.Names.EntityHeader_Enum_Value2, ResourceType: typeof(ValidationResources))]
+        Value2,
+        [EnumLabel("value3", LabelResource: MetaDataResources.Names.EntityHeader_Enum_Value3, ResourceType: typeof(ValidationResources))]
+        Value3
+    }
+
     public class EntityHeaderModel : IValidateable
     {
         [FormField(IsRequired:true)]
@@ -60,6 +71,9 @@ namespace LagoVista.Core.Tests.Models
 
         [FormField()]
         public EntityHeader NotRequired { get; set; }
+
+        [FormField(IsRequired: true)]
+        public EntityHeader<EnumFortTesting> PropWithEnum { get; set; }
     }
 
     public class StringLengthModel : IValidateable

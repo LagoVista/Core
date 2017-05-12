@@ -151,6 +151,15 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 //UIMetaData:MetaDataResources:BaseField1_WM
 
 		public static string BaseField1_WM { get { return GetResourceString("BaseField1_WM"); } }
+//UIMetaData:MetaDataResources:EntityHeader_Enum_Value1
+
+		public static string EntityHeader_Enum_Value1 { get { return GetResourceString("EntityHeader_Enum_Value1"); } }
+//UIMetaData:MetaDataResources:EntityHeader_Enum_Value2
+
+		public static string EntityHeader_Enum_Value2 { get { return GetResourceString("EntityHeader_Enum_Value2"); } }
+//UIMetaData:MetaDataResources:EntityHeader_Enum_Value3
+
+		public static string EntityHeader_Enum_Value3 { get { return GetResourceString("EntityHeader_Enum_Value3"); } }
 //UIMetaData:MetaDataResources:Enum1_Help
 
 		public static string Enum1_Help { get { return GetResourceString("Enum1_Help"); } }
@@ -248,6 +257,9 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 			public const string BaseField1_Help = "BaseField1_Help";
 			public const string BaseField1_Requied = "BaseField1_Requied";
 			public const string BaseField1_WM = "BaseField1_WM";
+			public const string EntityHeader_Enum_Value1 = "EntityHeader_Enum_Value1";
+			public const string EntityHeader_Enum_Value2 = "EntityHeader_Enum_Value2";
+			public const string EntityHeader_Enum_Value3 = "EntityHeader_Enum_Value3";
 			public const string Enum1_Help = "Enum1_Help";
 			public const string Enum1_Label = "Enum1_Label";
 			public const string Enum2_Help = "Enum2_Help";

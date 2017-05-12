@@ -129,6 +129,15 @@
   <data name="BaseField1_WM" xml:space="preserve">
     <value>WaterMark Field One</value>
   </data>
+  <data name="EntityHeader_Enum_Value1" xml:space="preserve">
+    <value>value1</value>
+  </data>
+  <data name="EntityHeader_Enum_Value2" xml:space="preserve">
+    <value>value2</value>
+  </data>
+  <data name="EntityHeader_Enum_Value3" xml:space="preserve">
+    <value>value3</value>
+  </data>
   <data name="Enum1_Help" xml:space="preserve">
     <value>This is the help field on enum One</value>
   </data>

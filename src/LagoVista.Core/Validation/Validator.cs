@@ -104,7 +104,8 @@ namespace LagoVista.Core.Validation
             {
                 ValidateString(result, prop, attr, value as String);
             }
-            else if (prop.PropertyType == typeof(EntityHeader))
+            /// TODO: Find better approeach for detecting generic type entity headers.
+            else if (prop.PropertyType.Name.StartsWith(nameof(EntityHeader))) /* YUCK! KDW 5/12/207 */
             {
                 ValidateEntityHeader(result, prop, attr, value as EntityHeader);
             }
