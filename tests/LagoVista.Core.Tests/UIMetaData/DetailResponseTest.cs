@@ -16,7 +16,7 @@ namespace LagoVista.Core.Tests.UIMetaData
             model1.Field1 = "MY VALUE";
             var response = DetailResponse<Model2>.Create(model1);
 
-            Assert.Equal("MY VALUE", response.View["field1"].Value);
+            Assert.Equal("MY VALUE", response.View["field1"].DefaultValue);
         }
 
         [Fact(DisplayName = "DetailResponses_Should_Be_PopulatedFromModel_WithEnum")]
@@ -26,7 +26,7 @@ namespace LagoVista.Core.Tests.UIMetaData
             model1.Field1 = "MY VALUE";
             var response = DetailResponse<Model1>.Create(model1);
 
-            Assert.Equal("MY VALUE", response.View["field1"].Value);
+            Assert.Equal("MY VALUE", response.View["field1"].DefaultValue);
         }
     }
 }

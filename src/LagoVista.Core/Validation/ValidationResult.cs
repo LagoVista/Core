@@ -41,6 +41,12 @@ namespace LagoVista.Core.Validation
             };
         }
 
+        public void Concat(ValidationResult result)
+        {
+            Errors.AddRange(result.Errors);
+            Warnings.AddRange(result.Warnings);
+        }
+
         public InvokeResult ToActionResult()
         {
             return new InvokeResult()
@@ -54,8 +60,6 @@ namespace LagoVista.Core.Validation
     public class InvokeResult<T> : ValidationResult
     {
         public T Result { get; set; }
-
-        
     }
 
     public class InvokeResult : ValidationResult

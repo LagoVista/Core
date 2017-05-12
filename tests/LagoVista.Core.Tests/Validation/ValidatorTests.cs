@@ -58,6 +58,18 @@ namespace LagoVista.Core.Tests.Validation
         }
 
         [Fact]
+        public void ConcatErrorsTest()
+        {
+            var result1 = new ValidationResult();
+            result1.Errors.Add(new ErrorMessage("BAD"));
+
+            var result2 = new ValidationResult();
+            result2.Concat(result1);
+
+            Assert.Equal(1,result2.Errors.Where(err => err.Message == "BAD").Count());
+        }
+
+        [Fact]
         public void IsRequired_Valid()
         {
             var result = Validator.Validate(GetValidModel());
@@ -292,7 +304,7 @@ namespace LagoVista.Core.Tests.Validation
             var result = Validator.Validate(auditEntity);
             Assert.False(result.Successful);
             WriteResults(result);
-            Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreationDateInvalidFormat, result.Errors.First().Message);
+            Assert.Equal(LagoVista.Core.Resources.ValidationResource.CreationDateInvalidFormat + " " + auditEntity.CreationDate, result.Errors.First().Message);
         }
 
 
@@ -304,7 +316,7 @@ namespace LagoVista.Core.Tests.Validation
             var result = Validator.Validate(auditEntity);
             Assert.False(result.Successful);
             WriteResults(result);
-            Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat, result.Errors.First().Message);
+            Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditEntity.LastUpdatedDate, result.Errors.First().Message);
         }
 
         [Fact]

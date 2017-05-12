@@ -162,7 +162,7 @@ namespace LagoVista.Core.Models
                 }
             }
         }
-
+       
         public override String Id
         {
             get { return base.Id; }

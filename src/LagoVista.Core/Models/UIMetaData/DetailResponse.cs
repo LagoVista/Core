@@ -38,7 +38,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     var defaultValue = property.GetValue(model);
                     if (defaultValue != null)
                     {
-                        //field.Value = defaultValue.ToString();
+                        field.DefaultValue = defaultValue.ToString();
                     }
 
                     

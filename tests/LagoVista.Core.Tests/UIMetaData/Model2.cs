@@ -11,8 +11,11 @@ namespace LagoVista.Core.Tests.UIMetaData
     public class Model2
     {
 
+        [FormField(LabelResource: MetaDataResources.Names.Field1_Label, ResourceType: typeof(MetaDataResources), WaterMark: MetaDataResources.Names.Field1_WaterMark, HelpResource: MetaDataResources.Names.Field1_Help, IsRequired: true, ReqMessageResource: MetaDataResources.Names.Field1_RequiredMessage1)]
         public String Field1 { get; set; }
+        [FormField(LabelResource: MetaDataResources.Names.Field2_Label, ResourceType: typeof(MetaDataResources),  HelpResource: MetaDataResources.Names.Field1_Help, IsRequired: true)]
         public String Field2 { get; set; }
+        [FormField(LabelResource: MetaDataResources.Names.Field3_Label, ResourceType: typeof(MetaDataResources),  HelpResource: MetaDataResources.Names.Field1_Help, IsRequired: true)]
         public String Field3 { get; set; }
     }
 }
