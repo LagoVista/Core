@@ -24,8 +24,9 @@ foreach( $child in $children)
 
 
     if($preRelease){
-        $content.package.metadata.version = $major +"." + $minor + "." + $revisionNumber.Days + "-$preRelease" + ("{0:00000}" -f $buildNumber)
-        }
+      	$buildNumber = ("{0:00}" -f [math]::Round($minutes.Hours)) + ("{0:00}" -f ([math]::Round($minutes.Minutes)))
+		$content.package.metadata.version = $major +"." + $minor + "." + $revisionNumber.Days + "-$preRelease" + ("{0:00000}" -f $buildNumber)
+    }
     else{
         $content.package.metadata.version = $major +"." + $minor + ".0"
     }
