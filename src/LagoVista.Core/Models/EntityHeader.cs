@@ -163,7 +163,46 @@ namespace LagoVista.Core.Models
                 }
             }
         }
-            
+
+        /// <summary>
+        /// Create an Entity Header based on something that implements IIDEntity and INamedEntity 
+        /// or an enum that has an EnumLabel attribte.
+        /// </summary>
+        public static EntityHeader<T> Create(T value)
+        {
+            if (typeof(T) == typeof(IIDEntity) && typeof(T) == typeof(INamedEntity))
+            {
+                var eh = new EntityHeader<T>();
+                eh.Id = ((IIDEntity)value).Id;
+                eh.Text = ((INamedEntity)value).Name;
+                return eh;
+            }
+
+            if (typeof(T).GetTypeInfo().IsEnum)
+            {
+                var valueMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == value.ToString()).FirstOrDefault();
+
+                var enumValues = Enum.GetValues(typeof(T));
+                for (var idx = 0; idx < enumValues.GetLength(0); ++idx)
+                {
+                    var enumValue = enumValues.GetValue(idx);
+                    if (enumValue.ToString() == value.ToString())
+                    {
+                        var enumMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
+                        var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
+                        var eh = new EntityHeader<T>();
+                        eh.Id = enumAttr.Key;
+                        eh.Value = value;
+                        var labelProperty = enumAttr.ResourceType.GetTypeInfo().GetDeclaredProperty(enumAttr.LabelResource);
+                        eh.Text = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
+                        return eh;
+                    }
+                }
+            }
+
+            throw new Exception($"Cannot map type {typeof(T).Name} to Entity Header.");
+        }
+
         public override String Id
         {
             get { return base.Id; }
@@ -182,7 +221,7 @@ namespace LagoVista.Core.Models
                     for (var idx = 0; idx < enumValues.GetLength(0); ++idx)
                     {
                         var enumValue = enumValues.GetValue(idx).ToString();
-                        
+
                         var enumMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
                         var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
                         str.Append(enumAttr.Key);
