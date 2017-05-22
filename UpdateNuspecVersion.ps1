@@ -20,8 +20,6 @@ foreach( $child in $children)
 	$versionPart = $content.package.metadata.version.Split('.')
 	$revisionNumber = New-TimeSpan -Start $start -End $end
 	$minutes = New-TimeSpan -Start $today -End $end
-	$buildNumber = [math]::Round($minutes.TotalMinutes)
-
 
     if($preRelease){
       	$buildNumber = ("{0:00}" -f [math]::Round($minutes.Hours)) + ("{0:00}" -f ([math]::Round($minutes.Minutes)))
