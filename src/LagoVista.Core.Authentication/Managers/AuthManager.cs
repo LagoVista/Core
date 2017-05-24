@@ -1,11 +1,8 @@
 ﻿using LagoVista.Core.PlatformSupport;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.Networking.Interfaces;
+using LagoVista.Core.Models;
 
 namespace LagoVista.Core.Authentication.Managers
 {
@@ -29,7 +26,7 @@ namespace LagoVista.Core.Authentication.Managers
         public bool IsUserVerified { get; set; }
         public string RefreshToken { get; set; }
         public long RefreshTokenExpiration { get; set; }
-        public IAppUser User { get; set; }
+        public UserInfo User { get; set; }
 
         public async Task LoadAsync()
         {

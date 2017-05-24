@@ -1,7 +1,8 @@
 ﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Interfaces
+namespace LagoVista.Core.Interfaces
 {
     public interface IAuthManager
     {
@@ -13,8 +14,7 @@ namespace LagoVista.Core.Networking.Interfaces
         bool IsUserVerified { get; set; }
         string RefreshToken { get; set; }
         long RefreshTokenExpiration { get; set; }
-        IAppUser User { get; set; }
-
+        UserInfo User { get; set; }
         Task LoadAsync();
         Task PersistAsync();
     }

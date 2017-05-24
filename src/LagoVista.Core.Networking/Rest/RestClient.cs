@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Networking.Interfaces;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.Core.Networking.Rest
 {

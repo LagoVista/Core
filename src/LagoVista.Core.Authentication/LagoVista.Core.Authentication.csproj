@@ -18,4 +18,23 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="T4ResourceGenerator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4ResourceGenerator.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="T4ResourceGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
 </Project>
