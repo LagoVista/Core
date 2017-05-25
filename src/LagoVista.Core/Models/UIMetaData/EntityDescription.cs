@@ -72,8 +72,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public String UserHelp { get; set; }
         public String Title { get; set; }
 
-        public List<FormField> Elements { get; private set; }
+        public List<FormField> Elements { get;  set; }
 
-        public List<ListColumn> ListColumns { get; private set; }
+        public List<ListColumn> ListColumns { get;  set; }
     }
 }

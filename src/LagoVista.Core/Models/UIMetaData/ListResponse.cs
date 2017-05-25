@@ -13,12 +13,12 @@ namespace LagoVista.Core.Models.UIMetaData
         public string Title { get; set; }
         public string Help { get; set; }
 
-        public IEnumerable<ListColumn> Columns { get; private set; }
+        public IEnumerable<ListColumn> Columns { get;  set; }
 
-        public IEnumerable<TModel> Model { get; private set; }
+        public IEnumerable<TModel> Model { get;  set; }
 
-        public int Top { get; private set; }
-        public int RowCount { get; private set; }
+        public int Top { get;  set; }
+        public int RowCount { get;  set; }
 
         public static ListResponse<TModel> Create(IEnumerable<TModel> model)
         {

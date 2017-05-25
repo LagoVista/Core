@@ -12,19 +12,19 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         private FormField() { }
 
-        public string Label { get; private set; }
-        public String Watermark { get; private set; }
-        public bool IsRequired { get; private set; }
-        public string RequiredMessage { get; private set; }
-        public string Help { get; private set; }
-        public string FieldType { get; private set; }
-        public string RegEx { get; private set; }
-        public string RegExMessage { get; private set; }
-        public String Name { get; private set; }
+        public string Label { get;  set; }
+        public String Watermark { get;  set; }
+        public bool IsRequired { get;  set; }
+        public string RequiredMessage { get;  set; }
+        public string Help { get;  set; }
+        public string FieldType { get;  set; }
+        public string RegEx { get;  set; }
+        public string RegExMessage { get;  set; }
+        public String Name { get;  set; }
         public String Value { get; set; }
         public String DefaultValue { get; set; }
-        public bool IsUserEditable { get; private set; }
-        public String DataType { get; private set; }
+        public bool IsUserEditable { get;  set; }
+        public String DataType { get;  set; }
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
 

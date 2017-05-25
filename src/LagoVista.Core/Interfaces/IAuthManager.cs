@@ -1,5 +1,4 @@
-﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models;
+﻿using LagoVista.Core.Models;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
@@ -11,11 +10,11 @@ namespace LagoVista.Core.Interfaces
         string DeviceId { get; set; }
         string DeviceType { get; set; }
         bool IsAuthenticated { get; set; }
-        bool IsUserVerified { get; set; }
         string RefreshToken { get; set; }
         long RefreshTokenExpiration { get; set; }
         UserInfo User { get; set; }
         Task LoadAsync();
         Task PersistAsync();
+        Task LogoutAsync();
     }
 }

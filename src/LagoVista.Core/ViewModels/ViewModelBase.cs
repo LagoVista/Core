@@ -37,23 +37,6 @@ using LagoVista.Core.Resources;
 
 namespace LagoVista.Core.ViewModels
 {
-    public class ViewModelLaunchArgs
-    {
-        public Type ViewModelType { get; set; }
-        public Object Parameter { get; set; }
-    }
-
-    public interface IViewModelNavigation
-    {
-        void Navigate(ViewModelLaunchArgs args);
-        void Navigate<TViewModel>() where TViewModel : ViewModelBase;
-        void PopToRoot();
-        void SetAsNewRoot();
-        void SetAsNewRoot<TViewModel>() where TViewModel : ViewModelBase;
-        bool CanGoBack();
-        void GoBack();
-    }
-
     public abstract class ViewModelBase : INotifyPropertyChanged, IDataErrorInfo
     {
         #region INotifyPropertyChanged Member
@@ -173,17 +156,7 @@ namespace LagoVista.Core.ViewModels
         }
 
         public virtual void Init() { }
-
-        public virtual Task<bool> CanGoBack()
-        {
-            return Task.FromResult(true);
-        }
-
-        public void GoBack()
-        {
-            IOC.SLWIOC.Get<IViewModelNavigation>().GoBack();
-        }
-
+        
         public virtual Task IsClosingAsync()
         {
             return Task.FromResult(0);
@@ -209,19 +182,15 @@ namespace LagoVista.Core.ViewModels
             get { return IOC.SLWIOC.Get<IDispatcherServices>(); }
         }
 
+        public ViewModelLaunchArgs LaunchArgs
+        {
+            get; set;
+        }
+
         public bool SectionVisibility
         {
             get;
             set;
-        }
-
-        public void ShowViewModel<T>(Object args = null)
-        {
-            IOC.SLWIOC.Get<IViewModelNavigation>().Navigate(new ViewModelLaunchArgs()
-            {
-                ViewModelType = typeof(T),
-                Parameter = args
-            });
         }
 
         private string _messageText;
@@ -292,9 +261,14 @@ namespace LagoVista.Core.ViewModels
             get { return IOC.SLWIOC.Get<ILogger>(); }
         }
 
-        public void CloseScreen()
+        public async Task CloseScreenAsync()
         {
-            GoBack();
+            await ViewModelNavigation.GoBackAsync();
+        }
+
+        public async void CloseScreen()
+        {
+            await ViewModelNavigation.GoBackAsync();
         }
 
 
