@@ -151,11 +151,13 @@ namespace LagoVista.Core.ViewModels
 
         public virtual Task InitAsync()
         {
-            Init();
             return Task.FromResult(0);
         }
 
-        public virtual void Init() { }
+        public virtual Task ReloadedAsync()
+        {
+            return Task.FromResult(0);
+        }
         
         public virtual Task IsClosingAsync()
         {
