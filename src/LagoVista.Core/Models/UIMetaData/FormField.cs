@@ -27,7 +27,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public String DataType { get;  set; }
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
-
+        public bool IsVisible { get; set; }
         public List<EnumDescription> Options { get; set; }
         
         public static  FormField Create(String name, FormFieldAttribute attr)
@@ -118,6 +118,8 @@ namespace LagoVista.Core.Models.UIMetaData
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
                 field.Help = helpProperty == null ? String.Empty : (string)helpProperty.GetValue(helpProperty.DeclaringType, null);
             }
+
+            field.IsVisible = true;
 
             return field;
         }
