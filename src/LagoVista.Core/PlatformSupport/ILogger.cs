@@ -19,7 +19,7 @@ namespace LagoVista.Core.PlatformSupport
     public interface ILogger
     {
         void SetUserId(string userId);
-        void SetKeys(params string[] args);
+        void SetKeys(params KeyValuePair<String, String>[] args);
 
         void Log(LogLevel level, String area, String message, params KeyValuePair<String, String>[] args);
 
