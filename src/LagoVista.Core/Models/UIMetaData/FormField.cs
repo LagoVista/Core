@@ -10,6 +10,18 @@ namespace LagoVista.Core.Models.UIMetaData
 {
     public class FormField
     {
+        public const string FieldType_MultilineText = "MultiLineText";
+        public const string FieldType_CheckBox = "CheckBox";
+        public const string FieldType_Picker = "Picker";
+        public const string FeildType_EntityHeaderPicker = "EntityHeaderPicker";
+        public const string FieldType_Text = "Text";
+        public const string FieldType_Key = "Key";
+        public const string FieldType_ChildList = "ChildList";
+        public const string FieldType_Decimal = "Decimal";
+        public const string FieldType_Integer = "Integer";
+        public const string FieldType_Password = "Password";
+
+
         private FormField() { }
 
         public string Label { get;  set; }

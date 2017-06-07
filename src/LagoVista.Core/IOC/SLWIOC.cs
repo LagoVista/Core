@@ -68,6 +68,11 @@ namespace LagoVista.Core.IOC
             var newInstanceType = typeof(TClassType);
             var constructors = newInstanceType.GetTypeInfo().DeclaredConstructors;
             var primaryConstructor = constructors.FirstOrDefault();
+            if(primaryConstructor == null)
+            {
+                throw new Exception($"Could not find first constructor for {typeof(TClassType)}");
+            }
+
             var parameters = GetDependencyInjectionParameters(newInstanceType, primaryConstructor);
             object newObject;
             try
@@ -135,9 +140,7 @@ namespace LagoVista.Core.IOC
 
             foreach (var parameterInfo in primaryConstructor.GetParameters())
             {
-                object parameterValue;
-
-                if (!TryResolve(parameterInfo.ParameterType, out parameterValue))
+                if (!TryResolve(parameterInfo.ParameterType, out object parameterValue))
                 {
                     if (parameterInfo.IsOptional)
                     {
@@ -148,8 +151,10 @@ namespace LagoVista.Core.IOC
                         throw new Exception($"Could not create dependency for {parameterInfo.ParameterType.FullName} on {type.FullName}");
                     }
                 }
-
-                parameters.Add(parameterValue);
+                else
+                {
+                    parameters.Add(parameterValue);
+                }
             }
 
             return parameters;
