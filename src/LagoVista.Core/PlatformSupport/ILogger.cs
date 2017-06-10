@@ -14,6 +14,9 @@ namespace LagoVista.Core.PlatformSupport
         Warning,
         Message,
         Verbose,
+        TimedEvent,
+        Metric,
+        ConfigurationError
     }
 
     public interface ILogger
@@ -21,7 +24,6 @@ namespace LagoVista.Core.PlatformSupport
         TimedEvent StartTimedEvent(string area, string description);
         void EndTimedEvent(TimedEvent evt);
 
-        void SetUserId(string userId);
         void AddKVPs(params KeyValuePair<String, String>[] args);
 
         void AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel level, string tag, string customEvent, params KeyValuePair<string, string>[] args);
