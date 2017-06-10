@@ -158,7 +158,7 @@ namespace LagoVista.Core.Networking.Models
                     }
                     catch(Exception ex)
                     {
-                        PlatformSupport.Services.Logger.LogException("uPnPDevice.DeviceIcon", ex);
+                        PlatformSupport.Services.Logger.AddException("uPnPDevice.DeviceIcon", ex);
                     }
                 }
 

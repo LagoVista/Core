@@ -235,7 +235,7 @@ namespace LagoVista.Core.ViewModels
         public void LogTelemetry(String msg, [CallerMemberName] string area = "", params KeyValuePair<string, string>[] args)
         {
             area = $"{this.GetType().Name}_{area}";
-            Logger.Log(LogLevel.Message, area, msg, args);
+            Logger.AddCustomEvent(LogLevel.Message, area, msg, args);
         }
        
         public virtual void TransitionCompleted()
@@ -296,7 +296,7 @@ namespace LagoVista.Core.ViewModels
                 catch (Exception ex)
                 {
                     success = false;
-                    PlatformSupport.Services.Logger.LogException("ViewModelBase.PerformNetworkOperation", ex);
+                    PlatformSupport.Services.Logger.AddException("ViewModelBase.PerformNetworkOperation", ex);
                 }
                 finally
                 {

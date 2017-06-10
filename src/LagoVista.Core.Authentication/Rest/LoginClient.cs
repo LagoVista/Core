@@ -67,7 +67,7 @@ namespace LagoVista.Core.Authentication.Rest
             catch(Exception ex)
             {
                 var json = JsonConvert.SerializeObject(formContent);
-                _logger.LogException("AuthClient_LoginAsync", ex, new System.Collections.Generic.KeyValuePair<string, string>("json", json));
+                _logger.AddException("AuthClient_LoginAsync", ex, new System.Collections.Generic.KeyValuePair<string, string>("json", json));
                 return APIResponse<AuthResponse>.FromException(ex);
             }
         }

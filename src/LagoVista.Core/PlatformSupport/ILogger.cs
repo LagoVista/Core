@@ -19,15 +19,14 @@ namespace LagoVista.Core.PlatformSupport
     public interface ILogger
     {
         TimedEvent StartTimedEvent(string area, string description);
-        
         void EndTimedEvent(TimedEvent evt);
 
         void SetUserId(string userId);
-        void SetKeys(params KeyValuePair<String, String>[] args);
+        void AddKVPs(params KeyValuePair<String, String>[] args);
 
-        void Log(LogLevel level, String area, String message, params KeyValuePair<String, String>[] args);
+        void AddCustomEvent(LagoVista.Core.PlatformSupport.LogLevel level, string tag, string customEvent, params KeyValuePair<string, string>[] args);
 
-        void LogException(String area, Exception ex, params KeyValuePair<String, String>[] args);
+        void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args);
 
         void TrackEvent(string message, Dictionary<string, string> parameters);
     }

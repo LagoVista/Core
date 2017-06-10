@@ -140,9 +140,9 @@ namespace LagoVista.Core.ServiceCommon
             if (ShowDiagnostics)
             {
                 if (args != null && args.Length > 0)
-                    PlatformSupport.Services.Logger.Log(PlatformSupport.LogLevel.Message, GetType().Name, String.Format(message, args));
+                    PlatformSupport.Services.Logger.AddCustomEvent(PlatformSupport.LogLevel.Message, GetType().Name, String.Format(message, args));
                 else
-                    PlatformSupport.Services.Logger.Log(PlatformSupport.LogLevel.Message, GetType().Name, message);
+                    PlatformSupport.Services.Logger.AddCustomEvent(PlatformSupport.LogLevel.Message, GetType().Name, message);
             }
         }
 
@@ -151,15 +151,15 @@ namespace LagoVista.Core.ServiceCommon
             if (ShowDiagnostics)
             {
                 if (args != null && args.Length > 0)
-                    PlatformSupport.Services.Logger.Log(PlatformSupport.LogLevel.Verbose, GetType().Name, String.Format(message, args));
+                    PlatformSupport.Services.Logger.AddCustomEvent(PlatformSupport.LogLevel.Verbose, GetType().Name, String.Format(message, args));
                 else
-                    PlatformSupport.Services.Logger.Log(PlatformSupport.LogLevel.Verbose, GetType().Name, message);
+                    PlatformSupport.Services.Logger.AddCustomEvent(PlatformSupport.LogLevel.Verbose, GetType().Name, message);
             }
         }
 
         protected void LogException(String area, Exception ex)
         {
-            PlatformSupport.Services.Logger.LogException(GetType().Name, ex);
+            PlatformSupport.Services.Logger.AddException(GetType().Name, ex);
         }
 
         private DateTime? _dateConnected;
