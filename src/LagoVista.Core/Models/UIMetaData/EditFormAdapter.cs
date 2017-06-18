@@ -22,6 +22,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public event EventHandler<OptionSelectedEventArgs> OptionSelected;
 
+        public event EventHandler<DeleteItemEventArgs> DeleteItem;
+
         public EditFormAdapter(object parent, IDictionary<string, FormField> view, IViewModelNavigation navigationService)
         {
             _entityLists = new Dictionary<string, IEnumerable<IEntityHeaderEntity>>();
@@ -36,6 +38,11 @@ namespace LagoVista.Core.Models.UIMetaData
         public void InvokeOptionSelected(OptionSelectedEventArgs optionSelectedEventArgs)
         {
             OptionSelected?.Invoke(this, optionSelectedEventArgs);
+        }
+
+        public void InvokeItemDeleted(DeleteItemEventArgs args)
+        {
+            DeleteItem?.Invoke(this, args);
         }
 
         public void InvokeAdd(string type)
@@ -58,6 +65,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 LaunchType = LaunchTypes.Edit
             });
         }
+
 
 
         ObservableCollection<FormField> _formItems;
@@ -144,6 +152,12 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         public String Type { get; set; }
         public String Id { get; set; }
+    }
+
+    public class DeleteItemEventArgs : EventArgs
+    {
+        public string Type { get; set; }
+        public string Id { get; set; }
     }
 
 }
