@@ -13,6 +13,7 @@ namespace LagoVista.Core.PlatformSupport
         UnhandledException,
         Warning,
         Message,
+        StateChange,
         Verbose,
         TimedEvent,
         Metric,
