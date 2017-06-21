@@ -54,7 +54,7 @@ namespace LagoVista.Core.Networking.Interfaces
     }
 
 
-    public interface IMQTTIoTClientBase
+    public interface IMQTTClientBase
     {
         event EventHandler<IMQTTAppStatusReceivedEventArgs> AppStatusReceived;
         event EventHandler<IMQTTCommandEventArgs> CommandReceived;
@@ -76,7 +76,7 @@ namespace LagoVista.Core.Networking.Interfaces
     }
 
 
-    public interface IMQTTIoTAppClient : IMQTTIoTClientBase
+    public interface IMQTTAppClient : IMQTTClientBase
     {
         String AppId { get; set; }
         String APIKey { get; set; }
@@ -98,7 +98,7 @@ namespace LagoVista.Core.Networking.Interfaces
         Task SaveSettingsAsync();
     }
 
-    public interface IMQTTIoTDeviceClient : IMQTTIoTClientBase
+    public interface IMQTTDeviceClient : IMQTTClientBase
     {
         String DeviceType { get; set; }
 
