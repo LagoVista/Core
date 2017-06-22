@@ -89,6 +89,11 @@ namespace LagoVista.Core.IOC
 
         public static object CreateForType(Type newInstanceType) 
         {
+            if(newInstanceType.GetTypeInfo().IsInterface)
+            {
+                newInstanceType = _registeredTypes[newInstanceType];
+            }
+
             var constructors = newInstanceType.GetTypeInfo().DeclaredConstructors;
             var primaryConstructor = constructors.FirstOrDefault();
             var parameters = GetDependencyInjectionParameters(newInstanceType, primaryConstructor);
@@ -140,15 +145,24 @@ namespace LagoVista.Core.IOC
 
             foreach (var parameterInfo in primaryConstructor.GetParameters())
             {
+                /* First try to get it from a singleton */
                 if (!TryResolve(parameterInfo.ParameterType, out object parameterValue))
                 {
-                    if (parameterInfo.IsOptional)
+                    parameterValue = CreateForType(parameterInfo.ParameterType);
+                    if (parameterValue == null)
                     {
-                        parameterValue = Type.Missing;
+                        if (parameterInfo.IsOptional)
+                        {
+                            parameterValue = Type.Missing;
+                        }
+                        else
+                        {
+                            throw new Exception($"Could not create dependency for {parameterInfo.ParameterType.FullName} on {type.FullName}");
+                        }
                     }
                     else
                     {
-                        throw new Exception($"Could not create dependency for {parameterInfo.ParameterType.FullName} on {type.FullName}");
+                        parameters.Add(parameterValue);
                     }
                 }
                 else

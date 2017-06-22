@@ -54,7 +54,7 @@ namespace LagoVista.Core.Networking.Interfaces
     }
 
 
-    public interface IMQTTClientBase
+    public interface IMQTTClientBase : IDisposable
     {
         event EventHandler<IMQTTAppStatusReceivedEventArgs> AppStatusReceived;
         event EventHandler<IMQTTCommandEventArgs> CommandReceived;
@@ -63,14 +63,16 @@ namespace LagoVista.Core.Networking.Interfaces
 
         event EventHandler<bool> ConnectionStateChanged;
 
-        String OrgId { get; set; }        
-        String APIToken { get; set; }
+        String BrokerHostName { get; set; }
+        int BrokerPort { get; set; }
 
         String ClientId { get; }
 
         bool IsConnected { get; }
 
-        Task<ConnAck> Connect();
+        Task<ConnAck> ConnectAsync();
+
+        void Disconnect();
 
         bool ShowDiagnostics { get; set; }
     }
@@ -79,42 +81,35 @@ namespace LagoVista.Core.Networking.Interfaces
     public interface IMQTTAppClient : IMQTTClientBase
     {
         String AppId { get; set; }
-        String APIKey { get; set; }
+        String Password { get; set; }
 
-        String ServerURL { get; set; }
+        
         UInt16 SubscribeToApplicationStatus();
 
         UInt16 SubscribeToDeviceEvents(string deviceType = "+", string deviceId = "+", string evt = "+", string format = "+");
-
         UInt16 SubscribeToDeviceCommands(string deviceType = "+", string deviceId = "+", string cmd = "+", string format = "+");
 
         UInt16 PublishCommand(String deviceType, String deviceId, String command, string format, string data);
-
         UInt16 PublishEvent(String deviceType, String deviceId, String evt, string format, string data);
+
         bool SettingsReady { get; }
 
         Task<bool> ReadSettingsAsync();
-
         Task SaveSettingsAsync();
     }
 
     public interface IMQTTDeviceClient : IMQTTClientBase
     {
-        String DeviceType { get; set; }
-
         String DeviceId { get; set; }
-        String ServerURL { get; set; }
+        String Password { get; set; }
 
         bool SettingsReady { get; }
 
         Task<bool> ReadSettingsAsync();
-
         Task SaveSettingsAsync();
 
         UInt16 SubscribeCommand(String cmd, String format, byte qosLevel = 0);
-
         UInt16 PublishEvent<T>(String evt, String format, T payload);
-
         UInt16 PublishEvent(String evt, String format, String msg, byte qosLevel = 0);
     }
 

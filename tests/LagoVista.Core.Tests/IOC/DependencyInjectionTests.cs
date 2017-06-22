@@ -8,7 +8,7 @@ namespace LagoVista.Core.Tests.IOC
     public class DependencyInjectionTests
     {
         [Fact]
-        public void SimpleInjectionTest()
+        public void SimpleSingletonInjectionTest()
         {
             SLWIOC.RegisterSingleton<IClassA, ClassA>();
             SLWIOC.RegisterSingleton<IClassB, ClassB>();
@@ -27,6 +27,16 @@ namespace LagoVista.Core.Tests.IOC
             var classC = SLWIOC.Get<IClassC>();
             Assert.Equal(classC.ClassA.PropertyA,classA.PropertyA);
             Assert.Equal(classC.ClassB.PropertyA,classB.PropertyA);
+        }
+
+        [Fact]
+        public void SimpleCreateAllTest()
+        {
+            SLWIOC.Register<IClassA, ClassA>();
+            SLWIOC.Register<IClassB, ClassB>();
+            SLWIOC.Register<IClassC, ClassC>();
+
+            SLWIOC.Create<IClassC>();
         }
     }
 }
