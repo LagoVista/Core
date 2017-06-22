@@ -55,6 +55,36 @@ namespace LagoVista.Core.Validation
                 Warnings = Warnings,
             };
         }
+
+        public static InvokeResult FromException(String tag, Exception ex)
+        {
+            var result = new InvokeResult();
+            result.Errors.Add(new ErrorMessage()
+            {
+                ErrorCode = "EXC9999",
+                Message = "Unhandled Excpetion",
+                Details = tag
+            });
+
+            result.Errors.Add(new ErrorMessage()
+            {
+                ErrorCode = "EXC9998",
+                Message = ex.Message,
+                Details = ex.StackTrace
+            });
+
+            if (ex.InnerException != null)
+            {
+                result.Errors.Add(new ErrorMessage()
+                {
+                    ErrorCode = "EXC9997",
+                    Message = ex.InnerException.Message,
+                    Details = ex.InnerException.StackTrace
+                });
+            }
+
+            return result;
+        }
     }
 
     public class InvokeResult<T> : ValidationResult
@@ -97,7 +127,7 @@ namespace LagoVista.Core.Validation
 
         public string Message { get; set; }
 
-        public string Details { get;  set; }
+        public string Details { get; set; }
 
         public override string ToString()
         {

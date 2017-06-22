@@ -190,12 +190,23 @@ namespace LagoVista.Core.Models
                     {
                         var enumMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
                         var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
-                        var eh = new EntityHeader<T>();
-                        eh.Id = enumAttr.Key;
-                        eh.Value = value;
-                        var labelProperty = enumAttr.ResourceType.GetTypeInfo().GetDeclaredProperty(enumAttr.LabelResource);
-                        eh.Text = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
-                        return eh;
+                        if (enumAttr != null)
+                        {
+                            var eh = new EntityHeader<T>();
+                            eh.Id = enumAttr.Key;
+                            eh.Value = value;
+                            var labelProperty = enumAttr.ResourceType.GetTypeInfo().GetDeclaredProperty(enumAttr.LabelResource);
+                            eh.Text = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
+                            return eh;
+                        }
+                        else
+                        {
+                            var eh = new EntityHeader<T>();
+                            eh.Id = value.ToString();
+                            eh.Text = value.ToString();
+                            eh.Value = value;
+                            return eh;
+                        }
                     }
                 }
             }
@@ -224,14 +235,24 @@ namespace LagoVista.Core.Models
 
                         var enumMember = typeof(T).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
                         var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
-                        str.Append(enumAttr.Key);
-                        str.Append(",");
-                        if (enumAttr.Key == value)
+                        if (enumAttr != null)
+                        {
+                            str.Append(enumAttr.Key);
+                            str.Append(",");
+                            if (enumAttr.Key == value)
+                            {
+                                base.Id = value;
+                                _value = (T)(enumValues.GetValue(idx));
+                                return;
+                            }
+                        }
+                        else if(value == enumMember.Name)
                         {
                             base.Id = value;
                             _value = (T)(enumValues.GetValue(idx));
                             return;
                         }
+
                     }
 
                     /* If we made it here, we attempted to assign an invalid id, so reset values to null */

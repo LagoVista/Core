@@ -7,13 +7,10 @@ namespace LagoVista.Core.Networking.Interfaces
     {
         String AppId { get; set; }
         String Password { get; set; }
-        
-        UInt16 SubscribeToApplicationStatus();
-
+                
         UInt16 Subscribe(String topic, byte qosLevel = 0);
         UInt16 Publish<T>(String topic, T payload, byte qosLevel = 0);
         UInt16 Publish(String topic, String payload = "", byte qosLevel = 0);
-
 
         bool SettingsReady { get; }
 

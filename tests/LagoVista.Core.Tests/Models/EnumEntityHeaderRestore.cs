@@ -28,6 +28,13 @@ namespace LagoVista.Core.Tests.Models
             Enum5,
         }
 
+        public enum EnumWithOutLabel
+        {
+            EnumWOLabel1,
+            EnumWOLabel2,
+            EnumWOLabel3,
+        }
+
        
         [TestMethod()]
         public void ShowRestoreValueOnEnumEntityHeaderType()
@@ -51,6 +58,16 @@ namespace LagoVista.Core.Tests.Models
             Assert.AreEqual("enum1", eh.Id);
             Assert.AreEqual(ValidationResources.EnumOne, eh.Text);
             Assert.AreEqual(SampleEnum.Enum1, eh.Value);
+        }
+
+        [TestMethod]
+        public void EHCreateWithoutLabel()
+        {
+            var eh = EntityHeader<EnumWithOutLabel>.Create(EnumWithOutLabel.EnumWOLabel1);
+
+            Assert.AreEqual("EnumWOLabel1", eh.Id);
+            Assert.AreEqual(EnumWithOutLabel.EnumWOLabel1.ToString(), eh.Text);
+            Assert.AreEqual(EnumWithOutLabel.EnumWOLabel1, eh.Value);
         }
     }
 }
