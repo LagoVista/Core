@@ -1,6 +1,8 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.IOC;
 using LagoVista.Core.Models;
+using LagoVista.Core.PlatformSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,12 @@ namespace LagoVista.Core.Validation
         
             if (entity == null)
             {
+                if(SLWIOC.Contains(typeof(ILogger)))
+                {
+                    var logger = SLWIOC.Get<ILogger>();
+                    logger.AddException("Validator_Validate", new Exception("NULL Value Passed to Validate Method"));
+                }
+
                 result.AddSystemError("Null Value Provided for model on upload.");
                 return result;
             }
