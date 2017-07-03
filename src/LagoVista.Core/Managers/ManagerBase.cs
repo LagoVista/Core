@@ -83,11 +83,17 @@ namespace LagoVista.Core.Managers
         protected async Task ConfirmNoDepenenciesAsync(Object instance)
         {
             var dependants = await _dependencyManager.CheckForDependenciesAsync(instance);
-            if(dependants.IsInUse)
+            if (dependants.IsInUse)
             {
                 throw new InUseException(dependants);
             }
         }
+
+        protected Task AuthorizeOrgAccessAsync(string userId, string orgId, Type entityType = null, Actions action = Actions.Any, object data = null)
+        {
+            return _security.AuthorizeOrgAccessAsync(userId, orgId, entityType);
+        }
+
 
         /// <summary>
         /// To be called when an object is renamed, will go through any objects that rely on this object and rename the entity header column.
@@ -99,19 +105,25 @@ namespace LagoVista.Core.Managers
             return _dependencyManager.RenameDependentObjectsAsync(instance, newName);
         }
 
-        protected Task AuthorizeOrgAccess(string userId, string orgId, Type entityType = null)
+        protected Task AuthorizeAsync(string userId, string orgId, string action, Object data = null)
         {
-            return _security.AuthorizeOrgAccess(userId, orgId, entityType);
+            return _security.AuthorizeAsync(userId, orgId, action, data);
         }
 
-        protected Task AuthorizeOrgAccess(EntityHeader user, string orgId, Type entityType = null)
+        protected Task AuthorizeAsync(EntityHeader userId, EntityHeader orgId, string action, Object data = null)
         {
-            return _security.AuthorizeOrgAccess(user, orgId, entityType);
+            return _security.AuthorizeAsync(userId, orgId, action, data);
         }
 
-        protected Task AuthorizeOrgAccess(EntityHeader user, EntityHeader org, Type entityType = null)
+
+        protected Task AuthorizeOrgAccessAsync(EntityHeader user, string orgId, Type entityType = null, Actions action = Actions.Any, object data = null)
         {
-            return _security.AuthorizeOrgAccess(user, org, entityType);
+            return _security.AuthorizeOrgAccessAsync(user, orgId, entityType);
+        }
+
+        protected Task AuthorizeOrgAccessAsync(EntityHeader user, EntityHeader org, Type entityType = null, Actions action = Actions.Any, object data = null)
+        {
+            return _security.AuthorizeOrgAccessAsync(user, org, entityType);
         }
 
     }

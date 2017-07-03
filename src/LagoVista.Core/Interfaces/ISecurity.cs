@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,8 +11,10 @@ namespace LagoVista.Core.Interfaces
     public interface ISecurity
     {
         Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, string actionName);
-        Task AuthorizeOrgAccess(EntityHeader user, EntityHeader org, Type entityType = null);
-        Task AuthorizeOrgAccess(EntityHeader user, string orgId, Type entityType = null);
-        Task AuthorizeOrgAccess(string userId, string orgId, Type entityType = null);
+        Task AuthorizeAsync(EntityHeader user, EntityHeader org, string actionName, Object data );
+        Task AuthorizeAsync(string user, string org, string actionName, Object data );
+        Task AuthorizeOrgAccessAsync(EntityHeader user, EntityHeader org, Type entityType = null, Actions action = Actions.Any);
+        Task AuthorizeOrgAccessAsync(EntityHeader user, string orgId, Type entityType = null, Actions action = Actions.Any);
+        Task AuthorizeOrgAccessAsync(string userId, string orgId, Type entityType = null, Actions action = Actions.Any);
     }
 }
