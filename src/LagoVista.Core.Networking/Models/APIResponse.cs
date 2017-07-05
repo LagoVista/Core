@@ -15,21 +15,27 @@ namespace LagoVista.Core.Networking.Models
 
     public class APIResponse 
     {
+        [JsonProperty("statusCode")]
         public HttpStatusCode StatusCode { get; protected set; }
 
+        [JsonProperty("errorMessage")]
         public string ErrorMessage { get; protected set; }
 
-        public ResponeStatus Status { get; protected set; }
-        public Exception Exception { get; protected set; }        
+        [JsonProperty("status")]
+        public String Status { get; protected set; }
 
-        public bool Success { get { return Status == ResponeStatus.Ok; } }
+        [JsonProperty("exception")]
+        public Exception Exception { get; protected set; }
+
+        [JsonProperty("success")]
+        public bool Success { get { return Status == ResponeStatus.Ok.ToString(); } }
 
         public static APIResponse CreateOK()
         {
             return new APIResponse()
             {
                  StatusCode = HttpStatusCode.OK,
-                 Status = ResponeStatus.Ok,
+                 Status = ResponeStatus.Ok.ToString(),
             };
         }
 
@@ -39,7 +45,7 @@ namespace LagoVista.Core.Networking.Models
             {
                 Exception = ex,
                 StatusCode = HttpStatusCode.ExpectationFailed,
-                Status = ResponeStatus.Failed,
+                Status = ResponeStatus.Failed.ToString(),
             };
         }
 
@@ -48,7 +54,7 @@ namespace LagoVista.Core.Networking.Models
             return new APIResponse()
             {
                 StatusCode = statusCode,
-                Status = ResponeStatus.Failed,
+                Status = ResponeStatus.Failed.ToString(),
             };
         }
     }
@@ -59,7 +65,7 @@ namespace LagoVista.Core.Networking.Models
         public APIResponse(TResult result)
         {
             Result = result;
-            Status = ResponeStatus.Ok;
+            Status = ResponeStatus.Ok.ToString();
         }
 
         public TResult Result { get; private set; }
@@ -68,7 +74,7 @@ namespace LagoVista.Core.Networking.Models
         {
             return new APIResponse<TResult>(result)
             {
-                Status = ResponeStatus.Ok,
+                Status = ResponeStatus.Ok.ToString(),
                 StatusCode = HttpStatusCode.OK
             };
         }
@@ -78,7 +84,7 @@ namespace LagoVista.Core.Networking.Models
             var result = JsonConvert.DeserializeObject<TResult>(json);
             return new APIResponse<TResult>(result)
             {
-                Status = ResponeStatus.Ok,
+                Status = ResponeStatus.Ok.ToString(),
                 StatusCode = HttpStatusCode.OK
             };
         }
@@ -88,7 +94,7 @@ namespace LagoVista.Core.Networking.Models
             return new APIResponse<TResult>(null)
             {
                 StatusCode = statusCode,
-                Status = ResponeStatus.Failed,
+                Status = ResponeStatus.Failed.ToString(),
             };
         }
 
@@ -98,7 +104,7 @@ namespace LagoVista.Core.Networking.Models
             {
                 Exception = ex,
                 StatusCode = HttpStatusCode.ExpectationFailed,
-                Status = ResponeStatus.Failed,
+                Status = ResponeStatus.Failed.ToString(),
             };
         }
     }
