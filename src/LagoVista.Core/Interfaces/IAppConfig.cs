@@ -27,6 +27,8 @@ namespace LagoVista.Core.Interfaces
         Environments Environment { get; }
         String WebAddress { get; }
         String AppName { get; }
+        String AppId { get;  }
+        String InstallationId { get; }
         String AppLogo { get; }
         String CompanyLogo { get; }
         bool EmitTestingCode { get; }

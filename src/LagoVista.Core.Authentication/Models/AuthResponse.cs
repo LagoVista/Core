@@ -11,14 +11,21 @@ namespace LagoVista.Core.Authentication.Models
 
     public class AuthResponse
     {
-        public string AuthToken { get; set; }
+        public AuthResponse()
+        {
+            Roles = new List<string>();
+        }
 
-        public string AuthTokenExpiresUTC { get; set;}
+        public string AccessToken { get; set; }
+
+        public string AccessTokenExpiresUTC { get; set;}
 
         public string RefreshToken { get; set; }
 
         public string RefreshTokenExpiresUTC { get; set; }
 
         public string TokenType { get; set; }
+
+        public List<String> Roles { get; set; }
     }
 }

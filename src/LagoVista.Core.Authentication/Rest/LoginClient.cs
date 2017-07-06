@@ -4,6 +4,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Networking.Interfaces;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Validation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Authentication.Rest
 {
-    public class AuthClient 
+    /*public class AuthClient 
     {
         private const string PATH = "/api/v1/token";
 
@@ -29,47 +30,9 @@ namespace LagoVista.Core.Authentication.Rest
             _networkService = networkService;
         }
 
-        public async Task<APIResponse<AuthResponse>> LoginAsync(AuthRequest loginInfo, CancellationTokenSource cancellationTokenSource = null)
+        public  Task<InvokeResult<AuthResponse>> LoginAsync(AuthRequest loginInfo, CancellationTokenSource cancellationTokenSource = null)
         {
-            if(cancellationTokenSource == null)
-            {
-                cancellationTokenSource = new CancellationTokenSource();
-            }
-
-            var formContent = new Dictionary<string, string>
-                {
-                    {"grant_type", loginInfo.GrantType},
-                    {"refresh_token", loginInfo.GrantType},
-                    {"username", loginInfo.Email},
-                    {"password", loginInfo.Password},
-                };
-
-
-            var postContent = new FormUrlEncodedContent(formContent);
-            postContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-            _httpClient.DefaultRequestHeaders.Clear();
-
-            try
-            {
-                var response = await _httpClient.PostAsync(PATH, postContent, cancellationTokenSource.Token);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContents = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<AuthResponse>(responseContents);
-                    return new APIResponse<AuthResponse>(result);
-                }
-                else
-                {
-                    return APIResponse<AuthResponse>.FromFailedStatusCode(response.StatusCode);
-                }
-            }
-            catch(Exception ex)
-            {
-                var json = JsonConvert.SerializeObject(formContent);
-                _logger.AddException("AuthClient_LoginAsync", ex, new System.Collections.Generic.KeyValuePair<string, string>("json", json));
-                return APIResponse<AuthResponse>.FromException(ex);
-            }
+            throw new NotImplementedException();
         }
 
         public Task<APIResponse> ResetPasswordAsync(String emailAddress, CancellationTokenSource cancellationTokenSource = null)
@@ -82,5 +45,5 @@ namespace LagoVista.Core.Authentication.Rest
             return Task.FromResult<APIResponse>(null);
         }
 
-    }
+    }*/
 }

@@ -9,16 +9,21 @@ namespace LagoVista.Core.Authentication.Models
         /// Grant type supported are password and refreshtoken
         /// </summary>
         public string GrantType { get; set; }
-        
+
         /// <summary>
         /// Regsitered App Id for Calling Web Service
         /// </summary>
         public string AppId { get; set; }
 
         /// <summary>
-        /// Unique Client/Device ID.  To ensure sessions are maintained this should be unique to device
+        /// Unique ID from the physical hardware (if available) 
         /// </summary>
-        public string ClientId { get; set; }
+        public String DeviceId {get; set; }
+
+        /// <summary>
+        /// Unqiue Generated ID generated for the installation
+        /// </summary>
+        public string InstallationId { get; set; }
 
         /// <summary>
         /// Type of client, free form text but should be something like iPhone/Android/Windows/Web, etc...

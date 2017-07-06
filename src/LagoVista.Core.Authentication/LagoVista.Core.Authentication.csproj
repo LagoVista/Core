@@ -12,6 +12,11 @@
     <AssemblyOriginatorKeyFile>LagoVista.Core.Authentication.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Resources\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <None Remove="Resources\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
     <ProjectReference Include="..\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
   </ItemGroup>
@@ -33,8 +38,5 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>

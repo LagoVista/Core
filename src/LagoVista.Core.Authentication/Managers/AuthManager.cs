@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using System.Collections.Generic;
 
 namespace LagoVista.Core.Authentication.Managers
 {
@@ -16,16 +17,18 @@ namespace LagoVista.Core.Authentication.Managers
         {
             _deviceInfo = deviceInfo;
             _storage = storage;
+            Roles = new List<string>();
         }
 
-        public string AuthToken { get; set; }
-        public long AuthTokenExpiration { get; set; }
+        public string AccessToken { get; set; }
+        public string AccessTokenExpirationUTC { get; set; }
         public string DeviceId { get; set; }
         public String DeviceType { get; set; }
         public bool IsAuthenticated { get; set; }
         public string RefreshToken { get; set; }
-        public long RefreshTokenExpiration { get; set; }
+        public string RefreshTokenExpirationUTC { get; set; }
         public UserInfo User { get; set; }
+        public List<String> Roles { get; set; }
 
         public async Task LoadAsync()
         {
@@ -39,13 +42,13 @@ namespace LagoVista.Core.Authentication.Managers
             }
             else
             {
-                AuthToken = storedAuthmanager.AuthToken;
-                AuthTokenExpiration = storedAuthmanager.AuthTokenExpiration;
+                AccessToken = storedAuthmanager.AccessToken;
+                AccessTokenExpirationUTC = storedAuthmanager.AccessTokenExpirationUTC;
                 DeviceId = storedAuthmanager.DeviceId;
                 DeviceType = storedAuthmanager.DeviceType;
                 IsAuthenticated = storedAuthmanager.IsAuthenticated;
                 RefreshToken = storedAuthmanager.RefreshToken;
-                RefreshTokenExpiration = storedAuthmanager.RefreshTokenExpiration;
+                RefreshTokenExpirationUTC = storedAuthmanager.RefreshTokenExpirationUTC;
                 User = storedAuthmanager.User;
             }
         }

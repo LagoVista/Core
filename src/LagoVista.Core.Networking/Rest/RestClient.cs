@@ -11,7 +11,7 @@ using LagoVista.Core.Interfaces;
 
 namespace LagoVista.Core.Networking.Rest
 {
-    public class RestClient : IRestClient
+    /*public class RestClient : IRestClient
     {
         HttpClient _httpClient;
         IAuthManager _authManager;
@@ -36,7 +36,7 @@ namespace LagoVista.Core.Networking.Rest
             }
 
             _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authManager.AuthToken);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authManager.AccessToken);
 
             try
             {
@@ -78,5 +78,5 @@ namespace LagoVista.Core.Networking.Rest
         {
             throw new NotImplementedException();
         }
-    }
+    }*/
 }
