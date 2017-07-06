@@ -47,91 +47,14 @@ namespace LagoVista.Core.Validation
             Warnings.AddRange(result.Warnings);
         }
 
-        public InvokeResult ToActionResult()
+
+        public InvokeResult ToInvokeResult()
         {
             return new InvokeResult()
             {
                 Errors = Errors,
                 Warnings = Warnings,
             };
-        }
-
-        public static InvokeResult FromException(String tag, Exception ex)
-        {
-            var result = new InvokeResult();
-            result.Errors.Add(new ErrorMessage()
-            {
-                ErrorCode = "EXC9999",
-                Message = "Unhandled Excpetion",
-                Details = tag
-            });
-
-            result.Errors.Add(new ErrorMessage()
-            {
-                ErrorCode = "EXC9998",
-                Message = ex.Message,
-                Details = ex.StackTrace
-            });
-
-            if (ex.InnerException != null)
-            {
-                result.Errors.Add(new ErrorMessage()
-                {
-                    ErrorCode = "EXC9997",
-                    Message = ex.InnerException.Message,
-                    Details = ex.InnerException.StackTrace
-                });
-            }
-
-            return result;
-        }
-    }
-
-    public class InvokeResult<T> : ValidationResult
-    {
-        public T Result { get; set; }
-    }
-
-    public class InvokeResult : ValidationResult
-    {
-        public static InvokeResult Success
-        {
-            get { return new InvokeResult(); }
-        }
-    }
-
-    public class ErrorMessage
-    {
-        public ErrorMessage()
-        {
-
-        }
-
-        public ErrorMessage(String message, bool systemError = false)
-        {
-            Message = message;
-            SystemError = systemError;
-        }
-
-        public ErrorMessage(String errorCode, String message, bool systemError = false)
-        {
-            ErrorCode = errorCode;
-            Message = message;
-            SystemError = systemError;
-        }
-
-        public string ErrorCode { get; set; }
-
-        public bool SystemError { get; set; }
-
-
-        public string Message { get; set; }
-
-        public string Details { get; set; }
-
-        public override string ToString()
-        {
-            return Message;
         }
     }
 }

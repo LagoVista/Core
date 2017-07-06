@@ -13,11 +13,11 @@ namespace LagoVista.Core.Authentication.Models
     {
         public string AuthToken { get; set; }
 
-        public long AuthTokenExpiration { get; set;}
+        public string AuthTokenExpiresUTC { get; set;}
 
         public string RefreshToken { get; set; }
 
-        public long RefreshTokenExpiration { get; set; }
+        public string RefreshTokenExpiresUTC { get; set; }
 
         public string TokenType { get; set; }
     }

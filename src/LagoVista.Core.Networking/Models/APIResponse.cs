@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Linq;
 using LagoVista.Core.Networking.Interfaces;
 using Newtonsoft.Json;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.Core.Networking.Models
 {
@@ -13,7 +15,7 @@ namespace LagoVista.Core.Networking.Models
     }
 
 
-    public class APIResponse 
+    public class APIResponse
     {
         [JsonProperty("statusCode")]
         public HttpStatusCode StatusCode { get; protected set; }
@@ -34,8 +36,8 @@ namespace LagoVista.Core.Networking.Models
         {
             return new APIResponse()
             {
-                 StatusCode = HttpStatusCode.OK,
-                 Status = ResponeStatus.Ok.ToString(),
+                StatusCode = HttpStatusCode.OK,
+                Status = ResponeStatus.Ok.ToString(),
             };
         }
 
@@ -57,10 +59,34 @@ namespace LagoVista.Core.Networking.Models
                 Status = ResponeStatus.Failed.ToString(),
             };
         }
+
+        public static APIResponse Create(InvokeResult result)
+        {
+            if (result.Errors.Any())
+            {
+                var response = new APIResponse()
+                {
+                    Status = ResponeStatus.Failed.ToString()
+                };
+
+                response.ErrorMessage = String.Empty;
+
+                foreach(var err in result.Errors)
+                {
+                    response.ErrorMessage += err.Message;
+                }
+
+                return response;
+            }
+            else
+            {
+                return APIResponse.CreateOK();
+            }
+        }
     }
 
 
-    public class APIResponse<TResult> : APIResponse where TResult: class
+    public class APIResponse<TResult> : APIResponse where TResult : class
     {
         public APIResponse(TResult result)
         {
@@ -106,6 +132,30 @@ namespace LagoVista.Core.Networking.Models
                 StatusCode = HttpStatusCode.ExpectationFailed,
                 Status = ResponeStatus.Failed.ToString(),
             };
+        }
+
+        public static APIResponse<TResult> Create(InvokeResult<TResult> result)
+        {
+            if (result.Errors.Any())
+            {
+                var response = new APIResponse<TResult>(result.Result)
+                {
+                    Status = ResponeStatus.Failed.ToString()
+                };
+
+                response.ErrorMessage = String.Empty;
+
+                foreach (var err in result.Errors)
+                {
+                    response.ErrorMessage += err.Message;
+                }
+
+                return response;
+            }
+            else
+            {
+                return APIResponse<TResult>.Create(result.Result);
+            }
         }
     }
 }

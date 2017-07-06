@@ -166,6 +166,16 @@ namespace LagoVista.Core
             }
         }
 
+        public static string ToRowKeyDatePart(this DateTime dateTime)
+        {
+            return (DateTime.MaxValue.Ticks - dateTime.Ticks).ToString("D19");
+        }
+
+        public static string ToInverseTicksRowKey(this DateTime dateTime)
+        {
+            return $"{dateTime.ToRowKeyDatePart()}.{Guid.NewGuid().ToId()}";
+        }
+
 
         public static int? ToInt(this object basis, IFormatProvider cultureInfo)
         {

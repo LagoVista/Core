@@ -1,25 +1,20 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Authentication.Models
 {
 //    [EntityDescription(Name: "Refresh Token", Domain: Domains.AuthenticationDomain)]
     public class RefreshToken : TableStorageEntity
     {
-        public string Subject { get; set; }
+        public RefreshToken(string userId)
+        {
+            PartitionKey = userId;
+        }
+
+        public string AppId { get; set; }
         public string ClientId { get; set; }
         public String IssuedUtc { get; set; }
         public String ExpiresUtc { get; set; }
-        public string ProtectedTicket { get; set; }
-        public bool Enabled { get; set; }
-
-        public RefreshToken()
-        {
-            Enabled = true;
-        }
-    }
+     }
 }
