@@ -22,6 +22,7 @@ namespace LagoVista.Core.Authentication.Managers
 
         public string AccessToken { get; set; }
         public string AccessTokenExpirationUTC { get; set; }
+        public String AppInstanceId { get; set; }
         public string DeviceId { get; set; }
         public String DeviceType { get; set; }
         public bool IsAuthenticated { get; set; }
