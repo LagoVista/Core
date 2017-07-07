@@ -28,7 +28,7 @@ namespace LagoVista.Core.Interfaces
         String WebAddress { get; }
         String AppName { get; }
         String AppId { get;  }
-        String InstallationId { get; }
+        String ClientType { get; }
         String AppLogo { get; }
         String CompanyLogo { get; }
         bool EmitTestingCode { get; }

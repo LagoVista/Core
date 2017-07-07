@@ -24,7 +24,7 @@ namespace LagoVista.Core.Authentication.Models
 
         public string RefreshTokenExpiresUTC { get; set; }
 
-        public string TokenType { get; set; }
+        public string AppInstanceId { get; set; }
 
         public List<String> Roles { get; set; }
     }

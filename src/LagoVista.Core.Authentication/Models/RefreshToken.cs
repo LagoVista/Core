@@ -13,7 +13,7 @@ namespace LagoVista.Core.Authentication.Models
         }
 
         public string AppId { get; set; }
-        public string ClientId { get; set; }
+        public string AppInstanceId { get; set; }
         public String IssuedUtc { get; set; }
         public String ExpiresUtc { get; set; }
      }

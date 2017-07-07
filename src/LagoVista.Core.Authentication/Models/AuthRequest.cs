@@ -21,9 +21,11 @@ namespace LagoVista.Core.Authentication.Models
         public String DeviceId {get; set; }
 
         /// <summary>
-        /// Unqiue Generated ID generated for the installation
+        /// Unqiue Generated ID generated for the installation, will be generated from
+        /// server on initial install if not passed in as a parameter, if passed in
+        /// as a parameter we will assume the user is just logging in for a second time.
         /// </summary>
-        public string InstallationId { get; set; }
+        public string AppInstanceId { get; set; }
 
         /// <summary>
         /// Type of client, free form text but should be something like iPhone/Android/Windows/Web, etc...
