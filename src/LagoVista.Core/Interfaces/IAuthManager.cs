@@ -10,6 +10,7 @@ namespace LagoVista.Core.Interfaces
         string AccessToken { get; set; }
         string AccessTokenExpirationUTC { get; set; }
         string DeviceId { get; set; }
+        string AppInstanceId { get; set; }
         string DeviceType { get; set; }
         bool IsAuthenticated { get; set; }
         string RefreshToken { get; set; }
