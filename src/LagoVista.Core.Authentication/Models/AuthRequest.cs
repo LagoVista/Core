@@ -35,6 +35,12 @@ namespace LagoVista.Core.Authentication.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string RefreshToken { get; set; }
+
+        /// <summary>
+        /// If Present will login with the context of this user id, if not will use the login from the last logino
+        /// </summary>
+        public string OrgId { get; set; }
+        public string OrgName { get; set; }
     }
 }
                                                                                                                                                                                                                                                                                                                                                                 

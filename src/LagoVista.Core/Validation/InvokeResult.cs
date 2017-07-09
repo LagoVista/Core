@@ -11,6 +11,17 @@ namespace LagoVista.Core.Validation
             return new InvokeResult<T>() { Result = result } ;
         }
 
+        /// <summary>
+        /// Create an empty result that can either be populated at a later time
+        /// or used to show success.
+        /// </summary>
+        /// <returns></returns>
+        public static InvokeResult<T> CreateEmpty()
+        {
+            return new InvokeResult<T>() { };
+        }
+
+
         public static InvokeResult<T> FromErrors(params ErrorMessage[] errs)
         {
             var result = new InvokeResult<T>();
@@ -19,6 +30,13 @@ namespace LagoVista.Core.Validation
                 result.Errors.Add(err);
             }
 
+            return result;
+        }
+
+        public static InvokeResult<T> FromError(String err)
+        {
+            var result = new InvokeResult<T>();
+            result.Errors.Add(new ErrorMessage(err));
             return result;
         }
 
@@ -49,6 +67,13 @@ namespace LagoVista.Core.Validation
                 });
             }
 
+            return result;
+        }
+
+        public static InvokeResult<T> FromInvokeResult(InvokeResult originalResult)
+        {
+            var result = new InvokeResult<T>();
+            result.Concat(originalResult);
             return result;
         }
     }
