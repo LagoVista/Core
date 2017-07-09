@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace LagoVista.Core.Authentication.Models
     {
         public AuthResponse()
         {
-            Roles = new List<string>();
+            Roles = new List<EntityHeader>();
         }
 
         public string AccessToken { get; set; }
@@ -26,6 +27,10 @@ namespace LagoVista.Core.Authentication.Models
 
         public string AppInstanceId { get; set; }
 
-        public List<String> Roles { get; set; }
+        public bool IsLockedOut { get; set; }
+
+        public EntityHeader Org { get; set; }
+
+        public List<EntityHeader> Roles { get; set; }
     }
 }
