@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LagoVista.Core.Validation
 {
@@ -76,6 +77,24 @@ namespace LagoVista.Core.Validation
             result.Concat(originalResult);
             return result;
         }
+
+        public KeyValuePair<string, string>[] ErrorsToKVPArray()
+        {
+            var idx = 1;
+            var kvps = new List<KeyValuePair<string, string>>();
+            foreach(var err in Errors)
+            {
+                if (String.IsNullOrEmpty(err.ErrorCode))
+                {
+                    kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", err.Message));
+                }
+                else
+                {
+                    kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", $"{err.ErrorCode} - {err.Message}"));
+                }
+            }
+            return kvps.ToArray();            
+        }
     }
 
 
@@ -126,6 +145,24 @@ namespace LagoVista.Core.Validation
             }
 
             return result;
+        }
+
+        public KeyValuePair<string, string>[] ErrorsToKVPArray()
+        {
+            var idx = 1;
+            var kvps = new List<KeyValuePair<string, string>>();
+            foreach (var err in Errors)
+            {
+                if (String.IsNullOrEmpty(err.ErrorCode))
+                {
+                    kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", err.Message));
+                }
+                else
+                {
+                    kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", $"{err.ErrorCode} - {err.Message}"));
+                }
+            }
+            return kvps.ToArray();
         }
     }
 }
