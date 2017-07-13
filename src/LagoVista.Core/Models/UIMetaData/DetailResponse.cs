@@ -2,10 +2,11 @@
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
-    public class DetailResponse<TModel> where TModel : new()
+    public class DetailResponse<TModel> : InvokeResult where TModel : new()
     {
         private DetailResponse() { }
 

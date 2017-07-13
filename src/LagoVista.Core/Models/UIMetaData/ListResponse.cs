@@ -3,10 +3,11 @@ using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
-    public class ListResponse<TModel> where TModel :class
+    public class ListResponse<TModel>  : InvokeResult where TModel :class
     {
         private ListResponse() { }
 

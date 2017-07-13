@@ -7,6 +7,15 @@ namespace LagoVista.Core.Interfaces
 {
     public interface IAuthManager
     {
+        event EventHandler<EntityHeader> OrgChanged;
+
+        event EventHandler<List<EntityHeader>> RolesChanged;
+
+        void RaiseOrgChanged(EntityHeader newOrg);
+
+        void RaiseRolesChanged(List<EntityHeader> newRoles);
+
+
         string AccessToken { get; set; }
         string AccessTokenExpirationUTC { get; set; }
         string AppInstanceId { get; set; }
@@ -20,6 +29,6 @@ namespace LagoVista.Core.Interfaces
         Task PersistAsync();
         Task LogoutAsync();
 
-        List<String> Roles { get; set; }
+        List<EntityHeader> Roles { get; set; }
     }
 }

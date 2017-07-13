@@ -10,14 +10,17 @@ namespace LagoVista.Core.Authentication.Managers
     public class AuthManager : IAuthManager
     {
         private const string AUTH_MGR_SETTINGS = "AUTHSETTINGS.JSON";
-        IStorageService _storage;
-        IDeviceInfo _deviceInfo;
+        private readonly IStorageService _storage;
+        private readonly IDeviceInfo _deviceInfo;
+
+        public event EventHandler<EntityHeader> OrgChanged;
+        public event EventHandler<List<EntityHeader>> RolesChanged;
 
         public AuthManager(IStorageService storage, IDeviceInfo deviceInfo)
         {
             _deviceInfo = deviceInfo;
             _storage = storage;
-            Roles = new List<string>();
+            Roles = new List<EntityHeader>();
         }
 
         public string AccessToken { get; set; }
@@ -29,7 +32,17 @@ namespace LagoVista.Core.Authentication.Managers
         public string RefreshToken { get; set; }
         public string RefreshTokenExpirationUTC { get; set; }
         public UserInfo User { get; set; }
-        public List<String> Roles { get; set; }
+        public List<EntityHeader> Roles { get; set; }
+
+        public void RaiseOrgChanged(EntityHeader newOrg)
+        {
+            OrgChanged?.Invoke(this, newOrg);
+        }
+
+        public void RaiseRolesChanged(List<EntityHeader> newRoles)
+        {
+            RolesChanged?.Invoke(this, newRoles);
+        }
 
         public async Task LoadAsync()
         {
