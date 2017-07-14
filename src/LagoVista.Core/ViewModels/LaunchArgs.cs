@@ -18,14 +18,23 @@ namespace LagoVista.Core.ViewModels
         public ViewModelLaunchArgs()
         {
             Parameters = new Dictionary<string, object>();
-            
-        }               
+            IsNewRoot = false;            
+        }
+
+        public ViewModelBase ParentViewModel { get; set; }
+
+        public ViewModelBase ThisViewModel { get; set; }
 
         public Object Parent { get; set; }
         public Object Child { get; set; }
 
         public String ParentId { get; set; }
         public String ChildId { get; set; }
+
+
+
+
+        public bool IsNewRoot { get; set; }
 
         public Type ViewModelType { get; set; }
         public LaunchTypes LaunchType { get; set; }

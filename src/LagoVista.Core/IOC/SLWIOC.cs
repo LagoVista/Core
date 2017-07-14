@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,6 +32,12 @@ namespace LagoVista.Core.IOC
 
         public static ITSingleton Get<ITSingleton>() where ITSingleton : class
         {
+            if(!_registeredInstances.ContainsKey(typeof(ITSingleton)))
+            {
+                Debug.WriteLine($"SLWIOC => Could not find Singleton Implementation for Type {typeof(ITSingleton).Name}");
+                throw new Exception($"SLWIOC => Could not find Singleton Implementation for Type {typeof(ITSingleton).Name}");
+            }
+
             return _registeredInstances[typeof(ITSingleton)] as ITSingleton;
         }
 
@@ -46,7 +53,14 @@ namespace LagoVista.Core.IOC
 
         public static TNewInstance Create<TNewInstance>() where TNewInstance : class
         {
+            if (!_registeredTypes.ContainsKey(typeof(TNewInstance)))
+            {
+                Debug.WriteLine($"SLWIOC => Could not Create New Instance for Type {typeof(TNewInstance).Name}");
+                throw new Exception($"SLWIOC => Could not Create New Instance for Type {typeof(TNewInstance).Name}");
+            }
+
             var type = _registeredTypes[typeof(TNewInstance)];
+
             var constructors = type.GetTypeInfo().DeclaredConstructors;
             var primaryConstructor = constructors.FirstOrDefault();
             var parameters = GetDependencyInjectionParameters(type, primaryConstructor);
@@ -89,10 +103,17 @@ namespace LagoVista.Core.IOC
 
         public static object CreateForType(Type newInstanceType) 
         {
-            if(newInstanceType.GetTypeInfo().IsInterface)
+            if (newInstanceType.GetTypeInfo().IsInterface)
             {
+                if (!_registeredTypes.ContainsKey(newInstanceType))
+                {
+                    Debug.WriteLine($"SLWIOC => Could not Create New Instance for Type {newInstanceType.Name}");
+                    throw new Exception($"SLWIOC => Could not Create New Instance for Type {newInstanceType.Name}");
+                }
+
                 newInstanceType = _registeredTypes[newInstanceType];
             }
+
 
             var constructors = newInstanceType.GetTypeInfo().DeclaredConstructors;
             var primaryConstructor = constructors.FirstOrDefault();

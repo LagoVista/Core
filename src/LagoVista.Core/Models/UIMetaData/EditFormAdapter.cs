@@ -12,10 +12,11 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         Action<string, bool> _visibilityMethod;
         Func<bool> _validationMethod;
+        Func<bool> _getIsDirtyMethod;
         Action _refreshMethod;
-        IViewModelNavigation _navigationService;
-        IDictionary<string, FormField> _view;
         Dictionary<string, Type> _editorTypes;
+       IViewModelNavigation _navigationService;
+        IDictionary<string, FormField> _view;
         Dictionary<string, IEnumerable<IEntityHeaderEntity>> _entityLists;
 
         object _parent;
@@ -80,6 +81,12 @@ namespace LagoVista.Core.Models.UIMetaData
             _validationMethod = validationMethod;
         }
 
+        public void SetGetIsDirtyMethod(Func<bool> getIsDirtyMethod)
+        {
+            _getIsDirtyMethod = getIsDirtyMethod;
+        }
+
+
         public void SetRefreshMethod(Action refreshMethod)
         {
             _refreshMethod = refreshMethod;
@@ -107,6 +114,19 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
             _refreshMethod.Invoke();
+        }
+
+        public bool IsDirty
+        {
+            get
+            {
+                if (_getIsDirtyMethod == null)
+                {
+                    throw new InvalidOperationException("Must call SetGetIsDirtyMethod prior to calling IsDirty.");
+                }
+
+                return _getIsDirtyMethod();
+            }
         }
 
         public void ShowView(String name)
@@ -140,7 +160,6 @@ namespace LagoVista.Core.Models.UIMetaData
             _editorTypes.Add(propertyName, typeof(TEditorType));
         }
     }
-
 
     public class OptionSelectedEventArgs : EventArgs
     {

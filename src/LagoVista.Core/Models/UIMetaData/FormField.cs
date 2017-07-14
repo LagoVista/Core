@@ -19,8 +19,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public const string FieldType_ChildList = "ChildList";
         public const string FieldType_Decimal = "Decimal";
         public const string FieldType_Integer = "Integer";
+        public const string FieldType_Bool = "Bool";
+        public const string FieldType_NameSpace = "NameSpace";
         public const string FieldType_Password = "Password";
-
 
         private FormField() { }
 
