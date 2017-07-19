@@ -25,6 +25,9 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public event EventHandler<DeleteItemEventArgs> DeleteItem;
 
+        public event EventHandler<string> EHPickerTapped;
+
+
         public EditFormAdapter(object parent, IDictionary<string, FormField> view, IViewModelNavigation navigationService)
         {
             _entityLists = new Dictionary<string, IEnumerable<IEntityHeaderEntity>>();
@@ -39,6 +42,11 @@ namespace LagoVista.Core.Models.UIMetaData
         public void InvokeOptionSelected(OptionSelectedEventArgs optionSelectedEventArgs)
         {
             OptionSelected?.Invoke(this, optionSelectedEventArgs);
+        }
+
+        public void InvokeEHPickerTapped(String fieldName)
+        {
+            EHPickerTapped?.Invoke(this, fieldName);
         }
 
         public void InvokeItemDeleted(DeleteItemEventArgs args)

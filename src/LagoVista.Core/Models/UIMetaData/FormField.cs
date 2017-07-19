@@ -35,6 +35,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string RegExMessage { get;  set; }
         public String Name { get;  set; }
         public String Value { get; set; }
+        public String Display { get; set; }
         public String DefaultValue { get; set; }
         public bool IsUserEditable { get;  set; }
         public String DataType { get;  set; }
