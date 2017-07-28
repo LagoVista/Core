@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
 {
-    public interface IOwnedEntity
+    public interface IOwnedEntity:IIDEntity
     {
         bool IsPublic { get; set; }
         EntityHeader OwnerOrganization { get; set; }
