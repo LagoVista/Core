@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ namespace LagoVista.Core.Interfaces
         /// </summary>
         /// <param name="id">ID used for secret</param>
         /// <returns>plain text value for secret</returns>
-        Task<InvokeResult<string>> GetSecretAsync(string id);
+        Task<InvokeResult<string>> GetSecretAsync(string id, EntityHeader user, EntityHeader org);
 
         /// <summary>
         /// Removes a secret
