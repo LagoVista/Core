@@ -5,12 +5,12 @@ namespace LagoVista.Core.Exceptions
 {
     public class NotAuthorizedException : Exception
     {
-        public NotAuthorizedException(AuthorizeResult response)
+        public NotAuthorizedException(AuthorizeResult response) : base()
         {
             AuthorizationResponse = response;
         }
 
-        public NotAuthorizedException(String reason)
+        public NotAuthorizedException(String reason) : base(reason)
         {
             Reason = reason;
         }
@@ -22,7 +22,7 @@ namespace LagoVista.Core.Exceptions
 
     public class NotAuthenticatedException : Exception
     {
-        public NotAuthenticatedException(String reason)
+        public NotAuthenticatedException(String reason): base(reason)
         {
             Reason = reason;
         }
@@ -32,7 +32,7 @@ namespace LagoVista.Core.Exceptions
     
     public class AuthenticationFailedException : Exception
     {
-        public AuthenticationFailedException(String reason)
+        public AuthenticationFailedException(String reason) : base(reason)
         {
             Reason = reason;
         }
