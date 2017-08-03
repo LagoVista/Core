@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compare\ComparatorTests.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="IOC\DependencyInjectionTests.cs" />
     <Compile Include="Models\ComparatorModel.cs" />
     <Compile Include="Models\CustomValidationClasses.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="UIMetaData\Model2.cs" />
     <Compile Include="UIMetaData\Model3.cs" />
     <Compile Include="Validation\CustomValidationMethods.cs" />
+    <Compile Include="Validation\DateTimeValidation.cs" />
     <Compile Include="Validation\EntityHeaderValiationTests.cs" />
     <Compile Include="Validation\ValidatorTests.cs" />
   </ItemGroup>

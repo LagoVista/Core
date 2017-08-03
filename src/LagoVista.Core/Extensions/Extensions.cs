@@ -55,7 +55,7 @@ namespace LagoVista.Core
         {
             return !value.IsEmpty();
         }
-       
+
         public static DateTime? ToNullableDateTime(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -87,7 +87,61 @@ namespace LagoVista.Core
         }
 
         public static DateTime ToDateTime(this string value)
-        {            
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new Exception("Must provide value to convert string to DateTime.");
+            }
+
+            /*
+               Format = 
+               10 Chars for Date
+               1  for T
+               8 for hh:mm:ss
+               . for ms seperator
+               ms portion
+               Z
+
+               Min length w/o ms after trimming Z = 19
+            */
+
+            if(!value.EndsWith("Z"))
+            {
+                throw new Exception("Invalid Date Format, expected JSON ISO format in GMT ending with Z");
+            }
+
+            if(value.Length < 19)
+            {
+                throw new Exception("Input Time Too Short, minimum is yyy-mm-ddThh:mm:ssZ");
+            }
+
+            value = value.TrimEnd('Z');
+
+            if (value.Length == 19)
+            {
+                value = $"{value}.000Z";
+            }
+            else if (value.Length == 20)
+            {
+                value = $"{value}000Z";
+            }
+            else if (value.Length == 21)
+            {
+                value = $"{value}00Z";
+            }
+            else if (value.Length == 22)
+            {
+                value = $"{value}0Z";
+            }
+            else if (value.Length == 23)
+            {
+                value = $"{value}Z";
+            }
+            else
+            {
+                value = $"{value.Substring(0, 23)}Z";
+            }
+
             return DateTime.ParseExact(value, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None);
         }
 
@@ -368,7 +422,7 @@ namespace LagoVista.Core
 
         public static void SetCreationUpdatedFields(this ITableStorageAuditableEntity entity, IEntityHeader user)
         {
-            if(user == null ||user.IsEmpty())
+            if (user == null || user.IsEmpty())
             {
                 throw new InvalidOperationException("Must provide a valid user instance to assign to auditable fields.");
             }

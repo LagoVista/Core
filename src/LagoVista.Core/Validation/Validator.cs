@@ -5,6 +5,7 @@ using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -188,16 +189,31 @@ namespace LagoVista.Core.Validation
                 }
                 else if (!auditableModel.CreationDate.SuccessfulJSONDate())
                 {
-                    result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat + " " + auditableModel.CreationDate);
+                    if (DateTime.TryParse(auditableModel.CreationDate,CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
+                    {
+                        auditableModel.CreationDate = dateTime.ToJSONString();
+                    }
+                    else
+                    {
+                        result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat + " " + auditableModel.CreationDate);
+                    }
                 }
 
                 if (String.IsNullOrEmpty(auditableModel.LastUpdatedDate))
                 {
+
                     result.AddSystemError(Resources.ValidationResource.LastUpdatedDateRequired);
                 }
                 else if (!auditableModel.LastUpdatedDate.SuccessfulJSONDate())
                 {
-                    result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate);
+                    if (DateTime.TryParse(auditableModel.LastUpdatedDate, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
+                    {
+                        auditableModel.LastUpdatedDate = dateTime.ToJSONString();
+                    }
+                    else
+                    {
+                        result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate);
+                    }                    
                 }
 
                 if (auditableModel.LastUpdatedBy == null)
