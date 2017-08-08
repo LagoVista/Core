@@ -14,7 +14,7 @@ namespace LagoVista.Core.Models
         {
         
         }
-
+        
         public String RowKey { get; set; }
         public String PartitionKey { get; set; }
         [JsonProperty("odata.etag", NullValueHandling = NullValueHandling.Ignore)]

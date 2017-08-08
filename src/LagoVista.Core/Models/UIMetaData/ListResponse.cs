@@ -18,8 +18,13 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public IEnumerable<TModel> Model { get;  set; }
 
-        public int Top { get;  set; }
-        public int RowCount { get;  set; }
+        public int PageSize { get;  set; }
+        public int PageIndex { get; set; }
+        public int PageCount { get; set; }
+        public string NextPartitionKey { get; set; }
+        public string NextRowKey { get; set; }
+        public bool HasMoreRecords { get; set; }
+
 
         public static ListResponse<TModel> Create(IEnumerable<TModel> model)
         {
@@ -56,6 +61,7 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
             response.Columns = columns;
+            response.PageSize = model.Count();
 
             return response;
         }

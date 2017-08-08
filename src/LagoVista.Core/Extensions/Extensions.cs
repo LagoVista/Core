@@ -142,7 +142,7 @@ namespace LagoVista.Core
                 value = $"{value.Substring(0, 23)}Z";
             }
 
-            return DateTime.ParseExact(value, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None);
+            return DateTime.ParseExact(value, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None).ToUniversalTime();
         }
 
         public static String ToJSONString(this DateTime dateTime)
