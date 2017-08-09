@@ -38,6 +38,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public String Display { get; set; }
         public String DefaultValue { get; set; }
         public bool IsUserEditable { get;  set; }
+        public bool IsEnabled { get; set; }
         public String DataType { get;  set; }
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
@@ -83,6 +84,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.Name = name;
             field.MinLength = attr.MinLength;
             field.MaxLength = attr.MaxLength;
+            field.IsEnabled = true;
 
             field.Options = new List<EnumDescription>();
             if(attr.EnumType != null)
