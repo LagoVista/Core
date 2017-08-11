@@ -6,8 +6,6 @@ namespace LagoVista.Core.Models.UIMetaData
 {
     public class ListColumn
     {
-        private ListColumn() { }
-
         public String Header { get; set; }
         public String FieldName { get; set; }
         public String Alignment { get; set; }
