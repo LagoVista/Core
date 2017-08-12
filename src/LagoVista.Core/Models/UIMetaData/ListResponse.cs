@@ -8,9 +8,7 @@ using LagoVista.Core.Validation;
 namespace LagoVista.Core.Models.UIMetaData
 {
     public class ListResponse<TModel>  : InvokeResult where TModel :class
-    {
-        private ListResponse() { }
-
+    {        
         public string Title { get; set; }
         public string Help { get; set; }
 
