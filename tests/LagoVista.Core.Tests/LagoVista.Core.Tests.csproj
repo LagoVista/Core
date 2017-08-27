@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Compare\ComparatorTests.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\EnumToDisplayTests.cs" />
     <Compile Include="IOC\DependencyInjectionTests.cs" />
     <Compile Include="Models\ComparatorModel.cs" />
     <Compile Include="Models\CustomValidationClasses.cs" />
