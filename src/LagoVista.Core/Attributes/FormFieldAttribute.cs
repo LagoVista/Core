@@ -17,6 +17,8 @@ namespace LagoVista.Core.Attributes
         MultiLineText,
         Integer,
         Decimal,
+        Date,
+        Time,
         DateTime,
         Phone,
         Password,

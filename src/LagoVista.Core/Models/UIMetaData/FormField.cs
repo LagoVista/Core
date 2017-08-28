@@ -13,6 +13,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public const string FieldType_MultilineText = "MultiLineText";
         public const string FieldType_CheckBox = "CheckBox";
         public const string FieldType_Picker = "Picker";
+        public const string FieldType_Time = "Time";
+        public const string FieldType_Date = "Date";
+        public const string FieldType_DateTime = "DateTime";
         public const string FeildType_EntityHeaderPicker = "EntityHeaderPicker";
         public const string FieldType_Text = "Text";
         public const string FieldType_Key = "Key";
