@@ -68,6 +68,7 @@ namespace LagoVista.Core.Models
             return new UserInfoSummary()
             {
                 Id = Id,
+                Key = Id,
                 Name = $"{FirstName} {LastName}",
                 Email = Email,
                 ProfileImageUrl = ProfileImageUrl,
@@ -82,15 +83,20 @@ namespace LagoVista.Core.Models
     {
         [ListColumn(Visible: false)]
         public String Id { get; set; }
+        [ListColumn(Visible: false)]
+        public String Key { get; set; }
+
         [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
+        public bool IsSystemAdmin { get; set; }
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsSystemAdmin, ResourceType: typeof(AuthenticationResources))]
         public String Name { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_Email, ResourceType: typeof(AuthenticationResources))]
         public String Email { get; set; }
         [ListColumn(Visible: false)]
         public ImageDetails ProfileImageUrl { get; set; }
-        [ListColumn(Visible: false)]
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsEmailConfirmed, ResourceType: typeof(AuthenticationResources))]
         public bool EmailConfirmed { get; set; }
-        [ListColumn(Visible: false)]
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsPhoneConfirmed, ResourceType: typeof(AuthenticationResources))]
         public bool PhoneNumberConfirmed { get; set; }
     }
 }
