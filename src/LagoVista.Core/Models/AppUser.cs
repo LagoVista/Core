@@ -16,6 +16,12 @@ namespace LagoVista.Core.Models
     {
         public String Id { get; set; }
 
+        public String Key { get; set; }
+
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsSystemAdmin, ResourceType: typeof(AuthenticationResources))]
+        public String Name { get; set; }
+   
         [FormField(LabelResource: Resources.AuthenticationResources.Names.Common_CreationDate, FieldType: FieldTypes.JsonDateTime, ResourceType: typeof(AuthenticationResources), IsRequired: true, IsUserEditable: false)]
         public String CreationDate { get; set; }
 
@@ -27,7 +33,6 @@ namespace LagoVista.Core.Models
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.Common_LastUpdatedBy, ResourceType: typeof(AuthenticationResources), IsRequired: true, IsUserEditable: false)]
         public EntityHeader LastUpdatedBy { get; set; }
-
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_FirstName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string FirstName { get; set; }
