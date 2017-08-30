@@ -39,7 +39,7 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_LastName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string LastName { get; set; }
 
-        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, IsRequired: true, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsSystemAdmin { get; set; }
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.AuthenticationResources))]
