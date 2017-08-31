@@ -39,8 +39,11 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_LastName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string LastName { get; set; }
 
-        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, IsRequired: true, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin_Help, IsRequired: true, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsSystemAdmin { get; set; }
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin_Help, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
+        public bool IsOrgAdmin { get; set; }
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.AuthenticationResources))]
         public string PhoneNumber { get; set; }
@@ -91,9 +94,15 @@ namespace LagoVista.Core.Models
         [ListColumn(Visible: false)]
         public String Key { get; set; }
 
-        [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
-        public bool IsSystemAdmin { get; set; }
+        
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsSystemAdmin, ResourceType: typeof(AuthenticationResources))]
+        public bool IsSystemAdmin { get; set; }
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsOrgAdmin, ResourceType: typeof(AuthenticationResources))]
+        public bool IsOrgAdmin { get; set; }
+
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
         public String Name { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_Email, ResourceType: typeof(AuthenticationResources))]
         public String Email { get; set; }

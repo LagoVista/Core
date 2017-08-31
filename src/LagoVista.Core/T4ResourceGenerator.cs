@@ -1,4 +1,4 @@
-﻿/*5/23/2017 17:13:45*/
+﻿/*8/31/2017 14:32:51*/
 using System.Globalization;
 using System.Reflection;
 
@@ -117,12 +117,21 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_IsEmailConfirmed
 
 		public static string UserInfo_IsEmailConfirmed { get { return GetResourceString("UserInfo_IsEmailConfirmed"); } }
+//Resources:AuthenticationResources:UserInfo_IsOrgAdmin
+
+		public static string UserInfo_IsOrgAdmin { get { return GetResourceString("UserInfo_IsOrgAdmin"); } }
+//Resources:AuthenticationResources:UserInfo_IsOrgAdmin_Help
+
+		public static string UserInfo_IsOrgAdmin_Help { get { return GetResourceString("UserInfo_IsOrgAdmin_Help"); } }
 //Resources:AuthenticationResources:UserInfo_IsPhoneConfirmed
 
 		public static string UserInfo_IsPhoneConfirmed { get { return GetResourceString("UserInfo_IsPhoneConfirmed"); } }
 //Resources:AuthenticationResources:UserInfo_IsSystemAdmin
 
 		public static string UserInfo_IsSystemAdmin { get { return GetResourceString("UserInfo_IsSystemAdmin"); } }
+//Resources:AuthenticationResources:UserInfo_IsSystemAdmin_Help
+
+		public static string UserInfo_IsSystemAdmin_Help { get { return GetResourceString("UserInfo_IsSystemAdmin_Help"); } }
 //Resources:AuthenticationResources:UserInfo_LastName
 
 		public static string UserInfo_LastName { get { return GetResourceString("UserInfo_LastName"); } }
@@ -157,8 +166,11 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_FirstName = "UserInfo_FirstName";
 			public const string UserInfo_Help = "UserInfo_Help";
 			public const string UserInfo_IsEmailConfirmed = "UserInfo_IsEmailConfirmed";
+			public const string UserInfo_IsOrgAdmin = "UserInfo_IsOrgAdmin";
+			public const string UserInfo_IsOrgAdmin_Help = "UserInfo_IsOrgAdmin_Help";
 			public const string UserInfo_IsPhoneConfirmed = "UserInfo_IsPhoneConfirmed";
 			public const string UserInfo_IsSystemAdmin = "UserInfo_IsSystemAdmin";
+			public const string UserInfo_IsSystemAdmin_Help = "UserInfo_IsSystemAdmin_Help";
 			public const string UserInfo_LastName = "UserInfo_LastName";
 			public const string UserInfo_PhoneNumber = "UserInfo_PhoneNumber";
 			public const string UserInfo_Title = "UserInfo_Title";

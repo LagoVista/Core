@@ -180,11 +180,20 @@
   <data name="UserInfo_IsEmailConfirmed" xml:space="preserve">
     <value>Is Email Confirmed</value>
   </data>
+  <data name="UserInfo_IsOrgAdmin" xml:space="preserve">
+    <value>Is Org Admin</value>
+  </data>
+  <data name="UserInfo_IsOrgAdmin_Help" xml:space="preserve">
+    <value>An Org Admin is an administrator for the org they are currently assocaited with and can perform any tasks for that org.</value>
+  </data>
   <data name="UserInfo_IsPhoneConfirmed" xml:space="preserve">
     <value>Is Phone Number Confirmed</value>
   </data>
   <data name="UserInfo_IsSystemAdmin" xml:space="preserve">
     <value>Is System Admin</value>
+  </data>
+  <data name="UserInfo_IsSystemAdmin_Help" xml:space="preserve">
+    <value>A System Admin is an administrator that has full access to system level compoments.  They do not however have access to any and all orgs.</value>
   </data>
   <data name="UserInfo_LastName" xml:space="preserve">
     <value>Last Name</value>

@@ -22,6 +22,8 @@ namespace LagoVista.Core.Interfaces
 
         bool IsSystemAdmin { get; set; }
 
+        bool IsOrgAdmin { get; set; }
+
         string PhoneNumber { get; set; }
         bool PhoneNumberConfirmed { get; set; }
 
