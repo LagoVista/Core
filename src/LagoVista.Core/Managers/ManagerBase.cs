@@ -126,5 +126,9 @@ namespace LagoVista.Core.Managers
             return _security.AuthorizeOrgAccessAsync(user, org, entityType);
         }
 
+        protected Task LogEntityActionAsync(String id, string entityType, string accessType, EntityHeader org, EntityHeader user)
+        {
+            return _security.LogEntityActionAsync(id, entityType, accessType, org, user);
+        }
     }
 }
