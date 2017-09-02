@@ -60,8 +60,6 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsEmailConfirmed, IsUserEditable: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool EmailConfirmed { get; set; }
 
-
-
         public EntityHeader ToEntityHeader()
         {
             return new EntityHeader()

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
 using LagoVista.Core.Validation;
+using LagoVista.Core.Interfaces;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
@@ -15,15 +16,23 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public IDictionary<string, FormField> View { get; set; }
 
+        public List<string> FormFields { get; set; }
+
         public TModel Model { get; set; }
 
         public static DetailResponse<TModel> Create(TModel model)
         {
             var response = new DetailResponse<TModel>();
             response.Model = model;
+            response.FormFields = new List<string>();
             var viewItems = new Dictionary<string, FormField>();
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
             var entity = EntityDescription.Create(typeof(TModel), attr);
+
+            if(model is IFormDescriptor)
+            {
+                response.FormFields = (model as IFormDescriptor).GetFormFields();
+            }
 
             response.Title = entity.Title;
             response.Help = entity.UserHelp;
@@ -41,7 +50,6 @@ namespace LagoVista.Core.Models.UIMetaData
                     {
                         field.DefaultValue = defaultValue.ToString();
                     }
-
                     
                     viewItems.Add(camelCaseName, field);
                 }
@@ -54,6 +62,5 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             return Create(new TModel());
         }
-
     }
 }
