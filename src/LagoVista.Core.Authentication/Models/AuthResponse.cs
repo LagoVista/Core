@@ -28,9 +28,8 @@ namespace LagoVista.Core.Authentication.Models
         public string AppInstanceId { get; set; }
 
         public bool IsLockedOut { get; set; }
-
+        public EntityHeader User { get; set; }
         public EntityHeader Org { get; set; }
-
         public List<EntityHeader> Roles { get; set; }
     }
 }

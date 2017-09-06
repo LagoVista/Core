@@ -130,5 +130,18 @@ namespace LagoVista.Core.Managers
         {
             return _security.LogEntityActionAsync(id, entityType, accessType, org, user);
         }
+
+        protected void ValidateAuthParams(EntityHeader org, EntityHeader user)
+        {
+            if(EntityHeader.IsNullOrEmpty(org))
+            {
+                throw new ValidationException("Org is Required for This Operation", new List<ErrorMessage>() { new ErrorMessage("Missing Org Entity Header") });
+            }
+
+            if (EntityHeader.IsNullOrEmpty(org))
+            {
+                throw new ValidationException("User is Required for This Operation", new List<ErrorMessage>() { new ErrorMessage("Missing User Entity Header") });
+            }
+        }
     }
 }
