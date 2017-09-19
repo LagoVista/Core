@@ -13,6 +13,7 @@ namespace LagoVista.Core.Tests.Validation
         {
             return new Models.ValidationModel()
             {
+                ParentRequiredProperty = "I AM HERE",
                 SystemRequired = "KEVIN",
                 CustomValidationMessage = "CUStoM",
                 LabelBasedValidationMessage = "LABEL",
@@ -72,6 +73,15 @@ namespace LagoVista.Core.Tests.Validation
         {
             var model = GetValidModel();
             model.SystemRequired = null;
+            var result = Validator.Validate(model);
+            Assert.False(result.Successful);
+        }
+
+        [Fact]
+        public void IsRequired_InInvalidIfBasePropertyNotSet()
+        {
+            var model = GetValidModel();
+            model.ParentRequiredProperty = null;
             var result = Validator.Validate(model);
             Assert.False(result.Successful);
         }

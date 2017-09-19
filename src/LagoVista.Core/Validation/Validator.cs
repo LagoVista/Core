@@ -44,7 +44,7 @@ namespace LagoVista.Core.Validation
             ValidateAuditInfo(result, entity);
             ValidateId(result, entity);
 
-            var properties = entity.GetType().GetTypeInfo().DeclaredProperties;
+            var properties = entity.GetType().GetTypeInfo().GetAllProperties();
             foreach (var prop in properties)
             {
                 var attr = prop.GetCustomAttributes(typeof(FormFieldAttribute), true).OfType<FormFieldAttribute>().FirstOrDefault();

@@ -12,7 +12,14 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Tests.Models
 {
-    public class ValidationModel : IValidateable
+    public class ValidationModelBase
+    {
+        [FormField(IsRequired: true)]
+        public String ParentRequiredProperty { get; set; }
+
+    }
+
+    public class ValidationModel : ValidationModelBase, IValidateable
     {
         [FormField(IsRequired: true)]
         public String PropertyBasedValidationMessage { get; set; }
