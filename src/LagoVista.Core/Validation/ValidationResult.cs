@@ -22,11 +22,11 @@ namespace LagoVista.Core.Validation
         public List<ErrorMessage> Warnings { get; private set; }
         public List<ErrorMessage> Errors { get; private set; }
 
-        internal void AddUserError(String error)
+        public void AddUserError(String error)
         {
             Errors.Add(new ErrorMessage(error));
         }
-        internal void AddSystemError(String error)
+        public void AddSystemError(String error)
         {
             Errors.Add(new ErrorMessage(error, true));
         }
