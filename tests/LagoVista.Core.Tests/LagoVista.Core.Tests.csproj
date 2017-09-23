@@ -97,6 +97,8 @@
     <Compile Include="Validation\CustomValidationMethods.cs" />
     <Compile Include="Validation\DateTimeValidation.cs" />
     <Compile Include="Validation\EntityHeaderValiationTests.cs" />
+    <Compile Include="Validation\ValidationTestBase.cs" />
+    <Compile Include="Validation\ValidatorObjectGraphTests.cs" />
     <Compile Include="Validation\ValidatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +145,11 @@
     <Error Condition="!Exists('..\..\packages\MSTest.TestAdapter.1.2.0-beta3\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\MSTest.TestAdapter.1.2.0-beta3\build\net45\MSTest.TestAdapter.targets'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.3.0-beta5-build3769\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.0-beta5-build3769\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\..\packages\xunit.core.2.3.0-beta5-build3769\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.0-beta5-build3769\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.targets'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.props'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.targets'))" />
   </Target>
   <Import Project="..\..\packages\MSTest.TestAdapter.1.2.0-beta3\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\packages\MSTest.TestAdapter.1.2.0-beta3\build\net45\MSTest.TestAdapter.targets')" />
   <Import Project="..\..\packages\xunit.core.2.3.0-beta5-build3769\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.3.0-beta5-build3769\build\xunit.core.targets')" />
+  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.targets" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.15.5.0-preview-20170914-09\build\net45\Microsoft.Net.Test.Sdk.targets')" />
 </Project>

@@ -78,20 +78,24 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void Test_CustomValidation_TestOnInsert_Valid()
         {
-            var instance = new CustomValidation_TestOnInsert();
-            instance.Field = "FOO";
+            var instance = new CustomValidation_TestOnInsert
+            {
+                Field = "FOO"
+            };
             var result = Validator.Validate(instance, Actions.Create);
-            Assert.Equal(0, result.Errors.Count);
+            Assert.Empty(result.Errors);
             Assert.Equal(1, instance.Called);
         }
 
         [Fact]
         public void Test_CustomValidation_TestOnInsert_Null_Invalid()
         {
-            var instance = new CustomValidation_TestOnInsert();
-            instance.Field = null;
+            var instance = new CustomValidation_TestOnInsert
+            {
+                Field = null
+            };
             var result = Validator.Validate(instance, Actions.Create);
-            Assert.Equal(1, result.Errors.Count);
+            Assert.Single(result.Errors);
             Assert.Equal("ERROR", result.Errors.First().Message);
             Assert.Equal(1, instance.Called);
         }
@@ -99,30 +103,36 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void Test_CustomValidation_TestOnInsert_Null_Ignore_WithUpdate_Valid()
         {
-            var instance = new CustomValidation_TestOnInsert();
-            instance.Field = null;
+            var instance = new CustomValidation_TestOnInsert
+            {
+                Field = null
+            };
             var result = Validator.Validate(instance, Actions.Update);
-            Assert.Equal(0, result.Errors.Count);
+            Assert.Empty(result.Errors);
             Assert.Equal(1, instance.Called);
         }
 
         [Fact]
         public void Test_CustomValidation_TestOnUpdate_Valid()
         {
-            var instance = new CustomValidation_TestOnInsert();
-            instance.Field = "FOO";
+            var instance = new CustomValidation_TestOnInsert
+            {
+                Field = "FOO"
+            };
             var result = Validator.Validate(instance, Actions.Update);
-            Assert.Equal(0, result.Errors.Count);
+            Assert.Empty(result.Errors);
             Assert.Equal(1, instance.Called);
         }
 
         [Fact]
         public void Test_CustomValidation_TestOnUpdate_Null_Invalid()
         {
-            var instance = new CustomValidation_TestOnUpdate();
-            instance.Field = null;
+            var instance = new CustomValidation_TestOnUpdate
+            {
+                Field = null
+            };
             var result = Validator.Validate(instance, Actions.Update);
-            Assert.Equal(1, result.Errors.Count);
+            Assert.Single(result.Errors);
             Assert.Equal("ERROR", result.Errors.First().Message);
             Assert.Equal(1, instance.Called);
         }
@@ -130,10 +140,12 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void Test_CustomValidation_TestOnUpdate_Null_Ignore_WithInsert_Valid()
         {
-            var instance = new CustomValidation_TestOnUpdate();
-            instance.Field = null;
+            var instance = new CustomValidation_TestOnUpdate
+            {
+                Field = null
+            };
             var result = Validator.Validate(instance, Actions.Create);
-            Assert.Equal(0, result.Errors.Count);
+            Assert.Empty(result.Errors);
             Assert.Equal(1, instance.Called);
         }
 

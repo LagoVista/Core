@@ -64,6 +64,30 @@ namespace LagoVista.Core.Validation
                 }
             }
 
+            foreach(var prop in properties)
+            {
+                var propValue = prop.GetValue(entity) as IValidateable;
+                if (propValue != null)
+                {
+                    var childResult = Validator.Validate(propValue, action);
+                    result.Concat(childResult);
+                }
+
+                var listValues = prop.GetValue(entity) as System.Collections.IEnumerable;
+                if (listValues != null)
+                {
+                    foreach (var listValue in listValues)
+                    {
+                        var validatableListValue = listValue as IValidateable;
+                        if (validatableListValue != null)
+                        {
+                            var childResult = Validator.Validate(validatableListValue, action);
+                            result.Concat(childResult);
+                        }
+                    }
+                }
+            }
+
             return result;
         }
 

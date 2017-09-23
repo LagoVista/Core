@@ -21,8 +21,6 @@ namespace LagoVista.Core.Tests.Validation
             };
         }
 
-        
-
         public Models.AuditableModel GetValidAuditableModel()
         {
             var auditEntity = new Models.AuditableModel();
@@ -58,7 +56,19 @@ namespace LagoVista.Core.Tests.Validation
             var result2 = new ValidationResult();
             result2.Concat(result1);
 
-            Assert.Equal(1,result2.Errors.Where(err => err.Message == "BAD").Count());
+            Assert.Single(result2.Errors.Where(err => err.Message == "BAD"));
+        }
+
+        [Fact]
+        public void Validate_PropertiesThatImplementIValidatable()
+        {
+
+        }
+
+        [Fact]
+        public void Validate_GenericListPropertiesThatImplementIValidatable()
+        {
+
         }
 
         [Fact]
@@ -144,8 +154,10 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void IDEntityTest_Valid()
         {
-            var idEntity = new Models.IdValidationModel();
-            idEntity.Id = Guid.NewGuid().ToId();
+            var idEntity = new Models.IdValidationModel
+            {
+                Id = Guid.NewGuid().ToId()
+            };
             var result = Validator.Validate(idEntity);
             Assert.True(result.Successful);
         }
@@ -153,8 +165,10 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void IDEntityTest_Invalid()
         {
-            var idEntity = new Models.IdValidationModel();
-            idEntity.Id = null;
+            var idEntity = new Models.IdValidationModel
+            {
+                Id = null
+            };
             var result = Validator.Validate(idEntity);
             Assert.False(result.Successful);
         }
@@ -162,8 +176,10 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void IDEntityTest_EmptyGuid_Invalid()
         {
-            var idEntity = new Models.IdValidationModel();
-            idEntity.Id = Guid.Empty.ToId();
+            var idEntity = new Models.IdValidationModel
+            {
+                Id = Guid.Empty.ToId()
+            };
             var result = Validator.Validate(idEntity);
             Assert.False(result.Successful);
         }
@@ -171,8 +187,10 @@ namespace LagoVista.Core.Tests.Validation
         [Fact]
         public void IDEntityTest_ZeroId_Invalid()
         {
-            var idEntity = new Models.IdValidationModel();
-            idEntity.Id = "0";
+            var idEntity = new Models.IdValidationModel
+            {
+                Id = "0"
+            };
             var result = Validator.Validate(idEntity);
             Assert.False(result.Successful);
         }

@@ -92,4 +92,10 @@ namespace LagoVista.Core.Tests.Models
         [FormField(MinLength: 5, MaxLength: 15)]
         public String BetweenStringLength_5_15 { get; set; }
     }
+
+    public class ValidatableObjectGraph : IValidateable
+    {       
+        public ValidationModel ChildModel { get; set; }
+        public List<ValidationModel> ChildModels { get; set; }
+    }
 }

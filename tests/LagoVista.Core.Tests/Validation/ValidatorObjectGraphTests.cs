@@ -1,0 +1,71 @@
+﻿using LagoVista.Core.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace LagoVista.Core.Tests.Validation
+{
+    public class ValidatorObjectGraphTests : ValidationTestBase
+    {
+        public Models.ValidationModel GetValidModel()
+        {
+            return new Models.ValidationModel()
+            {
+                ParentRequiredProperty = "I AM HERE",
+                SystemRequired = "KEVIN",
+                CustomValidationMessage = "CUStoM",
+                LabelBasedValidationMessage = "LABEL",
+                PropertyBasedValidationMessage = "FOO"
+            };
+        }
+
+        public Models.ValidatableObjectGraph GetValidObjectGraph()
+        {
+            var graph = new Models.ValidatableObjectGraph()
+            {
+                ChildModel = GetValidModel(),
+                ChildModels = new System.Collections.Generic.List<Models.ValidationModel>()
+            };
+
+            graph.ChildModels.Add(GetValidModel());
+            graph.ChildModels.Add(GetValidModel());
+
+            return graph;
+        }
+
+        [Fact]
+        public void Validator_ObjectGraph_Valid()
+        {
+            var objectGraph = GetValidObjectGraph();
+
+            var result = Validator.Validate(objectGraph);
+
+            AssertIsValid(result);            
+        }
+
+        [Fact]
+        public void Validator_ObjectGraph_PropertyInvalid()
+        {
+            /* Test to ensure validation takes place on all child single instance objects marked as IValidatable */
+            var objectGraph = GetValidObjectGraph();
+            objectGraph.ChildModel.SystemRequired = null;
+            var result = Validator.Validate(objectGraph);            
+
+            AssertIsInValid(result);
+        }
+
+        [Fact]
+        public void Validator_ObjectGraph_PropertyOnListIsInvalid()
+        {
+            /* Test to ensure validation takes place on all child single instance within list */
+            var objectGraph = GetValidObjectGraph();
+            objectGraph.ChildModels[0].SystemRequired = null;
+            var result = Validator.Validate(objectGraph);
+
+            AssertIsInValid(result);
+        }
+    }
+}
