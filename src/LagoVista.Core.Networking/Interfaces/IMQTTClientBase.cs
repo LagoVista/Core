@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Networking.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.Interfaces
@@ -19,7 +20,7 @@ namespace LagoVista.Core.Networking.Interfaces
 
         bool IsConnected { get; }
 
-        Task<ConnAck> ConnectAsync();
+        Task<MQTTConnectResult> ConnectAsync(int port = 1883, bool isSSL = false);
 
         void Disconnect();
 
