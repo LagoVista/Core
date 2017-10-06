@@ -1,6 +1,7 @@
-﻿using System;
+﻿using LagoVista.Core.Networking.Interfaces;
+using System;
 
-namespace LagoVista.Core.Networking.Interfaces
+namespace LagoVista.Core.Networking.Models
 {
     public class MqttMsgPublishEventArgs : EventArgs
     {
@@ -33,7 +34,7 @@ namespace LagoVista.Core.Networking.Interfaces
         /// <summary>
         /// Quality of Service level
         /// </summary>
-        public byte QosLevel
+        public QOS QosLevel
         {
             get; internal set;
         }
@@ -44,6 +45,11 @@ namespace LagoVista.Core.Networking.Interfaces
         public bool Retain
         {
             get; internal set;
+        }
+
+        public string MessageId
+        {
+            get; set;
         }
 
         #endregion
@@ -59,7 +65,7 @@ namespace LagoVista.Core.Networking.Interfaces
         public MqttMsgPublishEventArgs(string topic,
             byte[] message,
             bool dupFlag,
-            byte qosLevel,
+            QOS qosLevel,
             bool retain)
         {
             Topic = topic;

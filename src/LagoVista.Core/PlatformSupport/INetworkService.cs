@@ -18,5 +18,7 @@ namespace LagoVista.Core.PlatformSupport
         ObservableCollection<NetworkDetails> AllConnections { get; }
 
         Task<bool> TestConnectivityAsync();
+    
+        void OpenURI(Uri uri);
     }
 }
