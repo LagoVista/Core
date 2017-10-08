@@ -122,13 +122,6 @@ namespace LagoVista.Core.Validation
             var result = new InvokeResult();
             result.Errors.Add(new ErrorMessage()
             {
-                ErrorCode = "EXC9999",
-                Message = "Unhandled Excpetion",
-                Details = tag
-            });
-
-            result.Errors.Add(new ErrorMessage()
-            {
                 ErrorCode = "EXC9998",
                 Message = ex.Message,
                 Details = ex.StackTrace
