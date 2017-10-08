@@ -76,9 +76,54 @@ namespace LagoVista.Core
             }
         }
 
+        private static string NormalizeFormatString(String value)
+        {
+            value = value.TrimEnd('Z');
+
+            if (value.Length == 19)
+            {
+                value = $"{value}.000Z";
+            }
+            else if (value.Length == 20)
+            {
+                value = $"{value}000Z";
+            }
+            else if (value.Length == 21)
+            {
+                value = $"{value}00Z";
+            }
+            else if (value.Length == 22)
+            {
+                value = $"{value}0Z";
+            }
+            else if (value.Length == 23)
+            {
+                value = $"{value}Z";
+            }
+            else
+            {
+                value = $"{value.Substring(0, 23)}Z";
+            }
+
+            return value;
+        }
+
         public static bool SuccessfulJSONDate(this string date)
         {
-            return Regex.IsMatch(date, @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d{0,4}Z$");
+            if (!date.EndsWith("Z"))
+            {
+                return false;
+            }
+
+            var dateValue = NormalizeFormatString(date);
+            if (Regex.IsMatch(dateValue, @"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.?\d{0,4}Z$"))
+            {
+                return DateTime.TryParseExact(dateValue, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime result);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static bool SuccessfulId(this string value)
@@ -115,32 +160,7 @@ namespace LagoVista.Core
                 throw new Exception("Input Time Too Short, minimum is yyy-mm-ddThh:mm:ssZ");
             }
 
-            value = value.TrimEnd('Z');
-
-            if (value.Length == 19)
-            {
-                value = $"{value}.000Z";
-            }
-            else if (value.Length == 20)
-            {
-                value = $"{value}000Z";
-            }
-            else if (value.Length == 21)
-            {
-                value = $"{value}00Z";
-            }
-            else if (value.Length == 22)
-            {
-                value = $"{value}0Z";
-            }
-            else if (value.Length == 23)
-            {
-                value = $"{value}Z";
-            }
-            else
-            {
-                value = $"{value.Substring(0, 23)}Z";
-            }
+            value = NormalizeFormatString(value);
 
             return DateTime.ParseExact(value, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None).ToUniversalTime();
         }

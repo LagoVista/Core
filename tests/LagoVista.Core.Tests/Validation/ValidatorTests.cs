@@ -333,8 +333,8 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
             auditEntity.LastUpdatedDate += "INVALID";
             var result = Validator.Validate(auditEntity);
-            Assert.False(result.Successful);
             WriteResults(result);
+            Assert.False(result.Successful);
             Assert.Equal(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditEntity.LastUpdatedDate, result.Errors.First().Message);
         }
 
