@@ -20,9 +20,9 @@ namespace LagoVista.Core.Networking.Interfaces
         Task<bool> ReadSettingsAsync();
         Task SaveSettingsAsync();
 
-        UInt16 Subscribe(string topic, QOS qosLevel = QOS.QOS0);
-        UInt16 Publish<T>(string topic, T payload, QOS qosLevel = QOS.QOS0, bool retainFlag = false);
-        UInt16 Publish(string topic, string payload = "", QOS qosLevel = QOS.QOS0, bool retainFlag = false);
-        UInt16 Publish(string topic, byte[] payload, QOS qosLevel = QOS.QOS0, bool retainFlag = false);
+        Task<UInt16> SubscribeAsync(string topic, QOS qosLevel = QOS.QOS0);
+        Task<UInt16> PublishAsync<T>(string topic, T payload, QOS qosLevel = QOS.QOS0, bool retainFlag = false);
+        Task<UInt16> PublishAsync(string topic, string payload = "", QOS qosLevel = QOS.QOS0, bool retainFlag = false);
+        Task<UInt16> PublishAsync(string topic, byte[] payload, QOS qosLevel = QOS.QOS0, bool retainFlag = false);
     }
 }
