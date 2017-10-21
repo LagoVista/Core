@@ -12,6 +12,9 @@
     <AssemblyOriginatorKeyFile>LagoVista.Core.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="PlatformSupport\MQTTClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\AuthenticationResources.resx">
       <Generator>
       </Generator>
