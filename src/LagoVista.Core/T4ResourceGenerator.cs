@@ -1,4 +1,4 @@
-﻿/*8/31/2017 14:32:51*/
+﻿/*10/23/2017 07:11:24*/
 using System.Globalization;
 using System.Reflection;
 
@@ -126,6 +126,12 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_IsPhoneConfirmed
 
 		public static string UserInfo_IsPhoneConfirmed { get { return GetResourceString("UserInfo_IsPhoneConfirmed"); } }
+//Resources:AuthenticationResources:UserInfo_IsPreviewUse_Help
+
+		public static string UserInfo_IsPreviewUse_Help { get { return GetResourceString("UserInfo_IsPreviewUse_Help"); } }
+//Resources:AuthenticationResources:UserInfo_IsPreviewUser
+
+		public static string UserInfo_IsPreviewUser { get { return GetResourceString("UserInfo_IsPreviewUser"); } }
 //Resources:AuthenticationResources:UserInfo_IsSystemAdmin
 
 		public static string UserInfo_IsSystemAdmin { get { return GetResourceString("UserInfo_IsSystemAdmin"); } }
@@ -169,6 +175,8 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_IsOrgAdmin = "UserInfo_IsOrgAdmin";
 			public const string UserInfo_IsOrgAdmin_Help = "UserInfo_IsOrgAdmin_Help";
 			public const string UserInfo_IsPhoneConfirmed = "UserInfo_IsPhoneConfirmed";
+			public const string UserInfo_IsPreviewUse_Help = "UserInfo_IsPreviewUse_Help";
+			public const string UserInfo_IsPreviewUser = "UserInfo_IsPreviewUser";
 			public const string UserInfo_IsSystemAdmin = "UserInfo_IsSystemAdmin";
 			public const string UserInfo_IsSystemAdmin_Help = "UserInfo_IsSystemAdmin_Help";
 			public const string UserInfo_LastName = "UserInfo_LastName";

@@ -45,6 +45,9 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin_Help, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsOrgAdmin { get; set; }
 
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
+        public bool IsPreviewUser { get; set; }
+
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.AuthenticationResources))]
         public string PhoneNumber { get; set; }
 

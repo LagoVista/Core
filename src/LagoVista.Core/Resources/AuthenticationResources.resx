@@ -189,6 +189,12 @@
   <data name="UserInfo_IsPhoneConfirmed" xml:space="preserve">
     <value>Is Phone Number Confirmed</value>
   </data>
+  <data name="UserInfo_IsPreviewUser" xml:space="preserve">
+    <value>Preview User</value>
+  </data>
+  <data name="UserInfo_IsPreviewUse_Help" xml:space="preserve">
+    <value>A Preivew User is a User that can use all the tools, but can't allocate any billable resources</value>
+  </data>
   <data name="UserInfo_IsSystemAdmin" xml:space="preserve">
     <value>Is System Admin</value>
   </data>
