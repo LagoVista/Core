@@ -15,7 +15,7 @@ namespace LagoVista.Core.Models.UIMetaData
         Func<bool> _getIsDirtyMethod;
         Action _refreshMethod;
         Dictionary<string, Type> _editorTypes;
-       IViewModelNavigation _navigationService;
+        IViewModelNavigation _navigationService;
         IDictionary<string, FormField> _view;
         Dictionary<string, IEnumerable<IEntityHeaderEntity>> _entityLists;
 
