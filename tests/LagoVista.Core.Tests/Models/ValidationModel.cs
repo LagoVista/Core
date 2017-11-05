@@ -98,4 +98,14 @@ namespace LagoVista.Core.Tests.Models
         public ValidationModel ChildModel { get; set; }
         public List<ValidationModel> ChildModels { get; set; }
     }
+
+    public class RegExModel : IValidateable
+    {
+        [FormField(ValidationRegEx:"^[0-9a-z]{2,20}$", RegExValidationMessageResource:ValidationResources.Names.RegExMessage, ResourceType: typeof(ValidationResources))]
+        public string RegExValue_2_20_lower_case { get; set; }
+
+        [FormField(FieldType:FieldTypes.Key, RegExValidationMessageResource: ValidationResources.Names.KeyIsBad, ResourceType:typeof(ValidationResources))]
+        public string Key { get; set; }
+
+    }
 }

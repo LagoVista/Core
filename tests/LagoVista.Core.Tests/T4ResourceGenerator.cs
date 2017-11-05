@@ -74,6 +74,12 @@ namespace LagoVista.Core.Tests.Resources.Models
 //Models:ValidationResources:FirstNameLabel
 
 		public static string FirstNameLabel { get { return GetResourceString("FirstNameLabel"); } }
+//Models:ValidationResources:KeyIsBad
+
+		public static string KeyIsBad { get { return GetResourceString("KeyIsBad"); } }
+//Models:ValidationResources:RegExMessage
+
+		public static string RegExMessage { get { return GetResourceString("RegExMessage"); } }
 //UIMetaData:MetaDataResources:BaseField1
 
 		public static class Names
@@ -85,6 +91,8 @@ namespace LagoVista.Core.Tests.Resources.Models
 			public const string EnumThree = "EnumThree";
 			public const string EnumTwo = "EnumTwo";
 			public const string FirstNameLabel = "FirstNameLabel";
+			public const string KeyIsBad = "KeyIsBad";
+			public const string RegExMessage = "RegExMessage";
 		}
 	}
 }

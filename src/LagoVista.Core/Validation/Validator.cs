@@ -3,12 +3,14 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.IOC;
 using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Validation
@@ -138,7 +140,7 @@ namespace LagoVista.Core.Validation
                 ValidateString(result, prop, attr, value as String);
             }
             /// TODO: Find better approeach for detecting generic type entity headers.
-            else if (prop.PropertyType.Name.StartsWith(nameof(EntityHeader))) /* YUCK! KDW 5/12/207 */
+            else if (prop.PropertyType.Name.StartsWith(nameof(EntityHeader))) /* YUCK! KDW 5/12/2017 */
             {
                 ValidateEntityHeader(result, prop, attr, value as EntityHeader);
             }
@@ -338,6 +340,37 @@ namespace LagoVista.Core.Validation
 
             if (!String.IsNullOrEmpty(value))
             {
+                if(attr.FieldType == FieldTypes.Key)
+                {
+                    var reEx = new Regex("^[a-z0-9]{3,30}$");
+                    if (!reEx.Match(value).Success)
+                    {
+                        if (attr.ResourceType == null)
+                        {
+                            throw new Exception($"Building Metadata - Reg Ex Validation has a resource text, but no resource type on {attr.LabelDisplayResource} {attr.LabelDisplayResource}");
+                        }
+
+                        result.AddUserError(ValidationResource.Common_Key_Validation);
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(attr.RegExValidation))
+                {
+                    var reEx = new Regex(attr.RegExValidation);
+                    if(!reEx.Match(value).Success)
+                    {
+                        if (attr.ResourceType == null)
+                        {
+                            throw new Exception($"Building Metadata - Reg Ex Validation has a resource text, but no resource type on {attr.LabelDisplayResource} {attr.LabelDisplayResource}");
+                        }
+
+                        var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RegExValidationMessageResource);
+                        result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null));
+                    }
+                }
+
+               
+
                 if (attr.MinLength.HasValue && attr.MaxLength.HasValue)
                 {
                     if (value.Length < attr.MinLength || value.Length > attr.MaxLength)

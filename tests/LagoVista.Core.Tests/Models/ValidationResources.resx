@@ -138,4 +138,10 @@
   <data name="FirstNameLabel" xml:space="preserve">
     <value>First Name</value>
   </data>
+  <data name="KeyIsBad" xml:space="preserve">
+    <value>KeyIsBad</value>
+  </data>
+  <data name="RegExMessage" xml:space="preserve">
+    <value>RegExIsBad</value>
+  </data>
 </root>

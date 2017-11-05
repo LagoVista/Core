@@ -109,11 +109,24 @@ namespace LagoVista.Core.Models.UIMetaData
                 field.RegEx=@"^[a-z0-9]{6,30}$";
                 field.RegExMessage = ValidationResource.Validation_RegEx_Namespace;
             }
-
-            if (attr.FieldType == FieldTypes.Key)
+            else if (attr.FieldType == FieldTypes.Key)
             {
                 field.RegEx = @"^[a-z0-9]{3,30}$";
                 field.RegExMessage = ValidationResource.Common_Key_Validation;
+            }
+            else
+            {
+                field.RegEx = attr.RegExValidation;
+                if (!String.IsNullOrEmpty(attr.RegExValidationMessageResource))
+                {
+                    if (attr.ResourceType == null)
+                    {
+                        throw new Exception($"Building Metadata - Reg Ex Validation has a resource nae, but no resource type on {name} {attr.LabelDisplayResource}");
+                    }
+
+                    var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RegExValidationMessageResource);
+                    field.RegExMessage = (string)validationProperty.GetValue(validationProperty.DeclaringType, null);
+                }
             }
 
             if (!String.IsNullOrEmpty(attr.WaterMark))
