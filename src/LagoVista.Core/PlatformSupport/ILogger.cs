@@ -22,6 +22,8 @@ namespace LagoVista.Core.PlatformSupport
 
     public interface ILogger
     {
+        bool DebugMode { get; set; }
+
         TimedEvent StartTimedEvent(string area, string description);
         void EndTimedEvent(TimedEvent evt);
 
