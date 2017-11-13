@@ -150,9 +150,17 @@ namespace LagoVista.Core
                Min length w/o ms after trimming Z = 19
             */
 
-            if(!value.EndsWith("Z"))
+            if (!value.EndsWith("Z"))
             {
-                throw new Exception("Invalid Date Format, expected JSON ISO format in GMT ending with Z");
+                //HACK: - Maybe, sometimes the deserilaizer tries to help us by converting the ISO format into current date format, if so use that...not sure if this could be a sleeping bug.
+                if (DateTime.TryParse(value, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTimeValue))
+                {
+                    return dateTimeValue;
+                }
+                else
+                {
+                    throw new Exception("Invalid Date Format, expected JSON ISO format in GMT ending with Z");
+                }
             }
 
             if(value.Length < 19)
@@ -160,9 +168,15 @@ namespace LagoVista.Core
                 throw new Exception("Input Time Too Short, minimum is yyy-mm-ddThh:mm:ssZ");
             }
 
-            value = NormalizeFormatString(value);
+            var normalizedValue = NormalizeFormatString(value);
 
-            return DateTime.ParseExact(value, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None).ToUniversalTime();
+            if(DateTime.TryParseExact(normalizedValue, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime dateTime))
+            {
+                return dateTime.ToUniversalTime();
+            }
+
+            throw new Exception("Could Not Parse DateTime.");
+
         }
 
         public static String ToJSONString(this DateTime dateTime)
