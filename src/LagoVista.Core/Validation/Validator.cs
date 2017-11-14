@@ -68,12 +68,22 @@ namespace LagoVista.Core.Validation
 
             foreach(var prop in properties)
             {
-                var propValue = prop.GetValue(entity) as IValidateable;
-                if (propValue != null)
+                var propValue = prop.GetValue(entity);
+
+                var validateablePropValue = propValue  as IValidateable;
+                if (validateablePropValue != null)
                 {
-                    var childResult = Validator.Validate(propValue, action);
+                    var childResult = Validator.Validate(validateablePropValue, action);
                     result.Concat(childResult);
                 }
+
+                if(propValue.GetType().GetGenericTypeDefinition() == typeof(EntityHeader<>))
+                {
+                   var genericEHType = propValue.GetType().GenericTypeArguments.First();
+                 
+                    var validatableChild = ((EntityHeader<IValidateable>)propValue).Value as IValidateable;
+
+                  }
 
                 var listValues = prop.GetValue(entity) as System.Collections.IEnumerable;
                 if (listValues != null)
@@ -88,6 +98,8 @@ namespace LagoVista.Core.Validation
                         }
                     }
                 }
+
+
             }
 
             return result;

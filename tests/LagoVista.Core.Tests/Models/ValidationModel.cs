@@ -83,6 +83,41 @@ namespace LagoVista.Core.Tests.Models
         public EntityHeader<EnumFortTesting> PropWithEnum { get; set; }
     }
 
+    public class EntityHeaderChildValueModels : IValidateable
+    {
+        [FormField(IsRequired:true)]
+        public EntityHeader<EhChildModel> Required { get; set; }
+
+
+        [FormField(IsRequired: false)]
+        public EntityHeader<EhChildModel> NotRequired { get; set; }
+    }
+
+    public class EhChildModel : IValidateable
+    {
+        [FormField(IsRequired:true)]
+        public string IsRequiredProp { get; set; }
+
+
+        [FormField(IsRequired: false)]
+        public string IsNotRequiredProp { get; set; }
+
+        [FormField(IsRequired:true)]
+        public EntityHeader<EhGrandChildModel> GrandChild { get; set; }
+    }
+
+    public class EhGrandChildModel : IValidateable
+    {
+
+        [FormField(IsRequired: true)]
+        public string IsRequiredProp { get; set; }
+
+
+        [FormField(IsRequired: false)]
+        public string IsNotRequiredProp { get; set; }
+    }
+
+
     public class StringLengthModel : IValidateable
     {
         [FormField(MinLength:5)]
