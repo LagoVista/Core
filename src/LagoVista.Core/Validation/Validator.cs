@@ -27,13 +27,20 @@ namespace LagoVista.Core.Validation
 
     public class Validator
     {
-        public static ValidationResult Validate(IValidateable entity, Actions action = Actions.Any)
+        /// <summary>
+        /// Validate an IValidateable object.
+        /// </summary>
+        /// <param name="entity">Object to validate</param>
+        /// <param name="action">Action to execute: if not specified, use Any, this is normally used for custom validation routines</param>
+        /// <param name="requirePopulatedEHValues">If this is set to true it will require that the entire object graphs, including traversing through EntityHeader<T>.Value will be required if the parameter is required.</param>
+        /// <returns></returns>
+        public static ValidationResult Validate(IValidateable entity, Actions action = Actions.Any, bool requirePopulatedEHValues = false)
         {
             var result = new ValidationResult();
-        
+
             if (entity == null)
             {
-                if(SLWIOC.Contains(typeof(ILogger)))
+                if (SLWIOC.Contains(typeof(ILogger)))
                 {
                     var logger = SLWIOC.Get<ILogger>();
                     logger.AddException("Validator_Validate", new Exception("NULL Value Passed to Validate Method"));
@@ -66,35 +73,49 @@ namespace LagoVista.Core.Validation
                 }
             }
 
-            foreach(var prop in properties)
+            foreach (var prop in properties)
             {
+                var attr = prop.GetCustomAttributes(typeof(FormFieldAttribute), true).OfType<FormFieldAttribute>().FirstOrDefault();
                 var propValue = prop.GetValue(entity);
-
-                var validateablePropValue = propValue  as IValidateable;
-                if (validateablePropValue != null)
+                if (propValue != null)
                 {
-                    var childResult = Validator.Validate(validateablePropValue, action);
-                    result.Concat(childResult);
-                }
-
-                if(propValue.GetType().GetGenericTypeDefinition() == typeof(EntityHeader<>))
-                {
-                   var genericEHType = propValue.GetType().GenericTypeArguments.First();
-                 
-                    var validatableChild = ((EntityHeader<IValidateable>)propValue).Value as IValidateable;
-
-                  }
-
-                var listValues = prop.GetValue(entity) as System.Collections.IEnumerable;
-                if (listValues != null)
-                {
-                    foreach (var listValue in listValues)
+                    var validateablePropValue = propValue as IValidateable;
+                    if (validateablePropValue != null)
                     {
-                        var validatableListValue = listValue as IValidateable;
-                        if (validatableListValue != null)
+                        var childResult = Validator.Validate(validateablePropValue, action);
+                        result.Concat(childResult);
+                    }
+
+                    if (propValue.GetType().GetTypeInfo().IsGenericType &&
+                        propValue.GetType().GetGenericTypeDefinition() == typeof(EntityHeader<>))
+                    {
+                        var valueProperty = propValue.GetType().GetTypeInfo().GetDeclaredProperty("Value");
+                        var validatableChild = valueProperty.GetValue(propValue) as IValidateable;
+                        if (validatableChild != null)
                         {
-                            var childResult = Validator.Validate(validatableListValue, action);
+                            var childResult = Validator.Validate(validatableChild, action);
                             result.Concat(childResult);
+                        }
+                        else
+                        {
+                            if (attr.IsRequired && requirePopulatedEHValues)
+                            {
+                                AddRequiredFieldMissingMessage(result, attr, prop.Name);
+                            }
+                        }
+                    }
+
+                    var listValues = prop.GetValue(entity) as System.Collections.IEnumerable;
+                    if (listValues != null)
+                    {
+                        foreach (var listValue in listValues)
+                        {
+                            var validatableListValue = listValue as IValidateable;
+                            if (validatableListValue != null)
+                            {
+                                var childResult = Validator.Validate(validatableListValue, action);
+                                result.Concat(childResult);
+                            }
                         }
                     }
                 }
@@ -160,6 +181,28 @@ namespace LagoVista.Core.Validation
             ValidateNumber(result, prop, attr, value);
         }
 
+        private static void AddRequiredFieldMissingMessage(ValidationResult result, FormFieldAttribute attr, string propertyName)
+        {
+            if (!String.IsNullOrEmpty(attr.RequiredMessageResource) && attr.ResourceType != null)
+            {
+                var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RequiredMessageResource);
+                var validationMessage = (string)validationProperty.GetValue(validationProperty.DeclaringType, null);
+                result.AddUserError(validationMessage);
+            }
+            else
+            {
+                var propertyLabel = GetLabel(attr);
+                if (String.IsNullOrEmpty(propertyLabel))
+                {
+                    result.AddSystemError(Resources.ValidationResource.Entity_Header_Null_System.Replace("[NAME]", propertyName));
+                }
+                else
+                {
+                    result.AddUserError(Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel));
+                }
+            }
+
+        }
 
 
         private static void ValidateEntityHeader(ValidationResult result, PropertyInfo prop, FormFieldAttribute attr, EntityHeader value)
@@ -176,24 +219,7 @@ namespace LagoVista.Core.Validation
             {
                 if (value == null || value.IsEmpty())
                 {
-                    if (!String.IsNullOrEmpty(attr.RequiredMessageResource) && attr.ResourceType != null)
-                    {
-                        var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RequiredMessageResource);
-                        var validationMessage = (string)validationProperty.GetValue(validationProperty.DeclaringType, null);
-                        result.AddUserError(validationMessage);
-                    }
-                    else
-                    {
-                        var propertyLabel = GetLabel(attr);
-                        if (String.IsNullOrEmpty(propertyLabel))
-                        {
-                            result.AddSystemError(Resources.ValidationResource.Entity_Header_Null_System.Replace("[NAME]", prop.Name));
-                        }
-                        else
-                        {
-                            result.AddUserError(Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel));
-                        }
-                    }
+                    AddRequiredFieldMissingMessage(result, attr, prop.Name);
                 }
             }
         }
@@ -227,7 +253,7 @@ namespace LagoVista.Core.Validation
                 }
                 else if (!auditableModel.CreationDate.SuccessfulJSONDate())
                 {
-                    if (DateTime.TryParse(auditableModel.CreationDate,CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
+                    if (DateTime.TryParse(auditableModel.CreationDate, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
                     {
                         auditableModel.CreationDate = dateTime.ToJSONString();
                     }
@@ -251,7 +277,7 @@ namespace LagoVista.Core.Validation
                     else
                     {
                         result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate);
-                    }                    
+                    }
                 }
 
                 if (auditableModel.LastUpdatedBy == null)
@@ -352,7 +378,7 @@ namespace LagoVista.Core.Validation
 
             if (!String.IsNullOrEmpty(value))
             {
-                if(attr.FieldType == FieldTypes.Key)
+                if (attr.FieldType == FieldTypes.Key)
                 {
                     var reEx = new Regex("^[a-z0-9]{3,30}$");
                     if (!reEx.Match(value).Success)
@@ -369,7 +395,7 @@ namespace LagoVista.Core.Validation
                 if (!String.IsNullOrEmpty(attr.RegExValidation))
                 {
                     var reEx = new Regex(attr.RegExValidation);
-                    if(!reEx.Match(value).Success)
+                    if (!reEx.Match(value).Success)
                     {
                         if (attr.ResourceType == null)
                         {
@@ -381,7 +407,7 @@ namespace LagoVista.Core.Validation
                     }
                 }
 
-               
+
 
                 if (attr.MinLength.HasValue && attr.MaxLength.HasValue)
                 {

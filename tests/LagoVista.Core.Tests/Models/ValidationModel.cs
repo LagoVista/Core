@@ -86,7 +86,7 @@ namespace LagoVista.Core.Tests.Models
     public class EntityHeaderChildValueModels : IValidateable
     {
         [FormField(IsRequired:true)]
-        public EntityHeader<EhChildModel> Required { get; set; }
+        public EntityHeader<EhChildModel> IsRequiredTopLevelProperty { get; set; }
 
 
         [FormField(IsRequired: false)]
@@ -96,7 +96,7 @@ namespace LagoVista.Core.Tests.Models
     public class EhChildModel : IValidateable
     {
         [FormField(IsRequired:true)]
-        public string IsRequiredProp { get; set; }
+        public string IsRequiredChildProperty { get; set; }
 
 
         [FormField(IsRequired: false)]
@@ -110,7 +110,7 @@ namespace LagoVista.Core.Tests.Models
     {
 
         [FormField(IsRequired: true)]
-        public string IsRequiredProp { get; set; }
+        public string IsRequiredGrandChildProperty { get; set; }
 
 
         [FormField(IsRequired: false)]
