@@ -34,10 +34,10 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
-        public static InvokeResult<T> FromError(String err)
+        public static InvokeResult<T> FromError(string err, string errorCode = "")
         {
             var result = new InvokeResult<T>();
-            result.Errors.Add(new ErrorMessage(err));
+            result.Errors.Add(new ErrorMessage(errorCode, err));
             return result;
         }
 
@@ -105,6 +105,13 @@ namespace LagoVista.Core.Validation
             get { return new InvokeResult(); }
         }
 
+
+        public static InvokeResult FromError(string err, string errorCode = "")
+        {
+            var result = new InvokeResult();
+            result.Errors.Add(new ErrorMessage(errorCode, err));
+            return result;
+        }
 
         public static InvokeResult FromErrors(params ErrorMessage[] errs)
         {

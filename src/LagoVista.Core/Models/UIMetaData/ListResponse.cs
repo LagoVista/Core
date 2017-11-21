@@ -23,6 +23,19 @@ namespace LagoVista.Core.Models.UIMetaData
         public string NextRowKey { get; set; }
         public bool HasMoreRecords { get; set; }
 
+        public static new ListResponse<TModel> FromError(string errorMessage, string errorCode = "")
+        {
+            var response = new ListResponse<TModel>();
+            response.Errors.Add(new ErrorMessage(errorCode, errorMessage));
+            return response;
+        }
+
+        public static new ListResponse<TModel> FromErrors(params ErrorMessage[] errMessages)
+        {
+            var response = new ListResponse<TModel>();
+            response.Errors.Concat(errMessages);
+            return response;
+        }
 
         public static ListResponse<TModel> Create(IEnumerable<TModel> model)
         {
