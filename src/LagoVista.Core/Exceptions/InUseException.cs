@@ -15,6 +15,6 @@ namespace LagoVista.Core.Exceptions
             this.DependentObjects = result.DependentObjects;
         }
 
-        public List<SummaryData> DependentObjects { get; set; }
+        public List<InUseRecordData> DependentObjects { get; set; }
     }
 }
