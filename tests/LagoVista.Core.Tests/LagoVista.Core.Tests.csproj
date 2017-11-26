@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>LagoVista.IoT.DeviceAdmin.Tests</AssemblyName>
+    <AssemblyName>LagoVista.Core.Tests</AssemblyName>
     <PackageId>LagoVista.IoT.DeviceAdmin.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
