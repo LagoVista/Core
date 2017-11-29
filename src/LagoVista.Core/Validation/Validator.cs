@@ -79,8 +79,7 @@ namespace LagoVista.Core.Validation
                 var propValue = prop.GetValue(entity);
                 if (propValue != null)
                 {
-                    var validateablePropValue = propValue as IValidateable;
-                    if (validateablePropValue != null)
+                    if (propValue is IValidateable validateablePropValue)
                     {
                         var childResult = Validator.Validate(validateablePropValue, action);
                         result.Concat(childResult);
@@ -90,28 +89,25 @@ namespace LagoVista.Core.Validation
                         propValue.GetType().GetGenericTypeDefinition() == typeof(EntityHeader<>))
                     {
                         var valueProperty = propValue.GetType().GetTypeInfo().GetDeclaredProperty("Value");
-                        var validatableChild = valueProperty.GetValue(propValue) as IValidateable;
-                        if (validatableChild != null)
+                        if (valueProperty.GetValue(propValue) is IValidateable validatableChild)
                         {
                             var childResult = Validator.Validate(validatableChild, action);
                             result.Concat(childResult);
                         }
                         else
                         {
-                            if (attr.IsRequired && requirePopulatedEHValues)
+                            if (attr != null && attr.IsRequired && requirePopulatedEHValues)
                             {
                                 AddRequiredFieldMissingMessage(result, attr, prop.Name);
                             }
                         }
                     }
 
-                    var listValues = prop.GetValue(entity) as System.Collections.IEnumerable;
-                    if (listValues != null)
+                    if (prop.GetValue(entity) is System.Collections.IEnumerable listValues)
                     {
                         foreach (var listValue in listValues)
                         {
-                            var validatableListValue = listValue as IValidateable;
-                            if (validatableListValue != null)
+                            if (listValue is IValidateable validatableListValue)
                             {
                                 var childResult = Validator.Validate(validatableListValue, action);
                                 result.Concat(childResult);
