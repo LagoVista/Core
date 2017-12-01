@@ -22,7 +22,7 @@
     <ProjectReference Include="..\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1-beta1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="T4ResourceGenerator.tt">
