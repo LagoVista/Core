@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Models;
+using System;
 
 namespace LagoVista.Core.Interfaces
 {
@@ -32,5 +33,6 @@ namespace LagoVista.Core.Interfaces
         String AppLogo { get; }
         String CompanyLogo { get; }
         bool EmitTestingCode { get; }
+        VersionInfo Version { get; }
     }
 }
