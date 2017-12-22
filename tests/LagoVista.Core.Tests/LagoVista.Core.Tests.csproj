@@ -3,13 +3,10 @@
     <TargetFramework>net461</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>LagoVista.Core.Tests</AssemblyName>
-    <PackageId>LagoVista.IoT.DeviceAdmin.Tests</PackageId>
+    <PackageId>LagoVista.Core.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.4;portable-net451+win8</PackageTargetFallback>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="ValidationTests\lse.cs" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
