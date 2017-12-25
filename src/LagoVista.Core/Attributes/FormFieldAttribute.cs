@@ -19,6 +19,7 @@ namespace LagoVista.Core.Attributes
         Decimal,
         Date,
         Time,
+        LinkButton,
         DateTime,
         Phone,
         Password,

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Commanding;
 using LagoVista.Core.Resources;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public const string FeildType_EntityHeaderPicker = "EntityHeaderPicker";
         public const string FieldType_Text = "Text";
         public const string FieldType_Key = "Key";
+        public const string FieldType_LinkButton = "LinkButton";
         public const string FieldType_ChildList = "ChildList";
         public const string FieldType_Decimal = "Decimal";
         public const string FieldType_Integer = "Integer";
@@ -46,6 +48,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
         public bool IsVisible { get; set; }
+        public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
         
         public static  FormField Create(String name, FormFieldAttribute attr)
