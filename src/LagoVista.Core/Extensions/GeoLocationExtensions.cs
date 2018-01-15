@@ -18,7 +18,7 @@ namespace LagoVista.Core
             return (180 / Math.PI) * radians;
         }
 
-        public static GeoLocation ToCoreLocation(this string value, GeoLocation defaultValue = null)
+        public static GeoLocation ToGeoLocation(this string value, GeoLocation defaultValue = null)
         {
             if (String.IsNullOrEmpty(value)) return defaultValue;
             var parts = value.Split(',');
