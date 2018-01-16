@@ -279,6 +279,11 @@ namespace LagoVista.Core.ViewModels
             get { return PlatformSupport.Services.Network.IsInternetConnected; }
         }
 
+        public virtual void HandleNetworkCallException(Exception ex)
+        {
+
+        }
+
         protected async Task<bool> PerformNetworkOperation(Func<Task> action, String waitMessage = null)
         {
             var success = false;
@@ -294,9 +299,10 @@ namespace LagoVista.Core.ViewModels
                     success = true;
                 }
                 catch (Exception ex)
-                {
+                {                    
                     success = false;
                     PlatformSupport.Services.Logger.AddException("ViewModelBase.PerformNetworkOperation", ex);
+                    HandleNetworkCallException(ex);
                 }
                 finally
                 {
