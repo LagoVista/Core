@@ -5,6 +5,14 @@ using System.Text;
 
 namespace LagoVista.Core.Models.Geo
 {
+    public enum DistanceUnits
+    {
+        NauticalMiles,
+        Miles,
+        Kilometers,
+        Meters
+    }
+
     public class GeoLocation : IGeoLocation
     {
         public double Altitude { get; set; }
@@ -17,7 +25,7 @@ namespace LagoVista.Core.Models.Geo
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        public double DistanceFrom(GeoLocation location)
+        public double DistanceFrom(GeoLocation location, DistanceUnits distanceUnits = DistanceUnits.NauticalMiles)
         {
             double phi_s = Latitude.ToRadians(),
                    lamda_s = Longitude.ToRadians(),
@@ -29,7 +37,16 @@ namespace LagoVista.Core.Models.Geo
                            Math.Sin(phi_f) - Math.Sin(phi_s) * Math.Cos(phi_f) * Math.Cos(lamda_s - lamda_f)), 2));
             double x = Math.Sin(phi_s) * Math.Sin(phi_f) + Math.Cos(phi_s) * Math.Cos(phi_f) * Math.Cos(lamda_s - lamda_f);
             double delta = Math.Atan2(y, x);
-            return delta.ToDegrees() * 60;
+            var nm = delta.ToDegrees() * 60;
+
+            switch(distanceUnits)
+            {
+                case DistanceUnits.Kilometers: return nm * 1.852;
+                case DistanceUnits.Meters:return nm * 1852;
+                case DistanceUnits.Miles: return nm * 1.15077945;
+            }
+
+            return nm;
         }
 
         public double HeadingTo(GeoLocation location)
@@ -43,6 +60,13 @@ namespace LagoVista.Core.Models.Geo
         public string ToNuvIoTFormat()
         {
             return $"{Latitude:0.0000000},{Longitude:0.0000000}";
+        }
+
+
+
+        public override string ToString()
+        {
+            return $"Latitude = {Latitude:0.0000000}; Longitude = {Longitude:0.0000000}";
         }
     }
 }
