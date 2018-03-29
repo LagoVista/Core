@@ -136,7 +136,7 @@ namespace LagoVista.Core.Tests.Models
 
     public class RegExModel : IValidateable
     {
-        [FormField(ValidationRegEx:"^[0-9a-z]{2,20}$", RegExValidationMessageResource:ValidationResources.Names.RegExMessage, ResourceType: typeof(ValidationResources))]
+        [FormField(ValidationRegEx:"^[0-9a-z]{2,20}$", RegExValidationMessageResource:ValidationResources.Names.RegExMessage, FieldType:FieldTypes.Text, ResourceType: typeof(ValidationResources))]
         public string RegExValue_2_20_lower_case { get; set; }
 
         [FormField(FieldType:FieldTypes.Key, RegExValidationMessageResource: ValidationResources.Names.KeyIsBad, ResourceType:typeof(ValidationResources))]
