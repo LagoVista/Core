@@ -50,6 +50,17 @@ namespace LagoVista.Core.Validation
                 return result;
             }
 
+            var methods = entity.GetType().GetTypeInfo().DeclaredMethods;
+            foreach (var method in methods)
+            {
+                var attr = method.GetCustomAttributes(typeof(PreValidationAttribute), true).OfType<PreValidationAttribute>().FirstOrDefault();
+                if (attr != null)
+                {
+                    CallPreValidationRoutine(entity, method, action);
+                }
+            }
+
+
             ValidateAuditInfo(result, entity);
             ValidateId(result, entity);
 
@@ -63,13 +74,12 @@ namespace LagoVista.Core.Validation
                 }
             }
 
-            var methods = entity.GetType().GetTypeInfo().DeclaredMethods;
             foreach (var method in methods)
             {
                 var attr = method.GetCustomAttributes(typeof(CustomValidatorAttribute), true).OfType<CustomValidatorAttribute>().FirstOrDefault();
                 if (attr != null)
                 {
-                    CallCustomValidationRoutine(attr, result, entity, method, action);
+                    CallCustomValidationRoutine(result, entity, method, action);
                 }
             }
 
@@ -122,7 +132,36 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
-        public static void CallCustomValidationRoutine(CustomValidatorAttribute attr, ValidationResult result, IValidateable entity, MethodInfo method, Actions action)
+        public static void CallPreValidationRoutine(IValidateable entity, MethodInfo method, Actions action)
+        {
+            if (method.ReturnType != typeof(void))
+            {
+                throw new InvalidOperationException("Custom Validation Method must not return a type, the return type must be [void]");
+            }
+
+            var parameters = method.GetParameters();
+
+            if (parameters.Count() > 1)
+            {
+                throw new InvalidOperationException("Custom Validation Method most not accept more than one parameters, it may optionally [Actions action].");
+            }
+
+            if (parameters.Count() == 1 && parameters[0].ParameterType != typeof(Actions))
+            {
+                throw new InvalidOperationException("Custom Validation Method must optionally accept only a first parameter of [Actions action].");
+            }
+
+            if (parameters.Count() == 1)
+            {
+                method.Invoke(entity, new object[] { action });
+            }
+            else
+            {
+                method.Invoke(entity, new object[] {});
+            }
+        }
+
+        public static void CallCustomValidationRoutine(ValidationResult result, IValidateable entity, MethodInfo method, Actions action)
         {
             if (method.ReturnType != typeof(void))
             {
@@ -158,7 +197,6 @@ namespace LagoVista.Core.Validation
             {
                 method.Invoke(entity, new object[] { result });
             }
-
         }
 
         private static void ValidateProperty(FormFieldAttribute attr, ValidationResult result, IValidateable entity, PropertyInfo prop, Actions action)
@@ -381,7 +419,7 @@ namespace LagoVista.Core.Validation
                     {
                         if (attr.ResourceType == null)
                         {
-                            throw new Exception($"Building Metadata - Reg Ex Validation has a resource text, but no resource type on {attr.LabelDisplayResource} {attr.LabelDisplayResource}");
+                            throw new Exception($"Validating String - Reg Ex Validation has a resource text, but no resource type for field [{attr.LabelDisplayResource}]");
                         }
 
                         result.AddUserError(ValidationResource.Common_Key_Validation);
@@ -395,11 +433,24 @@ namespace LagoVista.Core.Validation
                     {
                         if (attr.ResourceType == null)
                         {
-                            throw new Exception($"Building Metadata - Reg Ex Validation has a resource text, but no resource type on {attr.LabelDisplayResource} {attr.LabelDisplayResource}");
+                            throw new Exception($"Validating String - Reg Ex Validation was invalid, but no resource type for field [{attr.LabelDisplayResource}]");
                         }
 
-                        var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RegExValidationMessageResource);
-                        result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null));
+                        if (String.IsNullOrEmpty(attr.RegExValidationMessageResource))
+                        {
+                            throw new Exception($"Validating String - Reg Ex Validation was invalid, [RegExValidationMessageResource] was null or empty and could not lookup error message for invalid field [{attr.LabelDisplayResource}].");
+                        }
+                        else {
+                            var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RegExValidationMessageResource);
+                            if (validationProperty == null)
+                            {
+                                throw new Exception($"Validating String - Reg Ex Validation was invalid, but could not find validation message resource for field [{attr.LabelDisplayResource}]");
+                            }
+                            else
+                            {
+                                result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null));
+                            }
+                        }
                     }
                 }
 

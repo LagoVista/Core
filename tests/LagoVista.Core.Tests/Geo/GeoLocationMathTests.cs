@@ -1,10 +1,6 @@
 ﻿using LagoVista.Core.Models.Geo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Tests.Geo
 {
@@ -14,7 +10,7 @@ namespace LagoVista.Core.Tests.Geo
     {
 
         [TestMethod]
-        public void North()
+        public void GeogrpahyType_Find_North()
         {
             var start = new GeoLocation()
             {
@@ -34,7 +30,7 @@ namespace LagoVista.Core.Tests.Geo
         }
 
         [TestMethod]
-        public void South()
+        public void GeogrpahyType_Find_South()
         {
             var start = new GeoLocation()
             {
@@ -54,7 +50,7 @@ namespace LagoVista.Core.Tests.Geo
         }
 
         [TestMethod]
-        public void West()
+        public void GeogrpahyType_Find_West()
         {
             var start = new GeoLocation()
             {
@@ -75,7 +71,7 @@ namespace LagoVista.Core.Tests.Geo
 
 
         [TestMethod]
-        public void East()
+        public void GeogrpahyType_Find_East()
         {
             var start = new GeoLocation()
             {
