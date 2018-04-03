@@ -60,12 +60,15 @@ namespace LagoVista.Core.Validation
 
             if (ex.InnerException != null)
             {
-                result.Errors.Add(new ErrorMessage()
+                if (ex.InnerException.Message != ex.Message)
                 {
-                    ErrorCode = "EXC9997",
-                    Message = ex.InnerException.Message,
-                    Details = ex.InnerException.StackTrace
-                });
+                    result.Errors.Add(new ErrorMessage()
+                    {
+                        ErrorCode = "EXC9997",
+                        Message = ex.InnerException.Message,
+                        Details = ex.InnerException.StackTrace
+                    });
+                }
             }
 
             return result;
@@ -136,12 +139,15 @@ namespace LagoVista.Core.Validation
 
             if (ex.InnerException != null)
             {
-                result.Errors.Add(new ErrorMessage()
+                if (ex.Message != ex.InnerException.Message)
                 {
-                    ErrorCode = "EXC9997",
-                    Message = ex.InnerException.Message,
-                    Details = ex.InnerException.StackTrace
-                });
+                    result.Errors.Add(new ErrorMessage()
+                    {
+                        ErrorCode = "EXC9997",
+                        Message = ex.InnerException.Message,
+                        Details = ex.InnerException.StackTrace
+                    });
+                }
             }
 
             return result;
