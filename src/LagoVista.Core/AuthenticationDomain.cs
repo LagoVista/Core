@@ -25,7 +25,7 @@ namespace LagoVista.Core
                     {
                         Major = 1,
                         Minor = 3,
-                        Build = 003,
+                        Build = 004,
                         DateStamp = new DateTime(2018, 4, 27),
                         Revision = 1,
                         ReleaseNotes = "Beta Quality"
