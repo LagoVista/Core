@@ -23,10 +23,10 @@ namespace LagoVista.Core
                     Name = "Authentication",
                     CurrentVersion = new Core.Models.VersionInfo()
                     {
-                        Major = 0,
-                        Minor = 8,
+                        Major = 1,
+                        Minor = 3,
                         Build = 001,
-                        DateStamp = new DateTime(2016, 12, 20),
+                        DateStamp = new DateTime(2018, 4, 27),
                         Revision = 1,
                         ReleaseNotes = "Initial unstable preview"
                     }
