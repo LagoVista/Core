@@ -9,6 +9,10 @@
 *.csproj.bak
 *.nuspec.txt
 
+# NuvIoT Build  Specific
+*.csproj.bak
+*.nuspec.txt
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
