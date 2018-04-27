@@ -28,7 +28,7 @@ namespace LagoVista.Core
                         Build = 001,
                         DateStamp = new DateTime(2018, 4, 27),
                         Revision = 1,
-                        ReleaseNotes = "Initial unstable preview"
+                        ReleaseNotes = "Beta Quality"
                     }
                 };
             }
