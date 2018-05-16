@@ -1,4 +1,6 @@
-﻿namespace LagoVista.Core.PlatformSupport
+﻿using System;
+
+namespace LagoVista.Core.PlatformSupport
 {
     public interface IUsageMetrics
     {
@@ -56,6 +58,8 @@
         void Calculate();
 
         IUsageMetrics Clone();
+
+        void SetDatestamp(DateTime dateStamp);
 
         void Concat(IUsageMetrics metric);
 

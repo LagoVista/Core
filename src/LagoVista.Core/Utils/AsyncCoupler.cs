@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using System;
 using System.Collections.Concurrent;
@@ -31,9 +32,10 @@ namespace LagoVista.IoT.Coupler
         protected IUsageMetrics UsageMetrics { get; private set; }
         protected ConcurrentDictionary<string, WaitOnRequest<object>> Sessions { get; } = new ConcurrentDictionary<string, WaitOnRequest<object>>();
 
-        public AsyncCouplerBase(ILogger logger)
+        public AsyncCouplerBase(ILogger logger, IUsageMetrics  usageMetrics)
         {
-            Logger = logger ?? throw new ArgumentNullException("logger"); 
+            Logger = logger ?? throw new ArgumentNullException("logger");
+            UsageMetrics = usageMetrics ?? throw new ArgumentNullException("usageMetrics");
         }
 
         //public Task InitAsync(string version, string hostId, string instanceId, string name)
@@ -45,25 +47,24 @@ namespace LagoVista.IoT.Coupler
         //    return Task.FromResult(default(object));
         //}
 
-        //public UsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion)
-        //{
-        //    UsageMetrics.Version = hostVersion;
-        //    lock (UsageMetrics)
-        //    {
-        //        var clonedMetrics = UsageMetrics.Clone();
-        //        clonedMetrics.RowKey = dateStamp.ToInverseTicksRowKey();
-        //        clonedMetrics.PartitionKey = UsageMetrics.PartitionKey;
+        public IUsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion)
+        {
+            UsageMetrics.Version = hostVersion;
+            lock (UsageMetrics)
+            {
+                var clonedMetrics = UsageMetrics.Clone();
+                clonedMetrics.SetDatestamp(dateStamp);
 
-        //        clonedMetrics.EndTimeStamp = dateStamp.ToJSONString();
-        //        clonedMetrics.StartTimeStamp = UsageMetrics.StartTimeStamp;
-        //        clonedMetrics.Status = "Running";
+                clonedMetrics.EndTimeStamp = dateStamp.ToJSONString();
+                clonedMetrics.StartTimeStamp = UsageMetrics.StartTimeStamp;
+                clonedMetrics.Status = "Running";
 
-        //        clonedMetrics.Calculate();
+                clonedMetrics.Calculate();
 
-        //        UsageMetrics.Reset(clonedMetrics.EndTimeStamp);
-        //        return clonedMetrics;
-        //    }
-        //}
+                UsageMetrics.Reset(clonedMetrics.EndTimeStamp);
+                return clonedMetrics;
+            }
+        }
 
         protected Task<InvokeResult> InternalCompleteAsync(string correlationId, object item)
         {
@@ -81,23 +82,23 @@ namespace LagoVista.IoT.Coupler
         {
             try
             {
-                //UsageMetrics.ActiveCount++;
+                UsageMetrics.ActiveCount++;
                 var wor = new WaitOnRequest<object>(correlationId);
                 Sessions[correlationId] = wor;
                 wor.CompletionSource.Task.Wait(timeout);
-                //UsageMetrics.MessagesProcessed++;
-                //UsageMetrics.ActiveCount--;
-
-                //UsageMetrics.ElapsedMS = (DateTime.Now - wor.Enqueued).TotalMilliseconds;
+                UsageMetrics.MessagesProcessed++;
+                UsageMetrics.ActiveCount--;
+                
+                UsageMetrics.ElapsedMS = (DateTime.Now - wor.Enqueued).TotalMilliseconds;
 
                 if (!wor.CompletionSource.Task.IsCompleted)
                 {
-                    //UsageMetrics.ErrorCount++;
+                    UsageMetrics.ErrorCount++;
                     return Task.FromResult(InvokeResult<TResponseItem>.FromError("Timeout waiting for response."));
                 }
                 else if (wor.CompletionSource.Task.Result == null)
                 {
-                    //UsageMetrics.ErrorCount++;
+                    UsageMetrics.ErrorCount++;
                     return Task.FromResult(InvokeResult<TResponseItem>.FromError("Null Response From Completion Routine."));
                 }
                 else
@@ -109,7 +110,7 @@ namespace LagoVista.IoT.Coupler
                     }
                     else
                     {
-                        //UsageMetrics.ErrorCount++;
+                        UsageMetrics.ErrorCount++;
                         return Task.FromResult(InvokeResult<TResponseItem>.FromError($"Type Mismatch - Expected: {typeof(TResponseItem).Name} - Actual: {result.GetType().Name}."));
                     }
                 }
@@ -117,7 +118,7 @@ namespace LagoVista.IoT.Coupler
             catch (Exception ex)
             {
                 Logger.AddException("AsyncCoupler_WaitOnAsync", ex);
-                //UsageMetrics.ErrorCount++;
+                UsageMetrics.ErrorCount++;
 
                 return Task.FromResult(InvokeResult<TResponseItem>.FromException("AsyncCoupler_WaitOnAsync", ex));
             }
@@ -130,7 +131,7 @@ namespace LagoVista.IoT.Coupler
 
     public class AsyncCoupler : AsyncCouplerBase
     {
-        public AsyncCoupler(ILogger logger) : base(logger)
+        public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics) : base(logger, usageMetrics)
         {
         }
 
@@ -147,7 +148,7 @@ namespace LagoVista.IoT.Coupler
 
     public class AsyncCoupler<TResponseItem> : AsyncCouplerBase
     {
-        public AsyncCoupler(ILogger logger) : base(logger)
+        public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics) : base(logger, usageMetrics)
         {
         }
 
