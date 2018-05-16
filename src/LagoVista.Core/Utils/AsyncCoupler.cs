@@ -1,12 +1,11 @@
-﻿using LagoVista.Core;
-using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Validation;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LagoVista.IoT.Coupler
+namespace LagoVista.Core.PlatformSupport
 {
     public class WaitOnRequest<TModel>
     {
