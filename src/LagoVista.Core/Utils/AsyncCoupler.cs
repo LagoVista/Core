@@ -38,15 +38,6 @@ namespace LagoVista.IoT.Coupler
             UsageMetrics = usageMetrics ?? throw new ArgumentNullException("usageMetrics");
         }
 
-        //public Task InitAsync(string version, string hostId, string instanceId, string name)
-        //{
-        //    UsageMetrics = new UsageMetrics(hostId, instanceId, name)
-        //    {
-        //        Version = version
-        //    };
-        //    return Task.FromResult(default(object));
-        //}
-
         public IUsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion)
         {
             UsageMetrics.Version = hostVersion;
