@@ -1,10 +1,12 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Validation;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.PlatformSupport
+namespace LagoVista.Core.Utils
 {
     public class WaitOnRequest<TModel>
     {

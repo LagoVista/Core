@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LagoVista.Core.PlatformSupport
+namespace LagoVista.Core.Interfaces
 {
     public interface IUsageMetrics
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using LagoVista.Core.Validation;
 
-namespace LagoVista.Core.PlatformSupport
+namespace LagoVista.Core.Interfaces
 {
     public interface IAsyncCoupler
     {
