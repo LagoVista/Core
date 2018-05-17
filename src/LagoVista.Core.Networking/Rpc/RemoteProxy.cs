@@ -1,10 +1,13 @@
-﻿using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.Rpc
 {
+
+    /* Creating IProxy here isn't that terribely important, I don't think, since this is just the factory stuff */
     public abstract class RemoteProxy : IListener, IProxy
     {
         protected AsyncCoupler<IResponse> AsyncCoupler { get; }
@@ -60,4 +63,25 @@ namespace LagoVista.Core.Networking.Rpc
 
         public abstract Task HandleException(ListenerExceptionArgs e);
     }
+
+
+    /* Lifetime will be for life of the request - Instance will be created as a transient with each request, same as rest of reques handler classes */
+    public interface IRemoteProxyFactory
+    {
+        /* ISender is also created as a transient, and as an input on the constructor will receive the connection settings */
+        IRemoteClass Create<IRemoteClass>(IAsyncCoupler asyncCoupler, ISender sender, ILogger logger);
+    }
+
+    /* Lifetime will be a singleton that is created on startup of the app, since it's handling OnMessage, we can't create via the transient method as above. */
+    public interface IRemoteProxyResponseListener /*probably come up with a better name */
+    {
+        /* These two methods will be called in startup - question what happens if listener ever fails?  We can realistically only ever have one thing listening to subscriptions since we can predeict which one will get the message and clear it. */
+        void Init(IAsyncCoupler asyncCoupler, IConnectionSettings connectionSettings, ILogger logger);
+
+        /* Kick off loop, should throw exception and log, if this fails, something really, bad happened */
+         void Start();
+    }
+
+
+    
 }

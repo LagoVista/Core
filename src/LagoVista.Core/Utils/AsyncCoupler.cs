@@ -118,7 +118,7 @@ namespace LagoVista.Core.PlatformSupport
         }
     }
 
-    public class AsyncCoupler : AsyncCouplerBase
+    public class AsyncCoupler : AsyncCouplerBase, IAsyncCoupler
     {
         public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics) : base(logger, usageMetrics)
         {
@@ -135,7 +135,7 @@ namespace LagoVista.Core.PlatformSupport
         }
     }
 
-    public class AsyncCoupler<TResponseItem> : AsyncCouplerBase
+    public class AsyncCoupler<TResponseItem> : AsyncCouplerBase, IAsyncCoupler<TResponseItem>
     {
         public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics) : base(logger, usageMetrics)
         {

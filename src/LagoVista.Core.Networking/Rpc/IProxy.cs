@@ -6,4 +6,9 @@ namespace LagoVista.Core.Networking.Rpc
     {
         Task<IResponse> CallRemoteAsync(IRequest message);
     }
+
+    public interface IProxy<TInterface>
+    {
+
+    }
 }
