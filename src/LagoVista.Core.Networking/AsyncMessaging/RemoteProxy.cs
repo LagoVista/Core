@@ -8,61 +8,61 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Networking.Rpc
 {
     /* Creating IProxy here isn't that terribely important, I don't think, since this is just the factory stuff */
-    public abstract class RemoteProxy : IRequestListener, IProxy
-    {
-        protected AsyncCoupler<IResponse> AsyncCoupler { get; }
-        protected ISender Sender { get; }
+    //public abstract class RemoteProxy : IRequestListener, IProxy
+    //{
+    //    protected AsyncCoupler<IResponse> AsyncCoupler { get; }
+    //    protected ISender Sender { get; }
 
-        public RemoteProxy(AsyncCoupler<IResponse> asyncCoupler, ISender sender)
-        {
-            AsyncCoupler = asyncCoupler ?? throw new ArgumentNullException("asyncCoupler");
-            Sender = sender ?? throw new ArgumentNullException("sender");
-        }
+    //    public RemoteProxy(AsyncCoupler<IResponse> asyncCoupler, ISender sender)
+    //    {
+    //        AsyncCoupler = asyncCoupler ?? throw new ArgumentNullException("asyncCoupler");
+    //        Sender = sender ?? throw new ArgumentNullException("sender");
+    //    }
 
-        public string Channel { get; }
+    //    public string Channel { get; }
 
-        public async Task MessageReceived(IMessage message, CancellationToken token)
-        {
-            try
-            {
-                var response = (IResponse)message;
-                await AsyncCoupler.CompleteAsync(response.CorrelationId, response);
-                await CompleteAsync(message.LockToken);
-            }
-            catch (Exception ex)
-            {
-                //todo: log
-                await DeadLetterAsync(message.LockToken, ex.GetType().FullName, ex.Message);
-            }
-        }
+    //    public async Task MessageReceived(IMessage message, CancellationToken token)
+    //    {
+    //        try
+    //        {
+    //            var response = (IResponse)message;
+    //            await AsyncCoupler.CompleteAsync(response.CorrelationId, response);
+    //            await CompleteAsync(message.LockToken);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            //todo: log
+    //            await DeadLetterAsync(message.LockToken, ex.GetType().FullName, ex.Message);
+    //        }
+    //    }
 
-        public async Task<IResponse> CallRemoteAsync(IRequest message)
-        {
-            IResponse response = null;
-            await Sender.SendAsync(message);
-            //todo: get wait time from settings
-            var invokeResult = await AsyncCoupler.WaitOnAsync(message.CorrelationId, TimeSpan.FromSeconds(30));
-            if (!invokeResult.Successful)
-            {
-                //todo: handle errors
-            }
-            else
-            {
-                response = invokeResult.Result;
-                if(!response.Success)
-                {
-                    //todo: handle errors
-                }
-            }
-            return response;
-        }
+    //    public async Task<IResponse> CallRemoteAsync(IRequest message)
+    //    {
+    //        IResponse response = null;
+    //        await Sender.SendAsync(message);
+    //        //todo: get wait time from settings
+    //        var invokeResult = await AsyncCoupler.WaitOnAsync(message.CorrelationId, TimeSpan.FromSeconds(30));
+    //        if (!invokeResult.Successful)
+    //        {
+    //            //todo: handle errors
+    //        }
+    //        else
+    //        {
+    //            response = invokeResult.Result;
+    //            if(!response.Success)
+    //            {
+    //                //todo: handle errors
+    //            }
+    //        }
+    //        return response;
+    //    }
 
-        public abstract Task CompleteAsync(string lockToken);
+    //    public abstract Task CompleteAsync(string lockToken);
 
-        public abstract Task DeadLetterAsync(string lockToken, string reason, string description);
+    //    public abstract Task DeadLetterAsync(string lockToken, string reason, string description);
 
-        public abstract Task HandleException(ListenerExceptionArgs e);
-    }
+    //    public abstract Task HandleException(ListenerExceptionArgs e);
+    //}
 
     /* Lifetime will be for life of the request - Instance will be created as a transient with each request, same as rest of request handler classes */
     // this is to implement DispatchProxy
