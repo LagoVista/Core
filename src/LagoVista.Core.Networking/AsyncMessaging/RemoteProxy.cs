@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Networking.AsyncMessaging
 {
     /* Creating IProxy here isn't that terribely important, I don't think, since this is just the factory stuff */
     //public abstract class RemoteProxy : IRequestListener, IProxy

@@ -1,7 +1,7 @@
 ﻿using LagoVista.Core.Validation;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public interface IRequestBroker
     {
@@ -12,7 +12,7 @@ namespace LagoVista.Core.Networking.Rpc
         /// <param name="subject"></param>
         void RegisterSubject<T>(T subject) where T : class;
 
-        Task<InvokeResult> HandleMessageAsync(IRequest message);
+        Task<InvokeResult> HandleMessageAsync(IAsyncRequest message);
     }
 
     public class QueueRequestBroker: IRequestBroker
@@ -21,7 +21,7 @@ namespace LagoVista.Core.Networking.Rpc
         {
         }
 
-        public Task<InvokeResult> HandleMessageAsync(IRequest message)
+        public Task<InvokeResult> HandleMessageAsync(IAsyncRequest message)
         {
             throw new System.NotImplementedException();
         }

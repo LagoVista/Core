@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public interface ISender
     {
-        Task SendAsync(IMessage message);
+        Task SendAsync(IAsyncMessage message);
     }
 
     public class ServiceBusSender : ISender
@@ -15,7 +16,7 @@ namespace LagoVista.Core.Networking.Rpc
             _settings = settings;
         }
 
-        public Task SendAsync(IMessage message)
+        public Task SendAsync(IAsyncMessage message)
         {
             throw new System.NotImplementedException();
         }

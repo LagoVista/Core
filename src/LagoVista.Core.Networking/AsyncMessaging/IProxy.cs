@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public interface IProxy
     {
-        Task<IResponse> CallRemoteAsync(IRequest message);
+        Task<IAsyncResponse> CallRemoteAsync(IAsyncRequest message);
     }
 
     public interface IProxy<TInterface>

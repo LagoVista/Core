@@ -22,9 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		UploadResources.ps1 = UploadResources.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Tests", "tests\LagoVista.Core.Tests\LagoVista.Core.Tests.csproj", "{9E37DE62-0886-405D-911D-DBEF53942316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Tests", "tests\LagoVista.Core.Tests\LagoVista.Core.Tests.csproj", "{9E37DE62-0886-405D-911D-DBEF53942316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.DependencyInjection", "src\LagoVista.Core.DependencyInjection\LagoVista.Core.DependencyInjection.csproj", "{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.DependencyInjection", "src\LagoVista.Core.DependencyInjection\LagoVista.Core.DependencyInjection.csproj", "{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Networking.AsyncMessaging", "src\LagoVista.Core.Networking.AsyncMessaging\LagoVista.Core.Networking.AsyncMessaging.csproj", "{C855CABD-FE87-4F24-9431-38641B55AE53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C855CABD-FE87-4F24-9431-38641B55AE53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C855CABD-FE87-4F24-9431-38641B55AE53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C855CABD-FE87-4F24-9431-38641B55AE53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C855CABD-FE87-4F24-9431-38641B55AE53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{AF7596F8-2E2F-4FC1-8516-235C92B3A5AA} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{9E37DE62-0886-405D-911D-DBEF53942316} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
+		{C855CABD-FE87-4F24-9431-38641B55AE53} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E49F45F8-0C41-4A0A-A34E-D7A13852646B}

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="System.Reflection.DispatchProxy" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
+    <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
+  </ItemGroup>
+
+</Project>
