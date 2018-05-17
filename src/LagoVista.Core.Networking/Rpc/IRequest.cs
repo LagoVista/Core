@@ -1,6 +1,6 @@
 ﻿namespace LagoVista.Core.Networking.Rpc
 {
-    public interface IRemoteRequest : IRemoteMessage
+    public interface IRequest : IMessage
     {
         void AddValue(string name, object value, bool ignoreDuplicates = false);
         T GetValue<T>(string name);

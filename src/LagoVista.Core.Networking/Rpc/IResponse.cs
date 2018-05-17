@@ -2,14 +2,14 @@
 
 namespace LagoVista.Core.Networking.Rpc
 {
-    public interface IRemoteResponse : IRemoteMessage
+    public interface IResponse : IMessage
     {
         bool Success { get; }
         Exception Exception { get; }
         object Response { get; set; }
     }
 
-    public interface IRemoteResponse<T> : IRemoteResponse
+    public interface IResponse<T> : IResponse
     {
         T TypedResponse { get; }
     }

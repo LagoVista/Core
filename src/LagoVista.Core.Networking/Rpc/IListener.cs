@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.Rpc
 {
-    public sealed class RequestContext
+    public sealed class MessageContext
     {
-        public RequestContext(IRemoteRequest request)
+        public MessageContext(IRequest request)
         {
             Id = request.Id;
             CorrelationId = request.CorrelationId;
@@ -23,29 +23,29 @@ namespace LagoVista.Core.Networking.Rpc
         public string Other { get; set; }
     }
 
-    public sealed class RequestExceptionArgs : EventArgs
+    public sealed class ListenerExceptionArgs : EventArgs
     {
-        public RequestExceptionArgs(Exception exception, RequestContext requestContext)
+        public ListenerExceptionArgs(Exception exception, MessageContext requestContext)
         {
             Exception = exception ?? throw new ArgumentNullException("exception");
-            RequestContext = requestContext ?? throw new ArgumentNullException("requestContext");
+            MessageContext = requestContext ?? throw new ArgumentNullException("requestContext");
         }
 
         public Exception Exception { get; }
 
-        public RequestContext RequestContext { get; }
+        public MessageContext MessageContext { get; }
     }
 
-    public interface IRemoteRequestBroker
+    public interface IListener
     {
-        void RegisterSubject<T>(T subject) where T : class;
+        string Channel { get; }
 
-        Task StartAsync();
+        Task MessageReceived(IMessage message, CancellationToken token);
 
-        Task StopAsync();
+        Task CompleteAsync(string lockToken);
 
-        Task OnRequest(IRemoteRequest request, CancellationToken token);
+        Task DeadLetterAsync(string lockToken, string reason, string description);
 
-        Task OnException(RequestExceptionArgs e);
+        Task HandleException(ListenerExceptionArgs e);
     }
 }

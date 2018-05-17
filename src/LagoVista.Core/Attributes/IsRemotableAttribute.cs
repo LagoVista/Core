@@ -9,4 +9,9 @@ namespace LagoVista.Core.Attributes
     public class IsRemotableAttribute : Attribute
     {
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class ExcludeFromProxyAttribute : Attribute
+    {
+    }
 }
