@@ -1,20 +1,16 @@
-﻿using Microsoft.Azure.ServiceBus;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
     internal class InstanceMethodPair
     {
-        private bool _isAwaitable = false;
+        private readonly bool _isAwaitable = false;
+        private readonly object _instance = null;
+        private readonly MethodInfo _methodInfo;
+        private readonly ParameterInfo[] _parameters;
         private Type _responseType = null;
-        private object _instance = null;
-        private MethodInfo _methodInfo;
-        private ParameterInfo[] _parameters;
 
         public InstanceMethodPair(object instance, MethodInfo methodInfo) : base()
         {
@@ -27,7 +23,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public async Task<IAsyncResponse> Invoke(IAsyncRequest request)
         {
-            IResponse response = null;
+            IAsyncResponse response = null;
             try
             {
                 //todo: ML - validate the request to parameter mapping
@@ -40,24 +36,26 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                     arguments[i] = request.GetValue(_parameters[i].Name);
                 }
 
-                object result = null;
+                object invokeResult = null;
                 if (_isAwaitable)
                 {
-                    result = await (dynamic)_methodInfo.Invoke(_instance, arguments);
+                    invokeResult = await (dynamic)_methodInfo.Invoke(_instance, arguments);
                 }
                 else
                 {
-                    result = _methodInfo.Invoke(_instance, arguments);
+                    invokeResult = _methodInfo.Invoke(_instance, arguments);
                 }
+
+                //todo: ML - this could probably be done in the constructor based on the return type of MethodInfo, but a test must be done to extract the sub type if the return type is Task<>. It's just easier to do it here one time.
                 if (_responseType == null)
                 {
-                    _responseType = typeof(RemoteResponseJson<>).MakeGenericType(result.GetType());
+                    _responseType = typeof(AsyncResponse<>).MakeGenericType(invokeResult.GetType());
                 }
-                response = (IResponse)Activator.CreateInstance(_responseType, new[] { result });
+                response = (IAsyncResponse)Activator.CreateInstance(_responseType, new[] { invokeResult });
             }
             catch (Exception ex)
             {
-                response = (IResponse)Activator.CreateInstance(_responseType, new[] { ex });
+                response = (IAsyncResponse)Activator.CreateInstance(typeof(AsyncResponse), new[] { ex });
             }
 
             return response;
