@@ -10,17 +10,4 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     {
         void Start();
     }
-
-    public class SbRequestListener: IRequestListener
-    {
-        public SbRequestListener(IRequestBroker requestBroker, IConnectionSettings connectionSettings, ILogger logger)
-        {
-
-        }
-
-        public void Start()
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
