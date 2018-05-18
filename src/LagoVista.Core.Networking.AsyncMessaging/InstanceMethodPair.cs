@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    internal class InstanceMethodPair
+    internal sealed class InstanceMethodPair
     {
         private readonly bool _isAwaitable = false;
         private readonly object _instance = null;

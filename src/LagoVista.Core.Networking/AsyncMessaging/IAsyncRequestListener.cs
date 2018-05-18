@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    public interface IRequestListener
+    public interface IAsyncRequestListener
     {
         void Start();
     }

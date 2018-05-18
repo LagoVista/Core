@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    public class RequestBroker : IRequestBroker
+    public sealed class AsyncRequestBroker : IAsyncRequestBroker
     {
         private ConcurrentDictionary<string, InstanceMethodPair> _subjectRegistry = new ConcurrentDictionary<string, InstanceMethodPair>();
         private static MethodInfo[] _objectMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
@@ -79,7 +79,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
 
             // 2. call handler and get response
-            return await messageHandler.Invoke(request);
+            var response = await messageHandler.Invoke(request);
+
+            // 3. setup response for return trip
+            response.Path = request.Path;
+            response.CorrelationId = request.CorrelationId;
+            response.Id = Guid.NewGuid().ToString();
+
+            return response;
         }
     }
 }
