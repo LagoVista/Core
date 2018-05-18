@@ -15,7 +15,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         public ServiceBusAsyncRequestModerator(IAsyncRequestBroker requestBroker, IConnectionSettings connectionSettings, ILogger logger, IAsyncResponseHandler responseHandler) :
                 base(requestBroker, connectionSettings, logger)
         {
-            //todo: get setttings from connectionSettings
+            //todo: ML - get setttings from connectionSettings
             var receiverConnectionString = "Endpoint=sb://localrequestbus-dev.servicebus.windows.net/;SharedAccessKeyName=ListenAccessKey;SharedAccessKey=mIzxiTinXIAtX0H2XknVj6LWvkDYCjv/PdOxNfmENd8=;";
             var sourceEntityPath = "9e88c7f6b5894dbfb3bc09d20736705e_tolocal";
             var subscriptionPath = "devSub";
@@ -41,9 +41,18 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         private async Task MessageReceived(Message message, CancellationToken cancelationToken)
         {
-            var asyncRequest = new AsyncRequest(message.Body);
-            var asyncResponse = await _requestBroker.HandleMessageAsync(asyncRequest);
-            await _responseHandler.HandleResponse(asyncResponse);
+            try
+            {
+                var asyncRequest = new AsyncRequest(message.Body);
+                var asyncResponse = await _requestBroker.HandleMessageAsync(asyncRequest);
+                await _responseHandler.HandleResponse(asyncResponse);
+                await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
+            }
+            catch(Exception ex)
+            {
+                await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
+                throw;
+            }
         }
 
         private async Task HandleException(ExceptionReceivedEventArgs arg)
