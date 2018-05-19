@@ -10,8 +10,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public sealed class AsyncRequestBroker : IAsyncRequestBroker
     {
-        private ConcurrentDictionary<string, InstanceMethodPair> _subjectRegistry = new ConcurrentDictionary<string, InstanceMethodPair>();
-        private static MethodInfo[] _objectMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
+        private readonly ConcurrentDictionary<string, InstanceMethodPair> _subjectRegistry = new ConcurrentDictionary<string, InstanceMethodPair>();
+        private readonly static MethodInfo[] _objectMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
 
         private void RegisterSubjectMethod<T>(T instance, MethodInfo methodInfo) where T : class
         {

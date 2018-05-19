@@ -5,6 +5,8 @@
         string Id { get; set; }
         string CorrelationId { get; set; }
         string Path { get; set; }
+        string Datestamp { get; set; }
+
         byte[] MarshalledData { get; set; }
     }
 }

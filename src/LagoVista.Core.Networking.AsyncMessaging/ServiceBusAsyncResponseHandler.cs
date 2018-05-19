@@ -12,6 +12,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private readonly ILogger _logger;
         private readonly TopicClient _topicClient;
 
+        //todo: ML - change connection settings to correct type
         public ServiceBusAsyncResponseHandler(IConnectionSettings connectionSettings, ILogger logger) : base()
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException("connectionSettings");

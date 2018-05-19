@@ -12,7 +12,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private readonly SubscriptionClient _subscriptionClient;
         private readonly IAsyncResponseHandler _responseHandler;
 
-        public ServiceBusAsyncRequestModerator(IAsyncRequestBroker requestBroker, IConnectionSettings connectionSettings, ILogger logger, IAsyncResponseHandler responseHandler) :
+        //todo: ML - replace iconnectionsettings with correct type
+        public ServiceBusAsyncRequestModerator(IAsyncRequestBroker requestBroker, IAsyncResponseHandler responseHandler, IConnectionSettings connectionSettings, ILogger logger) :
                 base(requestBroker, connectionSettings, logger)
         {
             //todo: ML - get setttings from connectionSettings

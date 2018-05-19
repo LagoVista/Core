@@ -6,6 +6,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     {
         bool Success { get; }
         Exception Exception { get; }
+
         object Response { get; }
     }
 

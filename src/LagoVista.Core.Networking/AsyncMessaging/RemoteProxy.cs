@@ -76,6 +76,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public interface IRemoteProxyResponseListener /*probably come up with a better name */
     {
         /* These two methods will be called in startup - question what happens if listener ever fails?  We can realistically only ever have one thing listening to subscriptions since we can predeict which one will get the message and clear it. */
+
+        //todo: ML - change IConnectionSettings to the appropriate type of settings
         void Init(IAsyncCoupler asyncCoupler, IConnectionSettings connectionSettings);
 
         /* Kick off loop, should throw exception and log, if this fails, something really, bad happened */
