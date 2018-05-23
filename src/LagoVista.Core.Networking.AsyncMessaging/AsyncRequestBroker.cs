@@ -66,7 +66,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
         }
 
-        public async Task<IAsyncResponse> HandleMessageAsync(IAsyncRequest request)
+        public async Task<IAsyncResponse> HandleRequestAsync(IAsyncRequest request)
         {
             if (request == null)
             {

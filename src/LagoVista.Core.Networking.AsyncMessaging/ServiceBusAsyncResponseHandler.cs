@@ -1,18 +1,17 @@
-﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.PlatformSupport;
 using Microsoft.Azure.ServiceBus;
 using System;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    public sealed class ServiceBusAsyncResponseHandler: IAsyncResponseHandler
+    public sealed class ServiceBusAsyncResponseSender: IAsyncResponseHandler
     {
         private readonly ISenderConnectionSettings _connectionSettings;
         private readonly ILogger _logger;
         private readonly TopicClient _topicClient;
 
-        public ServiceBusAsyncResponseHandler(ISenderConnectionSettings connectionSettings, ILogger logger) : base()
+        public ServiceBusAsyncResponseSender(ISenderConnectionSettings connectionSettings, ILogger logger) : base()
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException("connectionSettings");
             _logger = logger ?? throw new ArgumentNullException("logger");

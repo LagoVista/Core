@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
+    /// <summary>
+    /// Listens to service bus subscription for async requests, invokes requests through the request broker, returns responses via service bus (response sender)
+    /// </summary>
     public sealed class ServiceBusAsyncRequestModerator : IAsyncRequestListener
     {
         private readonly SubscriptionClient _subscriptionClient;
-        private readonly IAsyncResponseHandler _responseHandler;
+        private readonly IAsyncResponseHandler _responseSender;
         private readonly IAsyncRequestBroker _requestBroker;
         private readonly IListenerConnectionSettings _connectionSettings;
         private readonly ILogger _logger;
 
-        //todo: ML - replace iconnectionsettings with correct type
-        public ServiceBusAsyncRequestModerator(IAsyncResponseHandler responseHandler, IAsyncRequestBroker requestBroker, IListenerConnectionSettings connectionSettings, ILogger logger)
+        public ServiceBusAsyncRequestModerator(IAsyncResponseHandler responseSender, IAsyncRequestBroker requestBroker, IListenerConnectionSettings connectionSettings, ILogger logger)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException("connectionSettings");
             _logger = logger ?? throw new ArgumentNullException("logger");
             _requestBroker = requestBroker ?? throw new ArgumentNullException("requestBroker");
-            _responseHandler = responseHandler ?? throw new ArgumentNullException("sender");
+            _responseSender = responseSender ?? throw new ArgumentNullException("sender");
 
             //var receiverConnectionString = "Endpoint=sb://localrequestbus-dev.servicebus.windows.net/;SharedAccessKeyName=ListenAccessKey;SharedAccessKey=mIzxiTinXIAtX0H2XknVj6LWvkDYCjv/PdOxNfmENd8=;";
             //var sourceEntityPath = "9e88c7f6b5894dbfb3bc09d20736705e_tolocal";
@@ -53,7 +55,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             {
                 var asyncRequest = new AsyncRequest(message.Body);
                 var asyncResponse = await _requestBroker.HandleRequestAsync(asyncRequest);
-                await _responseHandler.HandleResponse(asyncResponse);
+                await _responseSender.HandleResponse(asyncResponse);
                 await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
             }
             catch (Exception ex)
