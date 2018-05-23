@@ -11,6 +11,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// <param name="subject"></param>
         void RegisterSubject<T>(T subject) where T : class;
 
-        Task<IAsyncResponse> HandleMessageAsync(IAsyncRequest request);
+        Task<IAsyncResponse> HandleRequestAsync(IAsyncRequest request);
     }
 }

@@ -4,6 +4,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public interface IAsyncResponseListener
     {
-        void Start(IAsyncResponseHandler responseHandler, IListenerConnectionSettings connectionSettings, ILogger logger);
+        //IAsyncResponseHandler responseHandler, IListenerConnectionSettings connectionSettings, ILogger logger
+        void Start();
     }
 }

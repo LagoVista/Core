@@ -13,6 +13,10 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
     public interface IListenerConnectionSettings
     {
+        string ServiceBusConnectionString { get; set; }
+        string SourceEntityPath { get; set; }
+        string SubscriptionPath { get; set; }
+
         IConnectionSettings ConnectionSettings { get; set; }
     }
 
