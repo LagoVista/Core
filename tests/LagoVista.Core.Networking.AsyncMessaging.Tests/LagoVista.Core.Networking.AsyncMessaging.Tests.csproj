@@ -22,16 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AsyncCoupler\LagoVista.IoT.Coupler.Tests\bin\Debug\net461\" />
-    <Folder Include="AsyncCoupler\LagoVista.IoT.Coupler.Tests\bin\Release\net461\" />
-    <Folder Include="AsyncCoupler\LagoVista.IoT.Coupler.Tests\obj\Release\net461\" />
     <Folder Include="AsyncMessages\" />
-    <Folder Include="DispatchProxy\" />
     <Folder Include="RequestBroker\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="AsyncCoupler\LagoVista.IoT.Coupler.Tests\LagoVista.IoT.Couplers.Tests.csproj" />
   </ItemGroup>
 
 </Project>

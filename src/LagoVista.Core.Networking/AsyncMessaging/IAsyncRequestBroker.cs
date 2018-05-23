@@ -1,5 +1,4 @@
-﻿using LagoVista.Core.Validation;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {

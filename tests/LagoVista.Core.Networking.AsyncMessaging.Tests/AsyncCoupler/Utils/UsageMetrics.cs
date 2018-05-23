@@ -1,7 +1,6 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core;
+using LagoVista.Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.IoT.Coupler.Tests.Utils
 {

@@ -1,13 +1,9 @@
-﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.PlatformSupport;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using LagoVista.Core.PlatformSupport;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public interface IAsyncRequestListener
     {
-        void Start();
+        void Start(IAsyncRequestBroker requestBroker, IListenerConnectionSettings connectionSettings, ILogger logger);
     }
 }

@@ -10,7 +10,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private const string _pathKey = "__message_path";
         private const string _idKey = "__message_id";
         private const string _correlationIdKey = "__correlation_id";
-        private const string _timestampKey = "__timestampKey";
+        private const string _dateTimeStampKey = "__datetimestamp_key";
 
         private Dictionary<string, object> _data = new Dictionary<string, object>();
         private JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
@@ -83,10 +83,10 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             set { AddValue(_correlationIdKey, value, true); }
         }
 
-        public string Datestamp
+        public DateTime TimeStamp
         {
-            get { return GetValue<string>(_timestampKey); }
-            set { AddValue(_timestampKey, value, true); }
+            get { return GetValue<DateTime>(_dateTimeStampKey); }
+            set { AddValue(_dateTimeStampKey, value, true); }
         }
 
         public byte[] MarshalledData

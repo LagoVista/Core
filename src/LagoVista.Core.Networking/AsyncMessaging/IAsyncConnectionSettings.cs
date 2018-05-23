@@ -1,19 +1,24 @@
 ﻿using LagoVista.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
     /* This is used so we can somewhere create a class that has connnections settings specific to service bus (or whatever */
     public interface ISenderConnectionSettings
     {
-        IConnectionSettings RemoteProxyConnectionSettings { get; }
+        string ServiceBusConnectionString { get; set; } 
+        string DestinationEntityPath { get; set; }
+
+        IConnectionSettings ConnectionSettings { get; set; }
+    }
+
+    public interface IListenerConnectionSettings
+    {
+        IConnectionSettings ConnectionSettings { get; set; }
     }
 
 
     public interface IRequestBrokerConnectionSettings
     {
-        IConnectionSettings RequestBrokerConnectionSettings { get; }
+        IConnectionSettings ConnectionSettings { get; set; }
     }
 }
