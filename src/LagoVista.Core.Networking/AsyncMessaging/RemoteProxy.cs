@@ -69,7 +69,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public interface IRemoteProxyFactory
     {
         /* ISender is also created as a transient, and as an input on the constructor will receive the connection settings */
-        TRemoteClass Create<TRemoteClass>(IAsyncCoupler asyncCoupler, IAsyncResponseHandler sender);
+        TRemoteInterface Create<TRemoteInterface>(IAsyncCoupler asyncCoupler, IAsyncResponseHandler sender);
     }
 
     /* Lifetime will be a singleton that is created on startup of the app, since it's handling OnMessage, we can't create via the transient method as above. */
@@ -82,5 +82,20 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         /* Kick off loop, should throw exception and log, if this fails, something really, bad happened */
          void Start();
+    }
+
+    public class Thing:IAsyncRequestListener
+    {
+        IAsyncCoupler asyncCoupler;
+        IAsyncResponseHandler sender;
+        
+    }
+
+    public sealed class RemoteProxyFactory : IRemoteProxyFactory
+    {
+        public TRemoteInterface Create<TRemoteInterface>(IAsyncCoupler asyncCoupler, IAsyncResponseHandler sender)
+        {
+            return new Thing();
+        }
     }
 }
