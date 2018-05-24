@@ -29,18 +29,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 request.AddValue(parameters[i].Name, args[i]);
             }
 
-            RequestSender.HandleRequest(request).ContinueWith(sendAsyncTask =>
-            {
-                if (sendAsyncTask.Status == TaskStatus.Faulted && sendAsyncTask.Exception != null)
-                {
-                    //todo: ML - handle exception
-                }
-                else if (sendAsyncTask.Status != TaskStatus.RanToCompletion)
-                {
-                    //todo: ML - handle unexpected status
-                }
-            });
-
+            // note: we prep that async coupler before sending the request - the coupler won't be awaited until after the call to RequestSender.HandleRequest
             var waitOnAsync = AsyncCoupler.WaitOnAsync(request.CorrelationId, TimeSpan.FromSeconds(30)).ContinueWith(waitOnAsyncTask =>
             {
                 if (waitOnAsyncTask.Status == TaskStatus.Faulted && waitOnAsyncTask.Exception != null)
@@ -53,6 +42,19 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 }
                 return waitOnAsyncTask.Result;
             });
+
+            RequestSender.HandleRequest(request).ContinueWith(sendAsyncTask =>
+            {
+                if (sendAsyncTask.Status == TaskStatus.Faulted && sendAsyncTask.Exception != null)
+                {
+                    //todo: ML - handle exception
+                }
+                else if (sendAsyncTask.Status != TaskStatus.RanToCompletion)
+                {
+                    //todo: ML - handle unexpected status
+                }
+            });
+
             waitOnAsync.Wait();
 
             var genericFromResult = FromResultMethodInfo.MakeGenericMethod(new Type[] { targetMethod.ReturnType.GetGenericArguments()[0] });
