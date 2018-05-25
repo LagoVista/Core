@@ -7,6 +7,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 {
     internal sealed class AsyncProxy : DispatchProxy
     {
+        //todo: ML - add logger
         internal IAsyncCoupler<IAsyncResponse> AsyncCoupler { get; set; }
         internal IAsyncRequestHandler RequestSender { get; set; }
         private static MethodInfo FromResultMethodInfo { get; } = typeof(Task).GetMethod("FromResult", BindingFlags.Static | BindingFlags.Public);
