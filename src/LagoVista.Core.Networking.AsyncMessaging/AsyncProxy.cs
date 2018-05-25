@@ -5,7 +5,14 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    internal sealed class AsyncProxy : DispatchProxy
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// Decendents of DispatchProxy cannot be sealed
+    /// For our use, decendents of DispatchProxy cannot be private or internal - received access denied exception
+    /// </remarks>
+    public class AsyncProxy : DispatchProxy
     {
         //todo: ML - add logger
         internal IAsyncCoupler<IAsyncResponse> AsyncCoupler { get; set; }
@@ -58,25 +65,59 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
             waitOnAsync.Wait();
 
-            var genericFromResult = FromResultMethodInfo.MakeGenericMethod(new Type[] { targetMethod.ReturnType.GetGenericArguments()[0] });
+            MethodInfo genericFromResult = null;
+            if (targetMethod.ReturnType.BaseType == typeof(Task))
+            {
+                var genericArguments = targetMethod.ReturnType.GetGenericArguments();
+                if (genericArguments.Length > 0)
+                {
+                    genericFromResult = FromResultMethodInfo.MakeGenericMethod(genericArguments);
+                }
+                else
+                {
+                    genericFromResult = FromResultMethodInfo.MakeGenericMethod();
+                }
+            }
+
             var invokeResult = waitOnAsync.Result;
             if (invokeResult.Successful)
             {
                 var response = invokeResult.Result;
                 if (response.Success)
                 {
-                    return genericFromResult.Invoke(null, new object[] { response.Response });
+                    if (genericFromResult != null)
+                    {
+                        return genericFromResult.Invoke(null, new object[] { response.Response });
+                    }
+                    else
+                    {
+                        return response.Response;
+                    }
                 }
                 else
                 {
                     //todo: ML - response.Exception
-                    return genericFromResult.Invoke(null, new object[] { null });
+                    if (genericFromResult != null)
+                    {
+                        return genericFromResult.Invoke(null, new object[] { null });
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             else
             {
                 //todo: ML - handle failed invoke result
-                return genericFromResult.Invoke(null, new object[] { null });
+                if (genericFromResult != null)
+                {
+                    return genericFromResult.Invoke(null, new object[] { null });
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }

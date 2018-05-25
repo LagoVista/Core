@@ -69,7 +69,7 @@ namespace LagoVista.Core.Utils
 
         public int ActiveSessions { get { return Sessions.Count; } }
 
-        protected Task<InvokeResult<TResponseItem>> WaitOnAsyncInternal<TResponseItem>(string correlationId, TimeSpan timeout)
+        protected Task<InvokeResult<TAsyncResult>> WaitOnAsyncInternal<TAsyncResult>(string correlationId, TimeSpan timeout)
         {
             try
             {
@@ -85,24 +85,24 @@ namespace LagoVista.Core.Utils
                 if (!wor.CompletionSource.Task.IsCompleted)
                 {
                     UsageMetrics.ErrorCount++;
-                    return Task.FromResult(InvokeResult<TResponseItem>.FromError("Timeout waiting for response."));
+                    return Task.FromResult(InvokeResult<TAsyncResult>.FromError("Timeout waiting for response."));
                 }
                 else if (wor.CompletionSource.Task.Result == null)
                 {
                     UsageMetrics.ErrorCount++;
-                    return Task.FromResult(InvokeResult<TResponseItem>.FromError("Null Response From Completion Routine."));
+                    return Task.FromResult(InvokeResult<TAsyncResult>.FromError("Null Response From Completion Routine."));
                 }
                 else
                 {
                     var result = wor.CompletionSource.Task.Result;
-                    if (result is TResponseItem typedResult)
+                    if (result is TAsyncResult typedResult)
                     {
-                        return Task.FromResult(InvokeResult<TResponseItem>.Create(typedResult));
+                        return Task.FromResult(InvokeResult<TAsyncResult>.Create(typedResult));
                     }
                     else
                     {
                         UsageMetrics.ErrorCount++;
-                        return Task.FromResult(InvokeResult<TResponseItem>.FromError($"Type Mismatch - Expected: {typeof(TResponseItem).Name} - Actual: {result.GetType().Name}."));
+                        return Task.FromResult(InvokeResult<TAsyncResult>.FromError($"Type Mismatch - Expected: {typeof(TAsyncResult).Name} - Actual: {result.GetType().Name}."));
                     }
                 }
             }
@@ -111,7 +111,7 @@ namespace LagoVista.Core.Utils
                 Logger.AddException("AsyncCoupler_WaitOnAsync", ex);
                 UsageMetrics.ErrorCount++;
 
-                return Task.FromResult(InvokeResult<TResponseItem>.FromException("AsyncCoupler_WaitOnAsync", ex));
+                return Task.FromResult(InvokeResult<TAsyncResult>.FromException("AsyncCoupler_WaitOnAsync", ex));
             }
             finally
             {

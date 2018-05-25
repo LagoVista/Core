@@ -13,7 +13,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private const string _dateTimeStampKey = "__datetimestamp_key";
 
         private Dictionary<string, object> _data = new Dictionary<string, object>();
-        private JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             // note: do not change this to auto or array or all - only works with TypeNameHandling.Objects
             TypeNameHandling = TypeNameHandling.Objects,
