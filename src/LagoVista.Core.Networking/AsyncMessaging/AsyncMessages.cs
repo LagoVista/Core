@@ -1,18 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using LagoVista.Core.Networking.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
     public class AsyncMessage : IAsyncMessage
     {
-        private const string _pathKey = "__message_path";
-        private const string _idKey = "__message_id";
-        private const string _correlationIdKey = "__correlation_id";
-        private const string _dateTimeStampKey = "__datetimestamp_key";
+        private const string _privateKeyPrefix = "__";
+        private const string _pathKey = _privateKeyPrefix + "message_path";
+        private const string _idKey = _privateKeyPrefix + "message_id";
+        private const string _correlationIdKey = _privateKeyPrefix + "correlation_id";
+        private const string _dateTimeStampKey = _privateKeyPrefix + "datetimestamp_key";
 
-        private Dictionary<string, object> _data = new Dictionary<string, object>();
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             // note: do not change this to auto or array or all - only works with TypeNameHandling.Objects
@@ -23,36 +25,59 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
         };
 
-        public AsyncMessage() : base()
+        private Dictionary<string, object> _data = new Dictionary<string, object>();
+
+        protected int GetPublicItemCount()
         {
+            return _data.Keys.Where(k => !k.StartsWith(_privateKeyPrefix)).Count();
         }
 
-        public AsyncMessage(string json) : base()
+        public AsyncMessage() : base() { }
+
+        public AsyncMessage(Json json) : base()
         {
-            if (!string.IsNullOrEmpty(json))
+            if (json.HasValue)
+            {
                 MarshalledData = Encoding.UTF8.GetBytes(json);
+            }
         }
 
         public AsyncMessage(byte[] marshalledData) : base()
         {
-            MarshalledData = marshalledData;
+            MarshalledData = marshalledData ?? throw new ArgumentNullException(nameof(marshalledData));
         }
 
-        public void AddValue(string key, object value, bool ignoreDuplicates = false)
+        public void SetValue(string key, object value, bool ignoreDuplicates = false)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             if (!ignoreDuplicates && _data.ContainsKey(key))
-                throw new ArgumentException($"argument already exists{key}");
+            {
+                throw new ArgumentException($"key already exists {key}");
+            }
 
             _data[key] = value;
         }
 
         public T GetValue<T>(string key)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             if (!_data.TryGetValue(key, out object result))
+            {
                 throw new KeyNotFoundException(key);
+            }
 
             if (!(result is T))
+            {
                 throw new InvalidCastException($"The value of {key} is not of type {typeof(T).FullName}");
+            }
 
             return (T)result;
         }
@@ -68,25 +93,25 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         public string Path
         {
             get { return GetValue<string>(_pathKey); }
-            set { AddValue(_pathKey, value, true); }
+            set { SetValue(_pathKey, value, true); }
         }
 
         public string Id
         {
             get { return GetValue<string>(_idKey); }
-            set { AddValue(_idKey, value, true); }
+            set { SetValue(_idKey, value, true); }
         }
 
         public string CorrelationId
         {
             get { return GetValue<string>(_correlationIdKey); }
-            set { AddValue(_correlationIdKey, value, true); }
+            set { SetValue(_correlationIdKey, value, true); }
         }
 
         public DateTime TimeStamp
         {
             get { return GetValue<DateTime>(_dateTimeStampKey); }
-            set { AddValue(_dateTimeStampKey, value, true); }
+            set { SetValue(_dateTimeStampKey, value, true); }
         }
 
         public byte[] MarshalledData
@@ -109,38 +134,28 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
     public sealed class AsyncRequest : AsyncMessage, IAsyncRequest
     {
-        public AsyncRequest() : base()
-        {
-        }
+        public AsyncRequest() : base() { }
 
-        public AsyncRequest(string json) : base(json)
-        {
-        }
+        public AsyncRequest(Json json) : base(json) { }
 
-        public AsyncRequest(byte[] marshalledData) : base(marshalledData)
-        {
-        }
+        public AsyncRequest(byte[] marshalledData) : base(marshalledData) { }
+
+        public int ArgumentCount => GetPublicItemCount();
     }
 
     public class AsyncResponse : AsyncMessage, IAsyncResponse
     {
         private const string _responseKey = "__response";
 
-        public AsyncResponse() : base()
-        {
-        }
+        public AsyncResponse() : base() { }
 
-        public AsyncResponse(string json) : base(json)
-        {
-        }
+        public AsyncResponse(Json json) : base(json) { }
 
-        public AsyncResponse(byte[] marshalledData) : base(marshalledData)
-        {
-        }
+        public AsyncResponse(byte[] marshalledData) : base(marshalledData) { }
 
         public AsyncResponse(object value) : base()
         {
-            Response = value;
+            ReturnValue = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public AsyncResponse(Exception exception) : base()
@@ -153,38 +168,25 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public Exception Exception { get; } = null;
 
-        public object Response
+        public object ReturnValue
         {
             get { return GetValue(_responseKey); }
-            private set { AddValue(_responseKey, value, true); }
+            private set { SetValue(_responseKey, value, true); }
         }
     }
 
     public sealed class AsyncResponse<T> : AsyncResponse, IAsyncResponse<T>
     {
-        public AsyncResponse() : base()
-        {
-        }
+        public AsyncResponse() : base() { }
 
-        public AsyncResponse(string json) : base(json)
-        {
-        }
+        public AsyncResponse(Json json) : base(json) { }
 
-        public AsyncResponse(byte[] marshalledData) : base(marshalledData)
-        {
-        }
+        public AsyncResponse(byte[] marshalledData) : base(marshalledData) { }
 
-        public AsyncResponse(T value) : base(value)
-        {
-        }
+        public AsyncResponse(T value) : base(value) { }
 
-        public AsyncResponse(Exception exception) : base(exception)
-        {
-        }
+        public AsyncResponse(Exception exception) : base(exception) { }
 
-        public T TypedResponse
-        {
-            get { return (T)Response; }
-        }
+        public T TypedReturnValue { get { return (T)ReturnValue; } }
     }
 }

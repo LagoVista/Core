@@ -82,11 +82,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             // 2. call handler and get response
             var response = await messageHandler.Invoke(request);
 
-            // 3. setup response for return trip
-            response.Path = request.Path;
-            response.CorrelationId = request.CorrelationId;
-            response.Id = Guid.NewGuid().ToString();
-
             return response;
         }
     }

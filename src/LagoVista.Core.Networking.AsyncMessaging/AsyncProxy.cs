@@ -9,8 +9,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     /// 
     /// </summary>
     /// <remarks>
-    /// Decendents of DispatchProxy cannot be sealed
-    /// For our use, decendents of DispatchProxy cannot be private or internal - received access denied exception
+    /// Decendents of DispatchProxy cannot be sealed.
+    /// Decendents of DispatchProxy cannot be internal nor private.
     /// </remarks>
     public class AsyncProxy : DispatchProxy
     {
@@ -34,7 +34,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             var parameters = targetMethod.GetParameters();
             for (var i = 0; i < parameters.Length; ++i)
             {
-                request.AddValue(parameters[i].Name, args[i]);
+                request.SetValue(parameters[i].Name, args[i]);
             }
 
             // note: we prep that async coupler before sending the request - the coupler won't be awaited until after the call to RequestSender.HandleRequest
@@ -87,11 +87,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 {
                     if (genericFromResult != null)
                     {
-                        return genericFromResult.Invoke(null, new object[] { response.Response });
+                        return genericFromResult.Invoke(null, new object[] { response.ReturnValue });
                     }
                     else
                     {
-                        return response.Response;
+                        return response.ReturnValue;
                     }
                 }
                 else

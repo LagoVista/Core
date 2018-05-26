@@ -21,8 +21,4 @@
     <ProjectReference Include="..\..\src\LagoVista.Core\LagoVista.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="RequestBroker\" />
-  </ItemGroup>
-
 </Project>

@@ -2,8 +2,10 @@
 {
     public interface IAsyncRequest : IAsyncMessage
     {
-        void AddValue(string name, object value, bool ignoreDuplicates = false);
+        void SetValue(string name, object value, bool ignoreDuplicates = false);
         T GetValue<T>(string name);
         object GetValue(string name);
+
+        int ArgumentCount { get; }
     }
 }

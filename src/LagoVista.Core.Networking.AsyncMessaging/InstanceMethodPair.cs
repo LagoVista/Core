@@ -21,14 +21,29 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             _parameters = _methodInfo.GetParameters();
         }
 
+        internal void ValidateArguments(IAsyncRequest request)
+        {
+            //todo: ML - validate the request to parameter mapping
+
+            // 1. check request value count == param count
+            if (request.ArgumentCount != _parameters.Length)
+                throw new ArgumentException($"parameter count mismatch. params {_parameters.Length}, args {request.ArgumentCount}.");
+
+            // 2. loop each list indepently to validate param and argument names and types
+            for (var i = 0; i < _parameters.Length; ++i)
+            {
+
+            }
+            //throw new ArgumentException("argument validation failure");
+        }
+
         public async Task<IAsyncResponse> Invoke(IAsyncRequest request)
         {
             IAsyncResponse response = null;
             try
             {
-                //todo: ML - validate the request to parameter mapping
-                // 1. check request value count == param count
-                // 2. loop each list indepently to validate param and argument names and types
+                ValidateArguments(request);
+                
                 var arguments = new object[_parameters.Length];
                 for (var i = 0; i < _parameters.Length; ++i)
                 {
@@ -57,6 +72,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             {
                 response = (IAsyncResponse)Activator.CreateInstance(typeof(AsyncResponse), new[] { ex });
             }
+
+            response.Id = Guid.NewGuid().ToString();
+            response.CorrelationId = request.CorrelationId;
+            response.Path = request.Path;
+            response.TimeStamp = DateTime.UtcNow;
 
             return response;
         }
