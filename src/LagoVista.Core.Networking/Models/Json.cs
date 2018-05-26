@@ -1,9 +1,12 @@
-﻿using Newtonsoft.Json;
-
-namespace LagoVista.Core.Networking.Models
+﻿namespace LagoVista.Core.Networking.Models
 {
+    /// <summary>
+    /// this class is used by the async messaging system to make it possible to have AsyncResponse.ReturnValue's of type string
+    /// </summary>
     public sealed class Json
     {
+        public Json() { }
+
         public Json(string value) { Value = value; }
 
         public string Value { get; } = null;
