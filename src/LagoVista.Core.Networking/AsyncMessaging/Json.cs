@@ -1,4 +1,4 @@
-﻿namespace LagoVista.Core.Networking.Models
+﻿namespace LagoVista.Core.Networking.AsyncMessaging
 {
     /// <summary>
     /// this class is used by the async messaging system to make it possible to have AsyncResponse.ReturnValue's of type string
