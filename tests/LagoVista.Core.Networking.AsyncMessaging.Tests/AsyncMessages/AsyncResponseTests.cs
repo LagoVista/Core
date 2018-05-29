@@ -1,40 +1,11 @@
-﻿using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
 {
     [TestClass]
     public class AsyncResponseTests : TestBase
     {
-        private readonly MethodInfo echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        private readonly object[] echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        private readonly string echoMethodParam = "value";
-        private readonly string responseValue = "jello babies";
-        private readonly string rootExceptionValue = "boo";
-
-        private IAsyncRequest CreateControlRequest()
-        {
-            return new AsyncRequest(echoMethodInfo, echoArgs);
-        }
-
-        private IAsyncResponse CreateControlSuccessResponse()
-        {
-            var request = CreateControlRequest();
-            return new AsyncResponse(request, responseValue);
-        }
-
-        private IAsyncResponse CreateControlFailResponse()
-        {
-            var request = CreateControlRequest();
-            var ex = new Exception(rootExceptionValue, new Exception("hoo"));
-            return new AsyncResponse(request, ex);
-        }
-
         private void AssertSuccessResponse(IAsyncResponse response)
         {
             Assert.IsTrue(response.Success);
@@ -44,7 +15,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncResponse_Constructor_StandardSuccessResponse()
         {
-            var controlRequest = CreateControlRequest();
+            var controlRequest = CreateControlEchoRequest();
             var response = new AsyncResponse(controlRequest, responseValue);
 
             AssertSuccessResponse(response);
@@ -61,7 +32,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncResponse_Constructor_MarshalledData_SuccessResponse()
         {
-            var controlResponse = CreateControlSuccessResponse();
+            var controlResponse = CreateControlEchoSuccessResponse();
             var response = new AsyncResponse(controlResponse.MarshalledData);
 
             AssertSuccessResponse(response);
@@ -100,7 +71,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncResponse_Constructor_StandardFailureResponse()
         {
-            var controlRequest = CreateControlRequest();
+            var controlRequest = CreateControlEchoRequest();
             var ex = new Exception(rootExceptionValue, new Exception("hoo"));
 
             var response = new AsyncResponse(controlRequest, ex);
@@ -116,7 +87,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncResponse_Constructor_MarshalledData_FailureResponse()
         {
-            var controlResponse = CreateControlFailResponse();
+            var controlResponse = CreateControlEchoFailureResponse();
             var response = new AsyncResponse(controlResponse.MarshalledData);
 
             AssertFailureResponse(response);

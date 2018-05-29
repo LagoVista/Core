@@ -9,21 +9,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
     [TestClass]
     public class AsyncRequestTests : TestBase
     {
-        private readonly MethodInfo echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        private readonly object[] echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        private readonly string echoMethodParam = "value";
-
-        private IAsyncRequest CreateControlRequest()
-        {
-            return new AsyncRequest(echoMethodInfo, echoArgs);
-        }
-
         [TestMethod]
         public void AsyncRequest_Constructor_MethodInfo_Args()
         {
             var request = new AsyncRequest(echoMethodInfo, echoArgs);
 
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(echoMethodParam));
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
         }
 
@@ -38,11 +29,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncRequest_Constructor_MarshalledData()
         {
-            var controlRequest = CreateControlRequest();
+            var controlRequest = CreateControlEchoRequest();
 
             var request = new AsyncRequest(controlRequest.MarshalledData);
 
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(echoMethodParam));
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
 
             Assert.AreEqual(controlRequest.Id, request.Id);

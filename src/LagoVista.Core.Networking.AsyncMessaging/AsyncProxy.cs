@@ -18,7 +18,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private IAsyncCoupler<IAsyncResponse> _asyncCoupler { get; set; }
         private IAsyncRequestHandler _requestSender { get; set; }
 
-        internal static TProxy Create<TProxy>(IAsyncCoupler<IAsyncResponse> asyncCoupler, IAsyncRequestHandler requestSender)
+        internal static TProxy CreateProxy<TProxy>(IAsyncCoupler<IAsyncResponse> asyncCoupler, IAsyncRequestHandler requestSender)
         {
             var result = Create<TProxy, AsyncProxy>();
             (result as AsyncProxy)._asyncCoupler = asyncCoupler;
