@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,142 +7,177 @@ using System.Linq;
 namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
 {
     [TestClass]
-    public class AsyncMessageTests
+    public class AsyncMessageTests : TestBase
     {
-        [TestInitialize]
-        public void Init()
-        {
-        }
-
         private readonly string messagePath = "TestPath";
-        private readonly DateTime timeStamp = new DateTime(2018, 1, 1, 13, 0, 0);
+        private readonly DateTime messageTimeStamp = new DateTime(2018, 1, 1, 13, 0, 0);
         private readonly string messageId = Guid.NewGuid().ToString();
         private readonly string messageCorrelationId = Guid.NewGuid().ToString();
 
-        [TestMethod]
-        public void TestAsyncMessage()
+        private IAsyncMessage CreateControlMessage()
         {
-            IAsyncMessage message1 = new AsyncMessage()
+            return new AsyncMessage()
             {
                 Id = messageId,
                 CorrelationId = messageCorrelationId,
                 Path = messagePath,
-                TimeStamp = timeStamp
+                TimeStamp = messageTimeStamp
             };
-            Assert.AreEqual(message1.Id, messageId);
-            Assert.AreEqual(message1.CorrelationId, messageCorrelationId);
-            Assert.AreEqual(message1.Path, messagePath);
-            Assert.AreEqual(message1.TimeStamp, timeStamp);
-
-            byte[] marshalledData = message1.MarshalledData;
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(marshalledData));
-
-            IAsyncMessage message2 = new AsyncMessage(marshalledData);
-            Assert.AreEqual(message1.Id, message2.Id);
-            Assert.AreEqual(message1.CorrelationId, message2.CorrelationId);
-            Assert.AreEqual(message1.Path, message2.Path);
-            Assert.AreEqual(message1.TimeStamp, message2.TimeStamp);
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(message2.MarshalledData));
         }
 
         [TestMethod]
-        public void TestAsyncRequest()
+        public void AsyncMessage_Constructor_Generic()
         {
-            IAsyncRequest message1 = new AsyncRequest()
+            var message = new AsyncMessage()
             {
                 Id = messageId,
                 CorrelationId = messageCorrelationId,
                 Path = messagePath,
-                TimeStamp = timeStamp
+                TimeStamp = messageTimeStamp
             };
-            Assert.AreEqual(message1.Id, messageId);
-            Assert.AreEqual(message1.CorrelationId, messageCorrelationId);
-            Assert.AreEqual(message1.Path, messagePath);
-            Assert.AreEqual(message1.TimeStamp, timeStamp);
 
-            var keyName = "property1";
-            object value1 = "value1";
-            message1.SetValue(keyName, value1);
-            Assert.AreEqual(message1.GetValue(keyName), value1);
-            Assert.AreEqual(message1.GetValue<string>(keyName), value1);
-
-            object value2 = "value2";
-            var argumentException = Assert.ThrowsException<ArgumentException>(() => { message1.SetValue(keyName, value2); });
-            Assert.AreEqual($"key already exists {keyName}", argumentException.Message);
-            message1.SetValue(keyName, value2, true);
-            Assert.AreEqual(message1.GetValue(keyName), value2);
-            Assert.AreEqual(message1.GetValue<string>(keyName), value2);
-
-            byte[] marshalledData = message1.MarshalledData;
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(marshalledData));
-
-            IAsyncRequest message2 = new AsyncRequest(marshalledData);
-            Assert.AreEqual(message1.Id, message2.Id);
-            Assert.AreEqual(message1.CorrelationId, message2.CorrelationId);
-            Assert.AreEqual(message1.Path, message2.Path);
-            Assert.AreEqual(message1.TimeStamp, message2.TimeStamp);
-            Assert.AreEqual(message1.GetValue(keyName), message2.GetValue(keyName));
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(message2.MarshalledData));
+            // tests constructor and InternalSetValue and InternalGetValue
+            Assert.AreEqual(messageId, message.Id);
+            Assert.AreEqual(messageCorrelationId, message.CorrelationId);
+            Assert.AreEqual(messagePath, message.Path);
+            Assert.AreEqual(messageTimeStamp, message.TimeStamp);
         }
 
         [TestMethod]
-        public void TestAsyncResponse()
+        public void AsyncMessage_Constructor_MarshalledData()
         {
-            var responseValue = "response value";
-            // cast as object to prevent being the json constructor from being called
-            IAsyncResponse message1 = new AsyncResponse((object)responseValue)
-            {
-                Id = messageId,
-                CorrelationId = messageCorrelationId,
-                Path = messagePath,
-                TimeStamp = timeStamp
-            };
-            Assert.IsTrue(message1.Success);
-            Assert.AreEqual(message1.Id, messageId);
-            Assert.AreEqual(message1.CorrelationId, messageCorrelationId);
-            Assert.AreEqual(message1.Path, messagePath);
-            Assert.AreEqual(message1.TimeStamp, timeStamp);
-            Assert.IsNotNull(message1.ReturnValue);
-            Assert.AreEqual(message1.ReturnValue, responseValue);
+            var controlMessage = CreateControlMessage();
 
-            byte[] marshalledData = message1.MarshalledData;
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(marshalledData));
+            var message = new AsyncMessage(controlMessage.MarshalledData);
 
-            IAsyncResponse message2 = new AsyncResponse(marshalledData);
-            Assert.IsTrue(message2.Success);
-            Assert.AreEqual(message1.Id, message2.Id);
-            Assert.AreEqual(message1.CorrelationId, message2.CorrelationId);
-            Assert.AreEqual(message1.Path, message2.Path);
-            Assert.AreEqual(message1.TimeStamp, message2.TimeStamp);
-            Assert.IsNotNull(message2.ReturnValue);
-            Assert.AreEqual(message1.ReturnValue, message2.ReturnValue);
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(message2.MarshalledData));
+            Assert.AreEqual(controlMessage.Id, message.Id);
+            Assert.AreEqual(controlMessage.CorrelationId, message.CorrelationId);
+            Assert.AreEqual(controlMessage.Path, message.Path);
+            Assert.AreEqual(controlMessage.TimeStamp, message.TimeStamp);
+            Assert.AreEqual(controlMessage.Json, message.Json);
+            Assert.IsTrue(controlMessage.MarshalledData.SequenceEqual(message.MarshalledData));
+        }
 
-            IAsyncResponse<string> message4 = new AsyncResponse<string>(marshalledData);
-            Assert.IsTrue(message4.Success);
-            Assert.AreEqual(message1.Id, message4.Id);
-            Assert.AreEqual(message1.CorrelationId, message4.CorrelationId);
-            Assert.AreEqual(message1.Path, message4.Path);
-            Assert.AreEqual(message1.TimeStamp, message4.TimeStamp);
-            Assert.IsInstanceOfType(message4.TypedReturnValue, typeof(string));
-            Assert.IsNotNull(message4.TypedReturnValue);
-            Assert.AreEqual(message1.ReturnValue, message4.TypedReturnValue);
-            Assert.IsTrue(message1.MarshalledData.SequenceEqual(message4.MarshalledData));
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AsyncMessage_Constructor_MarshalledData_ArgumentNull()
+        {
+            byte[] marshalledData = null;
+            var message = new AsyncMessage(marshalledData);
+        }
 
-            var exMessage = "fail";
-            IAsyncResponse message3 = new AsyncResponse(new Exception(exMessage))
-            {
-                Id = messageId,
-                CorrelationId = messageCorrelationId,
-                Path = messagePath,
-                TimeStamp = timeStamp
-            };
-            Assert.IsFalse(message3.Success);
-            Assert.AreEqual(message3.Exception.Message, exMessage);
-            var exception = Assert.ThrowsException<KeyNotFoundException>(() => { var r = message3.ReturnValue; });
-            Assert.AreEqual(exception.Message, "__response");
+        [TestMethod]
+        public void AsyncMessage_SetValue()
+        {
+            var controlMessage = CreateControlMessage();
+            controlMessage.SetValue("key", "value");
+        }
 
-            Assert.IsFalse(message1.MarshalledData.SequenceEqual(message3.MarshalledData));
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AsyncMessage_SetValue_KeyAlreadyExistsError()
+        {
+            var controlMessage = CreateControlMessage();
+            var key = "key";
+            controlMessage.SetValue(key, "value1");
+            controlMessage.SetValue(key, "value2");
+        }
+
+        [TestMethod]
+        public void AsyncMessage_SetValue_OverwriteValueWithExistingKey()
+        {
+            var controlMessage = CreateControlMessage();
+            var key = "key";
+            controlMessage.SetValue(key, "value1");
+            controlMessage.SetValue(key, "value2", true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AsyncMessage_SetValue_KeyNullArgument()
+        {
+            string key = string.Empty;
+            var controlMessage = CreateControlMessage();
+            controlMessage.SetValue(key, "value1");
+        }
+
+        [TestMethod]
+        public void AsyncMessage_SetValue_NullValueArgument()
+        {
+            string value = string.Empty;
+            var controlMessage = CreateControlMessage();
+            controlMessage.SetValue("key", value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AsyncMessage_SetValue_IllegalKeyPrefix()
+        {
+            var controlMessage = CreateControlMessage();
+            controlMessage.SetValue("__key", "value");
+        }
+
+        [TestMethod]
+        public void AsyncMessage_GetValue()
+        {
+            var controlMessage = CreateControlMessage();
+
+            var key = "key";
+            var value = "value";
+            controlMessage.SetValue(key, value);
+
+            Assert.AreEqual(value, controlMessage.GetValue(key));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AsyncMessage_GetValue_KeyNullArgument()
+        {
+            var controlMessage = CreateControlMessage();
+
+            var key = string.Empty;
+            var v = controlMessage.GetValue(key);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AsyncMessage_GetValue_IllegalKeyPrefix()
+        {
+            var controlMessage = CreateControlMessage();
+            var v = controlMessage.GetValue("__key");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void AsyncMessage_GetValue_KeyNotFound()
+        {
+            var controlMessage = CreateControlMessage();
+            var v = controlMessage.GetValue("key");
+        }
+
+        [TestMethod]
+        public void AsyncMessage_GetValue_T()
+        {
+            var controlMessage = CreateControlMessage();
+
+            var key = "key";
+            var value = new ProxySubject();
+            controlMessage.SetValue(key, value);
+
+            Assert.AreEqual(value, controlMessage.GetValue<ProxySubject>(key));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidCastException))]
+        public void AsyncMessage_GetValue_T_InvalidType()
+        {
+            var controlMessage = CreateControlMessage();
+
+            var key = "key";
+            var value = new object();
+            controlMessage.SetValue(key, value);
+
+            var v = controlMessage.GetValue<ProxySubject>("key");
         }
     }
 }

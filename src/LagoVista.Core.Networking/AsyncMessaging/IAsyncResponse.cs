@@ -6,12 +6,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     {
         bool Success { get; }
         Exception Exception { get; }
-
         object ReturnValue { get; }
-    }
-
-    public interface IAsyncResponse<T> : IAsyncResponse
-    {
-        T TypedReturnValue { get; }
+        string RequestId { get; }
+        T GetTypedReturnValue<T>();
     }
 }
