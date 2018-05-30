@@ -7,29 +7,40 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
     /// <summary>
-    /// Listens to service bus subscription for async requests, invokes requests through the request broker, returns responses via service bus (response sender)
+    /// Listens to service bus subscription for async requests, 
+    /// invokes requests through the request broker, 
+    /// returns responses to the requestor via service bus (response sender).
+    /// This class lives response side.
     /// </summary>
     public sealed class ServiceBusAsyncRequestModerator : IAsyncRequestListener
     {
-        private readonly SubscriptionClient _subscriptionClient;
         private readonly IAsyncResponseHandler _responseSender;
         private readonly IAsyncRequestBroker _requestBroker;
-        private readonly IListenerConnectionSettings _connectionSettings;
         private readonly ILogger _logger;
+        private readonly SubscriptionClient _subscriptionClient;
 
-        public ServiceBusAsyncRequestModerator(IAsyncResponseHandler responseSender, IAsyncRequestBroker requestBroker, IListenerConnectionSettings connectionSettings, ILogger logger)
+        public ServiceBusAsyncRequestModerator(
+            IAsyncResponseHandler responseSender, 
+            IAsyncRequestBroker requestBroker, 
+            IServiceBusAsyncRequestModeratorConnectionSettings settings, 
+            ILogger logger)
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException("connectionSettings");
-            _logger = logger ?? throw new ArgumentNullException("logger");
-            _requestBroker = requestBroker ?? throw new ArgumentNullException("requestBroker");
-            _responseSender = responseSender ?? throw new ArgumentNullException("sender");
+            _responseSender = responseSender ?? throw new ArgumentNullException(nameof(responseSender));
+            _requestBroker = requestBroker ?? throw new ArgumentNullException(nameof(requestBroker));
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            //var receiverConnectionString = "Endpoint=sb://localrequestbus-dev.servicebus.windows.net/;SharedAccessKeyName=ListenAccessKey;SharedAccessKey=mIzxiTinXIAtX0H2XknVj6LWvkDYCjv/PdOxNfmENd8=;";
-            //var sourceEntityPath = "9e88c7f6b5894dbfb3bc09d20736705e_tolocal";
-            //var subscriptionPath = "devSub";
-            var receiverConnectionString = connectionSettings.ServiceBusConnectionString;
-            var sourceEntityPath = connectionSettings.SourceEntityPath;
-            var subscriptionPath = connectionSettings.SubscriptionPath;
+            // Endpoint - Name
+            // SharedAccessKeyName - UserName
+            // SharedAccessKey - AccessKey
+            // SourceEntityPath - ResourceName
+            // SubscriptionPath - Uri
+            var receiverConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestModerator.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestModerator.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestModerator.AccessKey};";
+            var sourceEntityPath = settings.ServiceBusAsyncRequestModerator.ResourceName;
+            var subscriptionPath = settings.ServiceBusAsyncRequestModerator.Uri;
 
             //todo: ML - need to set retry policy and operation timeout etc.
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);

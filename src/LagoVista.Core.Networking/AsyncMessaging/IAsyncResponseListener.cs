@@ -1,10 +1,8 @@
-﻿using LagoVista.Core.PlatformSupport;
-
-namespace LagoVista.Core.Networking.AsyncMessaging
+﻿namespace LagoVista.Core.Networking.AsyncMessaging
 {
+    //todo: ML - add <summary> for this interface
     public interface IAsyncResponseListener
     {
-        //IAsyncResponseHandler responseHandler, IListenerConnectionSettings connectionSettings, ILogger logger
         void Start();
     }
 }

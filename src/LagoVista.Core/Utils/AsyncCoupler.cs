@@ -34,8 +34,8 @@ namespace LagoVista.Core.Utils
 
         public AsyncCouplerBase(ILogger logger, IUsageMetrics  usageMetrics)
         {
-            Logger = logger ?? throw new ArgumentNullException("logger");
-            UsageMetrics = usageMetrics ?? throw new ArgumentNullException("usageMetrics");
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            UsageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
         }
 
         public IUsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion)

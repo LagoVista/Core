@@ -17,14 +17,17 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         {
             if (instance == null)
             {
-                throw new ArgumentNullException("instance");
+                throw new ArgumentNullException(nameof(instance));
             }
 
             if (methodInfo == null)
             {
-                throw new ArgumentNullException("methodInfo");
+                throw new ArgumentNullException(nameof(methodInfo));
             }
 
+            // This should be impossible, but if T is explicitly provided as an interface like this: RegisterSubjectMethod<IMyThing>(thingInstance, IOtherThing.methodInfo)
+            // the type of the instance might be restricted in such a way as to hide the method 
+            // represented by methodInfo. 
             if (typeof(T) != methodInfo.DeclaringType)
             {
                 throw new ArgumentException($"{typeof(T).FullName} does not contain method '{methodInfo.Name}'.");
@@ -52,13 +55,13 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         {
             if (subject == null)
             {
-                throw new ArgumentNullException("subject");
+                throw new ArgumentNullException(nameof(subject));
             }
 
             var type = typeof(T);
             if (!type.IsInterface)
             {
-                throw new ArgumentException("Type of subject must be an interface.");
+                throw new ArgumentException($"Subject type must be an interface: '{typeof(T).FullName}'");
             }
 
             var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
@@ -74,7 +77,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         {
             if (request == null)
             {
-                throw new ArgumentNullException("request");
+                throw new ArgumentNullException(nameof(request));
             }
 
             // 1. get handler

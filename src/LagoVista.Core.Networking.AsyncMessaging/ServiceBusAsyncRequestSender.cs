@@ -5,20 +5,32 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
+    /// <summary>
+    /// "handles" requests by sending them to service bus. They get picked up on "the other side" by 
+    /// ServiceBusAsyncRequestModerator which routes requests and returns responses via service bus.
+    /// This class lives where ever NuvIoT core management rest api is hosted.
+    /// </summary>
     public class ServiceBusAsyncRequestSender : IAsyncRequestHandler
     {
-        private readonly ISenderConnectionSettings _connectionSettings;
         private readonly ILogger _logger;
         private readonly TopicClient _topicClient;
-        public ServiceBusAsyncRequestSender(ISenderConnectionSettings connectionSettings, ILogger logger)
+        public ServiceBusAsyncRequestSender(IServiceBusAsyncRequestSenderConnectionSettings settings, ILogger logger)
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException("connectionSettings");
-            _logger = logger ?? throw new ArgumentNullException("logger");
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            var senderConnectionString = connectionSettings.ServiceBusConnectionString; // "Endpoint=sb://localrequestbus-dev.servicebus.windows.net/;SharedAccessKeyName=SendAccessKey;SharedAccessKey=B2bGyjZVtiNsgQ/BvjCqwtk9FgCYGdA7np99etWzHLc=;";
-            var destinationEntityPath = connectionSettings.DestinationEntityPath; // "9e88c7f6b5894dbfb3bc09d20736705e_fromlocal";
+            // Endpoint - Name
+            // SharedAccessKeyName - UserName
+            // SharedAccessKey - AccessKey
+            // DestinationEntityPath - ResourceName
+            var topicConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestSender.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestSender.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestSender.AccessKey};";
+            var destinationEntityPath = settings.ServiceBusAsyncRequestSender.ResourceName;
+
             //todo: ML - need to set retry policy and operation timeout etc.
-            _topicClient = new TopicClient(senderConnectionString, destinationEntityPath, null);
+            _topicClient = new TopicClient(topicConnectionString, destinationEntityPath, null);
         }
 
         public async Task HandleRequest(IAsyncRequest request)

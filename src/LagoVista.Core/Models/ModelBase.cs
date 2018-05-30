@@ -17,24 +17,26 @@ namespace LagoVista.Core.Models
 
         public string GetPropertyNameFromExpression<TResult>(Expression<Func<TResult>> propertyExpression)
         {
+            if (propertyExpression == null)
+                throw new ArgumentNullException(nameof(propertyExpression));
+
             System.Linq.Expressions.MemberExpression memberExpression = (System.Linq.Expressions.MemberExpression)propertyExpression.Body;
 
             if (memberExpression != null)
                 return memberExpression.Member.Name;
 
-            throw new ArgumentException("propertyExpression");
+            throw new ArgumentException(nameof(propertyExpression));
         }
 
 
         protected void OnPropertyChanged<TResult>(Expression<Func<TResult>> propertyExpression)
         {
-            if (!this.CheckExpressionForMemberAccess(propertyExpression.Body))
-                throw new ArgumentException("propertyExpression",
-                        string.Format("The expected expression is no 'MemberAccess'; its a '{0}'", propertyExpression.Body.NodeType));
-
-
             if (propertyExpression == null)
-                throw new ArgumentNullException("propertyExpression");
+                throw new ArgumentNullException(nameof(propertyExpression));
+
+            if (!this.CheckExpressionForMemberAccess(propertyExpression.Body))
+                throw new ArgumentException(nameof(propertyExpression),
+                        string.Format("The expected expression is no 'MemberAccess'; its a '{0}'", propertyExpression.Body.NodeType));
 
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(this.GetPropertyNameFromExpression(propertyExpression)));

@@ -2,27 +2,61 @@
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    /* This is used so we can somewhere create a class that has connnections settings specific to service bus (or whatever */
-    public interface ISenderConnectionSettings
+    /// <summary>
+    /// request side service bus toplic client settings - request sender
+    /// </summary>
+    public interface IServiceBusAsyncRequestSenderConnectionSettings
     {
-        string ServiceBusConnectionString { get; set; } 
-        string DestinationEntityPath { get; set; }
-
-        IConnectionSettings ConnectionSettings { get; set; }
+        /// <summary>
+        /// Endpoint - Name
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// DestinationEntityPath - ResourceName
+        /// </summary>
+        IConnectionSettings ServiceBusAsyncRequestSender { get; set; }
     }
 
-    public interface IListenerConnectionSettings
+    /// <summary>
+    /// response side service bus topic client settings - response sender
+    /// </summary>
+    public interface IServiceBusAsyncResponseSenderConnectionSettings
     {
-        string ServiceBusConnectionString { get; set; }
-        string SourceEntityPath { get; set; }
-        string SubscriptionPath { get; set; }
-
-        IConnectionSettings ConnectionSettings { get; set; }
+        /// <summary>
+        /// Endpoint - Name
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// DestinationEntityPath - ResourceName
+        /// </summary>
+        IConnectionSettings ServiceBusAsyncResponseSender { get; set; }
     }
 
-
-    public interface IRequestBrokerConnectionSettings
+    /// <summary>
+    /// request side service bus subscription client settings - response listener
+    /// </summary>
+    public interface IServiceBusAsyncResponseListenerConnectionSettings
     {
-        IConnectionSettings ConnectionSettings { get; set; }
+        /// <summary>
+        /// Endpoint - Name
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// SourceEntityPath - ResourceName
+        /// SubscriptionPath - Uri
+        /// </summary>
+        IConnectionSettings ServiceBusAsyncResponseListener { get; set; }
+    }
+
+    /// <summary>
+    /// response side service bus subscription client settings - request listener 
+    /// </summary>
+    public interface IServiceBusAsyncRequestModeratorConnectionSettings
+    {
+        /// <summary>
+        /// Endpoint - Name
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// SourceEntityPath - ResourceName
+        /// SubscriptionPath - Uri
+        /// </summary>
+        IConnectionSettings ServiceBusAsyncRequestModerator { get; set; }
     }
 }

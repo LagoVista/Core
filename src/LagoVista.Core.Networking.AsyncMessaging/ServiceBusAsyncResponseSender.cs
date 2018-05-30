@@ -5,19 +5,30 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
+    /// <summary>
+    /// This class is used by ServiceBusRequestModerator to route the response back to the requestor via service bus.
+    /// This class lives on-premises.
+    /// </summary>
     public sealed class ServiceBusAsyncResponseSender: IAsyncResponseHandler
     {
-        private readonly ISenderConnectionSettings _connectionSettings;
         private readonly ILogger _logger;
         private readonly TopicClient _topicClient;
 
-        public ServiceBusAsyncResponseSender(ISenderConnectionSettings connectionSettings, ILogger logger) : base()
+        public ServiceBusAsyncResponseSender(IServiceBusAsyncResponseSenderConnectionSettings settings, ILogger logger) : base()
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException("connectionSettings");
-            _logger = logger ?? throw new ArgumentNullException("logger");
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            var senderConnectionString = connectionSettings.ServiceBusConnectionString; // "Endpoint=sb://localrequestbus-dev.servicebus.windows.net/;SharedAccessKeyName=SendAccessKey;SharedAccessKey=B2bGyjZVtiNsgQ/BvjCqwtk9FgCYGdA7np99etWzHLc=;";
-            var destinationEntityPath = connectionSettings.DestinationEntityPath; // "9e88c7f6b5894dbfb3bc09d20736705e_fromlocal";
+            // Endpoint - Name
+            // SharedAccessKeyName - UserName
+            // SharedAccessKey - AccessKey
+            // DestinationEntityPath - ResourceName
+            var senderConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncResponseSender.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncResponseSender.UserName};SharedAccessKey={settings.ServiceBusAsyncResponseSender.AccessKey};";
+            var destinationEntityPath = settings.ServiceBusAsyncResponseSender.ResourceName;
+            
             //todo: ML - need to set retry policy and operation timeout etc.
             _topicClient = new TopicClient(senderConnectionString, destinationEntityPath, null);
         }

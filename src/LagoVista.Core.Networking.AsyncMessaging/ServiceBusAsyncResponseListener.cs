@@ -7,28 +7,38 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
+    /// <summary>
+    /// Listens to service bus for responses to requests handled on-premises by ServiceBusRequestModerator. 
+    /// When a response is received it is routed to the class waiting via the AsyncCoupler registry.
+    /// This is done by calling CompleteAsync() on the coupler.
+    /// This class lives where ever NuvIoT core management rest api is hosted.
+    /// </summary>
     public class ServiceBusAsyncResponseListener : IAsyncResponseListener
     {
         private readonly SubscriptionClient _subscriptionClient;
         private readonly IAsyncCoupler<IAsyncResponse> _asyncCoupler;
-        private readonly IListenerConnectionSettings _connectionSettings;
         private readonly ILogger _logger;
 
         public ServiceBusAsyncResponseListener(
-            IAsyncCoupler<IAsyncResponse> asyncCoupler, 
-            IListenerConnectionSettings connectionSettings, 
+            IAsyncCoupler<IAsyncResponse> asyncCoupler,
+            IServiceBusAsyncResponseListenerConnectionSettings settings,
             ILogger logger)
         {
             _asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            //var receiverConnectionString = "Endpoint=sb://localrequestbus-dev.servicebus.windows.net/;SharedAccessKeyName=ListenAccessKey;SharedAccessKey=mIzxiTinXIAtX0H2XknVj6LWvkDYCjv/PdOxNfmENd8=;";
-            //var sourceEntityPath = "9e88c7f6b5894dbfb3bc09d20736705e_tolocal";
-            //var subscriptionPath = "devSub";
-            var receiverConnectionString = connectionSettings.ServiceBusConnectionString;
-            var sourceEntityPath = connectionSettings.SourceEntityPath;
-            var subscriptionPath = connectionSettings.SubscriptionPath;
+            // Endpoint - Name
+            // SharedAccessKeyName - UserName
+            // SharedAccessKey - AccessKey
+            // SourceEntityPath - ResourceName
+            // SubscriptionPath - Uri
+            var receiverConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncResponseListener.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncResponseListener.UserName};SharedAccessKey={settings.ServiceBusAsyncResponseListener.AccessKey};";
+            var sourceEntityPath = settings.ServiceBusAsyncResponseListener.ResourceName;
+            var subscriptionPath = settings.ServiceBusAsyncResponseListener.Uri;
 
             //todo: ML - need to set retry policy and operation timeout etc.
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
@@ -53,7 +63,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             try
             {
                 var response = new AsyncResponse(message.Body);
-                await _asyncCoupler.CompleteAsync(response.CorrelationId, response);
+                var invokeResult = await _asyncCoupler.CompleteAsync(response.CorrelationId, response);
+                if (!invokeResult.Successful)
+                {
+                    //todo: ML - handle unsuccessful attempt to complete the request
+                }
                 await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
             }
             catch (Exception ex)
