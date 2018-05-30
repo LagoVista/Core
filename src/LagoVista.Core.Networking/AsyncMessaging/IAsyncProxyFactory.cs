@@ -10,7 +10,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncCoupler<IAsyncResponse> asyncCoupler,
             IAsyncRequestHandler requestSender,
             ILogger logger,
-            IUsageMetrics usageMetrics,
+            //IUsageMetrics usageMetrics,
             TimeSpan timeout);
     }
 }

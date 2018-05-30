@@ -20,7 +20,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         {
             var logger = new TestLogger();
             var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, logger, metrics, TimeSpan.FromSeconds(10));
+            var proxy = _proxyFactory.Create<IProxySubject>(
+                _successCoupler.Object, 
+                _sender.Object, 
+                logger, 
+                //metrics, 
+                TimeSpan.FromSeconds(10));
             Assert.IsNotNull(proxy);
         }
 
@@ -29,7 +34,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         {
             var logger = new TestLogger();
             var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, logger, metrics, TimeSpan.FromSeconds(10));
+            var proxy = _proxyFactory.Create<IProxySubject>(
+                _successCoupler.Object, 
+                _sender.Object, 
+                logger, 
+                //metrics, 
+                TimeSpan.FromSeconds(10));
             Assert.IsInstanceOfType(proxy, typeof(IProxySubject));
         }
 
@@ -38,7 +48,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         {
             var logger = new TestLogger();
             var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, logger, metrics, TimeSpan.FromSeconds(10));
+            var proxy = _proxyFactory.Create<IProxySubject>(
+                _successCoupler.Object, 
+                _sender.Object, 
+                logger, 
+                //metrics, 
+                TimeSpan.FromSeconds(10));
             Assert.IsNotNull(proxy.GetType().GetMethod(nameof(IProxySubject.Echo)));
             Assert.IsNotNull(proxy.GetType().GetMethod(nameof(IProxySubject.EchoAsync)));
         }
@@ -49,7 +64,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         {
             var logger = new TestLogger();
             var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(null, _sender.Object, logger, metrics, TimeSpan.FromSeconds(10));
+            var proxy = _proxyFactory.Create<IProxySubject>(null, 
+                _sender.Object, 
+                logger, 
+                //metrics, 
+                TimeSpan.FromSeconds(10));
         }
 
         [TestMethod]
@@ -58,7 +77,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         {
             var logger = new TestLogger();
             var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, null, logger, metrics, TimeSpan.FromSeconds(10));
+            var proxy = _proxyFactory.Create<IProxySubject>(
+                _successCoupler.Object, 
+                null, 
+                logger, 
+                //metrics, 
+                TimeSpan.FromSeconds(10));
         }
 
         [TestMethod]
@@ -66,16 +90,21 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         public void ProxyFactory_Create_NullLogger()
         {
             var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, null, metrics, TimeSpan.FromSeconds(10));
+            var proxy = _proxyFactory.Create<IProxySubject>(
+                _successCoupler.Object, 
+                _sender.Object, 
+                null, 
+                //metrics, 
+                TimeSpan.FromSeconds(10));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ProxyFactory_Create_NullUsageMetrics()
-        {
-            var logger = new TestLogger();
-            var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, logger, null, TimeSpan.FromSeconds(10));
-        }
+        //[TestMethod]
+        //[ExpectedException(typeof(ArgumentNullException))]
+        //public void ProxyFactory_Create_NullUsageMetrics()
+        //{
+        //    var logger = new TestLogger();
+        //    var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, logger, null, TimeSpan.FromSeconds(10));
+        //}
     }
 }
 

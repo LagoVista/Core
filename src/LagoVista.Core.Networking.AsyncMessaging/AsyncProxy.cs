@@ -19,7 +19,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private IAsyncRequestHandler _requestSender;
         private TimeSpan _timeout;
         private ILogger _logger;
-        private IUsageMetrics _usageMetrics;
+        //private IUsageMetrics _usageMetrics;
         private static MethodInfo _fromResultMethodInfo =
             typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
@@ -27,7 +27,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncCoupler<IAsyncResponse> asyncCoupler,
             IAsyncRequestHandler requestSender,
             ILogger logger,
-            IUsageMetrics usageMetrics,
+            //IUsageMetrics usageMetrics,
             TimeSpan timeout)
         {
             var result = Create<TProxy, AsyncProxy>();
@@ -35,7 +35,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             (result as AsyncProxy)._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             (result as AsyncProxy)._requestSender = requestSender ?? throw new ArgumentNullException(nameof(requestSender));
             (result as AsyncProxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            (result as AsyncProxy)._usageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
+            //(result as AsyncProxy)._usageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
             (result as AsyncProxy)._timeout = timeout;
 
             return result;

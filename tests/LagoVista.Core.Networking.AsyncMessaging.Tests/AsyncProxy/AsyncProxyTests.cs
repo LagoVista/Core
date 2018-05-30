@@ -23,7 +23,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         public void Init()
         {
             _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
-            _proxySubject = _proxyFactory.Create<IProxySubject>(_coupler, _sender, _logger, _metrics, TimeSpan.FromSeconds(30));
+            _proxySubject = _proxyFactory.Create<IProxySubject>(
+                _coupler, 
+                _sender, 
+                _logger, 
+                //_metrics, 
+                TimeSpan.FromSeconds(30));
             
             //controlEchoSuccessResponse = new AsyncResponse(controlEchoRequest, ProxySubject.EchoValueConst);
             //successCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
@@ -72,7 +77,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
             var array = new string[] { ProxySubject.EchoValueConst };
             var result = Newtonsoft.Json.JsonConvert.SerializeObject(array);
             var sender = new FakeSender(_coupler, result);
-            var proxySubject = _proxyFactory.Create<IProxySubject>(_coupler, sender, _logger, _metrics, TimeSpan.FromSeconds(30));
+            var proxySubject = _proxyFactory.Create<IProxySubject>(
+                _coupler, 
+                sender, 
+                _logger, 
+                //_metrics, 
+                TimeSpan.FromSeconds(30));
             var echoResult = proxySubject.PassStringParams(array);
 
             Assert.AreEqual(result, echoResult);
@@ -84,7 +94,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
             var array = new string[] { ProxySubject.EchoValueConst };
             var result = Newtonsoft.Json.JsonConvert.SerializeObject(array);
             var sender = new FakeSender(_coupler, result);
-            var proxySubject = _proxyFactory.Create<IProxySubject>(_coupler, sender, _logger, _metrics, TimeSpan.FromSeconds(30));
+            var proxySubject = _proxyFactory.Create<IProxySubject>(
+                _coupler, 
+                sender, 
+                _logger, 
+                //_metrics, 
+                TimeSpan.FromSeconds(30));
             var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
 
             Assert.AreEqual(result, methodResult);
