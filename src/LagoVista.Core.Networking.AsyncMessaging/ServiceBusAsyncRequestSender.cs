@@ -13,7 +13,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public class ServiceBusAsyncRequestSender : IAsyncRequestHandler
     {
         private readonly ILogger _logger;
-        private readonly TopicClient _topicClient;
+        private readonly string _topicConnectionString;
+        private readonly string _destinationEntityPath;
+
         public ServiceBusAsyncRequestSender(IServiceBusAsyncRequestSenderConnectionSettings settings, ILogger logger)
         {
             if (settings == null)
@@ -26,31 +28,37 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
-            var topicConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestSender.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestSender.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestSender.AccessKey};";
-            var destinationEntityPath = settings.ServiceBusAsyncRequestSender.ResourceName;
-
-            //todo: ML - need to set retry policy and operation timeout etc.
-            _topicClient = new TopicClient(topicConnectionString, destinationEntityPath, null);
+            _topicConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestSender.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestSender.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestSender.AccessKey};";
+            _destinationEntityPath = settings.ServiceBusAsyncRequestSender.ResourceName;
         }
 
-        public async Task HandleRequest(IAsyncRequest request)
+        public async Task HandleRequest(IAsyncRequest request, string destination)
         {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (string.IsNullOrEmpty(destination)) throw new ArgumentNullException(nameof(destination));
+
+            //todo: ML - need to set retry policy and operation timeout etc.
+            var topicClient = new TopicClient(_topicConnectionString, _destinationEntityPath.Replace("[instance_id]", destination), null);
             try
             {
                 // package response in service bus message and send to topic
-                var messageOut = new Message(request.MarshalledData)
+                var messageOut = new Message(request.Payload)
                 {
                     Label = request.Path,
                     ContentType = request.GetType().FullName,
                     MessageId = request.Id,
                     CorrelationId = request.CorrelationId
                 };
-                await _topicClient.SendAsync(messageOut);
+                await topicClient.SendAsync(messageOut);
             }
             catch (Exception ex)
             {
                 //todo: ML - log exception
                 throw;
+            }
+            finally
+            {
+                await topicClient.CloseAsync();
             }
         }
     }

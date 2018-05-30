@@ -36,7 +36,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public AsyncMessage(byte[] marshalledData) : base()
         {
-            MarshalledData = marshalledData ?? throw new ArgumentNullException(nameof(marshalledData));
+            Payload = marshalledData ?? throw new ArgumentNullException(nameof(marshalledData));
         }
 
         public void SetValue(string key, object value, bool overwriteDuplicates = false)
@@ -157,7 +157,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             set { InternalSetValue(_dateTimeStampKey, value, true); }
         }
 
-        public byte[] MarshalledData
+        public byte[] Payload
         {
             get
             {
@@ -180,7 +180,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         public string Json => JsonConvert.SerializeObject(_data, _jsonSettings);
     }
 
-    public sealed class AsyncRequest : AsyncMessage, IAsyncRequest
+    public class AsyncRequest : AsyncMessage, IAsyncRequest
     {
         public AsyncRequest() : base() { }
 

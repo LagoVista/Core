@@ -18,6 +18,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
         private FakeSender _sender;
         private IProxySubject _proxySubject;
+        private readonly string _destination = "over the rainbow";
 
         [TestInitialize]
         public void Init()
@@ -26,7 +27,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
             _proxySubject = _proxyFactory.Create<IProxySubject>(
                 _coupler, 
                 _sender, 
-                _logger, 
+                _logger,
+                _destination,
                 //_metrics, 
                 TimeSpan.FromSeconds(30));
             
@@ -80,7 +82,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
             var proxySubject = _proxyFactory.Create<IProxySubject>(
                 _coupler, 
                 sender, 
-                _logger, 
+                _logger,
+                _destination,
                 //_metrics, 
                 TimeSpan.FromSeconds(30));
             var echoResult = proxySubject.PassStringParams(array);
@@ -97,7 +100,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
             var proxySubject = _proxyFactory.Create<IProxySubject>(
                 _coupler, 
                 sender, 
-                _logger, 
+                _logger,
+                _destination,
                 //_metrics, 
                 TimeSpan.FromSeconds(30));
             var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);

@@ -31,7 +31,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         {
             var controlRequest = CreateControlEchoRequest();
 
-            var request = new AsyncRequest(controlRequest.MarshalledData);
+            var request = new AsyncRequest(controlRequest.Payload);
 
             Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
@@ -41,7 +41,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
             Assert.AreEqual(controlRequest.Path, request.Path);
             Assert.AreEqual(controlRequest.TimeStamp, request.TimeStamp);
             Assert.AreEqual(controlRequest.Json, request.Json);
-            Assert.IsTrue(controlRequest.MarshalledData.SequenceEqual(request.MarshalledData));
+            Assert.IsTrue(controlRequest.Payload.SequenceEqual(request.Payload));
         }
 
         [TestMethod]

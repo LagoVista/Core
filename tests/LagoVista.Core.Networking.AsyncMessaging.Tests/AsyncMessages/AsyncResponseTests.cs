@@ -33,7 +33,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncResponse_Constructor_MarshalledData_SuccessResponse()
         {
             var controlResponse = CreateControlEchoSuccessResponse();
-            var response = new AsyncResponse(controlResponse.MarshalledData);
+            var response = new AsyncResponse(controlResponse.Payload);
 
             AssertSuccessResponse(response);
             Assert.AreEqual(controlResponse.CorrelationId, response.CorrelationId);
@@ -88,7 +88,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncResponse_Constructor_MarshalledData_FailureResponse()
         {
             var controlResponse = CreateControlEchoFailureResponse();
-            var response = new AsyncResponse(controlResponse.MarshalledData);
+            var response = new AsyncResponse(controlResponse.Payload);
 
             AssertFailureResponse(response);
 

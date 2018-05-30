@@ -10,23 +10,16 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncCoupler<IAsyncResponse> asyncCoupler,
             IAsyncRequestHandler requestSender,
             ILogger logger,
+            string destination,
             //IUsageMetrics usageMetrics,
             TimeSpan timeout)
         {
-            if(asyncCoupler == null)
-            {
-                throw new ArgumentNullException(nameof(asyncCoupler));
-            }
-
-            if (requestSender == null)
-            {
-                throw new ArgumentNullException(nameof(asyncCoupler));
-            }
-
+            // CreateProxy does null checks
             return AsyncProxy.CreateProxy<TProxy>(
-                asyncCoupler, 
+                asyncCoupler,
                 requestSender,
                 logger,
+                destination,
                 //usageMetrics,
                 timeout);
         }

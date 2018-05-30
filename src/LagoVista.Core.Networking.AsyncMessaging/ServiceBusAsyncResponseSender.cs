@@ -38,7 +38,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             try
             {
                 // package response in service bus message and send to topic
-                var message = new Message(response.MarshalledData)
+                var message = new Message(response.Payload)
                 {
                     Label = response.Path,
                     ContentType = response.GetType().FullName,

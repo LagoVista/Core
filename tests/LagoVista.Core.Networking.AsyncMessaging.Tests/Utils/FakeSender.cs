@@ -17,25 +17,23 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Utils
             Result = result;
         }
 
-        public Task HandleRequest(IAsyncRequest request)
+        public Task HandleRequest(IAsyncRequest request, string instructions)
         {
-            Request = request;
-            CompleteRequest(TimeSpan.FromSeconds(1));
+            CompleteRequest(request, TimeSpan.FromSeconds(1));
             return Task.FromResult<object>(null);
         }
 
-        private void CompleteRequest(TimeSpan delay)
+        private void CompleteRequest(IAsyncRequest request, TimeSpan delay)
         {
             Task.Factory.StartNew(async () =>
             {
                 await Task.Delay(delay);
-                var response = new AsyncResponse(Request, Result);
+                var response = new AsyncResponse(request, Result);
                 await _asyncCoupler.CompleteAsync(response.CorrelationId, response);
             });
         }
 
         public object Result { get; private set; }
-        public IAsyncRequest Request { get; private set; }
     }
 
 }

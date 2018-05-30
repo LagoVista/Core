@@ -12,7 +12,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         string CorrelationId { get; set; }
         string Path { get; set; }
         DateTime TimeStamp { get; set; }
-        byte[] MarshalledData { get; }
+        byte[] Payload { get; }
         string Json { get; }
 
         //todo: ML - design and implement a versioning method for request and response

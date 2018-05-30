@@ -17,8 +17,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     {
         private IAsyncCoupler<IAsyncResponse> _asyncCoupler;
         private IAsyncRequestHandler _requestSender;
-        private TimeSpan _timeout;
         private ILogger _logger;
+        private string _destination;
+        private TimeSpan _timeout;
         //private IUsageMetrics _usageMetrics;
         private static MethodInfo _fromResultMethodInfo =
             typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
@@ -28,6 +29,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncRequestHandler requestSender,
             ILogger logger,
             //IUsageMetrics usageMetrics,
+            string destination,
             TimeSpan timeout)
         {
             var result = Create<TProxy, AsyncProxy>();
@@ -36,6 +38,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             (result as AsyncProxy)._requestSender = requestSender ?? throw new ArgumentNullException(nameof(requestSender));
             (result as AsyncProxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             //(result as AsyncProxy)._usageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
+            (result as AsyncProxy)._destination = destination ?? throw new ArgumentNullException(nameof(destination));
             (result as AsyncProxy)._timeout = timeout;
 
             return result;
@@ -49,7 +52,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             var request = new AsyncRequest(targetMethod, args);
 
             // note: no reason to wait on this - the result will be returned by the async coupler
-            _requestSender.HandleRequest(request).ContinueWith(sendAsyncTask =>
+            _requestSender.HandleRequest(request, _destination).ContinueWith(sendAsyncTask =>
             {
                 if (sendAsyncTask.Status == TaskStatus.Faulted && sendAsyncTask.Exception != null)
                 {

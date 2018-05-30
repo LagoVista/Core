@@ -48,14 +48,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         {
             var controlMessage = CreateControlMessage();
 
-            var message = new AsyncMessage(controlMessage.MarshalledData);
+            var message = new AsyncMessage(controlMessage.Payload);
 
             Assert.AreEqual(controlMessage.Id, message.Id);
             Assert.AreEqual(controlMessage.CorrelationId, message.CorrelationId);
             Assert.AreEqual(controlMessage.Path, message.Path);
             Assert.AreEqual(controlMessage.TimeStamp, message.TimeStamp);
             Assert.AreEqual(controlMessage.Json, message.Json);
-            Assert.IsTrue(controlMessage.MarshalledData.SequenceEqual(message.MarshalledData));
+            Assert.IsTrue(controlMessage.Payload.SequenceEqual(message.Payload));
         }
 
         [TestMethod]

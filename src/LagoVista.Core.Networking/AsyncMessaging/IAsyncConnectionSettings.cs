@@ -11,9 +11,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// Endpoint - Name
         /// SharedAccessKeyName - UserName
         /// SharedAccessKey - AccessKey
-        /// DestinationEntityPath - ResourceName
+        /// DestinationEntityPath - ResourceName - [instance id]
         /// </summary>
-        IConnectionSettings ServiceBusAsyncRequestSender { get; set; }
+        IConnectionSettings ServiceBusAsyncRequestSender { get; }
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// SharedAccessKey - AccessKey
         /// DestinationEntityPath - ResourceName
         /// </summary>
-        IConnectionSettings ServiceBusAsyncResponseSender { get; set; }
+        IConnectionSettings ServiceBusAsyncResponseSender { get; }
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// SourceEntityPath - ResourceName
         /// SubscriptionPath - Uri
         /// </summary>
-        IConnectionSettings ServiceBusAsyncResponseListener { get; set; }
+        IConnectionSettings ServiceBusAsyncResponseListener { get; }
     }
 
     /// <summary>
@@ -57,6 +57,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// SourceEntityPath - ResourceName
         /// SubscriptionPath - Uri
         /// </summary>
-        IConnectionSettings ServiceBusAsyncRequestModerator { get; set; }
+        IConnectionSettings ServiceBusAsyncRequestModerator { get; }
     }
 }
