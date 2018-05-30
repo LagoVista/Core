@@ -8,28 +8,28 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests
     [TestClass]
     public abstract class TestBase
     {
-        protected static readonly MethodInfo echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        protected static readonly object[] echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        protected static readonly string echoMethodParamValue = "ping";
-        protected static readonly string echoMethodParamName = "value";
-        protected static readonly string responseValue = "jello babies";
-        protected static readonly string rootExceptionValue = "boo";
+        protected static readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+        protected static readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
+        protected static readonly string _echoMethodParamValue = "ping";
+        protected static readonly string _echoMethodParamName = "value";
+        protected static readonly string _responseValue = "jello babies";
+        protected static readonly string _rootExceptionValue = "boo";
 
         protected static IAsyncRequest CreateControlEchoRequest()
         {
-            return new AsyncRequest(echoMethodInfo, echoArgs);
+            return new AsyncRequest(_echoMethodInfo, _echoArgs);
         }
 
         protected static IAsyncResponse CreateControlEchoSuccessResponse()
         {
             var request = CreateControlEchoRequest();
-            return new AsyncResponse(request, responseValue);
+            return new AsyncResponse(request, _responseValue);
         }
 
         protected static IAsyncResponse CreateControlEchoFailureResponse()
         {
             var request = CreateControlEchoRequest();
-            var ex = new Exception(rootExceptionValue, new Exception("hoo"));
+            var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
             return new AsyncResponse(request, ex);
         }
 

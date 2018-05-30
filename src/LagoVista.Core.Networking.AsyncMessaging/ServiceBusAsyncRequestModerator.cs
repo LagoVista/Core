@@ -53,9 +53,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         {
             try
             {
-                var asyncRequest = new AsyncRequest(message.Body);
-                var asyncResponse = await _requestBroker.HandleRequestAsync(asyncRequest);
-                await _responseSender.HandleResponse(asyncResponse);
+                var request = new AsyncRequest(message.Body);
+                var response = await _requestBroker.HandleRequestAsync(request);
+                await _responseSender.HandleResponse(response);
                 await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
         }
 
-        private async Task HandleException(ExceptionReceivedEventArgs arg)
+        private async Task HandleException(ExceptionReceivedEventArgs e)
         {
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);

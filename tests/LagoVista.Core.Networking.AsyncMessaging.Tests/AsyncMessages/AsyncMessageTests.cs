@@ -9,19 +9,19 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
     [TestClass]
     public class AsyncMessageTests : TestBase
     {
-        private readonly string messagePath = "TestPath";
-        private readonly DateTime messageTimeStamp = new DateTime(2018, 1, 1, 13, 0, 0);
-        private readonly string messageId = Guid.NewGuid().ToString();
-        private readonly string messageCorrelationId = Guid.NewGuid().ToString();
+        private readonly string _messagePath = "TestPath";
+        private readonly DateTime _messageTimeStamp = new DateTime(2018, 1, 1, 13, 0, 0);
+        private readonly string _messageId = Guid.NewGuid().ToString();
+        private readonly string _messageCorrelationId = Guid.NewGuid().ToString();
 
         private IAsyncMessage CreateControlMessage()
         {
             return new AsyncMessage()
             {
-                Id = messageId,
-                CorrelationId = messageCorrelationId,
-                Path = messagePath,
-                TimeStamp = messageTimeStamp
+                Id = _messageId,
+                CorrelationId = _messageCorrelationId,
+                Path = _messagePath,
+                TimeStamp = _messageTimeStamp
             };
         }
 
@@ -30,17 +30,17 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         {
             var message = new AsyncMessage()
             {
-                Id = messageId,
-                CorrelationId = messageCorrelationId,
-                Path = messagePath,
-                TimeStamp = messageTimeStamp
+                Id = _messageId,
+                CorrelationId = _messageCorrelationId,
+                Path = _messagePath,
+                TimeStamp = _messageTimeStamp
             };
 
             // tests constructor and InternalSetValue and InternalGetValue
-            Assert.AreEqual(messageId, message.Id);
-            Assert.AreEqual(messageCorrelationId, message.CorrelationId);
-            Assert.AreEqual(messagePath, message.Path);
-            Assert.AreEqual(messageTimeStamp, message.TimeStamp);
+            Assert.AreEqual(_messageId, message.Id);
+            Assert.AreEqual(_messageCorrelationId, message.CorrelationId);
+            Assert.AreEqual(_messagePath, message.Path);
+            Assert.AreEqual(_messageTimeStamp, message.TimeStamp);
         }
 
         [TestMethod]

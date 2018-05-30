@@ -10,8 +10,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
     public class AsyncRequestBrokerTests
     {
         private readonly IProxySubject _instance = new ProxySubject();
-        private readonly MethodInfo _methodInfo = typeof(ProxySubject).GetMethod("Echo");
-        private readonly MethodInfo _asyncMethodInfo = typeof(ProxySubject).GetMethod("EchoAsync");
+        private readonly MethodInfo _methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+        private readonly MethodInfo _asyncMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.EchoAsync));
         private InstanceMethodPair _pair = null;
         private InstanceMethodPair _asyncPair = null;
 
@@ -24,24 +24,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
             _pair = new InstanceMethodPair(_instance, _methodInfo);
             _asyncPair = new InstanceMethodPair(_instance, _asyncMethodInfo);
         }
-
-        //[TestMethod]
-        //public void TestInstanceMethodPairParameterValidation()
-        //{
-        //    IAsyncRequest request = new AsyncRequest()
-        //    {
-        //        Id = "id",
-        //        CorrelationId = "correlationId",
-        //        Path = $"{_methodInfo.DeclaringType.FullName}.{_methodInfo.Name}",
-        //        TimeStamp = DateTime.UtcNow
-        //    };
-        //    request.SetValue("value", ProxySubject.EchoValueConst);
-        //    request.SetValue("bunk", "bunk");
-
-        //    Assert.AreEqual(2, request.ArgumentCount);
-
-        //    var exception = Assert.ThrowsException<ArgumentException>(() => { _pair.ValidateArguments(request); });
-        //}
 
         [TestMethod]
         public async Task TestInstanceMethodPairInvokeSuccess()

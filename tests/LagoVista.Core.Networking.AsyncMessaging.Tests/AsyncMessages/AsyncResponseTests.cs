@@ -16,7 +16,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncResponse_Constructor_StandardSuccessResponse()
         {
             var controlRequest = CreateControlEchoRequest();
-            var response = new AsyncResponse(controlRequest, responseValue);
+            var response = new AsyncResponse(controlRequest, _responseValue);
 
             AssertSuccessResponse(response);
             Assert.AreEqual(controlRequest.CorrelationId, response.CorrelationId);
@@ -24,8 +24,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
             Assert.AreNotEqual(controlRequest.TimeStamp, response.TimeStamp);
             Assert.AreNotEqual(controlRequest.Id, response.Id);
             Assert.AreEqual(controlRequest.Id, response.RequestId);
-            Assert.AreEqual(responseValue, response.ReturnValue);
-            Assert.AreEqual(responseValue, response.GetTypedReturnValue<string>());
+            Assert.AreEqual(_responseValue, response.ReturnValue);
+            Assert.AreEqual(_responseValue, response.GetTypedReturnValue<string>());
 
         }
 
@@ -49,7 +49,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncResponse_Constructor_IAsyncRequest_NullArgument()
         {
             IAsyncRequest request = null;
-            var response = new AsyncResponse(request, responseValue);
+            var response = new AsyncResponse(request, _responseValue);
         }
 
         //[TestMethod]
@@ -72,7 +72,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncResponse_Constructor_StandardFailureResponse()
         {
             var controlRequest = CreateControlEchoRequest();
-            var ex = new Exception(rootExceptionValue, new Exception("hoo"));
+            var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
 
             var response = new AsyncResponse(controlRequest, ex);
             AssertFailureResponse(response);
@@ -92,7 +92,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
 
             AssertFailureResponse(response);
 
-            Assert.AreEqual(rootExceptionValue, response.Exception.Message);
+            Assert.AreEqual(_rootExceptionValue, response.Exception.Message);
             Assert.AreEqual(controlResponse.Exception.Message, response.Exception.Message);
             Assert.AreEqual(controlResponse.CorrelationId, response.CorrelationId);
             Assert.AreEqual(controlResponse.Path, response.Path);

@@ -6,6 +6,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Models
     {
         Task<string> EchoAsync(string value);
         string Echo(string value);
+        string PassStringParams(params string[] value);
+        string PassObjectParams(params object[] value);
     }
 
     public sealed class ProxySubject : IProxySubject
@@ -22,12 +24,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Models
             return await Task.FromResult(value);
         }
 
-        public string PassParams(params string[] value)
+        public string PassStringParams(params string[] value)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(value);
         }
 
-        public string PassParams(params object[] value)
+        public string PassObjectParams(params object[] value)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(value);
         }

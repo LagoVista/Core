@@ -1,97 +1,96 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
-using LagoVista.Core.Validation;
-using LagoVista.Core.Networking.AsyncMessaging;
+using LagoVista.Core.Networking.AsyncMessaging.Tests.Utils;
+using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
 {
+
     [TestClass]
     public class AsyncProxyTests : AsyncProxyFactoryTests
     {
-        private readonly IAsyncRequest controlEchoRequest = CreateControlEchoRequest();
-        private readonly Exception responseFailException = new Exception(rootExceptionValue, new Exception("hoo"));
-        private IAsyncResponse controlEchoSuccessResponse = null;
-        private IAsyncResponse controlEchoFailureResponse = null;
-        private readonly TimeSpan timeSpan = TimeSpan.FromMinutes(1);
+        private readonly IAsyncCoupler<IAsyncResponse> _coupler = new AsyncCoupler<IAsyncResponse>(new TestLogger(), new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
+        private readonly ILogger _logger = new TestLogger();
+        private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
+        private FakeSender _sender;
+        private IProxySubject _proxySubject;
 
         [TestInitialize]
         public void Init()
         {
-            controlEchoSuccessResponse = new AsyncResponse(controlEchoRequest, ProxySubject.EchoValueConst);
-            successCoupler.Setup(proc => proc.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
-                Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoSuccessResponse)));
+            _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
+            _proxySubject = _proxyFactory.Create<IProxySubject>(_coupler, _sender, _logger, _metrics, TimeSpan.FromSeconds(30));
+            
+            //controlEchoSuccessResponse = new AsyncResponse(controlEchoRequest, ProxySubject.EchoValueConst);
+            //successCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
+            //    Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoSuccessResponse)));
 
-            controlEchoFailureResponse = new AsyncResponse(controlEchoRequest, responseFailException);
-            failCoupler.Setup(proc => proc.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
-                Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoFailureResponse)));
+            //controlEchoFailureResponse = new AsyncResponse(controlEchoRequest, responseFailException);
+            //failCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
+            //    Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoFailureResponse)));
 
-            //_couplerSuccess.Setup(proc => proc.CompleteAsync(It.IsAny<string>(), It.IsAny<IAsyncResponse>())).Returns(Task.FromResult(InvokeResult.Success));
+            //_successCoupler.Setup(proc => proc.CompleteAsync(It.IsAny<string>(), It.IsAny<IAsyncResponse>())).Returns(Task.FromResult(InvokeResult.Success));
 
-            sender.Setup(proc => proc.HandleRequest(It.IsAny<IAsyncRequest>())).Returns(Task.FromResult<object>(null));
+            //_sender.Setup(proc => proc.HandleRequest(It.IsAny<IAsyncRequest>())).Returns(Task.FromResult<object>(null));
         }
 
         [TestMethod]
-        public async Task AsyncProxy_CallSimpleMethod_ResultIsExpected()
+        public void AsyncProxy_Echo_ResultIsNotNull()
         {
-            IProxySubject proxy = proxyFactory.Create<IProxySubject>(successCoupler.Object, sender.Object);
-            var echoResult = await proxy.EchoAsync(ProxySubject.EchoValueConst);
-
-            Assert.IsNotNull(echoResult);
+            var echoResult = _proxySubject.Echo(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
-        public async Task AsyncProxy_CallSimpleMethod_CouplerSuccessMoqVerified()
+        public void AsyncProxy_Echo_ResultIsCorrectValue()
         {
-            IProxySubject proxy = proxyFactory.Create<IProxySubject>(successCoupler.Object, sender.Object);
-            var echoResult = await proxy.EchoAsync(ProxySubject.EchoValueConst);
-
-            var correlationIdArg = It.Is<string>(s => string.Compare(s, controlEchoSuccessResponse.CorrelationId) == 0);
-            var timeSpanArg = It.Is<TimeSpan>(t => t.Ticks == this.timeSpan.Ticks);
-            successCoupler.Verify(o => o.WaitOnAsync(correlationIdArg, timeSpanArg));
-        }
-
-        [TestMethod]
-        public async Task AsyncProxy_CallSimpleMethod_SenderMoqVerified()
-        {
-            IProxySubject proxy = proxyFactory.Create<IProxySubject>(successCoupler.Object, sender.Object);
-            var echoResult = await proxy.EchoAsync(ProxySubject.EchoValueConst);
-
-            sender.Verify(o => o.HandleRequest(It.Is<IAsyncRequest>(arc => arc.Id == controlEchoRequest.Id)));
-        }
-
-        [TestMethod]
-        public async Task AsyncProxy_CallSimpleMethod_FailureResponse()
-        {
-            IProxySubject proxy = proxyFactory.Create<IProxySubject>(failCoupler.Object, sender.Object);
-            var echoResult = await proxy.EchoAsync(ProxySubject.EchoValueConst);
-
-            Assert.IsNotNull(echoResult);
+            var echoResult = _proxySubject.Echo(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
-        public async Task AsyncProxy_CallSimpleMethod_FailureResponse_CouplerSuccessMoqVerified()
+        public async Task AsyncProxy_EchoAsync_ResultIsNotNull()
         {
-            IProxySubject proxy = proxyFactory.Create<IProxySubject>(failCoupler.Object, sender.Object);
-            var echoResult = await proxy.EchoAsync(ProxySubject.EchoValueConst);
-
-            var correlationIdArg = It.Is<string>(s => string.Compare(s, controlEchoSuccessResponse.CorrelationId) == 0);
-            var timeSpanArg = It.Is<TimeSpan>(t => t.Ticks == this.timeSpan.Ticks);
-            failCoupler.Verify(o => o.WaitOnAsync(correlationIdArg, timeSpanArg));
+            var echoResult = await _proxySubject.EchoAsync(ProxySubject.EchoValueConst);
+            Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
-        public async Task AsyncProxy_CallSimpleMethod_FailureResponse_SenderMoqVerified()
+        public async Task AsyncProxy_EchoAsync_ResultIsCorrectValue()
         {
-            IProxySubject proxy = proxyFactory.Create<IProxySubject>(failCoupler.Object, sender.Object);
-            var echoResult = await proxy.EchoAsync(ProxySubject.EchoValueConst);
+            var echoResult = await _proxySubject.EchoAsync(ProxySubject.EchoValueConst);
+            Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
+        }
 
-            sender.Verify(o => o.HandleRequest(It.Is<IAsyncRequest>(arc => arc.Id == controlEchoRequest.Id)));
+        [TestMethod]
+        public void AsyncProxy_PassStringParams_ResultIsCorrectValue1()
+        {
+            var array = new string[] { ProxySubject.EchoValueConst };
+            var result = Newtonsoft.Json.JsonConvert.SerializeObject(array);
+            var sender = new FakeSender(_coupler, result);
+            var proxySubject = _proxyFactory.Create<IProxySubject>(_coupler, sender, _logger, _metrics, TimeSpan.FromSeconds(30));
+            var echoResult = proxySubject.PassStringParams(array);
+
+            Assert.AreEqual(result, echoResult);
+        }
+
+        [TestMethod]
+        public void AsyncProxy_PassStringParams_ResultIsCorrectValue2()
+        {
+            var array = new string[] { ProxySubject.EchoValueConst };
+            var result = Newtonsoft.Json.JsonConvert.SerializeObject(array);
+            var sender = new FakeSender(_coupler, result);
+            var proxySubject = _proxyFactory.Create<IProxySubject>(_coupler, sender, _logger, _metrics, TimeSpan.FromSeconds(30));
+            var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
+
+            Assert.AreEqual(result, methodResult);
+            //var subject = new ProxySubject();
+            //var json1 = subject.PassStringParams(ProxySubject.EchoValueConst);
+            //var json2 = subject.PassStringParams(array);
         }
     }
 }

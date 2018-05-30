@@ -218,12 +218,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private const string _exceptionKey = "__exception";
         private const string _requestIdKey = "__request_id";
 
-        //public AsyncResponse() : base()
-        //{
-        //    Exception = null;
-        //    Success = true;
-        //}
-
         public AsyncResponse(byte[] marshalledData) : base(marshalledData) { }
 
         public AsyncResponse(IAsyncRequest request, object value) : base()

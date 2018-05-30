@@ -27,14 +27,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             try
             {
                 // package response in service bus message and send to topic
-                var messageOut = new Message(response.MarshalledData)
+                var message = new Message(response.MarshalledData)
                 {
                     Label = response.Path,
                     ContentType = response.GetType().FullName,
                     MessageId = response.Id,
                     CorrelationId = response.CorrelationId
                 };
-                await _topicClient.SendAsync(messageOut);
+                await _topicClient.SendAsync(message);
             }
             catch(Exception ex)
             {

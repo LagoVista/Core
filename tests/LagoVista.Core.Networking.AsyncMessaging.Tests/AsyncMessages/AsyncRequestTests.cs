@@ -12,9 +12,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncRequest_Constructor_MethodInfo_Args()
         {
-            var request = new AsyncRequest(echoMethodInfo, echoArgs);
+            var request = new AsyncRequest(_echoMethodInfo, _echoArgs);
 
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(echoMethodParamName));
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
         }
 
@@ -23,7 +23,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncRequest_Constructor_MethodInfo_NullArgument()
         {
             MethodInfo echoMethodInfo = null;
-            var request = new AsyncRequest(echoMethodInfo, echoArgs);
+            var request = new AsyncRequest(echoMethodInfo, _echoArgs);
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
 
             var request = new AsyncRequest(controlRequest.MarshalledData);
 
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(echoMethodParamName));
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
 
             Assert.AreEqual(controlRequest.Id, request.Id);
@@ -42,6 +42,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
             Assert.AreEqual(controlRequest.TimeStamp, request.TimeStamp);
             Assert.AreEqual(controlRequest.Json, request.Json);
             Assert.IsTrue(controlRequest.MarshalledData.SequenceEqual(request.MarshalledData));
+        }
+
+        [TestMethod]
+        public void AsyncRequest_Constructor_MethodInfo_ParamsArg()
+        {
+            MethodInfo echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
+            var request = new AsyncRequest(echoMethodInfo, _echoArgs);
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
         }
     }
 }
