@@ -167,7 +167,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void InstanceMethodPair_ValidateArguments_Fails_DueToCountMismatch()
+        public void InstanceMethodPair_GetArguments_Fails_DueToCountMismatch()
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var parameters = methodInfo.GetParameters();
@@ -181,7 +181,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void InstanceMethodPair_ValidateArguments_Fails_DueToUnsupportedParamsKeyword()
+        public void InstanceMethodPair_GetArguments_Fails_DueToUnsupportedParamsKeyword()
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
             var parameters = methodInfo.GetParameters();
@@ -195,7 +195,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void InstanceMethodPair_ValidateArguments_NullRequest_ThrowsArgumentNullException()
+        public void InstanceMethodPair_GetArguments_NullRequest_ThrowsArgumentNullException()
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var parameters = methodInfo.GetParameters();
@@ -208,7 +208,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void InstanceMethodPair_ValidateArguments_NullParameters_ThrowsArgumentNullException()
+        public void InstanceMethodPair_GetArguments_NullParameters_ThrowsArgumentNullException()
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             ParameterInfo[] parameters = null;
