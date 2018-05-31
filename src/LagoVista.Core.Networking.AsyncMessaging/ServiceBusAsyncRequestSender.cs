@@ -61,8 +61,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         public async Task HandleRequest(IAsyncRequest request, string instructions = null)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            // although the interface says instructions is nullable, this implementation requires instructions to set the destination for service bus
-            // if (string.IsNullOrEmpty(instructions)) throw new ArgumentNullException(nameof(instructions));
+            // although the interface says instructions is nullable, this implementation requires instructions to set the topic destination
             var topicInstructions = (TopicInstructions)instructions ?? throw new ArgumentNullException(nameof(instructions));
 
             //todo: ML - need to set retry policy and operation timeout etc.

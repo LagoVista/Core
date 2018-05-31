@@ -29,7 +29,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncRequestHandler requestSender,
             ILogger logger,
             //IUsageMetrics usageMetrics,
-            string destination,
+            string destinationInstructions,
             TimeSpan timeout)
         {
             var result = Create<TProxy, AsyncProxy>();
@@ -38,7 +38,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             (result as AsyncProxy)._requestSender = requestSender ?? throw new ArgumentNullException(nameof(requestSender));
             (result as AsyncProxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             //(result as AsyncProxy)._usageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
-            (result as AsyncProxy)._destination = destination ?? throw new ArgumentNullException(nameof(destination));
+            (result as AsyncProxy)._destination = destinationInstructions ?? throw new ArgumentNullException(nameof(destinationInstructions));
             (result as AsyncProxy)._timeout = timeout;
 
             return result;
