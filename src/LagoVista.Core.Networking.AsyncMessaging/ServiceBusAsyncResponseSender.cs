@@ -22,11 +22,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            // Endpoint - Name
+            // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
-            var senderConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncResponseSender.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncResponseSender.UserName};SharedAccessKey={settings.ServiceBusAsyncResponseSender.AccessKey};";
+            var senderConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncResponseSender.AccountId}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncResponseSender.UserName};SharedAccessKey={settings.ServiceBusAsyncResponseSender.AccessKey};";
             var destinationEntityPath = settings.ServiceBusAsyncResponseSender.ResourceName;
             
             //todo: ML - need to set retry policy and operation timeout etc.

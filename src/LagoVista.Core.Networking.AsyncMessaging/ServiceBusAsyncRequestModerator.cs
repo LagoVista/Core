@@ -33,12 +33,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            // Endpoint - Name
+            // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
-            var receiverConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestModerator.Name}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestModerator.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestModerator.AccessKey};";
+            var receiverConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestModerator.AccountId}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestModerator.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestModerator.AccessKey};";
             var sourceEntityPath = settings.ServiceBusAsyncRequestModerator.ResourceName;
             var subscriptionPath = settings.ServiceBusAsyncRequestModerator.Uri;
 

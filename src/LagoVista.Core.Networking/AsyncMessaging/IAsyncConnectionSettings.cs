@@ -8,7 +8,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public interface IServiceBusAsyncRequestSenderConnectionSettings
     {
         /// <summary>
-        /// Endpoint - Name
+        /// Endpoint - AccountId
         /// SharedAccessKeyName - UserName
         /// SharedAccessKey - AccessKey
         /// DestinationEntityPath - ResourceName - [instance id]
@@ -22,7 +22,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public interface IServiceBusAsyncResponseSenderConnectionSettings
     {
         /// <summary>
-        /// Endpoint - Name
+        /// Endpoint - AccountId
         /// SharedAccessKeyName - UserName
         /// SharedAccessKey - AccessKey
         /// DestinationEntityPath - ResourceName
@@ -36,7 +36,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public interface IServiceBusAsyncResponseListenerConnectionSettings
     {
         /// <summary>
-        /// Endpoint - Name
+        /// Endpoint - AccountId
         /// SharedAccessKeyName - UserName
         /// SharedAccessKey - AccessKey
         /// SourceEntityPath - ResourceName
@@ -51,7 +51,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     public interface IServiceBusAsyncRequestModeratorConnectionSettings
     {
         /// <summary>
-        /// Endpoint - Name
+        /// Endpoint - AccountId
         /// SharedAccessKeyName - UserName
         /// SharedAccessKey - AccessKey
         /// SourceEntityPath - ResourceName
