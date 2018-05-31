@@ -10,7 +10,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests
     {
         protected static readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
         protected static readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        protected static readonly string _echoMethodParamValue = "ping";
+        protected static readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
         protected static readonly string _echoMethodParamName = "value";
         protected static readonly string _responseValue = "jello babies";
         protected static readonly string _rootExceptionValue = "boo";

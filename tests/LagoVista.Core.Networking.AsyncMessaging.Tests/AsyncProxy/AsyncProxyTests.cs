@@ -32,6 +32,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
                 //_metrics, 
                 TimeSpan.FromSeconds(30));
             
+            // don't delete - I'm keeping this here for reference
             //controlEchoSuccessResponse = new AsyncResponse(controlEchoRequest, ProxySubject.EchoValueConst);
             //successCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
             //    Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoSuccessResponse)));
@@ -74,6 +75,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
         public void AsyncProxy_PassStringParams_PassingArrayOfArgs_ResultIsCorrectValue()
         {
             var array = new string[] { ProxySubject.EchoValueConst };
@@ -92,6 +94,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
         public void AsyncProxy_PassStringParams_PassingSingleArgIntoParamsMethod_ResultIsCorrectValue2()
         {
             var array = new string[] { ProxySubject.EchoValueConst };

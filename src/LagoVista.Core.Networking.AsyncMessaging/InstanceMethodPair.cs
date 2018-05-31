@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging
 {
-    internal sealed class InstanceMethodPair : IAsyncRequestValidator
+    internal sealed class InstanceMethodPair
     {
         private readonly bool _isAwaitable = false;
         private readonly object _instance = null;
@@ -19,35 +19,46 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             _parameters = _methodInfo.GetParameters();
         }
 
-        public void ValidateArguments(IAsyncRequest request, ParameterInfo[] parameters)
+        internal static object[] GetArguments(IAsyncRequest request, ParameterInfo[] parameters)
         {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+
             // 1. check request value count == param count
             if (request.ArgumentCount != parameters.Length)
                 throw new ArgumentException($"parameter count mismatch. params {parameters.Length}, args {request.ArgumentCount}.");
 
-            //todo: ML - validate the request to parameter mapping
-            // 2. loop each list indepently to validate param and argument names and types
+            var arguments = new object[parameters.Length];
+
+            // 2. validate the types
             for (var i = 0; i < parameters.Length; ++i)
             {
+                var parameter = parameters[i];
 
+                if (parameter.GetCustomAttribute(typeof(ParamArrayAttribute)) != null)
+                    throw new NotSupportedException($"unsupported type - params keyword not allowed. type: '{parameter.Name}'.");
+
+                var argValue = request.GetValue(parameters[i].Name);
+                if(argValue != null)
+                {
+                    var argType = argValue.GetType();
+                    if (parameter.ParameterType != argType)
+                        throw new ArgumentException($"parameter type mismatch. param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
+
+                }
+                arguments[i] = argValue;
             }
-            //throw new ArgumentException("argument validation failure");
+            return arguments;
         }
 
         public async Task<IAsyncResponse> Invoke(IAsyncRequest request)
         {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
             IAsyncResponse response = null;
             try
             {
-                ValidateArguments(request, _parameters);
-
-                var arguments = new object[_parameters.Length];
-                for (var i = 0; i < _parameters.Length; ++i)
-                {
-                    //todo: ML - check value for IValidatable and if exits then call Validator.Valiate(value);
-                    arguments[i] = request.GetValue(_parameters[i].Name);
-                }
-
+                var arguments = GetArguments(request, _parameters);
                 object invokeResult = null;
                 if (_isAwaitable)
                 {

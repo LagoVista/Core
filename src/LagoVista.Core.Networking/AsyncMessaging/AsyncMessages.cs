@@ -200,12 +200,39 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 {
                     InternalSetValue(parameters[i].Name, args[i]);
                 }
+                ValidateArguments(parameters, args);
             }
 
             Id = Guid.NewGuid().ToString();
             CorrelationId = Guid.NewGuid().ToString();
             Path = PathBuilder.BuildPath(methodInfo);
             TimeStamp = DateTime.UtcNow;
+        }
+
+        internal static void ValidateArguments(ParameterInfo[] parameters, object[] args)
+        {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            if (args == null) throw new ArgumentNullException(nameof(args));
+
+            // 1. check request value count == param count
+            if (args.Length != parameters.Length)
+                throw new ArgumentException($"parameter count mismatch. params {parameters.Length}, args {args.Length}.");
+
+            // 2. validate the types
+            for (var i = 0; i < parameters.Length; ++i)
+            {
+                var parameter = parameters[i];
+
+                if(parameter.GetCustomAttribute(typeof(ParamArrayAttribute)) != null)
+                    throw new NotSupportedException($"unsupported type - params keyword not allowed. type: '{parameter.Name}'.");
+
+                if (args[i] != null)
+                {
+                    var argType = args[i].GetType();
+                    if (parameter.ParameterType != argType)
+                        throw new ArgumentException($"parameter type mismatch. param: '{parameter.Name}', param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
+                }
+            }
         }
 
         public int ArgumentCount => GetPublicItemCount();

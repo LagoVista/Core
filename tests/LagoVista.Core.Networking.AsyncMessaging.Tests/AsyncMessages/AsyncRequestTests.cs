@@ -45,11 +45,36 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         }
 
         [TestMethod]
-        public void AsyncRequest_Constructor_MethodInfo_ParamsArg()
+        public void AsyncRequest_Constructor_MethodInfo_SimpleArg()
         {
-            MethodInfo echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
+            var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var request = new AsyncRequest(echoMethodInfo, _echoArgs);
             Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void AsyncRequest_Constructor_MethodInfo_ParamsAr_ThrowsNotSupportedException()
+        {
+            var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
+            var request = new AsyncRequest(echoMethodInfo, _echoArgs);
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InstanceMethodPair_ValidateArguments_Fails_DueToCountMismatch()
+        {
+            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InstanceMethodPair_ValidateArguments_Fails_DueToTypeMismatch()
+        {
+            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+            var request = new AsyncRequest(methodInfo, new object[] { 3 });
         }
     }
 }

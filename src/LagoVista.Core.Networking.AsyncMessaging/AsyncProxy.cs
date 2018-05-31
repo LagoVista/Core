@@ -52,36 +52,34 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             var request = new AsyncRequest(targetMethod, args);
 
             // note: no reason to wait on this - the result will be returned by the async coupler
-            _requestSender.HandleRequest(request, _destination).ContinueWith(sendAsyncTask =>
+            var senderHandleRequestTask = _requestSender.HandleRequest(request, _destination);
+            senderHandleRequestTask.Wait();
+            if (senderHandleRequestTask.Status == TaskStatus.Faulted && senderHandleRequestTask.Exception != null)
             {
-                if (sendAsyncTask.Status == TaskStatus.Faulted && sendAsyncTask.Exception != null)
-                {
-                    //todo: ML - handle exception
-                }
-                else if (sendAsyncTask.Status != TaskStatus.RanToCompletion)
-                {
-                    //todo: ML - handle unexpected status
-                }
-            });
+                //todo: ML - handle exception
+            }
+            else if (senderHandleRequestTask.Status != TaskStatus.RanToCompletion)
+            {
+                //todo: ML - handle unexpected status
+            }
+            //todo: ML - if _requestSender.HandleRequest failed we can't continue
 
-            var waitOnAsync = _asyncCoupler.WaitOnAsync(request.CorrelationId, _timeout).ContinueWith(waitOnAsyncTask =>
+            var couplerWaitOnAsyncTask = _asyncCoupler.WaitOnAsync(request.CorrelationId, _timeout);
+            couplerWaitOnAsyncTask.Wait();
+            if (couplerWaitOnAsyncTask.Status == TaskStatus.Faulted && couplerWaitOnAsyncTask.Exception != null)
             {
-                if (waitOnAsyncTask.Status == TaskStatus.Faulted && waitOnAsyncTask.Exception != null)
-                {
-                    //todo: ML - handle exception
-                }
-                else if (waitOnAsyncTask.Status != TaskStatus.RanToCompletion)
-                {
-                    //todo: ML - handle unexpected status
-                }
-                return waitOnAsyncTask.Result;
-            });
-            // note: wait is absolutely required
-            waitOnAsync.Wait();
+                //todo: ML - handle exception
+            }
+            else if (couplerWaitOnAsyncTask.Status != TaskStatus.RanToCompletion)
+            {
+                //todo: ML - handle unexpected status
+            }
+            //todo: ML - if _asyncCoupler.WaitOnAsync failed we can't continue
 
             var taskFromResult = GetGenericTaskFromResult(targetMethod);
 
-            var invokeResult = waitOnAsync.Result;
+            //todo: ML - there has to be a simpler wait to handle all the cases
+            var invokeResult = couplerWaitOnAsyncTask.Result;
             if (invokeResult.Successful)
             {
                 var response = invokeResult.Result;
