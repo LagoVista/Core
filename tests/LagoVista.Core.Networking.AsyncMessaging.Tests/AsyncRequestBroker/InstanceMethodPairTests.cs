@@ -180,6 +180,20 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InstanceMethodPair_GetArguments_Fails_DueToTypeMismatch()
+        {
+            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+            var parameters = methodInfo.GetParameters();
+            var request = new AsyncRequest(methodInfo, new object[] { 3 });
+
+            Assert.AreEqual(1, request.ArgumentCount);
+            Assert.AreEqual(1, parameters.Length);
+
+            var arguments = InstanceMethodPair.GetArguments(request, parameters);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void InstanceMethodPair_GetArguments_Fails_DueToUnsupportedParamsKeyword()
         {
