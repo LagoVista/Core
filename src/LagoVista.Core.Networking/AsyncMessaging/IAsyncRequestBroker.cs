@@ -9,7 +9,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="subject"></param>
-        void RegisterSubject<T>(T subject) where T : class;
+        int RegisterSubject<T>(T subject) where T : class;
 
         Task<IAsyncResponse> HandleRequestAsync(IAsyncRequest request);
     }

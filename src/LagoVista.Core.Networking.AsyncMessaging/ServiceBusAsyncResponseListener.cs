@@ -83,8 +83,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
             //LogException("AzureServiceBusListener_Listen", ex.Exception);
-            //todo: ML - need to pass exception back to azure side proxy
-            //throw new NotImplementedException();
         }
     }
 }

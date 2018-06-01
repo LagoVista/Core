@@ -11,7 +11,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncRequestHandler requestSender,
             ILogger logger,
             string destinationInstructions,
-            //IUsageMetrics usageMetrics,
             TimeSpan timeout)
         {
             // CreateProxy does null checks
@@ -20,7 +19,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 requestSender,
                 logger,
                 destinationInstructions,
-                //usageMetrics,
                 timeout);
         }
     }

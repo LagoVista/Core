@@ -1,16 +1,14 @@
 ﻿using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBroker
+namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 {
     [TestClass]
-    public class InstanceMethodPairTests : TestBase
+    public class InstanceMethodPairTests 
     {
         #region synchronous method simple params
         [TestMethod]

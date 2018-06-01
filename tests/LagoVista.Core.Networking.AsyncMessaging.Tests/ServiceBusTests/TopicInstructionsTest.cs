@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ServiceBus
+namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ServiceBusTests
 {
     [TestClass]
     public class TopicInstructionsTest

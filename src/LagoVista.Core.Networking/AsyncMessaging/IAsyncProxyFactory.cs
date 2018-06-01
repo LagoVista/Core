@@ -11,8 +11,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncRequestHandler requestSender,
             ILogger logger,
             string destinationInstructions,
-            //todo: ML - get usage metrics added back
-            //IUsageMetrics usageMetrics,
             TimeSpan timeout);
     }
 }

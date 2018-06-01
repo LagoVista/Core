@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
+namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
 {
 
     [TestClass]
@@ -17,14 +17,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         private readonly ILogger _logger = new TestLogger();
         private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
         private FakeSender _sender;
-        private IProxySubject _proxySubject;
+        private IProxySubject _proxy;
         private readonly string _destination = "over the rainbow";
 
         [TestInitialize]
         public void Init()
         {
             _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
-            _proxySubject = _proxyFactory.Create<IProxySubject>(
+            _proxy = _proxyFactory.Create<IProxySubject>(
                 _coupler, 
                 _sender, 
                 _logger,
@@ -49,29 +49,36 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncProxyTests
         [TestMethod]
         public void AsyncProxy_Echo_ResultIsNotNull()
         {
-            var echoResult = _proxySubject.Echo(ProxySubject.EchoValueConst);
+            var echoResult = _proxy.Echo(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
         public void AsyncProxy_Echo_ResultIsCorrectValue()
         {
-            var echoResult = _proxySubject.Echo(ProxySubject.EchoValueConst);
+            var echoResult = _proxy.Echo(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
         public async Task AsyncProxy_EchoAsync_ResultIsNotNull()
         {
-            var echoResult = await _proxySubject.EchoAsync(ProxySubject.EchoValueConst);
+            var echoResult = await _proxy.EchoAsync(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
         public async Task AsyncProxy_EchoAsync_ResultIsCorrectValue()
         {
-            var echoResult = await _proxySubject.EchoAsync(ProxySubject.EchoValueConst);
+            var echoResult = await _proxy.EchoAsync(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void AsyncProxy_EchoAsync_MethodNotSupported()
+        {
+            var echoResult =  _proxy.SkipMe();
         }
 
         [TestMethod]

@@ -14,6 +14,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// DestinationEntityPath - ResourceName - [instance id]
         /// </summary>
         IConnectionSettings ServiceBusAsyncRequestSender { get; }
+        
+        /// <summary>
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// </summary>
+        IConnectionSettings ServiceBusTopicManager { get; }
     }
 
     /// <summary>

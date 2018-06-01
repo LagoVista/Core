@@ -3,17 +3,40 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
 {
     [TestClass]
-    public class AsyncMessageTests : TestBase
+    public class AsyncMessageTests 
     {
         private readonly string _messagePath = "TestPath";
         private readonly DateTime _messageTimeStamp = new DateTime(2018, 1, 1, 13, 0, 0);
         private readonly string _messageId = Guid.NewGuid().ToString();
         private readonly string _messageCorrelationId = Guid.NewGuid().ToString();
+        private static readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+        private static readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
+        private static readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
+        private static readonly string _responseValue = "jello babies";
+        private static readonly string _rootExceptionValue = "boo";
 
+        private static IAsyncRequest CreateControlEchoRequest()
+        {
+            return new AsyncRequest(_echoMethodInfo, _echoArgs);
+        }
+
+        private static IAsyncResponse CreateControlEchoSuccessResponse()
+        {
+            var request = CreateControlEchoRequest();
+            return new AsyncResponse(request, _responseValue);
+        }
+
+        private static IAsyncResponse CreateControlEchoFailureResponse()
+        {
+            var request = CreateControlEchoRequest();
+            var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
+            return new AsyncResponse(request, ex);
+        }
         private IAsyncMessage CreateControlMessage()
         {
             return new AsyncMessage()

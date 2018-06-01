@@ -51,7 +51,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="subject"></param>
-        public void RegisterSubject<T>(T subject) where T : class
+        public int RegisterSubject<T>(T subject) where T : class
         {
             if (subject == null)
             {
@@ -67,10 +67,13 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Except(_objectMethods)
                 .Where(m => m.GetCustomAttribute<AsyncIgnoreAttribute>() == null);
+            var methodCount = 0;
             foreach (var method in methods)
             {
                 RegisterSubjectMethod(subject, method);
+                ++methodCount;
             }
+            return methodCount;
         }
 
         public async Task<IAsyncResponse> HandleRequestAsync(IAsyncRequest request)
@@ -87,7 +90,16 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
 
             // 2. call handler and get response
-            var response = await messageHandler.Invoke(request);
+            IAsyncResponse response = null;
+            try
+            {
+                response = await messageHandler.Invoke(request);
+            }
+            catch(Exception ex)
+            {
+                response = new AsyncResponse(request, ex);
+                //todo: ML - log exception
+            }
 
             return response;
         }

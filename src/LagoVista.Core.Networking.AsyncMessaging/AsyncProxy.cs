@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using System;
 using System.Reflection;
@@ -20,7 +21,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private ILogger _logger;
         private string _destination;
         private TimeSpan _timeout;
-        //private IUsageMetrics _usageMetrics;
         private static MethodInfo _fromResultMethodInfo =
             typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
@@ -28,7 +28,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             IAsyncCoupler<IAsyncResponse> asyncCoupler,
             IAsyncRequestHandler requestSender,
             ILogger logger,
-            //IUsageMetrics usageMetrics,
             string destinationInstructions,
             TimeSpan timeout)
         {
@@ -37,7 +36,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             (result as AsyncProxy)._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             (result as AsyncProxy)._requestSender = requestSender ?? throw new ArgumentNullException(nameof(requestSender));
             (result as AsyncProxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            //(result as AsyncProxy)._usageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
             (result as AsyncProxy)._destination = destinationInstructions ?? throw new ArgumentNullException(nameof(destinationInstructions));
             (result as AsyncProxy)._timeout = timeout;
 
@@ -46,8 +44,10 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
+            if (targetMethod.GetCustomAttribute<AsyncIgnoreAttribute>() != null)
+                throw new NotSupportedException($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+
             //todo: ML - add logging
-            //todo: ML - add usage metrics
 
             var request = new AsyncRequest(targetMethod, args);
 

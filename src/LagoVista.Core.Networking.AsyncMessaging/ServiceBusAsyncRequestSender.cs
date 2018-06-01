@@ -39,8 +39,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             [JsonProperty("organizationKey"), JsonRequired]
             public string OrganizationKey { get; set; }
 
-            [JsonProperty("instanceKey"), JsonRequired]
-            public string InstanceKey { get; set; }
+            //[JsonProperty("instanceKey"), JsonRequired]
+            //public string InstanceKey { get; set; }
 
             [JsonProperty("instanceId"), JsonRequired]
             public string InstanceId { get; set; }
@@ -54,7 +54,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             {
                 if(instructions == null) throw new ArgumentNullException(nameof(instructions));
 
-                return $"_{instructions.OrganizationKey}_{instructions.InstanceKey}_{instructions.InstanceId}";
+                //return $"_{instructions.OrganizationKey}_{instructions.InstanceKey}_{instructions.InstanceId}";
+                return $"_{instructions.OrganizationKey}_{instructions.InstanceId}";
             }
         }
 
@@ -65,7 +66,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             var topicInstructions = (TopicInstructions)instructions ?? throw new ArgumentNullException(nameof(instructions));
 
             //todo: ML - need to set retry policy and operation timeout etc.
-            var topicClient = new TopicClient(_topicConnectionString, _destinationEntityPath + topicInstructions, null);
+            var topicClient = new TopicClient(_topicConnectionString, (_destinationEntityPath + topicInstructions).ToLower(), null);
             try
             {
                 // package response in service bus message and send to topic

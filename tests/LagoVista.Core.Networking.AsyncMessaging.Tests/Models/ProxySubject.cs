@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using LagoVista.Core.Attributes;
+using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Models
 {
@@ -8,6 +9,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Models
         string Echo(string value);
         string PassStringParams(params string[] value);
         string PassObjectParams(params object[] value);
+
+        [AsyncIgnore]
+        string SkipMe();
     }
 
     public sealed class ProxySubject : IProxySubject
@@ -32,6 +36,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Models
         public string PassObjectParams(params object[] value)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(value);
+        }
+
+        public string SkipMe()
+        {
+            return EchoValueConst;
         }
     }
 }
