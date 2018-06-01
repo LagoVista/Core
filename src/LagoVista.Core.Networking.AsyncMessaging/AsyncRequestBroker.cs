@@ -50,7 +50,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// </summary>
         /// <typeparam name="TInterface"></typeparam>
         /// <param name="subject"></param>
-        public int RegisterSubject<TInterface>(TInterface subject) where TInterface : class
+        public int AddRequestHandler<TInterface>(TInterface subject) where TInterface : class
         {
             if (subject == null)
             {

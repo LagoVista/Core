@@ -9,7 +9,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         /// </summary>
         /// <typeparam name="TImplementation"></typeparam>
         /// <param name="subject"></param>
-        int RegisterSubject<TInterface>(TInterface subject) where TInterface : class;
+        int AddRequestHandler<TInterface>(TInterface subject) where TInterface : class;
 
         Task<IAsyncResponse> HandleRequestAsync(IAsyncRequest request);
     }

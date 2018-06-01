@@ -30,7 +30,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         public void AsyncRequestBroker_RegisterSubject_Success()
         {
             var broker = new AsyncRequestBroker();
-            var methodsRegistered = broker.RegisterSubject(_controlInstance);
+            var methodsRegistered = broker.AddRequestHandler(_controlInstance);
 
             var instanceMethodCount = typeof(IProxySubject).GetMethods().Count();
             Assert.AreEqual(5, instanceMethodCount);
@@ -42,7 +42,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         public void AsyncRequestBroker_RegisterSubject_FailureDueToNonInterfaceInstance()
         {
             var broker = new AsyncRequestBroker();
-            broker.RegisterSubject(new ProxySubject());
+            broker.AddRequestHandler(new ProxySubject());
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         public void AsyncRequestBroker_RegisterSubject_FailureDueToNullInstance()
         {
             var broker = new AsyncRequestBroker();
-            broker.RegisterSubject((IProxySubject)null);
+            broker.AddRequestHandler((IProxySubject)null);
         }
 
     }

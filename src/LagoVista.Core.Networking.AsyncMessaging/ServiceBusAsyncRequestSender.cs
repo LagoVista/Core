@@ -36,8 +36,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         [JsonObject("topicInstructions")]
         internal sealed class TopicInstructions
         {
-            [JsonProperty("organizationKey"), JsonRequired]
-            public string OrganizationKey { get; set; }
+            [JsonProperty("organizationId"), JsonRequired]
+            public string OrganizationId { get; set; }
 
             //[JsonProperty("instanceKey"), JsonRequired]
             //public string InstanceKey { get; set; }
@@ -55,7 +55,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 if(instructions == null) throw new ArgumentNullException(nameof(instructions));
 
                 //return $"_{instructions.OrganizationKey}_{instructions.InstanceKey}_{instructions.InstanceId}";
-                return $"_{instructions.OrganizationKey}_{instructions.InstanceId}";
+                return $"_{instructions.OrganizationId}_{instructions.InstanceId}";
             }
         }
 
@@ -64,6 +64,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             if (request == null) throw new ArgumentNullException(nameof(request));
             // although the interface says instructions is nullable, this implementation requires instructions to set the topic destination
             var topicInstructions = (TopicInstructions)instructions ?? throw new ArgumentNullException(nameof(instructions));
+
+            //todo: ML - if service bus topic doesn't exist, then create it
 
             //todo: ML - need to set retry policy and operation timeout etc.
             var topicClient = new TopicClient(_topicConnectionString, (_destinationEntityPath + topicInstructions).ToLower(), null);
