@@ -20,9 +20,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private readonly SubscriptionClient _subscriptionClient;
 
         public ServiceBusAsyncRequestModerator(
+            IServiceBusAsyncRequestModeratorConnectionSettings settings,
+            IAsyncRequestBroker requestBroker,
             IAsyncResponseHandler responseSender, 
-            IAsyncRequestBroker requestBroker, 
-            IServiceBusAsyncRequestModeratorConnectionSettings settings, 
             ILogger logger)
         {
             _responseSender = responseSender ?? throw new ArgumentNullException(nameof(responseSender));
