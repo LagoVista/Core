@@ -50,7 +50,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         public void AsyncRequestBroker_RegisterSubject_FailureDueToNullInstance()
         {
             var broker = new AsyncRequestBroker();
-            broker.RegisterSubject((object)null);
+            broker.RegisterSubject((IProxySubject)null);
         }
 
     }

@@ -13,11 +13,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private readonly ConcurrentDictionary<string, InstanceMethodPair> _subjectRegistry = new ConcurrentDictionary<string, InstanceMethodPair>();
         private readonly static MethodInfo[] _objectMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
 
-        private void RegisterSubjectMethod<T>(T instance, MethodInfo methodInfo) where T : class
+        private void RegisterSubjectMethod<TImplementation>(TImplementation subject, MethodInfo methodInfo) where TImplementation : class
         {
-            if (instance == null)
+            if (subject == null)
             {
-                throw new ArgumentNullException(nameof(instance));
+                throw new ArgumentNullException(nameof(subject));
             }
 
             if (methodInfo == null)
@@ -25,46 +25,45 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 throw new ArgumentNullException(nameof(methodInfo));
             }
 
-            // This should be impossible, but if T is explicitly provided as an interface like this: RegisterSubjectMethod<IMyThing>(thingInstance, IOtherThing.methodInfo)
-            // the type of the instance might be restricted in such a way as to hide the method 
-            // represented by methodInfo. 
-            if (typeof(T) != methodInfo.DeclaringType)
+            // This should be impossible, but if TImplementation is explicitly provided as an interface like this: RegisterSubjectMethod<IMyThing>(thingInstance, IOtherThing.methodInfo)
+            // the type of the instance might be restricted in such a way as to hide the method represented by methodInfo. 
+            if (typeof(TImplementation) != methodInfo.DeclaringType)
             {
-                throw new ArgumentException($"{typeof(T).FullName} does not contain method '{methodInfo.Name}'.");
+                throw new ArgumentException($"{typeof(TImplementation).FullName} does not contain method '{methodInfo.Name}'.");
             }
 
             var subjectKey = PathBuilder.BuildPath(methodInfo);
 
             if (_subjectRegistry.ContainsKey(subjectKey))
             {
-                throw new ArgumentException($"{subjectKey} handler already registed.");
+                throw new ArgumentException($"Subject key '{subjectKey}' already registed with RequestBroker.");
             }
 
-            if (!_subjectRegistry.TryAdd(subjectKey, new InstanceMethodPair(instance, methodInfo)))
+            if (!_subjectRegistry.TryAdd(subjectKey, new InstanceMethodPair(subject, methodInfo)))
             {
-                throw new Exception($"Could not register {subjectKey} with RequestBroker.");
+                throw new Exception($"Could not register subject key '{subjectKey}' with RequestBroker.");
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface"></typeparam>
         /// <param name="subject"></param>
-        public int RegisterSubject<T>(T subject) where T : class
+        public int RegisterSubject<TInterface>(TInterface subject) where TInterface : class
         {
             if (subject == null)
             {
                 throw new ArgumentNullException(nameof(subject));
             }
 
-            var type = typeof(T);
-            if (!type.IsInterface)
+            var interfaceType = typeof(TInterface);
+            if (!interfaceType.IsInterface)
             {
-                throw new ArgumentException($"Subject type must be an interface: '{typeof(T).FullName}'");
+                throw new ArgumentException($"TInterface type must be an interface: '{interfaceType.FullName}'.");
             }
 
-            var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+            var methods = interfaceType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Except(_objectMethods)
                 .Where(m => m.GetCustomAttribute<AsyncIgnoreAttribute>() == null);
             var methodCount = 0;
