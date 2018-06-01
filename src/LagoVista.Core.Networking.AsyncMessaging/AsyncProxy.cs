@@ -19,16 +19,20 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private IAsyncCoupler<IAsyncResponse> _asyncCoupler;
         private IAsyncRequestHandler _requestSender;
         private ILogger _logger;
-        private string _destination;
+        private string _organizationId;
+        private string _instanceId;
+        private string _replyPath;
         private TimeSpan _timeout;
-        private static MethodInfo _fromResultMethodInfo =
+        private readonly static MethodInfo _fromResultMethodInfo =
             typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
         internal static TProxy CreateProxy<TProxy>(
             IAsyncCoupler<IAsyncResponse> asyncCoupler,
             IAsyncRequestHandler requestSender,
             ILogger logger,
-            string destinationInstructions,
+            string organizationId,
+            string instanceId,
+            string replyPath,
             TimeSpan timeout)
         {
             var result = Create<TProxy, AsyncProxy>();
@@ -36,7 +40,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             (result as AsyncProxy)._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             (result as AsyncProxy)._requestSender = requestSender ?? throw new ArgumentNullException(nameof(requestSender));
             (result as AsyncProxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            (result as AsyncProxy)._destination = destinationInstructions ?? throw new ArgumentNullException(nameof(destinationInstructions));
+            (result as AsyncProxy)._organizationId = organizationId ?? throw new ArgumentNullException(nameof(organizationId));
+            (result as AsyncProxy)._instanceId = instanceId ?? throw new ArgumentNullException(nameof(instanceId));
+            (result as AsyncProxy)._replyPath = replyPath ?? throw new ArgumentNullException(nameof(replyPath));
             (result as AsyncProxy)._timeout = timeout;
 
             return result;
@@ -45,14 +51,15 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             if (targetMethod.GetCustomAttribute<AsyncIgnoreAttribute>() != null)
+            {
                 throw new NotSupportedException($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+            }
 
             //todo: ML - add logging
 
-            var request = new AsyncRequest(targetMethod, args);
+            var request = new AsyncRequest(targetMethod, args, _organizationId, _instanceId, _replyPath);
 
-            // note: no reason to wait on this - the result will be returned by the async coupler
-            var senderHandleRequestTask = _requestSender.HandleRequest(request, _destination);
+            var senderHandleRequestTask = _requestSender.HandleRequest(request);
             senderHandleRequestTask.Wait();
             if (senderHandleRequestTask.Status == TaskStatus.Faulted && senderHandleRequestTask.Exception != null)
             {

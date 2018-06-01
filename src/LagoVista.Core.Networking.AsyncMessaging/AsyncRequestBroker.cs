@@ -83,9 +83,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
 
             // 1. get handler
-            if (!_subjectRegistry.TryGetValue(request.Path, out InstanceMethodPair messageHandler))
+            if (!_subjectRegistry.TryGetValue(request.DestinationPath, out InstanceMethodPair messageHandler))
             {
-                throw new KeyNotFoundException($"Handler not found for {request.Path}");
+                throw new KeyNotFoundException($"Handler not found for {request.DestinationPath}");
             }
 
             // 2. call handler and get response

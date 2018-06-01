@@ -17,7 +17,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Utils
             Result = result;
         }
 
-        public Task HandleRequest(IAsyncRequest request, string instructions = null)
+        public Task HandleRequest(IAsyncRequest request)
         {
             CompleteRequest(request, TimeSpan.FromSeconds(1));
             return Task.FromResult<object>(null);

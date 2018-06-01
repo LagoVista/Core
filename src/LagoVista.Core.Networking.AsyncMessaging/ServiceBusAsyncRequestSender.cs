@@ -1,6 +1,5 @@
 ﻿using LagoVista.Core.PlatformSupport;
 using Microsoft.Azure.ServiceBus;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -16,13 +15,11 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private readonly ILogger _logger;
         private readonly string _topicConnectionString;
         private readonly string _destinationEntityPath;
+        private readonly IServiceBusAsyncRequestSenderConnectionSettings _settings;
 
         public ServiceBusAsyncRequestSender(IServiceBusAsyncRequestSenderConnectionSettings settings, ILogger logger)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             // Endpoint - AccountId
@@ -33,51 +30,54 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             _destinationEntityPath = settings.ServiceBusAsyncRequestSender.ResourceName;
         }
 
-        [JsonObject("topicInstructions")]
-        internal sealed class TopicInstructions
-        {
-            [JsonProperty("organizationId"), JsonRequired]
-            public string OrganizationId { get; set; }
+        //[JsonObject("topicInstructions")]
+        //internal sealed class TopicInstructions
+        //{
+        //    [JsonProperty("organizationId"), JsonRequired]
+        //    public string OrganizationId { get; set; }
 
-            //[JsonProperty("instanceKey"), JsonRequired]
-            //public string InstanceKey { get; set; }
+        //    //[JsonProperty("instanceKey"), JsonRequired]
+        //    //public string InstanceKey { get; set; }
 
-            [JsonProperty("instanceId"), JsonRequired]
-            public string InstanceId { get; set; }
+        //    [JsonProperty("responsePath"), JsonRequired]
+        //    public string ResponsePath { get; set; }
 
-            public static implicit operator TopicInstructions(string jsonValue)
-            {
-                return string.IsNullOrEmpty(jsonValue) ? null : JsonConvert.DeserializeObject<TopicInstructions>(jsonValue);
-            }
+        //    [JsonProperty("instanceId"), JsonRequired]
+        //    public string InstanceId { get; set; }
 
-            public static implicit operator string (TopicInstructions instructions)
-            {
-                if(instructions == null) throw new ArgumentNullException(nameof(instructions));
+        //    public static implicit operator TopicInstructions(string jsonValue)
+        //    {
+        //        return string.IsNullOrEmpty(jsonValue) ? null : JsonConvert.DeserializeObject<TopicInstructions>(jsonValue);
+        //    }
 
-                //return $"_{instructions.OrganizationKey}_{instructions.InstanceKey}_{instructions.InstanceId}";
-                return $"_{instructions.OrganizationId}_{instructions.InstanceId}";
-            }
-        }
+        //    public static implicit operator string (TopicInstructions instructions)
+        //    {
+        //        if(instructions == null) throw new ArgumentNullException(nameof(instructions));
 
-        public async Task HandleRequest(IAsyncRequest request, string instructions = null)
+        //        //return $"_{instructions.OrganizationKey}_{instructions.InstanceKey}_{instructions.InstanceId}";
+        //        return $"_{instructions.OrganizationId}_{instructions.InstanceId}";
+        //    }
+        //}
+
+        public async Task HandleRequest(IAsyncRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            // although the interface says instructions is nullable, this implementation requires instructions to set the topic destination
-            var topicInstructions = (TopicInstructions)instructions ?? throw new ArgumentNullException(nameof(instructions));
 
-            //todo: ML - if service bus topic doesn't exist, then create it
+            //todo: ML - if service bus topic and subscription doesn't exist, then create it: https://github.com/Azure-Samples/service-bus-dotnet-management/tree/master/src/service-bus-dotnet-management
 
             //todo: ML - need to set retry policy and operation timeout etc.
-            var topicClient = new TopicClient(_topicConnectionString, (_destinationEntityPath + topicInstructions).ToLower(), null);
+            var topicClient = new TopicClient(_topicConnectionString, _destinationEntityPath + $"_{request.OrganizationId}_{request.InstanceId}", null);
             try
             {
                 // package response in service bus message and send to topic
                 var messageOut = new Message(request.Payload)
                 {
-                    Label = request.Path,
-                    ContentType = request.GetType().FullName,
                     MessageId = request.Id,
-                    CorrelationId = request.CorrelationId
+                    To = request.DestinationPath,
+                    CorrelationId = request.CorrelationId,
+                    ContentType = request.GetType().FullName,
+                    Label = request.DestinationPath,
+                    ReplyTo = request.ReplyPath,
                 };
                 await topicClient.SendAsync(messageOut);
             }

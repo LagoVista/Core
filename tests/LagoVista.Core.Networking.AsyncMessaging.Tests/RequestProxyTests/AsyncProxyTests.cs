@@ -19,6 +19,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         private FakeSender _sender;
         private IProxySubject _proxy;
         private readonly string _destination = "over the rainbow";
+        private static readonly string _orgId = "orgid";
+        private static readonly string _insId = "insid";
 
         [TestInitialize]
         public void Init()
@@ -28,8 +30,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
                 _coupler, 
                 _sender, 
                 _logger,
-                _destination,
-                //_metrics, 
+                _orgId,
+                _insId,
                 TimeSpan.FromSeconds(30));
             
             // don't delete - I'm keeping this here for reference
@@ -50,7 +52,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         public void AsyncProxy_Echo_ResultIsNotNull()
         {
             var echoResult = _proxy.Echo(ProxySubject.EchoValueConst);
-            Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
+            Assert.IsNotNull(echoResult);
         }
 
         [TestMethod]
@@ -92,8 +94,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
                 _coupler, 
                 sender, 
                 _logger,
-                _destination,
-                //_metrics, 
+                _orgId,
+                _insId,
                 TimeSpan.FromSeconds(30));
             var echoResult = proxySubject.PassStringParams(array);
 
@@ -111,8 +113,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
                 _coupler, 
                 sender, 
                 _logger,
-                _destination,
-                //_metrics, 
+                _orgId,
+                _insId,
                 TimeSpan.FromSeconds(30));
             var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
 

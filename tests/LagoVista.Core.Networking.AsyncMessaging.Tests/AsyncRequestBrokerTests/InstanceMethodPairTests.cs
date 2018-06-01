@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 {
     [TestClass]
-    public class InstanceMethodPairTests 
+    public class InstanceMethodPairTests
     {
+        private static readonly string _orgId = "orgid";
+        private static readonly string _insId = "insid";
+        private static readonly string _replyPath = "replyPath";
+
+
         #region synchronous method simple params
         [TestMethod]
         public void InstanceMethodPair_Constructor_SynchronousMethodAndSimpleMethodParams()
@@ -27,7 +32,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var response = await pair.Invoke(request);
             Assert.IsNotNull(response);
@@ -40,7 +45,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var response = await pair.Invoke(request);
             Assert.IsTrue(response.Success);
@@ -53,7 +58,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var response = await pair.Invoke(request);
             Assert.AreEqual(request.CorrelationId, response.CorrelationId);
@@ -80,7 +85,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var response = await pair.Invoke(request);
             Assert.IsNotNull(response);
@@ -93,7 +98,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var response = await pair.Invoke(request);
             Assert.IsTrue(response.Success);
@@ -106,7 +111,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
 
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var response = await pair.Invoke(request);
             Assert.AreEqual(request.CorrelationId, response.CorrelationId);
@@ -136,7 +141,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var parameters = methodInfo.GetParameters();
-            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             Assert.AreEqual(1, request.ArgumentCount);
             Assert.AreEqual(1, parameters.Length);
@@ -151,7 +156,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var parameters = methodInfo.GetParameters();
             var requestArguments = new object[] { ProxySubject.EchoValueConst };
-            var request = new AsyncRequest(methodInfo, requestArguments);
+            var request = new AsyncRequest(methodInfo, requestArguments, _orgId, _insId, _replyPath);
 
             Assert.AreEqual(1, request.ArgumentCount);
             Assert.AreEqual(1, parameters.Length);
@@ -169,7 +174,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var parameters = methodInfo.GetParameters();
-            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst,  new object(), null});
+            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, _orgId, _insId, _replyPath);
 
             Assert.AreEqual(3, request.ArgumentCount);
             Assert.AreEqual(1, parameters.Length);
@@ -183,7 +188,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
             var parameters = methodInfo.GetParameters();
-            var request = new AsyncRequest(methodInfo, new object[] { 3 });
+            var request = new AsyncRequest(methodInfo, new object[] { 3 }, _orgId, _insId, _replyPath);
 
             Assert.AreEqual(1, request.ArgumentCount);
             Assert.AreEqual(1, parameters.Length);
@@ -197,7 +202,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
             var parameters = methodInfo.GetParameters();
-            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             Assert.AreEqual(1, request.ArgumentCount);
             Assert.AreEqual(1, parameters.Length);
@@ -226,7 +231,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
             ParameterInfo[] parameters = null;
             var subject = (IProxySubject)new ProxySubject();
             var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst });
+            var request = new AsyncRequest(methodInfo, new object[1] { ProxySubject.EchoValueConst }, _orgId, _insId, _replyPath);
 
             var arguments = InstanceMethodPair.GetArguments(request, parameters);
         }

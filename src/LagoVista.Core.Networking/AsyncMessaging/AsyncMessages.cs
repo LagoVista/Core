@@ -11,9 +11,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     {
         private const string _privateKeyPrefix = "__";
         private const string _pathKey = _privateKeyPrefix + "message_path";
+        private const string _replyToPathKey = _privateKeyPrefix + "reply_path";
         private const string _idKey = _privateKeyPrefix + "message_id";
         private const string _correlationIdKey = _privateKeyPrefix + "correlation_id";
         private const string _dateTimeStampKey = _privateKeyPrefix + "datetimestamp_key";
+        private const string _organizationId = _privateKeyPrefix + "organization_id";
+        private const string _instanceId = _privateKeyPrefix + "instance_id";
 
         private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
@@ -133,10 +136,16 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             return (T)result;
         }
 
-        public string Path
+        public string DestinationPath
         {
             get { return InternalGetValue<string>(_pathKey); }
             set { InternalSetValue(_pathKey, value, true); }
+        }
+
+        public string ReplyPath
+        {
+            get { return InternalGetValue<string>(_replyToPathKey); }
+            set { InternalSetValue(_replyToPathKey, value, true); }
         }
 
         public string Id
@@ -155,6 +164,17 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         {
             get { return InternalGetValue<DateTime>(_dateTimeStampKey); }
             set { InternalSetValue(_dateTimeStampKey, value, true); }
+        }
+
+        public string OrganizationId
+        {
+            get { return InternalGetValue<string>(_organizationId); }
+            set { InternalSetValue(_organizationId, value, true); }
+        }
+        public string InstanceId
+        {
+            get { return InternalGetValue<string>(_instanceId); }
+            set { InternalSetValue(_instanceId, value, true); }
         }
 
         public byte[] Payload
@@ -186,12 +206,16 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public AsyncRequest(byte[] marshalledData) : base(marshalledData) { }
 
-        public AsyncRequest(MethodInfo methodInfo, object[] args) : base()
+        public AsyncRequest(MethodInfo methodInfo, object[] args, string organizationId, string instanceId, string replyPath) : base()
         {
             if (methodInfo == null)
             {
                 throw new ArgumentNullException(nameof(methodInfo));
             }
+
+            OrganizationId = organizationId ?? throw new ArgumentNullException(nameof(organizationId));
+            InstanceId = instanceId ?? throw new ArgumentNullException(nameof(instanceId));
+            ReplyPath = replyPath ?? throw new ArgumentNullException(nameof(replyPath));
 
             if (args != null)
             {
@@ -205,7 +229,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
             Id = Guid.NewGuid().ToString();
             CorrelationId = Guid.NewGuid().ToString();
-            Path = PathBuilder.BuildPath(methodInfo);
+            DestinationPath = PathBuilder.BuildPath(methodInfo);
             TimeStamp = DateTime.UtcNow;
         }
 
@@ -223,7 +247,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             {
                 var parameter = parameters[i];
 
-                if(parameter.GetCustomAttribute(typeof(ParamArrayAttribute)) != null)
+                if (parameter.GetCustomAttribute(typeof(ParamArrayAttribute)) != null)
                     throw new NotSupportedException($"unsupported type - params keyword not allowed. type: '{parameter.Name}'.");
 
                 if (args[i] != null)
@@ -279,7 +303,10 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
             RequestId = request.Id;
             CorrelationId = request.CorrelationId;
-            Path = request.Path;
+            DestinationPath = request.DestinationPath;
+            OrganizationId = request.OrganizationId;
+            InstanceId = request.InstanceId;
+            ReplyPath = request.ReplyPath;
         }
 
         public bool Success

@@ -10,8 +10,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         string Id { get; set; }
         string CorrelationId { get; set; }
-        string Path { get; set; }
+        string OrganizationId { get; set; }
+        string InstanceId { get; set; }
+        string DestinationPath { get; set; }
+        string ReplyPath { get; set; }
         DateTime TimeStamp { get; set; }
+
         byte[] Payload { get; }
         string Json { get; }
 

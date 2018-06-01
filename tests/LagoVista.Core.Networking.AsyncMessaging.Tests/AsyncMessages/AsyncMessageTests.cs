@@ -19,10 +19,13 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         private static readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
         private static readonly string _responseValue = "jello babies";
         private static readonly string _rootExceptionValue = "boo";
+        private static readonly string _orgId = "orgid";
+        private static readonly string _insId = "insid";
+        private static readonly string _replyPath = "replyPath";
 
         private static IAsyncRequest CreateControlEchoRequest()
         {
-            return new AsyncRequest(_echoMethodInfo, _echoArgs);
+            return new AsyncRequest(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
         }
 
         private static IAsyncResponse CreateControlEchoSuccessResponse()
@@ -43,7 +46,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
             {
                 Id = _messageId,
                 CorrelationId = _messageCorrelationId,
-                Path = _messagePath,
+                DestinationPath = _messagePath,
                 TimeStamp = _messageTimeStamp
             };
         }
@@ -55,14 +58,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
             {
                 Id = _messageId,
                 CorrelationId = _messageCorrelationId,
-                Path = _messagePath,
+                DestinationPath = _messagePath,
                 TimeStamp = _messageTimeStamp
             };
 
             // tests constructor and InternalSetValue and InternalGetValue
             Assert.AreEqual(_messageId, message.Id);
             Assert.AreEqual(_messageCorrelationId, message.CorrelationId);
-            Assert.AreEqual(_messagePath, message.Path);
+            Assert.AreEqual(_messagePath, message.DestinationPath);
             Assert.AreEqual(_messageTimeStamp, message.TimeStamp);
         }
 
@@ -75,7 +78,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
 
             Assert.AreEqual(controlMessage.Id, message.Id);
             Assert.AreEqual(controlMessage.CorrelationId, message.CorrelationId);
-            Assert.AreEqual(controlMessage.Path, message.Path);
+            Assert.AreEqual(controlMessage.DestinationPath, message.DestinationPath);
             Assert.AreEqual(controlMessage.TimeStamp, message.TimeStamp);
             Assert.AreEqual(controlMessage.Json, message.Json);
             Assert.IsTrue(controlMessage.Payload.SequenceEqual(message.Payload));
