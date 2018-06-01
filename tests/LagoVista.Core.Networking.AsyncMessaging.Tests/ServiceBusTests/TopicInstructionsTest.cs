@@ -5,43 +5,34 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ServiceBusTests
     [TestClass]
     public class TopicInstructionsTest
     {
+        private readonly string _json = "{\"organizationId\": \"ok\", \"instanceId\": \"ii\"}";
         [TestMethod]
         public void TopicInstructions_ImplicitOperator_FromString_ReturnsNonNull()
         {
-            //var json = "{\"organizationKey\": \"ok\", \"instanceKey\": \"ik\", \"instanceId\": \"ii\"}";
-            var json = "{\"organizationKey\": \"ok\", \"instanceId\": \"ii\"}";
-            ServiceBusAsyncRequestSender.TopicInstructions topicInstructions = json;
+            ServiceBusAsyncRequestSender.TopicInstructions topicInstructions = _json;
             Assert.IsNotNull(topicInstructions);
         }
 
         [TestMethod]
         public void TopicInstructions_ImplicitOperator_FromString_ReturnsCorrectValues()
         {
-            //var json = "{\"organizationKey\": \"ok\", \"instanceKey\": \"ik\", \"instanceId\": \"ii\"}";
-            var json = "{\"organizationKey\": \"ok\", \"instanceId\": \"ii\"}";
-            ServiceBusAsyncRequestSender.TopicInstructions topicInstructions = json;
+            ServiceBusAsyncRequestSender.TopicInstructions topicInstructions = _json;
             Assert.AreEqual("ok", topicInstructions.OrganizationId);
-            //Assert.AreEqual("ik", topicInstructions.InstanceKey);
             Assert.AreEqual("ii", topicInstructions.InstanceId);
         }
 
         [TestMethod]
         public void TopicInstructions_ImplicitOperator_FromString_ReturnsNonNull_WithVar()
         {
-            //var json = "{\"organizationKey\": \"ok\", \"instanceKey\": \"ik\", \"instanceId\": \"ii\"}";
-            var json = "{\"organizationKey\": \"ok\", \"instanceId\": \"ii\"}";
-            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)json;
+            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)_json;
             Assert.IsNotNull(topicInstructions);
         }
 
         [TestMethod]
         public void TopicInstructions_ImplicitOperator_FromString_ReturnsCorrectValues_WithVar()
         {
-            //var json = "{\"organizationKey\": \"ok\", \"instanceKey\": \"ik\", \"instanceId\": \"ii\"}";
-            var json = "{\"organizationKey\": \"ok\", \"instanceId\": \"ii\"}";
-            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)json;
+            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)_json;
             Assert.AreEqual("ok", topicInstructions.OrganizationId);
-            //Assert.AreEqual("ik", topicInstructions.InstanceKey);
             Assert.AreEqual("ii", topicInstructions.InstanceId);
         }
 
@@ -56,10 +47,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ServiceBusTests
         [TestMethod]
         public void TopicInstructions_ImplicitOperator_ToString_UsingExplicitCast()
         {
-            //var json = "{\"organizationKey\": \"ok\", \"instanceKey\": \"ik\", \"instanceId\": \"ii\"}";
-            var json = "{\"organizationKey\": \"ok\", \"instanceId\": \"ii\"}";
-            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)json;
-            //var controlString = $"_{topicInstructions.OrganizationKey}_{topicInstructions.InstanceKey}_{topicInstructions.InstanceId}";
+            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)_json;
+            //var controlString = $"_{topicInstructions.organizationId}_{topicInstructions.InstanceKey}_{topicInstructions.InstanceId}";
             var controlString = $"_{topicInstructions.OrganizationId}_{topicInstructions.InstanceId}";
             Assert.AreEqual(controlString, (string)topicInstructions);
         }
@@ -67,10 +56,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ServiceBusTests
         [TestMethod]
         public void TopicInstructions_ImplicitOperator_ToString__UsingImplicitCast()
         {
-            //var json = "{\"organizationKey\": \"ok\", \"instanceKey\": \"ik\", \"instanceId\": \"ii\"}";
-            var json = "{\"organizationKey\": \"ok\", \"instanceId\": \"ii\"}";
-            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)json;
-            //var controlString = $"[TOPIC_PREFIX]_{topicInstructions.OrganizationKey}_{topicInstructions.InstanceKey}_{topicInstructions.InstanceId}";
+            var topicInstructions = (ServiceBusAsyncRequestSender.TopicInstructions)_json;
+            //var controlString = $"[TOPIC_PREFIX]_{topicInstructions.organizationId}_{topicInstructions.InstanceKey}_{topicInstructions.InstanceId}";
             var controlString = $"[TOPIC_PREFIX]_{topicInstructions.OrganizationId}_{topicInstructions.InstanceId}";
             Assert.AreEqual(controlString, "[TOPIC_PREFIX]" + topicInstructions);
         }
