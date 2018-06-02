@@ -1,7 +1,8 @@
 ﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models;
 using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
+using LagoVista.Core.Networking.AsyncMessaging.Tests.RequestProxyTests;
 using LagoVista.Core.Networking.AsyncMessaging.Tests.Utils;
+using LagoVista.Core.PlatformSupport;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -12,7 +13,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
     [TestClass]
     public class AsyncProxyFactoryTests
     {
-        protected readonly IAsyncProxyFactory _proxyFactory = new AsyncProxyFactory(new FakeConnectionSettings());
+        private readonly ILogger _logger = new TestLogger();
         protected readonly Mock<IAsyncCoupler<IAsyncResponse>> _successCoupler = new Mock<IAsyncCoupler<IAsyncResponse>>();
         protected readonly Mock<IAsyncCoupler<IAsyncResponse>> _failCoupler = new Mock<IAsyncCoupler<IAsyncResponse>>();
         private readonly Mock<IAsyncRequestHandler> _sender = new Mock<IAsyncRequestHandler>();
@@ -24,14 +25,6 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         private static readonly string _orgId = "orgid";
         private static readonly string _insId = "insid";
         private static readonly string _replyPath = "replyPath";
-
-        public class FakeConnectionSettings : IServiceBusAsyncResponseListenerConnectionSettings
-        {
-            public IConnectionSettings ServiceBusAsyncResponseListener { get; set; } = new ConnectionSettings()
-            {
-                ResourceName = _replyPath
-            };
-        }
 
         private static IAsyncRequest CreateControlEchoRequest()
         {
@@ -50,15 +43,17 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
             var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
             return new AsyncResponse(request, ex);
         }
+
         [TestMethod]
         public void ProxyFactory_Create_ReturnsInstance()
         {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
+            var proxyFactory = new AsyncProxyFactory(
+                new FakeConnectionSettings(),
                 _successCoupler.Object,
                 _sender.Object,
-                logger,
+                _logger);
+
+            var proxy = proxyFactory.Create<IProxySubject>(
                 _orgId,
                 _insId,
                 TimeSpan.FromSeconds(10));
@@ -68,12 +63,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         [TestMethod]
         public void ProxyFactory_Create_ReturnsCorrectInterface()
         {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
+            var proxyFactory = new AsyncProxyFactory(
+                new FakeConnectionSettings(),
                 _successCoupler.Object,
                 _sender.Object,
-                logger,
+                _logger);
+            var proxy = proxyFactory.Create<IProxySubject>(
                 _orgId,
                 _insId,
                 TimeSpan.FromSeconds(10));
@@ -83,12 +78,12 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         [TestMethod]
         public void ProxyFactory_Create_InterfaceContainsMethods()
         {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
+            var proxyFactory = new AsyncProxyFactory(
+                new FakeConnectionSettings(),
                 _successCoupler.Object,
                 _sender.Object,
-                logger,
+                _logger);
+            var proxy = proxyFactory.Create<IProxySubject>(
                 _orgId,
                 _insId,
                 TimeSpan.FromSeconds(10));
@@ -98,57 +93,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ProxyFactory_Create_NullAsyncProxy()
-        {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(null,
-                _sender.Object,
-                logger,
-                _orgId,
-                _insId,
-                TimeSpan.FromSeconds(10));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ProxyFactory_Create_NullRequestSender()
-        {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
-                _successCoupler.Object,
-                null,
-                logger,
-                _orgId,
-                _insId,
-                TimeSpan.FromSeconds(10));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ProxyFactory_Create_NullLogger()
-        {
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
-                _successCoupler.Object,
-                _sender.Object,
-                null,
-                _orgId,
-                _insId,
-                TimeSpan.FromSeconds(10));
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Create_NullOrganization()
         {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
+            var proxyFactory = new AsyncProxyFactory(
+                new FakeConnectionSettings(),
                 _successCoupler.Object,
                 _sender.Object,
-                logger,
+                _logger);
+            var proxy = proxyFactory.Create<IProxySubject>(
                 (string)null,
                 _insId,
                 TimeSpan.FromSeconds(10));
@@ -158,23 +110,15 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Create_NullInstance()
         {
-            var logger = new TestLogger();
-            var metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-            var proxy = _proxyFactory.Create<IProxySubject>(
+            var proxyFactory = new AsyncProxyFactory(
+                new FakeConnectionSettings(),
                 _successCoupler.Object,
                 _sender.Object,
-                logger,
+                _logger);
+            var proxy = proxyFactory.Create<IProxySubject>(
                 _orgId,
                 (string)null,
                 TimeSpan.FromSeconds(10));
         }
-
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentNullException))]
-        //public void ProxyFactory_Create_NullUsageMetrics()
-        //{
-        //    var logger = new TestLogger();
-        //    var proxy = _proxyFactory.Create<IProxySubject>(_successCoupler.Object, _sender.Object, logger, null, TimeSpan.FromSeconds(10));
-        //}
     }
 }

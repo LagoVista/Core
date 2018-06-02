@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
+using LagoVista.Core.Networking.AsyncMessaging.Tests.RequestProxyTests;
 using LagoVista.Core.Networking.AsyncMessaging.Tests.Utils;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Utils;
@@ -11,29 +12,34 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
 {
 
     [TestClass]
-    public class AsyncProxyTests : AsyncProxyFactoryTests
+    public class AsyncProxyTests
     {
-        private readonly IAsyncCoupler<IAsyncResponse> _coupler = new AsyncCoupler<IAsyncResponse>(new TestLogger(), new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
         private readonly ILogger _logger = new TestLogger();
         private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
+        private IAsyncCoupler<IAsyncResponse> _coupler;
         private FakeSender _sender;
         private IProxySubject _proxy;
-        private readonly string _destination = "over the rainbow";
+        private IAsyncProxyFactory _proxyFactory;
         private static readonly string _orgId = "orgid";
         private static readonly string _insId = "insid";
 
         [TestInitialize]
         public void Init()
         {
+            _coupler = new AsyncCoupler<IAsyncResponse>(_logger, new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
             _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
+
+            _proxyFactory = new AsyncProxyFactory(
+                new FakeConnectionSettings(),
+                _coupler,
+                _sender,
+                _logger);
+
             _proxy = _proxyFactory.Create<IProxySubject>(
-                _coupler, 
-                _sender, 
-                _logger,
                 _orgId,
                 _insId,
-                TimeSpan.FromSeconds(30));
-            
+                TimeSpan.FromSeconds(120));
+
             // don't delete - I'm keeping this here for reference
             //controlEchoSuccessResponse = new AsyncResponse(controlEchoRequest, ProxySubject.EchoValueConst);
             //successCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
@@ -80,7 +86,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         [ExpectedException(typeof(NotSupportedException))]
         public void AsyncProxy_EchoAsync_MethodNotSupported()
         {
-            var echoResult =  _proxy.SkipMe();
+            var echoResult = _proxy.SkipMe();
         }
 
         [TestMethod]
@@ -90,10 +96,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
             var array = new string[] { ProxySubject.EchoValueConst };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
             var sender = new FakeSender(_coupler, json);
+
             var proxySubject = _proxyFactory.Create<IProxySubject>(
-                _coupler, 
-                sender, 
-                _logger,
                 _orgId,
                 _insId,
                 TimeSpan.FromSeconds(30));
@@ -109,10 +113,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
             var array = new string[] { ProxySubject.EchoValueConst };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
             var sender = new FakeSender(_coupler, json);
+
             var proxySubject = _proxyFactory.Create<IProxySubject>(
-                _coupler, 
-                sender, 
-                _logger,
                 _orgId,
                 _insId,
                 TimeSpan.FromSeconds(30));

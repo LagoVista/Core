@@ -9,12 +9,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Utils
     /// </summary>
     internal sealed class FakeSender : IAsyncRequestHandler
     {
-        private IAsyncCoupler<IAsyncResponse> _asyncCoupler;
+        private readonly IAsyncCoupler<IAsyncResponse> _asyncCoupler;
+        private readonly object _result;
+
 
         public FakeSender(IAsyncCoupler<IAsyncResponse> asyncCoupler, object result)
         {
             _asyncCoupler = asyncCoupler;
-            Result = result;
+            _result = result;
         }
 
         public Task HandleRequest(IAsyncRequest request)
@@ -28,12 +30,10 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Utils
             Task.Factory.StartNew(async () =>
             {
                 await Task.Delay(delay);
-                var response = new AsyncResponse(request, Result);
+                var response = new AsyncResponse(request, _result);
                 await _asyncCoupler.CompleteAsync(response.CorrelationId, response);
             });
         }
-
-        public object Result { get; private set; }
     }
 
 }

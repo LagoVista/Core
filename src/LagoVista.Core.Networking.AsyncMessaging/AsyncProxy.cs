@@ -35,6 +35,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             string replyPath,
             TimeSpan timeout)
         {
+            Console.WriteLine("AsyncProxy::ctor >>");
             var result = Create<TProxy, AsyncProxy>();
 
             (result as AsyncProxy)._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
@@ -45,11 +46,14 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             (result as AsyncProxy)._replyPath = replyPath ?? throw new ArgumentNullException(nameof(replyPath));
             (result as AsyncProxy)._timeout = timeout;
 
+            Console.WriteLine("AsyncProxy::ctor <<");
+
             return result;
         }
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
+            Console.WriteLine($"AsyncProxy.Invoke: {targetMethod.DeclaringType.Name}.{targetMethod.Name}");
             if (targetMethod.GetCustomAttribute<AsyncIgnoreAttribute>() != null)
             {
                 throw new NotSupportedException($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
@@ -58,6 +62,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             //todo: ML - add logging
 
             var request = new AsyncRequest(targetMethod, args, _organizationId, _instanceId, _replyPath);
+            Console.WriteLine("reqeust created:");
+            Console.WriteLine(request.Json);
 
             var senderHandleRequestTask = _requestSender.HandleRequest(request);
             senderHandleRequestTask.Wait();

@@ -19,6 +19,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public ServiceBusAsyncRequestSender(IServiceBusAsyncRequestSenderConnectionSettings settings, ILogger logger)
         {
+            Console.WriteLine("ServiceBusAsyncRequestSender::ctor >>");
+
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -28,6 +30,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             // DestinationEntityPath - ResourceName
             _topicConnectionString = $"Endpoint=sb://{settings.ServiceBusAsyncRequestSender.AccountId}.servicebus.windows.net/;SharedAccessKeyName={settings.ServiceBusAsyncRequestSender.UserName};SharedAccessKey={settings.ServiceBusAsyncRequestSender.AccessKey};";
             _destinationEntityPath = settings.ServiceBusAsyncRequestSender.ResourceName;
+
+            Console.WriteLine("ServiceBusAsyncRequestSender::ctor <<");
         }
 
         //[JsonObject("topicInstructions")]
@@ -61,6 +65,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public async Task HandleRequest(IAsyncRequest request)
         {
+            Console.WriteLine("sending request");
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             //todo: ML - if service bus topic and subscription doesn't exist, then create it: https://github.com/Azure-Samples/service-bus-dotnet-management/tree/master/src/service-bus-dotnet-management

@@ -17,6 +17,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public ServiceBusAsyncResponseSender(IServiceBusAsyncResponseSenderConnectionSettings settings, ILogger logger) : base()
         {
+            Console.WriteLine("ServiceBusAsyncResponseSender::ctor");
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -29,6 +30,8 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
         public async Task HandleResponse(IAsyncResponse response)
         {
+            Console.WriteLine("sending response");
+
             //todo: ML - need to set retry policy and operation timeout etc. https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.servicebus.retrypolicy?view=azure-dotnet
             //todo: ML - to improve performance we could keep a concurent dictionary of topic clients hashed by reply path
             var topicClient = new TopicClient(_senderConnectionString, response.ReplyPath, null);
