@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Utils
 {
-    public class WaitOnRequest<TModel>
+    public sealed class WaitOnRequest<TModel>
     {
         public WaitOnRequest(string correlationId)
         {

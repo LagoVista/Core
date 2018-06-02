@@ -13,5 +13,4 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.RequestProxyTests
             ResourceName = _replyPath
         };
     }
-
 }
