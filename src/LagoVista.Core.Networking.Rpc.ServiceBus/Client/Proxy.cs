@@ -21,24 +21,20 @@ namespace LagoVista.Core.Networking.Rpc.ServiceBus.Client
         private ILogger _logger;
         private ITransceiver _client;
         private ITransceiverConnectionSettings _connectionSettings;
+        private ProxySettings _proxySettings;
         private string _replyPath;
-        private string _organizationId;
-        private string _instanceId;
 
         private readonly static MethodInfo _fromResultMethodInfo = typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
-        internal static TProxyInterface Create<TProxyInterface>(ITransceiverConnectionSettings connectionSettings, ITransceiver client, ILogger logger) where TProxyInterface : class
+        internal static TProxyInterface Create<TProxyInterface>(ITransceiverConnectionSettings connectionSettings, ITransceiver client, ILogger logger, ProxySettings proxySettings) where TProxyInterface : class
         {
             var result = Create<TProxyInterface, Proxy>();
 
             (result as Proxy)._connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+            (result as Proxy)._replyPath = connectionSettings.RpcReceiver.Uri;
             (result as Proxy)._client = client ?? throw new ArgumentNullException(nameof(client));
             (result as Proxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            (result as Proxy)._replyPath = connectionSettings.RpcReceiver.Uri;
-
-            //todo: ML - figure out a better way to get orgid and instance id
-            //(result as Proxy)._organizationId = organizationId ?? throw new ArgumentNullException(nameof(organizationId));
-            //(result as Proxy)._instanceId = instanceId ?? throw new ArgumentNullException(nameof(instanceId));
+            (result as Proxy)._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
 
             return result;
         }
@@ -53,7 +49,7 @@ namespace LagoVista.Core.Networking.Rpc.ServiceBus.Client
             //todo: ML - add logging
 
             // setup and transmit the request
-            var request = new Request(targetMethod, args, _organizationId, _instanceId, _replyPath);
+            var request = new Request(targetMethod, args, _proxySettings.OrganizationId, _proxySettings.InstanceId, _replyPath);
             var responseTask = _client.TransmitAsync(request);
 
             // wait for response and handle exceptions

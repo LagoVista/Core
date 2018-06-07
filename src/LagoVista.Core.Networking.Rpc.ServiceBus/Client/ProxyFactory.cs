@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Networking.Rpc.Middleware;
 using LagoVista.Core.Networking.Rpc.Settings;
 using LagoVista.Core.PlatformSupport;
+using Newtonsoft.Json;
 using System;
 
 namespace LagoVista.Core.Networking.Rpc.ServiceBus.Client
@@ -21,9 +22,10 @@ namespace LagoVista.Core.Networking.Rpc.ServiceBus.Client
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public TProxyInterface Create<TProxyInterface>() where TProxyInterface : class
+        public TProxyInterface Create<TProxyInterface>(string proxySettings) where TProxyInterface : class
         {
-            return Proxy.Create<TProxyInterface>(_connectionSettings, _client, _logger);
+            var settings = JsonConvert.DeserializeObject<ProxySettings>(proxySettings);
+            return Proxy.Create<TProxyInterface>(_connectionSettings, _client, _logger, settings);
         }
     }
 }

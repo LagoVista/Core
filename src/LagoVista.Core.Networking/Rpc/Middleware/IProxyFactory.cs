@@ -2,6 +2,6 @@
 {
     public interface IProxyFactory
     {
-        TProxyInterface Create<TProxyInterface>() where TProxyInterface : class;
+        TProxyInterface Create<TProxyInterface>(string proxySettings) where TProxyInterface : class;
     }
 }

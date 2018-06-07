@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Networking.Rpc.ServiceBus.Client
 {
-    internal class ProxyClient : ITransceiver
+    internal sealed class ProxyClient : ITransceiver
     {
         #region private fields
         private readonly string _topicConnectionString;
