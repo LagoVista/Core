@@ -8,7 +8,7 @@
         "Data": null,
         "InnerException": null,
         "HelpURL": null,
-        "StackTraceString": "   at LagoVista.CloudStorage.DocumentDB.DocumentDBRepoBase`1.SetConnection(String endPoint, String sharedKey, String dbName)\r\n   at LagoVista.IoT.DeviceManagement.Repos.Repos.DeviceManagementRepo.<GetDevicesForRepositoryAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at CallSite.Target(Closure , CallSite , Object )\r\n   at LagoVista.Core.Networking.AsyncMessaging.InstanceMethodPair.<Invoke>d__6.MoveNext()",
+        "StackTraceString": "   at LagoVista.CloudStorage.DocumentDB.DocumentDBRepoBase`1.SetConnection(String endPoint, String sharedKey, String dbName)\r\n   at LagoVista.IoT.DeviceManagement.Repos.Repos.DeviceManagementRepo.<GetDevicesForRepositoryAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at CallSite.Target(Closure , CallSite , Object )\r\n   at LagoVista.Core.Networking.Rpc.InstanceMethodPair.<Invoke>d__6.MoveNext()",
         "RemoteStackTraceString": null,
         "RemoteStackIndex": 0,
         "ExceptionMethod": null,

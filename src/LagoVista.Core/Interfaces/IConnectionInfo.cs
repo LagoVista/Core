@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
 {
@@ -24,5 +21,7 @@ namespace LagoVista.Core.Interfaces
         Func<bool> ValidationAction { get; set; }
         Func<string> GetValidationErrors { get; set; }
         Dictionary<string, string> Settings { get; set; }
+
+        int TimeoutInSeconds { get; set; }
     }
 }

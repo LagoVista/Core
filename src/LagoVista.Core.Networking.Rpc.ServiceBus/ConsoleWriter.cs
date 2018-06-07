@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LagoVista.Core.Networking.AsyncMessaging
+namespace LagoVista.Core.Networking.Rpc
 {
     public class ConsoleWriter : IConsoleWriter
     {
