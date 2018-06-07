@@ -17,13 +17,15 @@ namespace LagoVista.Core.Networking.AsyncMessaging
         private readonly IAsyncResponseHandler _responseSender;
         private readonly IAsyncRequestBroker _requestBroker;
         private readonly ILogger _logger;
-        private readonly SubscriptionClient _subscriptionClient;
+        private readonly ISubscriptionClient _subscriptionClient;
+        private readonly IConsoleWriter _console;
 
         public ServiceBusAsyncRequestModerator(
             IServiceBusAsyncRequestModeratorConnectionSettings settings,
             IAsyncRequestBroker requestBroker,
-            IAsyncResponseHandler responseSender, 
-            ILogger logger)
+            IAsyncResponseHandler responseSender,
+            ILogger logger,
+            IConsoleWriter consoleWriter)
         {
             _responseSender = responseSender ?? throw new ArgumentNullException(nameof(responseSender));
             _requestBroker = requestBroker ?? throw new ArgumentNullException(nameof(requestBroker));
@@ -32,6 +34,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging
                 throw new ArgumentNullException(nameof(settings));
             }
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _console = consoleWriter ?? throw new ArgumentNullException(nameof(consoleWriter));
 
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
@@ -44,10 +47,13 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 
             //todo: ML - need to set retry policy and operation timeout etc.
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
+
+            _console.WriteLine($"ServiceBusAsyncRequestModerator::ctor - complete");
         }
 
         public void Start()
         {
+            _console.WriteLine($"ServiceBusAsyncRequestModerator.Start >>");
             var options = new MessageHandlerOptions(HandleException)
             {
                 AutoComplete = false,
@@ -58,10 +64,13 @@ namespace LagoVista.Core.Networking.AsyncMessaging
 #endif
             };
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
+            _console.WriteLine($"ServiceBusAsyncRequestModerator.Start <<");
         }
 
         private async Task MessageReceived(Message message, CancellationToken cancelationToken)
         {
+
+            _console.WriteLine($"ServiceBusAsyncRequestModerator.MessageReceived >>");
             try
             {
                 var request = new AsyncRequest(message.Body);
@@ -71,13 +80,16 @@ namespace LagoVista.Core.Networking.AsyncMessaging
             }
             catch (Exception ex)
             {
+                _console.WriteError($"ServiceBusAsyncRequestModerator.MessageReceived, '{ex.Message}'");
                 await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
                 throw;
             }
+            _console.WriteLine($"ServiceBusAsyncRequestModerator.MessageReceived <<");
         }
 
         private async Task HandleException(ExceptionReceivedEventArgs e)
         {
+            _console.WriteError($"ServiceBusAsyncRequestModerator.HandleException, '{e.Exception.Message}'");
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");

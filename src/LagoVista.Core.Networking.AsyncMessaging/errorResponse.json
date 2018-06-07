@@ -1,0 +1,28 @@
+﻿{
+    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
+    "__success": false,
+    "__exception": {
+        "$type": "System.InvalidOperationException, System.Private.CoreLib",
+        "ClassName": "System.InvalidOperationException",
+        "Message": "Invalid or missing end point information on DeviceManagementRepo",
+        "Data": null,
+        "InnerException": null,
+        "HelpURL": null,
+        "StackTraceString": "   at LagoVista.CloudStorage.DocumentDB.DocumentDBRepoBase`1.SetConnection(String endPoint, String sharedKey, String dbName)\r\n   at LagoVista.IoT.DeviceManagement.Repos.Repos.DeviceManagementRepo.<GetDevicesForRepositoryAsync>d__14.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at CallSite.Target(Closure , CallSite , Object )\r\n   at LagoVista.Core.Networking.AsyncMessaging.InstanceMethodPair.<Invoke>d__6.MoveNext()",
+        "RemoteStackTraceString": null,
+        "RemoteStackIndex": 0,
+        "ExceptionMethod": null,
+        "HResult": -2146233079,
+        "Source": "LagoVista.CloudStorage",
+        "WatsonBuckets": null
+    },
+    "__return_value": null,
+    "__message_id": "f7a26601-c486-465d-9082-797b201de404",
+    "__datetimestamp_key": "2018-06-04T21:31:25.5471075Z",
+    "__request_id": "9a4e004c-06a3-42c9-9b01-f5ef620df254",
+    "__correlation_id": "d9728dca-e322-41b9-93b0-acb392f9f22b",
+    "__message_path": "LagoVista.IoT.DeviceManagement.Core.Repos.IDeviceManagementRepo/GetDevicesForRepositoryAsync/",
+    "__organization_id": "C8AD4589F26842E7A1AEFBAEFC979C9B",
+    "__instance_id": "9E88C7F6B5894DBFB3BC09D20736705E",
+    "__reply_path": "async_response_iot_web_portal"
+}

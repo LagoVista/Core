@@ -6,26 +6,23 @@ namespace LagoVista.Core.Networking.AsyncMessaging
     {
         public void WriteError(string message)
         {
-            var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
-            Console.ForegroundColor = color;
+            Console.ResetColor();
         }
 
         public void WriteLine(string message)
         {
-            var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine(message);
-            Console.ForegroundColor = color;
+            Console.ResetColor();
         }
 
         public void WriteWarning(string message)
         {
-            var color = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(message);
-            Console.ForegroundColor = color;
+            Console.ResetColor();
         }
     }
 }
