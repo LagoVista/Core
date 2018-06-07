@@ -10,6 +10,7 @@ namespace LagoVista.Core.Interfaces
         String Id { get; set; }
         String Text { get; set; }
         bool IsEmpty();
+
     }
 
     public interface IEntityHeader<T> : IEntityHeader 

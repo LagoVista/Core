@@ -141,6 +141,11 @@ namespace LagoVista.Core.Models
 
             return (hdr1.Id == hdr2.Id && hdr1.Text == hdr2.Text);
         }
+
+        public EntityHeader Clone()
+        {
+            return new EntityHeader() { Id = Id, Text = Text };
+        }
     }
 
     public class EntityHeader<T> : EntityHeader, IEntityHeader<T>
@@ -214,6 +219,17 @@ namespace LagoVista.Core.Models
             throw new Exception($"Cannot map type {typeof(T).Name} to Entity Header.");
         }
 
+        public new EntityHeader<T> Clone()
+        {
+            return new EntityHeader<T>()
+            {
+                Id = Id,
+                Text = Text,
+                Value = Value
+            };
+        }
+
+
         public override String Id
         {
             get { return base.Id; }
@@ -246,7 +262,7 @@ namespace LagoVista.Core.Models
                                 return;
                             }
                         }
-                        else if(value == enumMember.Name)
+                        else if (value == enumMember.Name)
                         {
                             base.Id = value;
                             _value = (T)(enumValues.GetValue(idx));
