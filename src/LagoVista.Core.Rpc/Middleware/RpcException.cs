@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LagoVista.Core.Networking.Rpc.Middleware
+namespace LagoVista.Core.Rpc.Middleware
 {
     public class RpcException : Exception
     {

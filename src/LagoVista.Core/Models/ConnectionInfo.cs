@@ -27,5 +27,7 @@ namespace LagoVista.Core.Models
         public Func<bool> ValidationAction { get; set; }
         public Func<string> GetValidationErrors { get; set; }
         public Dictionary<string, string> Settings { get { return _settings; } set { _settings = value; } }
+
+        public int TimeoutInSeconds { get; set; }
     }
 }

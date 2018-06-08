@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Networking.Rpc.Messages;
 using LagoVista.Core.Networking.Rpc.Middleware;
 using System;
 using System.Collections.Concurrent;
@@ -7,9 +8,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Networking.Rpc.ServiceBus.Server
 {
-    public sealed class AsyncRequestBroker : IRequestBroker
+    public sealed class RequestBroker : IRequestBroker
     {
         private readonly ConcurrentDictionary<string, InstanceMethodPair> _subjectRegistry = new ConcurrentDictionary<string, InstanceMethodPair>();
         private readonly static MethodInfo[] _objectMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
@@ -51,7 +52,7 @@ namespace LagoVista.Core.Networking.Rpc
         /// </summary>
         /// <typeparam name="TInterface"></typeparam>
         /// <param name="subject"></param>
-        public int AddRequestHandler<TInterface>(TInterface subject) where TInterface : class
+        public int AddService<TInterface>(TInterface subject) where TInterface : class
         {
             if (subject == null)
             {
@@ -76,12 +77,9 @@ namespace LagoVista.Core.Networking.Rpc
             return methodCount;
         }
 
-        public async Task<IAsyncResponse> HandleRequestAsync(IAsyncRequest request)
+        public async Task<IResponse> InvokeAsync(IRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             // 1. get handler
             if (!_subjectRegistry.TryGetValue(request.DestinationPath, out InstanceMethodPair messageHandler))
@@ -90,15 +88,15 @@ namespace LagoVista.Core.Networking.Rpc
             }
 
             // 2. call handler and get response
-            IAsyncResponse response = null;
+            IResponse response = null;
             try
             {
                 response = await messageHandler.Invoke(request);
             }
             catch(Exception ex)
             {
-                response = new AsyncResponse(request, ex);
                 //todo: ML - log exception
+                response = new Response(request, ex);
             }
 
             return response;

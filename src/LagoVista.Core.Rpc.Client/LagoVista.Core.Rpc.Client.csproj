@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.DispatchProxy" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj" />
+    <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
+  </ItemGroup>
+
+</Project>

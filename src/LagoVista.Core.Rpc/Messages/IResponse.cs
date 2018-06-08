@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LagoVista.Core.Networking.Rpc.Messages
+namespace LagoVista.Core.Rpc.Messages
 {
     public interface IResponse : IMessage
     {

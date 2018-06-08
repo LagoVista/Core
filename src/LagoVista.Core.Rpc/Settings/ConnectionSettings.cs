@@ -1,6 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 
-namespace LagoVista.Core.Networking.Rpc.Settings
+namespace LagoVista.Core.Rpc.Settings
 {
     /// <summary>
     /// request side service bus toplic client settings - request sender

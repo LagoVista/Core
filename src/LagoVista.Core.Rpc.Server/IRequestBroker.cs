@@ -1,7 +1,7 @@
-﻿using LagoVista.Core.Networking.Rpc.Messages;
+﻿using LagoVista.Core.Rpc.Messages;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Rpc.Middleware
 {
     public interface IRequestBroker
     {
@@ -11,7 +11,7 @@ namespace LagoVista.Core.Networking.Rpc
         /// <typeparam name="TInterface">an interface - enforced at runtime</typeparam>
         /// <param name="subject">instance that implments TInterface</param>
         /// <returns>count of methods found and registered</returns>
-        int AddRequestHandler<TInterface>(TInterface subject) where TInterface : class;
+        int AddService<TInterface>(TInterface subject) where TInterface : class;
 
         Task<IResponse> InvokeAsync(IRequest request);
     }

@@ -1,5 +1,5 @@
 ﻿
-namespace LagoVista.Core.Networking.Rpc.Middleware
+namespace LagoVista.Core.Rpc.Middleware
 {
     public interface ITransceiver:  ITransmitter, IReceiver
     {

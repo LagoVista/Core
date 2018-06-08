@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace LagoVista.Core.Networking.Rpc.Messages
+namespace LagoVista.Core.Rpc.Messages
 {
     public class Message : IMessage
     {

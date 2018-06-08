@@ -1,4 +1,4 @@
-﻿using LagoVista.Core.Networking.Rpc.Messages;
+﻿using LagoVista.Core.Rpc.Messages;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;

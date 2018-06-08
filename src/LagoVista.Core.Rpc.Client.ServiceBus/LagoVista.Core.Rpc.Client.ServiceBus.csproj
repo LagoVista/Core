@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.Core.Rpc.Client\LagoVista.Core.Rpc.Client.csproj" />
+    <ProjectReference Include="..\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj" />
+    <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
+  </ItemGroup>
+
+</Project>
