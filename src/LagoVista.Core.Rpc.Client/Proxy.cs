@@ -11,9 +11,6 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Client
 {
-    /// <summary>
-    /// 
-    /// </summary>
     /// <remarks>
     /// Decendents of DispatchProxy cannot be sealed.
     /// Decendents of DispatchProxy cannot be internal nor private.
@@ -47,7 +44,6 @@ namespace LagoVista.Core.Rpc.Client
             (result as Proxy)._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
             if (string.IsNullOrEmpty(proxySettings.OrganizationId)) throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
             if (string.IsNullOrEmpty(proxySettings.InstanceId)) throw new ArgumentNullException(nameof(proxySettings.InstanceId));
-
             (result as Proxy)._replyPath = connectionSettings.RpcReceiver.Uri;
             (result as Proxy)._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
 
