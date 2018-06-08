@@ -21,7 +21,6 @@ namespace LagoVista.Core.Interfaces
         Func<bool> ValidationAction { get; set; }
         Func<string> GetValidationErrors { get; set; }
         Dictionary<string, string> Settings { get; set; }
-
         int TimeoutInSeconds { get; set; }
     }
 }

@@ -47,11 +47,6 @@ namespace LagoVista.Core.Rpc.Server
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TInterface"></typeparam>
-        /// <param name="subject"></param>
         public int AddService<TInterface>(TInterface subject) where TInterface : class
         {
             if (subject == null)
