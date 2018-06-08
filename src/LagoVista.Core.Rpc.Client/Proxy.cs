@@ -24,7 +24,7 @@ namespace LagoVista.Core.Rpc.Client
         private ILogger _logger;
         private ITransceiver _client;
         private ITransceiverConnectionSettings _connectionSettings;
-        private ProxySettings _proxySettings;
+        private IProxySettings _proxySettings;
         private IAsyncCoupler<IMessage> _asyncCoupler;
         private string _replyPath;
         private TimeSpan _requestTimeout;
@@ -37,7 +37,7 @@ namespace LagoVista.Core.Rpc.Client
             ITransceiver client,
             IAsyncCoupler<IMessage> asyncCoupler,
             ILogger logger,
-            ProxySettings proxySettings) where TProxyInterface : class
+            IProxySettings proxySettings) where TProxyInterface : class
         {
             var result = Create<TProxyInterface, Proxy>();
 

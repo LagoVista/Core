@@ -26,7 +26,7 @@ namespace LagoVista.Core.Rpc.Client
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public TProxyInterface Create<TProxyInterface>(ProxySettings proxySettings) where TProxyInterface : class
+        public TProxyInterface Create<TProxyInterface>(IProxySettings proxySettings) where TProxyInterface : class
         {
             return Proxy.Create<TProxyInterface>(_connectionSettings, _client, _asyncCoupler, _logger, proxySettings);
         }
