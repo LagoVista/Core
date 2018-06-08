@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LagoVista.Core.Networking.Rpc
+namespace LagoVista.Core.Rpc
 {
     public class ConsoleWriter : IConsoleWriter
     {

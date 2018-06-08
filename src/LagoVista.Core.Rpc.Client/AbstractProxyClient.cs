@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
+namespace LagoVista.Core.Rpc.Client
 {
     public abstract class AbstractProxyClient : ITransceiver
     {

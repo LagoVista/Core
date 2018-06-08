@@ -7,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
+namespace LagoVista.Core.Rpc.Client.ServiceBus
 {
     internal sealed class ServiceBusProxyClient : AbstractProxyClient
     {
