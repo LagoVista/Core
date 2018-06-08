@@ -1,12 +1,13 @@
-﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
+﻿using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
+namespace LagoVista.Core.Rpc.Tests.Messages
 {
     [TestClass]
-    public class AsyncResponseTests 
+    public class ResponseTests 
     {
         private static readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
         private static readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
@@ -17,35 +18,35 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         private static readonly string _insId = "insid";
         private static readonly string _replyPath = "replyPath";
 
-        private static IAsyncRequest CreateControlEchoRequest()
+        private static IRequest CreateControlEchoRequest()
         {
-            return new AsyncRequest(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            return new Request(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
         }
 
-        private static IAsyncResponse CreateControlEchoSuccessResponse()
+        private static IResponse CreateControlEchoSuccessResponse()
         {
             var request = CreateControlEchoRequest();
-            return new AsyncResponse(request, _responseValue);
+            return new Response(request, _responseValue);
         }
 
-        private static IAsyncResponse CreateControlEchoFailureResponse()
+        private static IResponse CreateControlEchoFailureResponse()
         {
             var request = CreateControlEchoRequest();
             var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
-            return new AsyncResponse(request, ex);
+            return new Response(request, ex);
         }
 
-        private void AssertSuccessResponse(IAsyncResponse response)
+        private void AssertSuccessResponse(IResponse response)
         {
             Assert.IsTrue(response.Success);
             Assert.IsNull(response.Exception);
         }
 
         [TestMethod]
-        public void AsyncResponse_Constructor_StandardSuccessResponse()
+        public void Response_Constructor_StandardSuccessResponse()
         {
             var controlRequest = CreateControlEchoRequest();
-            var response = new AsyncResponse(controlRequest, _responseValue);
+            var response = new Response(controlRequest, _responseValue);
 
             AssertSuccessResponse(response);
             Assert.AreEqual(controlRequest.CorrelationId, response.CorrelationId);
@@ -59,10 +60,10 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         }
 
         [TestMethod]
-        public void AsyncResponse_Constructor_MarshalledData_SuccessResponse()
+        public void Response_Constructor_MarshalledData_SuccessResponse()
         {
             var controlResponse = CreateControlEchoSuccessResponse();
-            var response = new AsyncResponse(controlResponse.Payload);
+            var response = new Response(controlResponse.Payload);
 
             AssertSuccessResponse(response);
             Assert.AreEqual(controlResponse.CorrelationId, response.CorrelationId);
@@ -75,22 +76,22 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void AsyncResponse_Constructor_IAsyncRequest_NullArgument()
+        public void Response_Constructor_IRequest_NullArgument()
         {
-            IAsyncRequest request = null;
-            var response = new AsyncResponse(request, _responseValue);
+            IRequest request = null;
+            var response = new Response(request, _responseValue);
         }
 
         //[TestMethod]
         //[ExpectedException(typeof(ArgumentNullException))]
-        //public void AsyncResponse_Constructor_Object_NullArgument()
+        //public void Response_Constructor_Object_NullArgument()
         //{
         //    var request = CreateControlRequest();
         //    object responseValue = null;
-        //    var response = new AsyncResponse(request, responseValue);
+        //    var response = new Response(request, responseValue);
         //}
 
-        private void AssertFailureResponse(IAsyncResponse response)
+        private void AssertFailureResponse(IResponse response)
         {
             Assert.IsFalse(response.Success);
             Assert.IsNotNull(response.Exception);
@@ -98,12 +99,12 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         }
 
         [TestMethod]
-        public void AsyncResponse_Constructor_StandardFailureResponse()
+        public void Response_Constructor_StandardFailureResponse()
         {
             var controlRequest = CreateControlEchoRequest();
             var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
 
-            var response = new AsyncResponse(controlRequest, ex);
+            var response = new Response(controlRequest, ex);
             AssertFailureResponse(response);
 
             Assert.AreEqual(controlRequest.CorrelationId, response.CorrelationId);
@@ -114,10 +115,10 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         }
 
         [TestMethod]
-        public void AsyncResponse_Constructor_MarshalledData_FailureResponse()
+        public void Response_Constructor_MarshalledData_FailureResponse()
         {
             var controlResponse = CreateControlEchoFailureResponse();
-            var response = new AsyncResponse(controlResponse.Payload);
+            var response = new Response(controlResponse.Payload);
 
             AssertFailureResponse(response);
 

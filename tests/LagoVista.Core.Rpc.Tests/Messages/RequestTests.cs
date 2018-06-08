@@ -1,13 +1,14 @@
-﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
+﻿using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
+namespace LagoVista.Core.Rpc.Tests.Messages
 {
     [TestClass]
-    public class AsyncRequestTests
+    public class RequestTests
     {
         private static readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
         private static readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
@@ -19,27 +20,27 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         private static readonly string _insId = "insid";
         private static readonly string _replyPath = "replyPath";
 
-        private static IAsyncRequest CreateControlEchoRequest()
+        private static IRequest CreateControlEchoRequest()
         {
-            return new AsyncRequest(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            return new Request(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
         }
 
-        private static IAsyncResponse CreateControlEchoSuccessResponse()
+        private static IResponse CreateControlEchoSuccessResponse()
         {
             var request = CreateControlEchoRequest();
-            return new AsyncResponse(request, _responseValue);
+            return new Response(request, _responseValue);
         }
 
-        private static IAsyncResponse CreateControlEchoFailureResponse()
+        private static IResponse CreateControlEchoFailureResponse()
         {
             var request = CreateControlEchoRequest();
             var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
-            return new AsyncResponse(request, ex);
+            return new Response(request, ex);
         }
         [TestMethod]
-        public void AsyncRequest_Constructor_MethodInfo_Args()
+        public void Request_Constructor_MethodInfo_Args()
         {
-            var request = new AsyncRequest(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            var request = new Request(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
 
             Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
@@ -47,18 +48,18 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void AsyncRequest_Constructor_MethodInfo_NullArgument()
+        public void Request_Constructor_MethodInfo_NullArgument()
         {
             MethodInfo echoMethodInfo = null;
-            var request = new AsyncRequest(echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            var request = new Request(echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
         }
 
         [TestMethod]
-        public void AsyncRequest_Constructor_MarshalledData()
+        public void Request_Constructor_MarshalledData()
         {
             var controlRequest = CreateControlEchoRequest();
 
-            var request = new AsyncRequest(controlRequest.Payload);
+            var request = new Request(controlRequest.Payload);
 
             Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
@@ -72,19 +73,19 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         }
 
         [TestMethod]
-        public void AsyncRequest_Constructor_MethodInfo_SimpleArg()
+        public void Request_Constructor_MethodInfo_SimpleArg()
         {
             var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var request = new AsyncRequest(echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            var request = new Request(echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
             Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void AsyncRequest_Constructor_MethodInfo_ParamsAr_ThrowsNotSupportedException()
+        public void Request_Constructor_MethodInfo_ParamsAr_ThrowsNotSupportedException()
         {
             var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
-            var request = new AsyncRequest(echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            var request = new Request(echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
             Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
         }
 
@@ -93,7 +94,7 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         public void InstanceMethodPair_ValidateArguments_Fails_DueToCountMismatch()
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var request = new AsyncRequest(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, _orgId, _insId, _replyPath);
+            var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, _orgId, _insId, _replyPath);
         }
 
         [TestMethod]
@@ -101,7 +102,7 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         public void InstanceMethodPair_ValidateArguments_Fails_DueToTypeMismatch()
         {
             var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var request = new AsyncRequest(methodInfo, new object[] { 3 }, _orgId, _insId, _replyPath);
+            var request = new Request(methodInfo, new object[] { 3 }, _orgId, _insId, _replyPath);
         }
     }
 }

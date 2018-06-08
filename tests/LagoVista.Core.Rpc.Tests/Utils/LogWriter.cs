@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.Utils
+namespace LagoVista.Core.Rpc.Tests.Utils
 {
     public class TestLogger : ILogger
     {

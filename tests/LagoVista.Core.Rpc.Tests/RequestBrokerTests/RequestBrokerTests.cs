@@ -1,14 +1,14 @@
-﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
+﻿using LagoVista.Core.Rpc.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.AsyncRequestBrokerTests
+namespace LagoVista.Core.Rpc.Tests.RequestBrokerTests
 {
     [TestClass]
-    public class AsyncRequestBrokerTests
+    public class RequestBrokerTests
     {
         private readonly IProxySubject _controlInstance = new ProxySubject();
         //private readonly MethodInfo _methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
@@ -27,9 +27,9 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncRequestBrokerTests
         //}
 
         [TestMethod]
-        public void AsyncRequestBroker_RegisterSubject_Success()
+        public void RequestBroker_RegisterSubject_Success()
         {
-            var broker = new AsyncRequestBroker();
+            var broker = new RequestBroker();
             var methodsRegistered = broker.AddRequestHandler(_controlInstance);
 
             var instanceMethodCount = typeof(IProxySubject).GetMethods().Count();
@@ -39,17 +39,17 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncRequestBrokerTests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void AsyncRequestBroker_RegisterSubject_FailureDueToNonInterfaceInstance()
+        public void RequestBroker_RegisterSubject_FailureDueToNonInterfaceInstance()
         {
-            var broker = new AsyncRequestBroker();
+            var broker = new RequestBroker();
             broker.AddRequestHandler(new ProxySubject());
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void AsyncRequestBroker_RegisterSubject_FailureDueToNullInstance()
+        public void RequestBroker_RegisterSubject_FailureDueToNullInstance()
         {
-            var broker = new AsyncRequestBroker();
+            var broker = new RequestBroker();
             broker.AddRequestHandler((IProxySubject)null);
         }
 

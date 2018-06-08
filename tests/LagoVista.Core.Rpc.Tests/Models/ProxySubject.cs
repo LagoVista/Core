@@ -1,7 +1,8 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Rpc.Attributes;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.Models
+namespace LagoVista.Core.Rpc.Tests.Models
 {
     public interface IProxySubject
     {

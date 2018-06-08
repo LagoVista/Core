@@ -1,14 +1,15 @@
-﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
+﻿using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Messages;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
+namespace LagoVista.Core.Rpc.Tests.Messages
 {
     [TestClass]
-    public class AsyncMessageTests 
+    public class MessageTests 
     {
         private readonly string _messagePath = "TestPath";
         private readonly DateTime _messageTimeStamp = new DateTime(2018, 1, 1, 13, 0, 0);
@@ -23,22 +24,22 @@ namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
         private static readonly string _insId = "insid";
         private static readonly string _replyPath = "replyPath";
 
-        private static IAsyncRequest CreateControlEchoRequest()
+        private static IRequest CreateControlEchoRequest()
         {
-            return new AsyncRequest(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
+            return new Request(_echoMethodInfo, _echoArgs, _orgId, _insId, _replyPath);
         }
 
-        private static IAsyncResponse CreateControlEchoSuccessResponse()
+        private static IResponse CreateControlEchoSuccessResponse()
         {
             var request = CreateControlEchoRequest();
-            return new AsyncResponse(request, _responseValue);
+            return new Response(request, _responseValue);
         }
 
-        private static IAsyncResponse CreateControlEchoFailureResponse()
+        private static IResponse CreateControlEchoFailureResponse()
         {
             var request = CreateControlEchoRequest();
             var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
-            return new AsyncResponse(request, ex);
+            return new Response(request, ex);
         }
         private IMessage CreateControlMessage()
         {

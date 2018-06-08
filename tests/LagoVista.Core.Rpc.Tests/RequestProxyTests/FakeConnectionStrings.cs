@@ -2,13 +2,13 @@
 using LagoVista.Core.Models;
 using System;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.RequestProxyTests
+namespace LagoVista.Core.Rpc.Tests.RequestProxyTests
 {
-    public sealed class FakeConnectionSettings : IServiceBusAsyncResponseListenerConnectionSettings
+    public sealed class FakeConnectionSettings : IServiceBusResponseListenerConnectionSettings
     {
         private static readonly string _replyPath = "replyPath";
 
-        public IConnectionSettings ServiceBusAsyncResponseListener { get; private set; } = new ConnectionSettings()
+        public IConnectionSettings ServiceBusResponseListener { get; private set; } = new ConnectionSettings()
         {
             ResourceName = _replyPath
         };

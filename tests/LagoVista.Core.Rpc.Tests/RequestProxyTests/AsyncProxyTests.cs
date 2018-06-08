@@ -1,14 +1,14 @@
 ﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.Networking.Rpc.Tests.Models;
-using LagoVista.Core.Networking.Rpc.Tests.RequestProxyTests;
-using LagoVista.Core.Networking.Rpc.Tests.Utils;
+using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Tests.RequestProxyTests;
+using LagoVista.Core.Rpc.Tests.Utils;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.Tests.ProxyTests
+namespace LagoVista.Core.Rpc.Tests.ProxyTests
 {
 
     [TestClass]
@@ -16,7 +16,7 @@ namespace LagoVista.Core.Networking.Rpc.Tests.ProxyTests
     {
         private readonly ILogger _logger = new TestLogger();
         private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-        private IAsyncCoupler<IAsyncResponse> _coupler;
+        private IAsyncCoupler<IResponse> _coupler;
         private FakeSender _sender;
         private IProxySubject _proxy;
         private IProxyFactory _proxyFactory;
@@ -26,7 +26,7 @@ namespace LagoVista.Core.Networking.Rpc.Tests.ProxyTests
         [TestInitialize]
         public void Init()
         {
-            _coupler = new AsyncCoupler<IAsyncResponse>(_logger, new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
+            _coupler = new AsyncCoupler<IResponse>(_logger, new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
             _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
 
             _proxyFactory = new AsyncProxyFactory(
@@ -41,17 +41,17 @@ namespace LagoVista.Core.Networking.Rpc.Tests.ProxyTests
                 TimeSpan.FromSeconds(120));
 
             // don't delete - I'm keeping this here for reference
-            //controlEchoSuccessResponse = new AsyncResponse(controlEchoRequest, ProxySubject.EchoValueConst);
+            //controlEchoSuccessResponse = new Response(controlEchoRequest, ProxySubject.EchoValueConst);
             //successCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
-            //    Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoSuccessResponse)));
+            //    Returns(Task.FromResult(InvokeResult<IResponse>.Create(controlEchoSuccessResponse)));
 
-            //controlEchoFailureResponse = new AsyncResponse(controlEchoRequest, responseFailException);
+            //controlEchoFailureResponse = new Response(controlEchoRequest, responseFailException);
             //failCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
-            //    Returns(Task.FromResult(InvokeResult<IAsyncResponse>.Create(controlEchoFailureResponse)));
+            //    Returns(Task.FromResult(InvokeResult<IResponse>.Create(controlEchoFailureResponse)));
 
-            //_successCoupler.Setup(proc => proc.CompleteAsync(It.IsAny<string>(), It.IsAny<IAsyncResponse>())).Returns(Task.FromResult(InvokeResult.Success));
+            //_successCoupler.Setup(proc => proc.CompleteAsync(It.IsAny<string>(), It.IsAny<IResponse>())).Returns(Task.FromResult(InvokeResult.Success));
 
-            //_sender.Setup(proc => proc.HandleRequest(It.IsAny<IAsyncRequest>())).Returns(Task.FromResult<object>(null));
+            //_sender.Setup(proc => proc.HandleRequest(It.IsAny<IRequest>())).Returns(Task.FromResult<object>(null));
         }
 
         [TestMethod]
