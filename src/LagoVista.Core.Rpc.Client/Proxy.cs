@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Rpc.Attributes;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using LagoVista.Core.Rpc.Settings;
@@ -73,7 +74,7 @@ namespace LagoVista.Core.Rpc.Client
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            if (targetMethod.GetCustomAttribute<AsyncIgnoreAttribute>() != null)
+            if (targetMethod.GetCustomAttribute<RpcIgnoreAttribute>() != null)
             {
                 throw new NotSupportedException($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
             }

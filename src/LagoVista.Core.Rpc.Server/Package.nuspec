@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>LagoVista.Core.Rpc.Server</id>
-        <version>2.1.387-beta1523</version>
+        <version>2.1.387-beta2236</version>
         <authors>Software Logistics, LLC</authors>
         <owners>Software Logistics, LLC</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>

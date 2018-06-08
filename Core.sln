@@ -26,17 +26,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Tests", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.DependencyInjection", "src\LagoVista.Core.DependencyInjection\LagoVista.Core.DependencyInjection.csproj", "{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Networking.AsyncMessaging.Tests", "tests\LagoVista.Core.Networking.AsyncMessaging.Tests\LagoVista.Core.Networking.AsyncMessaging.Tests.csproj", "{CA98BA95-60D5-4BF7-93CB-7596BC181833}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Rpc", "src\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj", "{5913D9CD-C7FD-4200-AF6F-DEDADF380505}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Client", "src\LagoVista.Core.Rpc.Client\LagoVista.Core.Rpc.Client.csproj", "{66CDB6D0-D343-440E-A163-AB4F242FA071}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Rpc.Client", "src\LagoVista.Core.Rpc.Client\LagoVista.Core.Rpc.Client.csproj", "{66CDB6D0-D343-440E-A163-AB4F242FA071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Client.ServiceBus", "src\LagoVista.Core.Rpc.Client.ServiceBus\LagoVista.Core.Rpc.Client.ServiceBus.csproj", "{483A8699-A21A-4FE2-8207-CA0594213234}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Rpc.Client.ServiceBus", "src\LagoVista.Core.Rpc.Client.ServiceBus\LagoVista.Core.Rpc.Client.ServiceBus.csproj", "{483A8699-A21A-4FE2-8207-CA0594213234}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Server", "src\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj", "{A3090165-FCC4-4D20-BE05-D75939021FE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Rpc.Server", "src\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj", "{A3090165-FCC4-4D20-BE05-D75939021FE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Server.ServiceBus", "src\LagoVista.Core.Rpc.Server.ServiceBus\LagoVista.Core.Rpc.Server.ServiceBus.csproj", "{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Rpc.Server.ServiceBus", "src\LagoVista.Core.Rpc.Server.ServiceBus\LagoVista.Core.Rpc.Server.ServiceBus.csproj", "{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Rpc.Tests", "tests\LagoVista.Core.Rpc.Tests\LagoVista.Core.Rpc.Tests.csproj", "{09D98AE8-8E2A-45C1-AACB-A733D56275BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,10 +64,6 @@ Global
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA98BA95-60D5-4BF7-93CB-7596BC181833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA98BA95-60D5-4BF7-93CB-7596BC181833}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA98BA95-60D5-4BF7-93CB-7596BC181833}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA98BA95-60D5-4BF7-93CB-7596BC181833}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5913D9CD-C7FD-4200-AF6F-DEDADF380505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5913D9CD-C7FD-4200-AF6F-DEDADF380505}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5913D9CD-C7FD-4200-AF6F-DEDADF380505}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -88,6 +84,10 @@ Global
 		{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09D98AE8-8E2A-45C1-AACB-A733D56275BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09D98AE8-8E2A-45C1-AACB-A733D56275BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09D98AE8-8E2A-45C1-AACB-A733D56275BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09D98AE8-8E2A-45C1-AACB-A733D56275BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,12 +98,12 @@ Global
 		{AF7596F8-2E2F-4FC1-8516-235C92B3A5AA} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{9E37DE62-0886-405D-911D-DBEF53942316} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{68C0C811-A5A9-40FD-AC95-7E8BB2C72777} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
-		{CA98BA95-60D5-4BF7-93CB-7596BC181833} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{5913D9CD-C7FD-4200-AF6F-DEDADF380505} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{66CDB6D0-D343-440E-A163-AB4F242FA071} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{483A8699-A21A-4FE2-8207-CA0594213234} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{A3090165-FCC4-4D20-BE05-D75939021FE4} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
+		{09D98AE8-8E2A-45C1-AACB-A733D56275BE} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E49F45F8-0C41-4A0A-A34E-D7A13852646B}

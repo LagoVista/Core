@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Messaging and RPC Framework for LagoVista Library</Description>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Company>Software Logistics, LLC</Company>
+    <Authors>Software Logistics, LLC</Authors>
+    <Version>0.1</Version>
+    <Product>LagoVista IoT and Home Automation Frameworks</Product>
+    <!--SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>LagoVista.Core.snk</AssemblyOriginatorKeyFile-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj" />
-    <ProjectReference Include="..\src\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj" />
-    <ProjectReference Include="..\src\LagoVista.Core\LagoVista.Core.csproj" />
+    <ProjectReference Include="..\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj" />
+    <ProjectReference Include="..\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj" />
+    <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Rpc.Attributes;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using System;
@@ -67,7 +68,7 @@ namespace LagoVista.Core.Rpc.Server
 
             var methods = interfaceType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Except(_objectMethods)
-                .Where(m => m.GetCustomAttribute<AsyncIgnoreAttribute>() == null);
+                .Where(m => m.GetCustomAttribute<RpcIgnoreAttribute>() == null);
             var methodCount = 0;
             foreach (var method in methods)
             {

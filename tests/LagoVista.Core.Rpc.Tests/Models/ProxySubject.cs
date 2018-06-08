@@ -10,7 +10,7 @@ namespace LagoVista.Core.Networking.Rpc.Tests.Models
         string PassStringParams(params string[] value);
         string PassObjectParams(params object[] value);
 
-        [AsyncIgnore]
+        [RpcIgnore]
         string SkipMe();
     }
 
