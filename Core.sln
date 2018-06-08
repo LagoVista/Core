@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Client.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Server", "src\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj", "{A3090165-FCC4-4D20-BE05-D75939021FE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Server.ServiceBus", "LagoVista.Core.Rpc.Server.ServiceBus\LagoVista.Core.Rpc.Server.ServiceBus.csproj", "{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rpc.Server.ServiceBus", "src\LagoVista.Core.Rpc.Server.ServiceBus\LagoVista.Core.Rpc.Server.ServiceBus.csproj", "{53A9E4B6-082D-4BF3-B5E6-9A2D917D731E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
