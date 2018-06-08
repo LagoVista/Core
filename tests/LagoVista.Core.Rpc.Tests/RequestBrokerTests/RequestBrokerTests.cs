@@ -1,9 +1,8 @@
-﻿using LagoVista.Core.Rpc.Tests.Models;
+﻿using LagoVista.Core.Rpc.Server;
+using LagoVista.Core.Rpc.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.RequestBrokerTests
 {
@@ -30,7 +29,7 @@ namespace LagoVista.Core.Rpc.Tests.RequestBrokerTests
         public void RequestBroker_RegisterSubject_Success()
         {
             var broker = new RequestBroker();
-            var methodsRegistered = broker.AddRequestHandler(_controlInstance);
+            var methodsRegistered = broker.AddService(_controlInstance);
 
             var instanceMethodCount = typeof(IProxySubject).GetMethods().Count();
             Assert.AreEqual(5, instanceMethodCount);
@@ -42,7 +41,7 @@ namespace LagoVista.Core.Rpc.Tests.RequestBrokerTests
         public void RequestBroker_RegisterSubject_FailureDueToNonInterfaceInstance()
         {
             var broker = new RequestBroker();
-            broker.AddRequestHandler(new ProxySubject());
+            broker.AddService(new ProxySubject());
         }
 
         [TestMethod]
@@ -50,7 +49,7 @@ namespace LagoVista.Core.Rpc.Tests.RequestBrokerTests
         public void RequestBroker_RegisterSubject_FailureDueToNullInstance()
         {
             var broker = new RequestBroker();
-            broker.AddRequestHandler((IProxySubject)null);
+            broker.AddService((IProxySubject)null);
         }
 
     }
