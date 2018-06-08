@@ -1,5 +1,4 @@
-﻿using LagoVista.Core.Attributes;
-using LagoVista.Core.Rpc.Attributes;
+﻿using LagoVista.Core.Rpc.Attributes;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using System;
