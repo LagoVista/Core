@@ -24,8 +24,6 @@ namespace LagoVista.Core.Rpc.Client
         private IAsyncCoupler<IMessage> _asyncCoupler;
         private string _replyPath;
         private TimeSpan _requestTimeout;
-
-
         private readonly static MethodInfo _fromResultMethodInfo = typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
         internal static TProxyInterface Create<TProxyInterface>(

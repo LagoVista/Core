@@ -48,11 +48,12 @@ namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
 
         #region Rcp Receiver Methods
 
-        /// <summary>
-        /// starts listening for responses from server
-        /// </summary>
+        private bool _started = false;
+
         public override void Start()
         {
+            if (_started)
+                return;
             var options = new MessageHandlerOptions(HandleException)
             {
                 AutoComplete = false,
@@ -63,6 +64,7 @@ namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
 #endif
             };
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
+            _started = true;
         }
 
         #endregion
