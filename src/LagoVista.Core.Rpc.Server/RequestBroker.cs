@@ -1,6 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
-using LagoVista.Core.Networking.Rpc.Messages;
-using LagoVista.Core.Networking.Rpc.Middleware;
+using LagoVista.Core.Rpc.Messages;
+using LagoVista.Core.Rpc.Middleware;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.ServiceBus.Server
+namespace LagoVista.Core.Rpc.Server
 {
     public sealed class RequestBroker : IRequestBroker
     {

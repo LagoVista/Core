@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using LagoVista.Core.Rpc.Settings;
 using System;
@@ -9,21 +11,24 @@ namespace LagoVista.Core.Rpc.Client
     {
         private readonly ITransceiverConnectionSettings _connectionSettings;
         private readonly ITransceiver _client;
+        private readonly IAsyncCoupler<IMessage> _asyncCoupler;
         private readonly ILogger _logger;
 
         public ProxyFactory(
             ITransceiverConnectionSettings connectionSettings,
             ITransceiver client,
+            IAsyncCoupler<IMessage> asyncCoupler,
             ILogger logger)
         {
             _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public TProxyInterface Create<TProxyInterface>(ProxySettings proxySettings) where TProxyInterface : class
         {
-            return Proxy.Create<TProxyInterface>(_connectionSettings, _client, _logger, proxySettings);
+            return Proxy.Create<TProxyInterface>(_connectionSettings, _client, _asyncCoupler, _logger, proxySettings);
         }
     }
 }

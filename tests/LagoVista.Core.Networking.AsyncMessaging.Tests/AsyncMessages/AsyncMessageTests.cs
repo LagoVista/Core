@@ -1,11 +1,11 @@
-﻿using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
+﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
+namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
 {
     [TestClass]
     public class AsyncMessageTests 
@@ -40,9 +40,9 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
             var ex = new Exception(_rootExceptionValue, new Exception("hoo"));
             return new AsyncResponse(request, ex);
         }
-        private IAsyncMessage CreateControlMessage()
+        private IMessage CreateControlMessage()
         {
-            return new AsyncMessage()
+            return new Message()
             {
                 Id = _messageId,
                 CorrelationId = _messageCorrelationId,
@@ -54,7 +54,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         [TestMethod]
         public void AsyncMessage_Constructor_Generic()
         {
-            var message = new AsyncMessage()
+            var message = new Message()
             {
                 Id = _messageId,
                 CorrelationId = _messageCorrelationId,
@@ -74,7 +74,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         {
             var controlMessage = CreateControlMessage();
 
-            var message = new AsyncMessage(controlMessage.Payload);
+            var message = new Message(controlMessage.Payload);
 
             Assert.AreEqual(controlMessage.Id, message.Id);
             Assert.AreEqual(controlMessage.CorrelationId, message.CorrelationId);
@@ -89,7 +89,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
         public void AsyncMessage_Constructor_MarshalledData_ArgumentNull()
         {
             byte[] marshalledData = null;
-            var message = new AsyncMessage(marshalledData);
+            var message = new Message(marshalledData);
         }
 
         [TestMethod]

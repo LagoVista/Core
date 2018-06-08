@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\LagoVista.Core.Authentication\LagoVista.Core.Authentication.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.DependencyInjection\LagoVista.Core.DependencyInjection.csproj" />
-    <ProjectReference Include="..\..\src\LagoVista.Core.Networking.AsyncMessaging\LagoVista.Core.Networking.AsyncMessaging.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core\LagoVista.Core.csproj" />
   </ItemGroup>

@@ -1,9 +1,9 @@
-﻿using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
+﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncMessages
+namespace LagoVista.Core.Networking.Rpc.Tests.AsyncMessages
 {
     [TestClass]
     public class AsyncResponseTests 

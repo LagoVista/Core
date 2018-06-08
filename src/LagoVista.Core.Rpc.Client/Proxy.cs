@@ -1,9 +1,11 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using LagoVista.Core.Rpc.Settings;
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -22,21 +24,51 @@ namespace LagoVista.Core.Rpc.Client
         private ITransceiver _client;
         private ITransceiverConnectionSettings _connectionSettings;
         private ProxySettings _proxySettings;
+        private IAsyncCoupler<IMessage> _asyncCoupler;
         private string _replyPath;
+        private TimeSpan _requestTimeout;
+
 
         private readonly static MethodInfo _fromResultMethodInfo = typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
-        internal static TProxyInterface Create<TProxyInterface>(ITransceiverConnectionSettings connectionSettings, ITransceiver client, ILogger logger, ProxySettings proxySettings) where TProxyInterface : class
+        internal static TProxyInterface Create<TProxyInterface>(
+            ITransceiverConnectionSettings connectionSettings,
+            ITransceiver client,
+            IAsyncCoupler<IMessage> asyncCoupler,
+            ILogger logger,
+            ProxySettings proxySettings) where TProxyInterface : class
         {
             var result = Create<TProxyInterface, Proxy>();
 
             (result as Proxy)._connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
-            (result as Proxy)._replyPath = connectionSettings.RpcReceiver.Uri;
             (result as Proxy)._client = client ?? throw new ArgumentNullException(nameof(client));
+            (result as Proxy)._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             (result as Proxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             (result as Proxy)._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
+            if (string.IsNullOrEmpty(proxySettings.OrganizationId)) throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
+            if (string.IsNullOrEmpty(proxySettings.InstanceId)) throw new ArgumentNullException(nameof(proxySettings.InstanceId));
+
+            (result as Proxy)._replyPath = connectionSettings.RpcReceiver.Uri;
+            (result as Proxy)._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
 
             return result;
+        }
+
+        private async Task<IResponse> InvokeRemoteMethod(IRequest request)
+        {
+            await _client.TransmitAsync(request);
+
+            var invokeResult = await _asyncCoupler.WaitOnAsync(request.CorrelationId, _requestTimeout);
+
+            // timeout is the only likely failure case
+            if (!invokeResult.Successful)
+            {
+                var error = invokeResult.Errors.FirstOrDefault();
+                if (error != null)
+                    throw new RpcException(RpcException.FormatErrorMessage(error, "AsyncCoupler failed to complete message with error:"));
+            }
+
+            return (IResponse)invokeResult.Result;
         }
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
@@ -50,7 +82,7 @@ namespace LagoVista.Core.Rpc.Client
 
             // setup and transmit the request
             var request = new Request(targetMethod, args, _proxySettings.OrganizationId, _proxySettings.InstanceId, _replyPath);
-            var responseTask = _client.TransmitAsync(request);
+            var responseTask = InvokeRemoteMethod(request);
 
             // wait for response and handle exceptions
             responseTask.Wait();
@@ -66,7 +98,7 @@ namespace LagoVista.Core.Rpc.Client
             }
 
             // test response for server side exceptions
-            var response = (IResponse)responseTask.Result;
+            var response = responseTask.Result;
             if (!response.Success)
             {
                 //todo: ML - log exception

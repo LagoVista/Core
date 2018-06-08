@@ -1,11 +1,11 @@
-﻿using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
+﻿using LagoVista.Core.Networking.Rpc.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.AsyncRequestBrokerTests
+namespace LagoVista.Core.Networking.Rpc.Tests.AsyncRequestBrokerTests
 {
     [TestClass]
     public class InstanceMethodPairTests

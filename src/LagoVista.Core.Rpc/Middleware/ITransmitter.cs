@@ -5,6 +5,6 @@ namespace LagoVista.Core.Rpc.Middleware
 {
     public interface ITransmitter
     {
-        Task<IMessage> TransmitAsync(IMessage message);
+        Task TransmitAsync(IMessage message);
     }
 }

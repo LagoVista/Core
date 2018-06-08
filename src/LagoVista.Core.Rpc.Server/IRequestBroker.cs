@@ -1,7 +1,7 @@
 ﻿using LagoVista.Core.Rpc.Messages;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Rpc.Middleware
+namespace LagoVista.Core.Rpc.Server
 {
     public interface IRequestBroker
     {

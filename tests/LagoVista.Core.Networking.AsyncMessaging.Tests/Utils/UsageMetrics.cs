@@ -1,7 +1,7 @@
 ﻿using LagoVista.Core.Interfaces;
 using System;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Utils
+namespace LagoVista.Core.Networking.Rpc.Tests.Utils
 {
     public sealed class TestUsageMetrics : IUsageMetrics
     {

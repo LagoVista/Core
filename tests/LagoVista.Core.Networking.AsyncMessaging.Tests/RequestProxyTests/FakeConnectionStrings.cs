@@ -2,7 +2,7 @@
 using LagoVista.Core.Models;
 using System;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.RequestProxyTests
+namespace LagoVista.Core.Networking.Rpc.Tests.RequestProxyTests
 {
     public sealed class FakeConnectionSettings : IServiceBusAsyncResponseListenerConnectionSettings
     {

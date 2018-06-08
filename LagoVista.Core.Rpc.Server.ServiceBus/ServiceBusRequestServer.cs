@@ -1,5 +1,4 @@
-﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using Microsoft.Azure.ServiceBus;
@@ -7,9 +6,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
+namespace LagoVista.Core.Rpc.Server.ServiceBus
 {
-    internal sealed class ServiceBusProxyClient : AbstractProxyClient
+    public sealed class ServiceBusRequestServer : AbstractRequestServer
     {
         #region Fields
         private readonly string _topicConnectionString;
@@ -17,10 +16,8 @@ namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
         private readonly SubscriptionClient _subscriptionClient;
         #endregion
 
-        #region Constructors
-
-        public ServiceBusProxyClient(ITransceiverConnectionSettings connectionSettings, IAsyncCoupler<IMessage> asyncCoupler, ILogger logger) : 
-            base(connectionSettings, asyncCoupler, logger)
+        public ServiceBusRequestServer(ITransceiverConnectionSettings connectionSettings, IRequestBroker requestBroker, ILogger logger) :
+            base(connectionSettings, requestBroker, logger)
         {
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
@@ -44,37 +41,11 @@ namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
         }
 
-        #endregion
-
-        #region Rcp Receiver Methods
-
-        /// <summary>
-        /// starts listening for responses from server
-        /// </summary>
-        public override void Start()
-        {
-            var options = new MessageHandlerOptions(HandleException)
-            {
-                AutoComplete = false,
-#if DEBUG
-                MaxConcurrentCalls = 1,
-#else
-                MaxConcurrentCalls = 100,
-#endif
-            };
-            _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
-        }
-
-        #endregion
-
-        #region ServiceBus Subscription Methods
-
         private async Task MessageReceived(Microsoft.Azure.ServiceBus.Message message, CancellationToken cancelationToken)
         {
             try
             {
-                var response = new Response(message.Body);
-                await ReceiveAsync(response);
+                await ReceiveAsync(new Request(message.Body));
                 await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
             }
             catch (Exception ex)
@@ -92,17 +63,26 @@ namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
             //LogException("AzureServiceBusListener_Listen", ex.Exception);
         }
 
-        #endregion
-
-        #region Rpc Transmitter Methods
+        public override void Start()
+        {
+            var options = new MessageHandlerOptions(HandleException)
+            {
+                AutoComplete = false,
+#if DEBUG
+                MaxConcurrentCalls = 1,
+#else
+                MaxConcurrentCalls = 100,
+#endif
+            };
+            _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
+        }
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
             //todo: ML - if service bus topic and subscription doesn't exist, then create it: https://github.com/Azure-Samples/service-bus-dotnet-management/tree/master/src/service-bus-dotnet-management
 
             //todo: ML - need to set retry policy and operation timeout etc.
-            var entityPath = (_destinationEntityPath + $"_{message.OrganizationId}_{message.InstanceId}").Replace("__", "_");
-            var topicClient = new TopicClient(_topicConnectionString, entityPath, null);
+            var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath, null);
             try
             {
                 // package response in service bus message and send to topic
@@ -127,7 +107,5 @@ namespace LagoVista.Core.Networking.Rpc.Client.ServiceBus
                 await topicClient.CloseAsync();
             }
         }
-
-        #endregion
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>LagoVista.Core.Rpc.Server.ServiceBus</id>
+        <version>2.1.387-beta1523</version>
+        <authors>Software Logistics, LLC</authors>
+        <owners>Software Logistics, LLC</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+        <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+        <description>ServiceBus Implementation of RPC Server Functionality and Interfaces for Building Apps with the LagoVista IoT and Devices Framework</description>
+        <releaseNotes>Early Unstable Release</releaseNotes>
+        <copyright>Copyright 2018</copyright>
+        <tags>HomeAutomation IoT RPC Client ServiceBus</tags>
+    </metadata>
+    <files>
+        <file src="bin\release\netstandard2.0\*.dll" target="lib\netstandard2.0" />
+    </files>
+</package>

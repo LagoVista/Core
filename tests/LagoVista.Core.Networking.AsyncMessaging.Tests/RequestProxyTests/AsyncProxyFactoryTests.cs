@@ -1,14 +1,14 @@
 ﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
-using LagoVista.Core.Networking.AsyncMessaging.Tests.RequestProxyTests;
-using LagoVista.Core.Networking.AsyncMessaging.Tests.Utils;
+using LagoVista.Core.Networking.Rpc.Tests.Models;
+using LagoVista.Core.Networking.Rpc.Tests.RequestProxyTests;
+using LagoVista.Core.Networking.Rpc.Tests.Utils;
 using LagoVista.Core.PlatformSupport;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Reflection;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
+namespace LagoVista.Core.Networking.Rpc.Tests.ProxyTests
 {
     [TestClass]
     public class AsyncProxyFactoryTests

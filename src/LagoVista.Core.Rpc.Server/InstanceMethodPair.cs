@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.Rpc.ServiceBus.Server
+namespace LagoVista.Core.Rpc.Server
 {
     internal sealed class InstanceMethodPair
     {

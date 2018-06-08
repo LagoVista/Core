@@ -1,14 +1,14 @@
 ﻿using LagoVista.Core.Interfaces;
-using LagoVista.Core.Networking.AsyncMessaging.Tests.Models;
-using LagoVista.Core.Networking.AsyncMessaging.Tests.RequestProxyTests;
-using LagoVista.Core.Networking.AsyncMessaging.Tests.Utils;
+using LagoVista.Core.Networking.Rpc.Tests.Models;
+using LagoVista.Core.Networking.Rpc.Tests.RequestProxyTests;
+using LagoVista.Core.Networking.Rpc.Tests.Utils;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
+namespace LagoVista.Core.Networking.Rpc.Tests.ProxyTests
 {
 
     [TestClass]
@@ -19,7 +19,7 @@ namespace LagoVista.Core.Networking.AsyncMessaging.Tests.ProxyTests
         private IAsyncCoupler<IAsyncResponse> _coupler;
         private FakeSender _sender;
         private IProxySubject _proxy;
-        private IAsyncProxyFactory _proxyFactory;
+        private IProxyFactory _proxyFactory;
         private static readonly string _orgId = "orgid";
         private static readonly string _insId = "insid";
 

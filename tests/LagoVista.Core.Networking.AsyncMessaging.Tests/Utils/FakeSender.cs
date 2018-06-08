@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Networking.AsyncMessaging.Tests.Utils
+namespace LagoVista.Core.Networking.Rpc.Tests.Utils
 {
     /// <summary>
     /// fake sender "sends" a request, then waits a bit to simulate network and then completes the request with the coupler
