@@ -9,14 +9,12 @@ namespace LagoVista.Core.Rpc.Tests.Messages
     [TestClass]
     public class ResponseTests 
     {
-        private readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        private readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        private readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
-        private readonly string _echoMethodParamName = "value";
+        private readonly MethodInfo _echoMethodInfo = typeof(FakeProxySubject).GetMethod(nameof(FakeProxySubject.Echo));
+        private readonly object[] _echoArgs = new object[1] { FakeProxySubject.EchoValueConst };
+        private readonly string _echoMethodParamValue = FakeProxySubject.EchoValueConst;
         private readonly string _responseValue = "jello babies";
         private readonly string _rootExceptionValue = "boo";
 
-        private readonly string _destination = "Test.Destination.Path";
         private readonly string _messageId = Guid.Parse("{C4CE5957-F9D7-4727-A20D-4C51AB5C6745}").ToString();
         private readonly string _messageCorrelationId = Guid.Parse("{1C2FC03B-3D21-42A3-97F3-1756177DE2CB}").ToString();
         private readonly string _organizationId = Guid.Parse("{8AF59E47-E473-41D1-AA86-8B557813EEFB}").ToString();

@@ -1,10 +1,9 @@
-﻿using LagoVista.Core.Attributes;
-using LagoVista.Core.Rpc.Attributes;
+﻿using LagoVista.Core.Rpc.Attributes;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.Models
 {
-    public interface IProxySubject
+    public interface IFakeProxySubject
     {
         Task<string> EchoAsync(string value);
         string Echo(string value);
@@ -15,7 +14,7 @@ namespace LagoVista.Core.Rpc.Tests.Models
         string SkipMe();
     }
 
-    public sealed class ProxySubject : IProxySubject
+    public sealed class FakeProxySubject : IFakeProxySubject
     {
         public static readonly string EchoValueConst = "ping";
 

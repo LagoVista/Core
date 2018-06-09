@@ -227,11 +227,11 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         public void Message_GetValue_T()
         {
             var key = "key";
-            var value = new ProxySubject();
+            var value = new FakeProxySubject();
             var controlMessage = CreateControlMessage();
             // tests setting/getting non-null typed object
             controlMessage.SetValue(key, value);
-            Assert.AreEqual(value, controlMessage.GetValue<ProxySubject>(key));
+            Assert.AreEqual(value, controlMessage.GetValue<FakeProxySubject>(key));
         }
 
         [TestMethod]
@@ -243,7 +243,7 @@ namespace LagoVista.Core.Rpc.Tests.Messages
             var controlMessage = CreateControlMessage();
             // tests typed get value method with wrong type
             controlMessage.SetValue(key, value);
-            var v = controlMessage.GetValue<ProxySubject>("key");
+            var v = controlMessage.GetValue<FakeProxySubject>("key");
         }
     }
 }
