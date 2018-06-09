@@ -1,6 +1,5 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Rpc.Tests.Models;
-using LagoVista.Core.Rpc.Tests.RequestProxyTests;
 using LagoVista.Core.Rpc.Tests.Utils;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Utils;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Client;
 
-namespace LagoVista.Core.Rpc.Tests.ProxyTests
+namespace LagoVista.Core.Rpc.Tests.Client
 {
 
     [TestClass]
@@ -19,11 +18,10 @@ namespace LagoVista.Core.Rpc.Tests.ProxyTests
         private readonly ILogger _logger = new TestLogger();
         private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
         private IAsyncCoupler<IResponse> _coupler;
-        private FakeSender _sender;
         private IProxySubject _proxy;
         private IProxyFactory _proxyFactory;
-        private static readonly string _organizationId = "orgid";
-        private static readonly string _instanceId = "insid";
+        private static readonly string Constants.OrganizationId = "orgid";
+        private static readonly string Constants.InstanceId = "insid";
 
         [TestInitialize]
         public void Init()
@@ -32,14 +30,14 @@ namespace LagoVista.Core.Rpc.Tests.ProxyTests
             _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
 
             _proxyFactory = new ProxyFactory(
-                new FakeConnectionSettings(),
+                new SimulatedConnectionSettings(),
                 _coupler,
                 _sender,
                 _logger);
 
             _proxy = _proxyFactory.Create<IProxySubject>(
-                _organizationId,
-                _instanceId,
+                Constants.OrganizationId,
+                Constants.InstanceId,
                 TimeSpan.FromSeconds(120));
 
             // don't delete - I'm keeping this here for reference
@@ -100,8 +98,8 @@ namespace LagoVista.Core.Rpc.Tests.ProxyTests
             var sender = new FakeSender(_coupler, json);
 
             var proxySubject = _proxyFactory.Create<IProxySubject>(
-                _organizationId,
-                _instanceId,
+                Constants.OrganizationId,
+                Constants.InstanceId,
                 TimeSpan.FromSeconds(30));
             var echoResult = proxySubject.PassStringParams(array);
 
@@ -117,8 +115,8 @@ namespace LagoVista.Core.Rpc.Tests.ProxyTests
             var sender = new FakeSender(_coupler, json);
 
             var proxySubject = _proxyFactory.Create<IProxySubject>(
-                _organizationId,
-                _instanceId,
+                Constants.OrganizationId,
+                Constants.InstanceId,
                 TimeSpan.FromSeconds(30));
             var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
 

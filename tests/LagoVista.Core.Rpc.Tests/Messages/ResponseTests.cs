@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Tests.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
@@ -9,22 +10,15 @@ namespace LagoVista.Core.Rpc.Tests.Messages
     [TestClass]
     public class ResponseTests 
     {
-        private readonly MethodInfo _echoMethodInfo = typeof(FakeProxySubject).GetMethod(nameof(FakeProxySubject.Echo));
-        private readonly object[] _echoArgs = new object[1] { FakeProxySubject.EchoValueConst };
-        private readonly string _echoMethodParamValue = FakeProxySubject.EchoValueConst;
+        private readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+        private readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
+        private readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
         private readonly string _responseValue = "jello babies";
         private readonly string _rootExceptionValue = "boo";
 
-        private readonly string _messageId = Guid.Parse("{C4CE5957-F9D7-4727-A20D-4C51AB5C6745}").ToString();
-        private readonly string _messageCorrelationId = Guid.Parse("{1C2FC03B-3D21-42A3-97F3-1756177DE2CB}").ToString();
-        private readonly string _organizationId = Guid.Parse("{8AF59E47-E473-41D1-AA86-8B557813EEFB}").ToString();
-        private readonly string _instanceId = Guid.Parse("{EC0E2AE5-7B17-4C0D-9355-1903E3284FBE}").ToString();
-        private readonly string _replyPath = "Test.ReplyTo.Path";
-        private readonly DateTime _messageTimeStamp = new DateTime(2018, 1, 1, 13, 30, 30);
-
         private IRequest CreateControlEchoRequest()
         {
-            return new Request(_echoMethodInfo, _echoArgs, _organizationId, _instanceId, _replyPath);
+            return new Request(_echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
         }
 
         private IResponse CreateControlEchoSuccessResponse()

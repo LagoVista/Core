@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.Server
 {
-    public sealed class RequestServerSimulator : AbstractRequestServer
+    public sealed class SimulatedRequestServer : AbstractRequestServer
     {
         private readonly QueueSimulator _queue;
 
-        public RequestServerSimulator(
+        public SimulatedRequestServer(
             ITransceiverConnectionSettings connectionSettings, 
             IRequestBroker requestBroker, 
             ILogger logger, 

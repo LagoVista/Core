@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.Client
 {
-    public sealed class ProxyClientSimulator : AbstractProxyClient
+    public sealed class SimulatedProxyClient : AbstractProxyClient
     {
         private readonly QueueSimulator _queue;
 
-        public ProxyClientSimulator(
+        public SimulatedProxyClient(
             ITransceiverConnectionSettings connectionSettings, 
             IAsyncCoupler<IMessage> asyncCoupler, 
             ILogger logger, 

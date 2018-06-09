@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Tests.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,17 @@ namespace LagoVista.Core.Rpc.Tests.Messages
     [TestClass]
     public class MessageTests 
     {
-        private readonly string _destination = "Test.Destination.Path";
-        private readonly string _messageId = Guid.Parse("{C4CE5957-F9D7-4727-A20D-4C51AB5C6745}").ToString();
-        private readonly string _messageCorrelationId = Guid.Parse("{1C2FC03B-3D21-42A3-97F3-1756177DE2CB}").ToString();
-        private readonly string _organizationId = Guid.Parse("{8AF59E47-E473-41D1-AA86-8B557813EEFB}").ToString();
-        private readonly string _instanceId = Guid.Parse("{EC0E2AE5-7B17-4C0D-9355-1903E3284FBE}").ToString();
-        private readonly string _replyPath = "Test.ReplyTo.Path";
-        private readonly DateTime _messageTimeStamp = new DateTime(2018, 1, 1, 13, 30, 30);
-
         private IMessage CreateControlMessage()
         {
             return new Message()
             {
-                Id = _messageId,
-                CorrelationId = _messageCorrelationId,
-                DestinationPath = _destination,
-                TimeStamp = _messageTimeStamp,
-                InstanceId = _instanceId,
-                OrganizationId = _organizationId,
-                ReplyPath = _replyPath
+                Id = Constants.MessageId,
+                CorrelationId = Constants.MessageCorrelationId,
+                DestinationPath = Constants.MessageDestination,
+                TimeStamp = Constants.MessageTimeStamp,
+                InstanceId = Constants.InstanceId,
+                OrganizationId = Constants.OrganizationId,
+                ReplyPath = Constants.MessageReplyPath
             };
         }
 
@@ -37,23 +30,23 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         {
             var message = new Message()
             {
-                Id = _messageId,
-                CorrelationId = _messageCorrelationId,
-                DestinationPath = _destination,
-                TimeStamp = _messageTimeStamp,
-                InstanceId = _instanceId,
-                OrganizationId = _organizationId,
-                ReplyPath= _replyPath
+                Id = Constants.MessageId,
+                CorrelationId = Constants.MessageCorrelationId,
+                DestinationPath = Constants.MessageDestination,
+                TimeStamp = Constants.MessageTimeStamp,
+                InstanceId = Constants.InstanceId,
+                OrganizationId = Constants.OrganizationId,
+                ReplyPath= Constants.MessageReplyPath
             };
 
             // tests constructor, InternalSetValue, InternalGetValue and public property assignments
-            Assert.AreEqual(_messageId, message.Id);
-            Assert.AreEqual(_messageCorrelationId, message.CorrelationId);
-            Assert.AreEqual(_destination, message.DestinationPath);
-            Assert.AreEqual(_messageTimeStamp, message.TimeStamp);
-            Assert.AreEqual(_instanceId, message.InstanceId);
-            Assert.AreEqual(_organizationId, message.OrganizationId);
-            Assert.AreEqual(_replyPath, message.ReplyPath);
+            Assert.AreEqual(Constants.MessageId, message.Id);
+            Assert.AreEqual(Constants.MessageCorrelationId, message.CorrelationId);
+            Assert.AreEqual(Constants.MessageDestination, message.DestinationPath);
+            Assert.AreEqual(Constants.MessageTimeStamp, message.TimeStamp);
+            Assert.AreEqual(Constants.InstanceId, message.InstanceId);
+            Assert.AreEqual(Constants.OrganizationId, message.OrganizationId);
+            Assert.AreEqual(Constants.MessageReplyPath, message.ReplyPath);
         }
 
         [TestMethod]
@@ -227,11 +220,11 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         public void Message_GetValue_T()
         {
             var key = "key";
-            var value = new FakeProxySubject();
+            var value = new ProxySubject();
             var controlMessage = CreateControlMessage();
             // tests setting/getting non-null typed object
             controlMessage.SetValue(key, value);
-            Assert.AreEqual(value, controlMessage.GetValue<FakeProxySubject>(key));
+            Assert.AreEqual(value, controlMessage.GetValue<ProxySubject>(key));
         }
 
         [TestMethod]
@@ -243,7 +236,7 @@ namespace LagoVista.Core.Rpc.Tests.Messages
             var controlMessage = CreateControlMessage();
             // tests typed get value method with wrong type
             controlMessage.SetValue(key, value);
-            var v = controlMessage.GetValue<FakeProxySubject>("key");
+            var v = controlMessage.GetValue<ProxySubject>("key");
         }
     }
 }
