@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Client.ServiceBus
 {
-    internal sealed class ServiceBusProxyClient : AbstractProxyClient
+    public sealed class ServiceBusProxyClient : AbstractProxyClient
     {
         #region Fields
         private readonly string _topicConnectionString;
