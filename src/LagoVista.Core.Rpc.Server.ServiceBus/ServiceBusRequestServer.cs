@@ -63,12 +63,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             //LogException("AzureServiceBusListener_Listen", ex.Exception);
         }
 
-        private bool _started = false;
-
-        public override void Start()
+        protected override void CustomStart()
         {
-            if (_started)
-                return;
             var options = new MessageHandlerOptions(HandleException)
             {
                 AutoComplete = false,
@@ -79,7 +75,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 #endif
             };
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
-            _started = true;
         }
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)

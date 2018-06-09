@@ -20,15 +20,21 @@ namespace LagoVista.Core.Rpc.Server
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public abstract void Start();
+        private bool _started = false;
+
+        public void Start()
+        {
+            if (_started)
+                return;
+            CustomStart();
+            _started = true;
+        }
 
         public async Task TransmitAsync(IMessage message)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
             await CustomTransmitMessageAsync(message);
         }
-
-        protected abstract Task CustomTransmitMessageAsync(IMessage message);
 
         public async Task ReceiveAsync(IMessage message)
         {
@@ -37,5 +43,8 @@ namespace LagoVista.Core.Rpc.Server
             var response = await _requestBroker.InvokeAsync((IRequest)message);
             await TransmitAsync(response);
         }
+
+        protected abstract void CustomStart();
+        protected abstract Task CustomTransmitMessageAsync(IMessage message);
     }
 }

@@ -52,7 +52,18 @@ namespace LagoVista.Core.Rpc.Client
         /// <summary>
         /// starts listening for responses from server
         /// </summary>
-        public abstract void Start();
+
+        private bool _started = false;
+
+        public void Start()
+        {
+            if (_started)
+                return;
+            CustomStart();
+            _started = true;
+        }
+
+        protected abstract void CustomStart();
 
         #endregion
 
