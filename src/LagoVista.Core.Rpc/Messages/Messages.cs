@@ -35,7 +35,16 @@ namespace LagoVista.Core.Rpc.Messages
             return _data.Keys.Where(k => !k.StartsWith(_privateKeyPrefix)).Count();
         }
 
-        public Message() : base() { }
+        public Message() : base()
+        {
+            Id = string.Empty;
+            CorrelationId = string.Empty;
+            DestinationPath = string.Empty;
+            InstanceId = string.Empty;
+            OrganizationId = string.Empty;
+            ReplyPath = string.Empty;
+            TimeStamp = DateTime.UtcNow;
+        }
 
         public Message(byte[] marshalledData) : base()
         {
@@ -177,6 +186,7 @@ namespace LagoVista.Core.Rpc.Messages
             set { InternalSetValue(_instanceId, value, true); }
         }
 
+        [JsonIgnore]
         public byte[] Payload
         {
             get
@@ -197,6 +207,7 @@ namespace LagoVista.Core.Rpc.Messages
             }
         }
 
+        [JsonIgnore]
         public string Json => JsonConvert.SerializeObject(_data, _jsonSettings);
     }
 
@@ -259,6 +270,7 @@ namespace LagoVista.Core.Rpc.Messages
             }
         }
 
+        [JsonIgnore]
         public int ArgumentCount => GetPublicItemCount();
     }
 
