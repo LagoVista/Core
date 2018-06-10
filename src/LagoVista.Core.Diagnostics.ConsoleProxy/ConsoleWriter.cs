@@ -18,14 +18,14 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
         public void WriteError(string message)
         {
             Console.ForegroundColor = _errorForeground;
-            Console.WriteLine($"{DateTime.Now.ToLongTimeString()}  {message}");
+            Console.WriteLine($"{DateTime.UtcNow.ToString()}  {message}");
             Console.ResetColor();
         }
 
         public void WriteLine(string message)
         {
             Console.ForegroundColor = _defaultForeground;
-            Console.WriteLine($"{DateTime.Now.ToLongTimeString()}  {message}");
+            Console.WriteLine($"{DateTime.UtcNow.ToString()}  {message}");
             Console.ResetColor();
         }
 

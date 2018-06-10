@@ -29,12 +29,22 @@ namespace LagoVista.Core.Rpc.Tests.Diagnostics
         }
 
         [TestMethod]
-        public void ConsoleProxyFactory_Create_ProxyExecutes()
+        public void ConsoleProxyFactory_ProxyExecutesWithParam()
         {
             var proxyFactory = new ConsoleProxyFactory(new ConsoleWriter());
             var subject = new ProxySubject();
             var consoleProxy = proxyFactory.Create<IProxySubject>(subject);
             var value = consoleProxy.Echo(ProxySubject.EchoValueConst);
+            Assert.AreEqual(ProxySubject.EchoValueConst, value);
+        }
+
+        [TestMethod]
+        public void ConsoleProxyFactory_ProxyExecutesWithoutParam()
+        {
+            var proxyFactory = new ConsoleProxyFactory(new ConsoleWriter());
+            var subject = new ProxySubject();
+            var consoleProxy = proxyFactory.Create<IProxySubject>(subject);
+            var value = consoleProxy.SkipMe();
             Assert.AreEqual(ProxySubject.EchoValueConst, value);
         }
     }
