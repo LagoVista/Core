@@ -1,9 +1,8 @@
-﻿using LagoVista.Core;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Reflection;
 
-namespace LagoVista.Diagnostics
+namespace LagoVista.Core.Diagnostics.ConsoleProxy
 {
     public sealed class ConsoleProxyProxyFactory
     {

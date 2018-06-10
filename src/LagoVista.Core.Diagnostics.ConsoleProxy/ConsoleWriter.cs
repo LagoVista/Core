@@ -1,7 +1,6 @@
-using LagoVista.Core;
 using System;
 
-namespace LagoVista.Diagnostics
+namespace LagoVista.Core.Diagnostics.ConsoleProxy
 {
     public sealed class ConsoleWriter : IConsoleWriter
     {

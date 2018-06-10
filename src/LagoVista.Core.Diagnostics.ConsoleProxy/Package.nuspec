@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
-        <version>2.1.389-beta1431</version>
+        <version>2.1.389-beta2203</version>
         <authors>Software Logistics, LLC</authors>
         <owners>Software Logistics, LLC</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
