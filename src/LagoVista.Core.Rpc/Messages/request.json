@@ -1,8 +1,12 @@
 ﻿{
     "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.Object, System.Private.CoreLib]], System.Private.CoreLib",
-    "__organization_id": "C8AD4589F26842E7A1AEFBAEFC979C9B",
+    "__message_id": "750fadba-c27c-4a6f-909f-4c7c871c10a2",
+    "__correlation_id": "b3ac2d7d-8dec-450c-b0c8-0d549cdbda72",
+    "__message_path": "LagoVista.IoT.DeviceManagement.Core.Repos.IDeviceManagementRepo/GetDevicesForRepositoryAsync/",
     "__instance_id": "9E88C7F6B5894DBFB3BC09D20736705E",
-    "__reply_path": "async_response_iot_web_portal",
+    "__organization_id": "C8AD4589F26842E7A1AEFBAEFC979C9B",
+    "__reply_path": "production",
+    "__datetimestamp_key": "2018-06-10T05:25:50.4620215Z",
     "repo": {
         "$type": "LagoVista.IoT.DeviceManagement.Core.Models.DeviceRepository, LagoVista.IoT.DeviceManagement.Models",
         "DatabaseName": "dev",
@@ -26,7 +30,8 @@
             "Port": "27017",
             "ResourceName": "nuviot",
             "IsSSL": false,
-            "Settings": { "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib" }
+            "Settings": { "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib" },
+            "TimeoutInSeconds": 0
         },
         "DeviceArchiveStorageSettings": {
             "$type": "LagoVista.Core.Models.ConnectionSettings, LagoVista.Core",
@@ -34,7 +39,8 @@
             "Port": "3306",
             "ResourceName": "nuviot",
             "IsSSL": false,
-            "Settings": { "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib" }
+            "Settings": { "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib" },
+            "TimeoutInSeconds": 0
         },
         "PEMStorageSettings": {
             "$type": "LagoVista.Core.Models.ConnectionSettings, LagoVista.Core",
@@ -42,7 +48,8 @@
             "Port": "27017",
             "ResourceName": "nuviot",
             "IsSSL": false,
-            "Settings": { "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib" }
+            "Settings": { "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib" },
+            "TimeoutInSeconds": 0
         },
         "Key": "marktest",
         "Subscription": {
@@ -91,9 +98,5 @@
         "$type": "LagoVista.Core.Models.UIMetaData.ListRequest, LagoVista.Core",
         "PageIndex": 1,
         "PageSize": 25
-    },
-    "__message_id": "9a4e004c-06a3-42c9-9b01-f5ef620df254",
-    "__correlation_id": "d9728dca-e322-41b9-93b0-acb392f9f22b",
-    "__message_path": "LagoVista.IoT.DeviceManagement.Core.Repos.IDeviceManagementRepo/GetDevicesForRepositoryAsync/",
-    "__datetimestamp_key": "2018-06-04T21:31:22.378351Z"
+    }
 }

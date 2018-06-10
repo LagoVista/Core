@@ -43,8 +43,8 @@ namespace LagoVista.Core.Rpc.Client
             proxy._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
             if (string.IsNullOrEmpty(proxySettings.OrganizationId)) throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
             if (string.IsNullOrEmpty(proxySettings.InstanceId)) throw new ArgumentNullException(nameof(proxySettings.InstanceId));
-            if (string.IsNullOrEmpty(connectionSettings.RpcReceiver.Uri)) throw new ArgumentNullException(nameof(connectionSettings.RpcReceiver.Uri));
-            proxy._replyPath = connectionSettings.RpcReceiver.Uri;
+            if (string.IsNullOrEmpty(connectionSettings.RpcReceiver.ResourceName)) throw new ArgumentNullException(nameof(connectionSettings.RpcReceiver.ResourceName));
+            proxy._replyPath = connectionSettings.RpcReceiver.ResourceName;
             if (connectionSettings.RpcTransmitter.TimeoutInSeconds == 0) throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcReceiver.Uri));
             proxy._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
 
