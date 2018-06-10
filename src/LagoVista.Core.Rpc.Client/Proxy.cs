@@ -35,17 +35,18 @@ namespace LagoVista.Core.Rpc.Client
         {
             var result = Create<TProxyInterface, Proxy>();
 
-            (result as Proxy)._connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
-            (result as Proxy)._client = client ?? throw new ArgumentNullException(nameof(client));
-            (result as Proxy)._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
-            (result as Proxy)._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            (result as Proxy)._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
+            var proxy = (result as Proxy);
+            proxy._connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+            proxy._client = client ?? throw new ArgumentNullException(nameof(client));
+            proxy._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
+            proxy._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            proxy._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
             if (string.IsNullOrEmpty(proxySettings.OrganizationId)) throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
             if (string.IsNullOrEmpty(proxySettings.InstanceId)) throw new ArgumentNullException(nameof(proxySettings.InstanceId));
             if (string.IsNullOrEmpty(connectionSettings.RpcReceiver.Uri)) throw new ArgumentNullException(nameof(connectionSettings.RpcReceiver.Uri));
-            (result as Proxy)._replyPath = connectionSettings.RpcReceiver.Uri;
+            proxy._replyPath = connectionSettings.RpcReceiver.Uri;
             if (connectionSettings.RpcTransmitter.TimeoutInSeconds == 0) throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcReceiver.Uri));
-            (result as Proxy)._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
+            proxy._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
 
             return result;
         }

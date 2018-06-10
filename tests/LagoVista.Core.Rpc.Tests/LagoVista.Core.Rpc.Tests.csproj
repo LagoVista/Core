@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\LagoVista.Core.Diagnostics.ConsoleProxy\LagoVista.Core.Diagnostics.ConsoleProxy.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.Rpc.Client\LagoVista.Core.Rpc.Client.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj" />
