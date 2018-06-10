@@ -1,13 +1,11 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Rpc.Client;
 using LagoVista.Core.Rpc.Tests.Models;
 using LagoVista.Core.Rpc.Tests.Utils;
-using LagoVista.Core.PlatformSupport;
-using LagoVista.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Threading.Tasks;
-using LagoVista.Core.Rpc.Messages;
-using LagoVista.Core.Rpc.Client;
 
 namespace LagoVista.Core.Rpc.Tests.Client
 {
@@ -15,70 +13,39 @@ namespace LagoVista.Core.Rpc.Tests.Client
     [TestClass]
     public class ProxyTests
     {
-        private readonly ILogger _logger = new TestLogger();
-        private readonly IUsageMetrics _metrics = new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" };
-        private IAsyncCoupler<IResponse> _coupler;
-        private IProxySubject _proxy;
-        private IProxyFactory _proxyFactory;
-        private static readonly string Constants.OrganizationId = "orgid";
-        private static readonly string Constants.InstanceId = "insid";
+        private readonly IProxySubject _proxySubect;
+        private readonly IProxyFactory _proxyFactory = ProxyFactoryTests.CreateControlProxyFactory();
 
-        [TestInitialize]
-        public void Init()
+        public ProxyTests()
         {
-            _coupler = new AsyncCoupler<IResponse>(_logger, new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
-            _sender = new FakeSender(_coupler, ProxySubject.EchoValueConst);
-
-            _proxyFactory = new ProxyFactory(
-                new SimulatedConnectionSettings(),
-                _coupler,
-                _sender,
-                _logger);
-
-            _proxy = _proxyFactory.Create<IProxySubject>(
-                Constants.OrganizationId,
-                Constants.InstanceId,
-                TimeSpan.FromSeconds(120));
-
-            // don't delete - I'm keeping this here for reference
-            //controlEchoSuccessResponse = new Response(controlEchoRequest, ProxySubject.EchoValueConst);
-            //successCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
-            //    Returns(Task.FromResult(InvokeResult<IResponse>.Create(controlEchoSuccessResponse)));
-
-            //controlEchoFailureResponse = new Response(controlEchoRequest, responseFailException);
-            //failCoupler.Setup(mock => mock.WaitOnAsync(It.IsAny<string>(), It.IsAny<TimeSpan>())).
-            //    Returns(Task.FromResult(InvokeResult<IResponse>.Create(controlEchoFailureResponse)));
-
-            //_successCoupler.Setup(proc => proc.CompleteAsync(It.IsAny<string>(), It.IsAny<IResponse>())).Returns(Task.FromResult(InvokeResult.Success));
-
-            //_sender.Setup(proc => proc.HandleRequest(It.IsAny<IRequest>())).Returns(Task.FromResult<object>(null));
+            _proxySubect = _proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
         }
 
         [TestMethod]
         public void AsyncProxy_Echo_ResultIsNotNull()
         {
-            var echoResult = _proxy.Echo(ProxySubject.EchoValueConst);
+            var echoResult = _proxySubect.Echo(ProxySubject.EchoValueConst);
             Assert.IsNotNull(echoResult);
         }
 
         [TestMethod]
         public void AsyncProxy_Echo_ResultIsCorrectValue()
         {
-            var echoResult = _proxy.Echo(ProxySubject.EchoValueConst);
+            var echoResult = _proxySubect.Echo(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
         public async Task AsyncProxy_EchoAsync_ResultIsNotNull()
         {
-            var echoResult = await _proxy.EchoAsync(ProxySubject.EchoValueConst);
+            var echoResult = await _proxySubect.EchoAsync(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
         public async Task AsyncProxy_EchoAsync_ResultIsCorrectValue()
         {
-            var echoResult = await _proxy.EchoAsync(ProxySubject.EchoValueConst);
+            var echoResult = await _proxySubect.EchoAsync(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
@@ -86,7 +53,7 @@ namespace LagoVista.Core.Rpc.Tests.Client
         [ExpectedException(typeof(NotSupportedException))]
         public void AsyncProxy_EchoAsync_MethodNotSupported()
         {
-            var echoResult = _proxy.SkipMe();
+            var echoResult = _proxySubect.SkipMe();
         }
 
         [TestMethod]
@@ -95,14 +62,17 @@ namespace LagoVista.Core.Rpc.Tests.Client
         {
             var array = new string[] { ProxySubject.EchoValueConst };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
-            var sender = new FakeSender(_coupler, json);
 
-            var proxySubject = _proxyFactory.Create<IProxySubject>(
-                Constants.OrganizationId,
-                Constants.InstanceId,
-                TimeSpan.FromSeconds(30));
+            var logger = new Mock<ILogger>();
+            var client = new SimulatedTransceiver(
+                Constants.ConnectionSettings,
+                Constants.AsyncCoupler,
+                logger.Object,
+                json);
+            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+            var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+
             var echoResult = proxySubject.PassStringParams(array);
-
             Assert.AreEqual(json, echoResult);
         }
 
@@ -112,14 +82,17 @@ namespace LagoVista.Core.Rpc.Tests.Client
         {
             var array = new string[] { ProxySubject.EchoValueConst };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
-            var sender = new FakeSender(_coupler, json);
 
-            var proxySubject = _proxyFactory.Create<IProxySubject>(
-                Constants.OrganizationId,
-                Constants.InstanceId,
-                TimeSpan.FromSeconds(30));
+            var logger = new Mock<ILogger>();
+            var client = new SimulatedTransceiver(
+                Constants.ConnectionSettings,
+                Constants.AsyncCoupler,
+                logger.Object,
+                json);
+            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+            var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+
             var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
-
             Assert.AreEqual(json, methodResult);
 
             // shows that the result of json serialization is the same as passing an array or a single arg

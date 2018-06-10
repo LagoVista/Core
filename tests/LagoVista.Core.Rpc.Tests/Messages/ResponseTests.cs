@@ -1,24 +1,19 @@
 ﻿using LagoVista.Core.Rpc.Messages;
-using LagoVista.Core.Rpc.Tests.Models;
 using LagoVista.Core.Rpc.Tests.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Reflection;
 
 namespace LagoVista.Core.Rpc.Tests.Messages
 {
     [TestClass]
     public class ResponseTests 
     {
-        private readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        private readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        private readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
         private readonly string _responseValue = "jello babies";
         private readonly string _rootExceptionValue = "boo";
 
         private IRequest CreateControlEchoRequest()
         {
-            return new Request(_echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            return new Request(Constants.EchoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
         }
 
         private IResponse CreateControlEchoSuccessResponse()

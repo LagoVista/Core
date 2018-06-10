@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Server;
 using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Rpc.Tests.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -12,10 +13,6 @@ namespace LagoVista.Core.Rpc.Tests.Server
     [TestClass]
     public class InstanceMethodPairTests
     {
-        private static readonly string Constants.OrganizationId = "orgid";
-        private static readonly string Constants.InstanceId = "insid";
-        private static readonly string Constants.MessageReplyPath = "replyPath";
-
 
         #region synchronous method simple params
         [TestMethod]
@@ -239,8 +236,6 @@ namespace LagoVista.Core.Rpc.Tests.Server
         }
 
         #endregion
-
-
     }
 }
 

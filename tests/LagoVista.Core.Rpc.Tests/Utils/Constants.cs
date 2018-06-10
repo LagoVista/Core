@@ -1,4 +1,12 @@
-﻿using System;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
+using LagoVista.Core.Rpc.Client;
+using LagoVista.Core.Rpc.Messages;
+using LagoVista.Core.Rpc.Tests.Models;
+using LagoVista.Core.Utils;
+using Moq;
+using System;
+using System.Reflection;
 
 namespace LagoVista.Core.Rpc.Tests.Utils
 {
@@ -13,8 +21,24 @@ namespace LagoVista.Core.Rpc.Tests.Utils
         #endregion
 
         #region Common
+        public static readonly int TimeoutInSeconds = 5;
         public static readonly string OrganizationId = Guid.Parse("{8AF59E47-E473-41D1-AA86-8B557813EEFB}").ToString();
         public static readonly string InstanceId = Guid.Parse("{EC0E2AE5-7B17-4C0D-9355-1903E3284FBE}").ToString();
+        public static readonly SimulatedConnectionSettings ConnectionSettings = new SimulatedConnectionSettings();
         #endregion
+
+        #region Echo
+        public static readonly MethodInfo EchoMethodInfo = typeof(IProxySubject).GetMethod(nameof(IProxySubject.Echo));
+        public static readonly object[] EchoArgs = new object[1] { ProxySubject.EchoValueConst };
+        public static readonly string EchoMethodParamValue = ProxySubject.EchoValueConst;
+        public static readonly string EchoMethodParamName = "value";
+        #endregion
+
+        #region Proxy
+        public static readonly IAsyncCoupler<IMessage> AsyncCoupler = new AsyncCoupler<IMessage>(new Mock<ILogger>().Object, new SimulatedUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
+        public static readonly ProxySettings ProxySettings = new ProxySettings { InstanceId = Constants.InstanceId, OrganizationId = Constants.OrganizationId };
+        #endregion
+
+
     }
 }

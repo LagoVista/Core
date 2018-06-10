@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.Client
 {
+    /// <summary>
+    /// for end-to-end testing with server
+    /// </summary>
     public sealed class SimulatedProxyClient : AbstractProxyClient
     {
         private readonly QueueSimulator _queue;

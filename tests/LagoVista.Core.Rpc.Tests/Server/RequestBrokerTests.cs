@@ -1,8 +1,10 @@
 ﻿using LagoVista.Core.Rpc.Server;
+using LagoVista.Core.Rpc.Tests.Messages;
 using LagoVista.Core.Rpc.Tests.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.Server
 {
@@ -10,20 +12,6 @@ namespace LagoVista.Core.Rpc.Tests.Server
     public class RequestBrokerTests
     {
         private readonly IProxySubject _controlInstance = new ProxySubject();
-        //private readonly MethodInfo _methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        //private readonly MethodInfo _asyncMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.EchoAsync));
-        //private InstanceMethodPair _pair = null;
-        //private InstanceMethodPair _asyncPair = null;
-
-        //[TestInitialize]
-        //public void Init()
-        //{
-        //    Assert.IsNotNull(_methodInfo);
-        //    Assert.IsNotNull(_asyncMethodInfo);
-
-        //    _pair = new InstanceMethodPair(_instance, _methodInfo);
-        //    _asyncPair = new InstanceMethodPair(_instance, _asyncMethodInfo);
-        //}
 
         [TestMethod]
         public void RequestBroker_RegisterSubject_Success()
@@ -52,5 +40,19 @@ namespace LagoVista.Core.Rpc.Tests.Server
             broker.AddService((IProxySubject)null);
         }
 
+        [TestMethod]
+        public async Task RequestBroker_Invoke()
+        {
+            var broker = new RequestBroker();
+            var methodsRegistered = broker.AddService(_controlInstance);
+            var request = RequestTests.CreateControlEchoRequest();
+
+            var response = await broker.InvokeAsync(request);
+
+            Assert.AreEqual(true, response.Success);
+            Assert.AreEqual(request.CorrelationId, response.CorrelationId);
+            Assert.AreEqual(request.Id, response.RequestId);
+            Assert.AreEqual(ProxySubject.EchoValueConst, response.ReturnValue);
+        }
     }
 }

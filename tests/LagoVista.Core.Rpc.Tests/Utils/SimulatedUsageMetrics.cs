@@ -3,16 +3,16 @@ using System;
 
 namespace LagoVista.Core.Rpc.Tests.Utils
 {
-    public sealed class TestUsageMetrics : IUsageMetrics
+    public sealed class SimulatedUsageMetrics : IUsageMetrics
     {
-        public TestUsageMetrics(String hostId, String instanceId, string pipelineModuleId)
+        public SimulatedUsageMetrics(String hostId, String instanceId, string pipelineModuleId)
         {
             HostId = HostId;
             InstanceId = instanceId;
             PipelineModuleId = pipelineModuleId;
         }
 
-        private TestUsageMetrics() { }
+        private SimulatedUsageMetrics() { }
 
         public int WarningCount { get; set; }
         public int ErrorCount { get; set; }
@@ -49,7 +49,7 @@ namespace LagoVista.Core.Rpc.Tests.Utils
 
         public IUsageMetrics Clone()
         {
-            var clonedMetric = new TestUsageMetrics()
+            var clonedMetric = new SimulatedUsageMetrics()
             {
                 Version = Version,
                 HostId = HostId,

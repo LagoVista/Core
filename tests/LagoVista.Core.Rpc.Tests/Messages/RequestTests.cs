@@ -11,22 +11,17 @@ namespace LagoVista.Core.Rpc.Tests.Messages
     [TestClass]
     public class RequestTests
     {
-        private readonly MethodInfo _echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-        private readonly object[] _echoArgs = new object[1] { ProxySubject.EchoValueConst };
-        private readonly string _echoMethodParamValue = ProxySubject.EchoValueConst;
-        private readonly string _echoMethodParamName = "value";
-
-        private IRequest CreateControlEchoRequest()
+        public static IRequest CreateControlEchoRequest()
         {
-            return new Request(_echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            return new Request(Constants.EchoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
         }
 
         [TestMethod]
         public void Request_Constructor_MethodInfo_Args()
         {
-            var request = new Request(_echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            var request = new Request(Constants.EchoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(Constants.EchoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
         }
 
@@ -35,7 +30,7 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         public void Request_Constructor_MethodInfo_NullArgument()
         {
             MethodInfo echoMethodInfo = null;
-            var request = new Request(echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
         }
 
         [TestMethod]
@@ -45,7 +40,7 @@ namespace LagoVista.Core.Rpc.Tests.Messages
 
             var request = new Request(controlRequest.Payload);
 
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(Constants.EchoMethodParamName));
             Assert.AreEqual(1, request.ArgumentCount);
 
             Assert.AreEqual(controlRequest.Id, request.Id);
@@ -60,8 +55,8 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         public void Request_Constructor_MethodInfo_SimpleArg()
         {
             var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var request = new Request(echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
+            var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(Constants.EchoMethodParamName));
         }
 
         [TestMethod]
@@ -69,8 +64,8 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         public void Request_Constructor_MethodInfo_ParamsAr_ThrowsNotSupportedException()
         {
             var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
-            var request = new Request(echoMethodInfo, _echoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(_echoMethodParamName));
+            var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(Constants.EchoMethodParamName));
         }
 
         [TestMethod]
