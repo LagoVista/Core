@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Tests.Middelware
 {
+    /// <summary>
+    /// for end-to-end testing
+    /// </summary>
     public sealed class QueueSimulator
     {
         private readonly List<IReceiver> _responseReceivers = new List<IReceiver>();

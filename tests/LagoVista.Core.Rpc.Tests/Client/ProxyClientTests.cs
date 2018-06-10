@@ -6,7 +6,7 @@ using System.Text;
 namespace LagoVista.Core.Rpc.Tests.Client
 {
     [TestClass]
-    public class AbstractProxyClientTests
+    public class ProxyClientTests
     {
     }
 }
