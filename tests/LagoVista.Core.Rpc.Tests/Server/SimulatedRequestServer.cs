@@ -13,9 +13,9 @@ namespace LagoVista.Core.Rpc.Tests.Server
         private readonly QueueSimulator _queue;
 
         public SimulatedRequestServer(
-            ITransceiverConnectionSettings connectionSettings, 
-            IRequestBroker requestBroker, 
-            ILogger logger, 
+            ITransceiverConnectionSettings connectionSettings,
+            IRequestBroker requestBroker,
+            ILogger logger,
             QueueSimulator queue) : base(connectionSettings, requestBroker, logger)
         {
             _queue = queue ?? throw new ArgumentNullException(nameof(queue));
@@ -28,7 +28,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            await _queue.Send((IResponse)message);
+            await _queue.SendAsync((IResponse)message);
         }
     }
 }

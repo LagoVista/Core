@@ -2,6 +2,7 @@
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Client;
 using LagoVista.Core.Rpc.Messages;
+using LagoVista.Core.Rpc.Tests.Middelware;
 using LagoVista.Core.Rpc.Tests.Models;
 using LagoVista.Core.Utils;
 using Moq;
@@ -39,6 +40,9 @@ namespace LagoVista.Core.Rpc.Tests.Utils
         public static readonly ProxySettings ProxySettings = new ProxySettings { InstanceId = Constants.InstanceId, OrganizationId = Constants.OrganizationId };
         #endregion
 
+        #region Middleware
+        public static readonly QueueSimulator QueueSimulator = new QueueSimulator();
+        #endregion
 
     }
 }

@@ -32,7 +32,7 @@ namespace LagoVista.Core.Rpc.Tests.Client
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            await _queue.Send((IRequest)message);
+            await _queue.SendAsync((IRequest)message);
         }
     }
 }

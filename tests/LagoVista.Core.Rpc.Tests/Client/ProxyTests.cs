@@ -22,28 +22,28 @@ namespace LagoVista.Core.Rpc.Tests.Client
         }
 
         [TestMethod]
-        public void AsyncProxy_Echo_ResultIsNotNull()
+        public void Proxy_Echo_ResultIsNotNull()
         {
             var echoResult = _proxySubect.Echo(ProxySubject.EchoValueConst);
             Assert.IsNotNull(echoResult);
         }
 
         [TestMethod]
-        public void AsyncProxy_Echo_ResultIsCorrectValue()
+        public void Proxy_Echo_ResultIsCorrectValue()
         {
             var echoResult = _proxySubect.Echo(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
-        public async Task AsyncProxy_EchoAsync_ResultIsNotNull()
+        public async Task Proxy_EchoAsync_ResultIsNotNull()
         {
             var echoResult = await _proxySubect.EchoAsync(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
         }
 
         [TestMethod]
-        public async Task AsyncProxy_EchoAsync_ResultIsCorrectValue()
+        public async Task Proxy_EchoAsync_ResultIsCorrectValue()
         {
             var echoResult = await _proxySubect.EchoAsync(ProxySubject.EchoValueConst);
             Assert.AreEqual(ProxySubject.EchoValueConst, echoResult);
@@ -51,14 +51,14 @@ namespace LagoVista.Core.Rpc.Tests.Client
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void AsyncProxy_EchoAsync_MethodNotSupported()
+        public void Proxy_EchoAsync_MethodNotSupported()
         {
             var echoResult = _proxySubect.SkipMe();
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void AsyncProxy_PassStringParams_PassingArrayOfArgs_ResultIsCorrectValue()
+        public void Proxy_PassStringParams_PassingArrayOfArgs_ResultIsCorrectValue()
         {
             var array = new string[] { ProxySubject.EchoValueConst };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
@@ -78,7 +78,7 @@ namespace LagoVista.Core.Rpc.Tests.Client
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void AsyncProxy_PassStringParams_PassingSingleArgIntoParamsMethod_ResultIsCorrectValue2()
+        public void Proxy_PassStringParams_PassingSingleArgIntoParamsMethod_ResultIsCorrectValue2()
         {
             var array = new string[] { ProxySubject.EchoValueConst };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);

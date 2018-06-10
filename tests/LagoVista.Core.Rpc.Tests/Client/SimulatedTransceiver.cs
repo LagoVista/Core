@@ -14,7 +14,6 @@ namespace LagoVista.Core.Rpc.Tests.Client
     /// </summary>
     internal sealed class SimulatedTransceiver : AbstractProxyClient
     {
-        private readonly IAsyncCoupler<IResponse> _asyncCoupler;
         private readonly object _result;
 
         public SimulatedTransceiver(

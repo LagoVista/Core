@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,20 +33,48 @@ namespace LagoVista.Core.Rpc.Tests.Middelware
             }
         }
 
-        public async Task Send(IRequest request)
+        public int RequestCount { get; private set; } = 0;
+        public int ResponseCount { get; private set; } = 0;
+
+        public Task SendAsync(IRequest request)
         {
-            foreach (var receiver in _requestReceivers)
-            {
-                await receiver.ReceiveAsync(request);
-            }
+            ++RequestCount;
+            Send(request);
+            return Task.FromResult<object>(null);
         }
 
-        public async Task Send(IResponse response)
+        private void Send(IRequest request)
         {
-            foreach (var receiver in _responseReceivers)
+            // simulate network delay
+            Task.Factory.StartNew(async () =>
             {
-                await receiver.ReceiveAsync(response);
-            }
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                foreach (var receiver in _requestReceivers)
+                {
+                    await receiver.ReceiveAsync(request);
+                }
+            });
+        }
+
+        public Task SendAsync(IResponse response)
+        {
+            ++ResponseCount;
+            return Task.FromResult<object>(null);
+        }
+
+        private void Send(IResponse response)
+        {
+            // simulate network delay
+            Task.Factory.StartNew(async () =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                foreach (var receiver in _responseReceivers)
+                {
+                    await receiver.ReceiveAsync(response);
+                }
+            });
         }
     }
 }
+
