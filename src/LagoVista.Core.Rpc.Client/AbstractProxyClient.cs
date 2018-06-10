@@ -33,8 +33,6 @@ namespace LagoVista.Core.Rpc.Client
         /// <summary>
         /// receives responses from the server
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
         public async Task ReceiveAsync(IMessage message)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
@@ -49,12 +47,7 @@ namespace LagoVista.Core.Rpc.Client
             }
         }
 
-        /// <summary>
-        /// starts listening for responses from server
-        /// </summary>
-
         private bool _started = false;
-
         public void Start()
         {
             if (_started)
@@ -72,8 +65,6 @@ namespace LagoVista.Core.Rpc.Client
         /// <summary>
         /// transmits requests and waits on response
         /// </summary>
-        /// <param name="message"></param>
-        /// <returns></returns>
         public async Task TransmitAsync(IMessage message)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
