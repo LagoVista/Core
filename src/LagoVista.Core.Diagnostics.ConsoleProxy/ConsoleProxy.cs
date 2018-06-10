@@ -4,11 +4,11 @@ using System.Reflection;
 
 namespace LagoVista.Core.Diagnostics.ConsoleProxy
 {
-    public sealed class ConsoleProxyProxyFactory
+    public sealed class ConsoleProxyFactory
     {
         private readonly IConsoleWriter _console;
 
-        public ConsoleProxyProxyFactory(IConsoleWriter console)
+        public ConsoleProxyFactory(IConsoleWriter console)
         {
             _console = console ?? throw new ArgumentNullException(nameof(console));
         }
