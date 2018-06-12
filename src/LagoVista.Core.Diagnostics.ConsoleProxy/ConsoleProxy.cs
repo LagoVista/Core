@@ -7,23 +7,31 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
     public sealed class ConsoleProxyFactory
     {
         private readonly IConsoleWriter _console;
+        private readonly bool _debug;
 
-        public ConsoleProxyFactory(IConsoleWriter console)
+        public ConsoleProxyFactory(IConsoleWriter console, bool debug = false)
         {
-            _console = console != null ? console : new ConsoleWriter();
+            if (debug)
+            {
+                _console = console ?? new ConsoleWriter();
+            }
+            _debug = debug;
         }
 
         public TInterface Create<TInterface>(TInterface instance) where TInterface : class
         {
-//#if DEBUG
-            return ConsoleProxy.Create<TInterface>(instance, _console);
-//#else
-//            return instance;
-//#endif
+            if (_debug)
+            {
+                return ConsoleProxy.Create<TInterface>(instance, _console);
+            }
+            else
+            {
+                return instance;
+            }
         }
     }
 
-    public class ConsoleProxy : DispatchProxy 
+    public class ConsoleProxy : DispatchProxy
     {
         private IConsoleWriter _console;
         private object _instance;
@@ -34,13 +42,17 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
             _console.WriteLine($"-> {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
             if (args != null && args.Length > 0)
             {
-                try
+                var parameters = targetMethod.GetParameters();
+                for (var i = 0; i < parameters.Length; ++i)
                 {
-                    _console.WriteLine($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} args: {JsonConvert.SerializeObject(args)}");
-                }
-                catch(Exception ex)
-                {
-                    _console.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed to convert args to json. Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
+                    try
+                    {
+                        _console.WriteLine($"{parameters[i].Name}: {JsonConvert.SerializeObject(args[i])}");
+                    }
+                    catch (Exception ex)
+                    {
+                        _console.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed to convert args for param '{parameters[i].Name}' to json. Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
+                    }
                 }
             }
 
