@@ -29,28 +29,31 @@ namespace LagoVista.Core.Retry
                     result = targetMethod.Invoke(_instance, args);
                     complete = true;
                 }
-                catch (Exception ex)
+                catch (TargetInvocationException ex)
                 {
-                    var exceptionType = ex.GetType();
-                    if ((_isTransientException != null && !_isTransientException(ex)) || (_transientExceptions != null && !_transientExceptions.Contains(exceptionType)))
+                    if ((_isTransientException != null && !_isTransientException(ex.InnerException)) || (_transientExceptions != null && !_transientExceptions.Contains(ex.InnerException.GetType())))
                     {
-                        throw new NotTransientException("Exception does not qualify for retry. See inner exception for details.", ex);
+                        throw new NotTransientException("Exception does not qualify for retry. See inner exception for details.", ex.InnerException);
                     }
 
-                    if (currentAttempt >= _options.MaxAttempts)
+                    if (currentAttempt++ >= _options.MaxAttempts)
                     {
-                        throw new ExceededMaxAttemptsException($"Exceeded maximum attempts: {_options.MaxAttempts}.. See inner exception for details.", ex);
+                        throw new ExceededMaxAttemptsException($"Exceeded maximum attempts: {_options.MaxAttempts}.. See inner exception for details.", ex.InnerException);
                     }
 
                     if (stopwatch.ElapsedMilliseconds >= _options.MaxWaitTimeInSeconds * 1000)
                     {
-                        throw new ExceededMaxWaitTimeException($"Exceeded maximum wait time: {_options.MaxWaitTimeInSeconds} seconds.. See inner exception for details.", ex);
+                        throw new ExceededMaxWaitTimeException($"Exceeded maximum wait time: {_options.MaxWaitTimeInSeconds} seconds.. See inner exception for details.", ex.InnerException);
                     }
 
                     Thread.Sleep((int)(waitTime * 100));
 
                     // allow wait times up to ~10 seconds
                     waitTime = waitTime <= 110 ? waitTime * 1.25 : waitTime;
+                }
+                catch(Exception ex)
+                {
+                    throw new RetryException($"Unexpected exception type '{ex.GetType().FullName}'. See inner exception for details.", ex);
                 }
             }
             return result;
