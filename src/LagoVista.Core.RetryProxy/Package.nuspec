@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <package>
     <metadata>
-        <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
+        <id>LagoVista.Core.Retry</id>
         <version>2.1.392-beta1648</version>
         <authors>Software Logistics, LLC</authors>
         <owners>Software Logistics, LLC</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
         <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-        <description>Console Logging Functionality for Debugging the LagoVista IoT and Devices Framework</description>
+        <description>Retry Capability for the LagoVista IoT and Devices Framework</description>
         <releaseNotes>Early Unstable Release</releaseNotes>
         <copyright>Copyright 2018</copyright>
-        <tags>HomeAutomation IoT Diagnostics Console</tags>
+        <tags>HomeAutomation IoT Retry</tags>
     </metadata>
     <files>
         <file src="bin\release\netstandard2.0\*.dll" target="lib\netstandard2.0" />

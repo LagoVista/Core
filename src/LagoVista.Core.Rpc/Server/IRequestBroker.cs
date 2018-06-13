@@ -6,7 +6,7 @@ namespace LagoVista.Core.Rpc.Server
     public interface IRequestBroker
     {
         /// <summary>
-        /// T must be an interface and must include the AsyncMessagingAttribute attribute
+        /// T must be an interface 
         /// </summary>
         /// <typeparam name="TInterface">an interface - enforced at runtime</typeparam>
         /// <param name="subject">instance that implments TInterface</param>
