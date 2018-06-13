@@ -18,6 +18,7 @@ namespace LagoVista.Core.Rpc.Tests.Utils
         public static readonly string MessageId = Guid.Parse("{C4CE5957-F9D7-4727-A20D-4C51AB5C6745}").ToString();
         public static readonly string MessageCorrelationId = Guid.Parse("{1C2FC03B-3D21-42A3-97F3-1756177DE2CB}").ToString();
         public static readonly string MessageReplyPath = "Test.ReplyTo.Path";
+        public static readonly string MessageInBox = "Test.InBox";
         public static readonly DateTime MessageTimeStamp = new DateTime(2018, 1, 1, 13, 30, 30);
         #endregion
 

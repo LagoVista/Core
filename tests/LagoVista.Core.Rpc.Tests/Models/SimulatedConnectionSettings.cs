@@ -12,6 +12,8 @@ namespace LagoVista.Core.Rpc.Tests.Models
             RpcTransmitter = new ConnectionSettings();
             RpcReceiver = new ConnectionSettings();
             RpcReceiver.Uri = Constants.MessageReplyPath;
+            RpcReceiver.ResourceName = Constants.MessageInBox;
+
             RpcTransmitter.TimeoutInSeconds = Constants.TimeoutInSeconds;
         }
 
