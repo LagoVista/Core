@@ -68,14 +68,14 @@ namespace LagoVista.Core.Retry
             return result;
         }
 
-        public static TInterface Create<TInterface>(TInterface instance, RetryOptions options, IEnumerable<Type> transientExceptions = null) where TInterface : class
+        public static TInterface Create<TInterface>(TInterface instance, RetryOptions options, IEnumerable<Type> transientExceptions) where TInterface : class
         {
             var result = Create<TInterface, RetryProxy>();
 
             var proxy = (result as RetryProxy);
             proxy._instance = instance ?? throw new ArgumentNullException(nameof(instance));
             proxy._options = options ?? throw new ArgumentNullException(nameof(options));
-            proxy._transientExceptions = transientExceptions;
+            proxy._transientExceptions = transientExceptions ?? throw new ArgumentNullException(nameof(transientExceptions));
 
             return result;
         }
