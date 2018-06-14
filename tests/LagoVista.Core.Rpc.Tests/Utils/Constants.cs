@@ -37,7 +37,7 @@ namespace LagoVista.Core.Rpc.Tests.Utils
         #endregion
 
         #region Proxy
-        public static readonly IAsyncCoupler<IMessage> AsyncCoupler = new AsyncCoupler<IMessage>(new Mock<ILogger>().Object, new SimulatedUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
+        public static readonly IAsyncCoupler<IMessage> AsyncCoupler = new AsyncCoupler<IMessage>(new Mock<ILogger>().Object, new SimulatedUsageMetrics("rpc", "rpc", "rpc") { Version = "N/A" });
         public static readonly ProxySettings ProxySettings = new ProxySettings { InstanceId = Constants.InstanceId, OrganizationId = Constants.OrganizationId };
         #endregion
 

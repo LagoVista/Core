@@ -28,7 +28,7 @@ namespace LagoVista.Core.Rpc.Client
 
         #endregion
 
-        #region Rcp Receiver Methods
+        #region rpc Receiver Methods
 
         /// <summary>
         /// receives responses from the server

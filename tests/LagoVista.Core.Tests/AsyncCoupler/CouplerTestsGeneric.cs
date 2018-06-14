@@ -14,7 +14,7 @@ namespace LagoVista.Core.Coupler.Tests
         [TestInitialize]
         public void Init()
         {
-            _coupler = new AsyncCoupler<TestModelGenerics>(new TestLogger(), new TestUsageMetrics("rpc", "rcp", "rpc") { Version = "N/A" });
+            _coupler = new AsyncCoupler<TestModelGenerics>(new TestLogger(), new TestUsageMetrics("rpc", "rpc", "rpc") { Version = "N/A" });
         }
 
 

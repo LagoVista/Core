@@ -46,7 +46,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         #endregion
 
-        #region Rcp Receiver Methods
+        #region rpc Receiver Methods
 
         protected override void CustomStart()
         {
