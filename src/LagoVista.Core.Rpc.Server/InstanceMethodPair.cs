@@ -58,17 +58,17 @@ namespace LagoVista.Core.Rpc.Server
 
             var arguments = GetArguments(request, _parameters);
 
-            object result = null;
+            object invokeResult = null;
             if (_isAwaitable)
             {
-                result = await (dynamic)_methodInfo.Invoke(_instance, arguments);
+                invokeResult = await (dynamic)_methodInfo.Invoke(_instance, arguments);
             }
             else
             {
-                result = _methodInfo.Invoke(_instance, arguments);
+                invokeResult = _methodInfo.Invoke(_instance, arguments);
             }
 
-            return (IResponse)Activator.CreateInstance(typeof(Response), new object[] { request, result });
+            return (IResponse)Activator.CreateInstance(typeof(Response), new object[] { request, invokeResult });
         }
     }
 }
