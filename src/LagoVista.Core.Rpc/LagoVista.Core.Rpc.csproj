@@ -11,7 +11,7 @@
     <Product>LagoVista IoT and Home Automation Frameworks</Product>
     <!--SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>LagoVista.Core.snk</AssemblyOriginatorKeyFile-->
-    <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>

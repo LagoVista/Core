@@ -10,13 +10,13 @@
     <Product>LagoVista IoT and Home Automation Frameworks</Product>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>LagoVista.Core.Networking.snk</AssemblyOriginatorKeyFile>
-    <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">

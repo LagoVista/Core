@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.PlatformSupport
@@ -13,8 +14,10 @@ namespace LagoVista.Core.PlatformSupport
         bool IsConnected { get; }
         Task CloseAsync();
 
-        Stream InputStream { get; }
-        Stream OutputStream { get; }
+        Task WriteAsync(string msg);
+        Task WriteAsync(byte[] buffer);
+        Task<int> ReadAsync(byte[] bufffer, int start, int size, CancellationToken token = default(CancellationToken));
     }
+     
 
 }
