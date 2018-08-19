@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Fonts\Roboto-Black.ttf">
+      <LogicalName>Roboto-Black.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fonts\Roboto-BlackItalic.ttf">
+      <LogicalName>Roboto-BlackItaliic.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fonts\Roboto-Bold.ttf">
+      <LogicalName>Roboto-Bold.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fonts\Roboto-BoldItalic.ttf">
+      <LogicalName>Roboto-BoldItalic.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fonts\Roboto-Italic.ttf">
+      <LogicalName>Roboto-Italic.ttf</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fonts\Roboto-Regular.ttf">
+      <LogicalName>Roboto-Regular.ttf</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Didstopia.PDFSharp" Version="1.0.0-beta8" />
+  </ItemGroup>
+</Project>

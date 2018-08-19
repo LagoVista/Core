@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LagoVista.PDFServices</id>
+    <version>2.1.459-beta0858</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>PDF Generation Services for use with applications built with the LagoVista IoT Frameworks</description>
+    <releaseNotes>Pre-release Software</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>HomeAutomation IoT LagoVista PDF</tags>
+    <dependencies>
+      <dependency id="Didstopia.PDFSharp" version="1.0.0-beta8" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\release\netstandard2.0\*.dll" target="lib\netstandard2.0" />
+  </files>
+</package>
