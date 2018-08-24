@@ -82,6 +82,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             //todo: ML - if service bus topic and subscription doesn't exist, then create it: https://github.com/Azure-Samples/service-bus-dotnet-management/tree/master/src/service-bus-dotnet-management
 
             //todo: ML - need to set retry policy and operation timeout etc.
+            //todo: ML - figured out retry:   var retryPolicy = new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10);
             var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath, null);
             try
             {
