@@ -129,24 +129,6 @@ namespace LagoVista.Core.Retry.Tests
                 throw;
             }
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Create_CanRetryTesterNull()
-        {
-            var instance = new RetryProxySubject();
-            var options = new RetryOptions(5, TimeSpan.FromSeconds(5));
-            var retryExceptionTester = new CanRetryProxySubjectException();
-            try
-            {
-                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, options, null);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Assert.AreEqual(nameof(retryExceptionTester), ex.ParamName);
-                throw;
-            }
-        }
         #endregion
 
         #region success

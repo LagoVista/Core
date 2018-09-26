@@ -9,36 +9,33 @@ namespace LagoVista.Core.Retry
 {
     public class RetryProxy : DispatchProxy
     {
-        public static TInterface Create<TInterface>(TInterface instance, RetryOptions options, IRetryExceptionTester retryExceptionTester) where TInterface : class
+        public static TInterface Create<TInterface>(TInterface instance, RetryOptions options, IRetryExceptionTester retryExceptionTester = null, IEnumerable<Type> exceptionWhiteList = null, IEnumerable<Type> exceptionBlackList = null) where TInterface : class
         {
             var result = Create<TInterface, RetryProxy>();
 
             var proxy = (result as RetryProxy);
             proxy._instance = instance ?? throw new ArgumentNullException(nameof(instance));
             proxy._options = options ?? throw new ArgumentNullException(nameof(options));
-            proxy._retryExceptionTester = retryExceptionTester ?? throw new ArgumentNullException(nameof(retryExceptionTester));
+            proxy._retryExceptionTester = retryExceptionTester;
+            proxy._exceptionWhiteList = exceptionWhiteList;
+            proxy._exceptionBlackList = exceptionBlackList;
 
             return result;
         }
 
-        public static TInterface Create<TInterface, TImplementation>(RetryOptions options, IRetryExceptionTester retryExceptionTester)
+        public static TInterface Create<TInterface, TImplementation>(RetryOptions options, IRetryExceptionTester retryExceptionTester = null, IEnumerable<Type> exceptionWhiteList = null, IEnumerable<Type> exceptionBlackList = null)
             where TInterface : class
             where TImplementation : class, new()
         {
-            var result = Create<TInterface, RetryProxy>();
-
-            var instance = Activator.CreateInstance<TImplementation>();
-            var proxy = (result as RetryProxy);
-            proxy._instance = instance ?? throw new ArgumentNullException(nameof(instance));
-            proxy._options = options ?? throw new ArgumentNullException(nameof(options));
-            proxy._retryExceptionTester = retryExceptionTester ?? throw new ArgumentNullException(nameof(retryExceptionTester));
-
-            return result;
+            var instance = Activator.CreateInstance<TImplementation>() as TInterface;
+            return Create(instance, options, retryExceptionTester, exceptionWhiteList, exceptionBlackList);
         }
 
         private object _instance;
         private RetryOptions _options;
         private IRetryExceptionTester _retryExceptionTester = null;
+        private IEnumerable<Type> _exceptionWhiteList = null;
+        private IEnumerable<Type> _exceptionBlackList = null;
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
@@ -88,7 +85,7 @@ namespace LagoVista.Core.Retry
                         exceptions = new List<Exception>();
                     }
 
-                    var retryException = WithRetry.TestException(_options, _retryExceptionTester, null, null, exception, currentAttempt++, stopwatch.Elapsed, exceptions);
+                    var retryException = WithRetry.TestException(_options, _retryExceptionTester, _exceptionWhiteList, _exceptionBlackList, exception, currentAttempt++, stopwatch.Elapsed, exceptions);
                     if (retryException != null)
                     {
                         throw retryException;

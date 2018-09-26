@@ -1,11 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using LagoVista.Core.Retry;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using LagoVista.Core.Retry;
 
 namespace LagoVista.Core.Tests.Retry
 {
@@ -51,7 +46,8 @@ namespace LagoVista.Core.Tests.Retry
         public void RetryProxy_Success()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 5, MaxWaitTimeInSeconds = 5 }, new Type[] { typeof(RetryTestException) });
+
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(5)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
             var result = retryProxy.Succeed();
             Assert.AreEqual("succeed", result);
         }
@@ -61,7 +57,7 @@ namespace LagoVista.Core.Tests.Retry
         public void RetryProxy_Fail_TransientFunctionEvaluatesTrue()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 1, MaxWaitTimeInSeconds = 1000 }, (exception) => { return typeof(RetryTestException) == exception.GetType(); });
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(1000)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
             var result = retryProxy.Fail();
         }
 
@@ -70,26 +66,34 @@ namespace LagoVista.Core.Tests.Retry
         public void RetryProxy_Fail_TransientEnumerationEvaluatesTrue()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 1, MaxWaitTimeInSeconds = 5 }, new Type[] { typeof(RetryTestException) });
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(5)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
             var result = retryProxy.Fail();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotTransientException))]
+        [ExpectedException(typeof(RetryNotAllowedException))]
         public void RetryProxy_Fail_NotTransientByFunction()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 5, MaxWaitTimeInSeconds = 5 }, (exception) => { return false; });
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(5)), exceptionBlackList: new Type[] { typeof(RetryTestException) });
             var result = retryProxy.Fail();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotTransientException))]
+        [ExpectedException(typeof(RetryNotAllowedException))]
         public void RetryProxy_Fail_NotTransientByEnumerable()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 5, MaxWaitTimeInSeconds = 5 }, new Type[] { typeof(NullReferenceException) });
-            var result = retryProxy.Fail();
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(60)), exceptionWhiteList: new Type[] { typeof(NullReferenceException) });
+            try
+            {
+                var result = retryProxy.Fail();
+            }
+            catch (RetryNotAllowedException ex)
+            {
+                Assert.AreEqual(RetryNotAllowedReason.WhiteList, ex.Reason);
+                throw;
+            }
         }
 
         [TestMethod]
@@ -97,7 +101,7 @@ namespace LagoVista.Core.Tests.Retry
         public void RetryProxy_Fail_ExceedMaxAttempts()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 1, MaxWaitTimeInSeconds = 60 });
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(60)));
             var result = retryProxy.Fail();
         }
 
@@ -106,8 +110,8 @@ namespace LagoVista.Core.Tests.Retry
         public void RetryProxy_Fail_ExceedMaxWaitTime()
         {
             var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions { MaxAttempts = 10000, MaxWaitTimeInSeconds = 1 });
+            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(10000, TimeSpan.FromSeconds(1)));
             var result = retryProxy.Fail();
-        }       
+        }
     }
 }

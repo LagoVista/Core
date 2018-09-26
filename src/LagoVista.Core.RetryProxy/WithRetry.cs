@@ -260,7 +260,7 @@ namespace LagoVista.Core.Retry
             //simplified WithRetry class, added better async support, added wait interval to RetryOptions, added support for exception white lists and black lists
             var type = exception.GetType();
 
-            if (exceptionWhiteList != null && exceptionWhiteList.Contains(type))
+            if (exceptionWhiteList != null && !exceptionWhiteList.Contains(type))
             {
                 return new RetryNotAllowedException(RetryNotAllowedReason.WhiteList, "Exception does not qualify for retry. See inner exception for details.", exception)
                 {
