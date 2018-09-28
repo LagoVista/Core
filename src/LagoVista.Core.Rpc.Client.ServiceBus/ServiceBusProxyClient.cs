@@ -20,9 +20,9 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         #region Constructors
 
         public ServiceBusProxyClient(
-            ITransceiverConnectionSettings connectionSettings, 
-            IAsyncCoupler<IMessage> asyncCoupler, 
-            ILogger logger) : 
+            ITransceiverConnectionSettings connectionSettings,
+            IAsyncCoupler<IMessage> asyncCoupler,
+            ILogger logger) :
             base(connectionSettings, asyncCoupler, logger)
         {
             // Endpoint - AccountId
@@ -100,8 +100,9 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             //todo: ML - if service bus topic and subscription doesn't exist, then create it: https://github.com/Azure-Samples/service-bus-dotnet-management/tree/master/src/service-bus-dotnet-management
 
-            //todo: ML - need to set retry policy and operation timeout etc.
-            var entityPath = (_destinationEntityPath + $"_{message.OrganizationId}_{message.InstanceId}").Replace("__", "_").ToLower();
+            var entityPath = $"{_destinationEntityPath}_{message.OrganizationId}_{message.InstanceId}"
+                .Replace("__", "_")
+                .ToLower();
             var topicClient = new TopicClient(_topicConnectionString, entityPath, RetryPolicy.Default);
             try
             {
