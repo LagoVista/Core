@@ -9,6 +9,17 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Client.ServiceBus
 {
+    // code to create topics on the fly:
+    // var connstr = $"Endpoint=sb://{_settings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_settings.UserName};SharedAccessKey={_settings.AccessKey};"; 
+    // 
+    // var topic = $"rpc_request_{orgId}_{instanceId}";
+    // 
+    // var client = new ManagementClient(connstr);
+    // if (!await client.TopicExistsAsync(topic))
+    //     await client.CreateTopicAsync(topic);
+    // 
+    // //todo: don't forget to create the subscription
+
     public sealed class ServiceBusProxyClient : AbstractProxyClient
     {
         #region Fields
