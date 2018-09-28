@@ -55,12 +55,13 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             }
         }
 
-        private async Task HandleException(ExceptionReceivedEventArgs e)
+        private Task HandleException(ExceptionReceivedEventArgs e)
         {
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
             //LogException("AzureServiceBusListener_Listen", ex.Exception);
+            return Task.FromResult<object>(null);
         }
 
         protected override void CustomStart()
@@ -98,7 +99,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                 };
                 await topicClient.SendAsync(messageOut);
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 //todo: ML - log exception
                 throw;
