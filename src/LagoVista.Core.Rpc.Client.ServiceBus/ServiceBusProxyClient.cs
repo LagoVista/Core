@@ -19,7 +19,10 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         #region Constructors
 
-        public ServiceBusProxyClient(ITransceiverConnectionSettings connectionSettings, IAsyncCoupler<IMessage> asyncCoupler, ILogger logger) : 
+        public ServiceBusProxyClient(
+            ITransceiverConnectionSettings connectionSettings, 
+            IAsyncCoupler<IMessage> asyncCoupler, 
+            ILogger logger) : 
             base(connectionSettings, asyncCoupler, logger)
         {
             // Endpoint - AccountId
@@ -99,7 +102,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             //todo: ML - need to set retry policy and operation timeout etc.
             var entityPath = (_destinationEntityPath + $"_{message.OrganizationId}_{message.InstanceId}").Replace("__", "_").ToLower();
-            var topicClient = new TopicClient(_topicConnectionString, entityPath, null);
+            var topicClient = new TopicClient(_topicConnectionString, entityPath, RetryPolicy.Default);
             try
             {
                 // package response in service bus message and send to topic
