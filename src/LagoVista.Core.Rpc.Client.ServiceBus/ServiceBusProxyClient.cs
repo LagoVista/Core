@@ -115,6 +115,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             var entityPath = $"{_destinationEntityPath}_{message.OrganizationId}_{message.InstanceId}"
                 .Replace("__", "_")
                 .ToLower();
+
             var topicClient = new TopicClient(_topicConnectionString, entityPath, RetryPolicy.Default);
             try
             {
