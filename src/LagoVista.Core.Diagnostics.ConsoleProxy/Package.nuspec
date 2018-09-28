@@ -2,18 +2,18 @@
 <package>
     <metadata>
         <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
-        <version>2.1.500-beta1721</version>
+        <version>2.1.500-beta1739</version>
         <authors>Software Logistics, LLC</authors>
         <owners>Software Logistics, LLC</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
         <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-        <description>Console Logging Functionality for Debugging the LagoVista IoT and Devices Framework</description>
+        <description>Console Logging Functionality for Debugging the LagoVista IoT and Devices Framework. What to log a call to every method with it's argument values? Just wrap it in the console proxy.</description>
         <releaseNotes>Early Unstable Release</releaseNotes>
         <copyright>Copyright 2018</copyright>
         <tags>HomeAutomation IoT Diagnostics Console</tags>
     </metadata>
     <files>
-        <file src="bin\release\netstandard2.0\*.dll" target="lib\netstandard1.3" />
+        <file src="bin\release\netstandard1.3\*.dll" target="lib\netstandard1.3" />
     </files>
 </package>
