@@ -83,7 +83,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
             //todo: ML - need to set retry policy and operation timeout etc.
             //todo: ML - figured out retry:   var retryPolicy = new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10);
-            var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath, null);
+            var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), null);
             try
             {
                 // package response in service bus message and send to topic
