@@ -20,14 +20,7 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
 
         public TInterface Create<TInterface>(TInterface instance) where TInterface : class
         {
-            if (_debug)
-            {
-                return ConsoleProxy.Create<TInterface>(instance, _console);
-            }
-            else
-            {
-                return instance;
-            }
+            return _debug ? ConsoleProxy.Create<TInterface>(instance, _console) : instance;
         }
     }
 
