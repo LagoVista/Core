@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Messages\response.json" />
+    <Compile Include="Messages\Samples\response.json" />
   </ItemGroup>
 
   <ItemGroup>
