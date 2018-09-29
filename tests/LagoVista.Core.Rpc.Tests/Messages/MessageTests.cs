@@ -11,6 +11,18 @@ namespace LagoVista.Core.Rpc.Tests.Messages
     [TestClass]
     public class MessageTests 
     {
+        public T NullTest<T>()
+        {
+            object value = null;
+            return value != null ? (T)value : default(T);
+        }
+
+        [TestMethod] 
+        public void TestNull()
+        {
+            var i = NullTest<int>();
+        }
+
         private IMessage CreateControlMessage()
         {
             return new Message()
