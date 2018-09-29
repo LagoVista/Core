@@ -35,7 +35,10 @@ namespace LagoVista.Core.Rpc.Client
         /// </summary>
         public async Task ReceiveAsync(IMessage message)
         {
-            if (message == null) throw new ArgumentNullException(nameof(message));
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             var invokeResult = await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
 
@@ -43,7 +46,9 @@ namespace LagoVista.Core.Rpc.Client
             {
                 var error = invokeResult.Errors.FirstOrDefault();
                 if (error != null)
+                {
                     throw new RpcException(RpcException.FormatErrorMessage(error, "AsyncCoupler failed to complete message with error:"));
+                }
             }
         }
 
@@ -51,7 +56,10 @@ namespace LagoVista.Core.Rpc.Client
         public void Start()
         {
             if (_started)
+            {
                 return;
+            }
+
             CustomStart();
             _started = true;
         }
@@ -67,12 +75,15 @@ namespace LagoVista.Core.Rpc.Client
         /// </summary>
         public async Task TransmitAsync(IMessage message)
         {
-            if (message == null) throw new ArgumentNullException(nameof(message));
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             await CustomTransmitMessageAsync(message);
         }
 
         protected abstract Task CustomTransmitMessageAsync(IMessage message);
-        
 
         #endregion
     }
