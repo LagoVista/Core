@@ -41,28 +41,65 @@ namespace LagoVista.Core.Rpc.Client
             proxy._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             proxy._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             proxy._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
-            if (string.IsNullOrEmpty(proxySettings.OrganizationId)) throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
-            if (string.IsNullOrEmpty(proxySettings.InstanceId)) throw new ArgumentNullException(nameof(proxySettings.InstanceId));
-            if (string.IsNullOrEmpty(connectionSettings.RpcReceiver.ResourceName)) throw new ArgumentNullException(nameof(connectionSettings.RpcReceiver.ResourceName));
+            if (string.IsNullOrEmpty(proxySettings.OrganizationId))
+            {
+                throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
+            }
+
+            if (string.IsNullOrEmpty(proxySettings.InstanceId))
+            {
+                throw new ArgumentNullException(nameof(proxySettings.InstanceId));
+            }
+
+            if (string.IsNullOrEmpty(connectionSettings.RpcReceiver.ResourceName))
+            {
+                throw new ArgumentNullException(nameof(connectionSettings.RpcReceiver.ResourceName));
+            }
+
             proxy._replyPath = connectionSettings.RpcReceiver.ResourceName;
-            if (connectionSettings.RpcTransmitter.TimeoutInSeconds == 0) throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcReceiver.Uri));
+            if (connectionSettings.RpcTransmitter.TimeoutInSeconds == 0)
+            {
+                throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcReceiver.Uri));
+            }
+
             proxy._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
 
             return result;
         }
 
-        private async Task<IResponse> InvokeRemoteMethod(IRequest request)
+        private async Task<IResponse> InvokeRemoteMethodAsync(IRequest request)
         {
-            await _client.TransmitAsync(request);
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
+            await _client.TransmitAsync(request);
             var invokeResult = await _asyncCoupler.WaitOnAsync(request.CorrelationId, _requestTimeout);
+
+            if (invokeResult == null)
+            {
+                throw new NullReferenceException(nameof(invokeResult));
+            }
 
             // timeout is the only likely failure case
             if (!invokeResult.Successful)
             {
+                if (invokeResult.Errors == null)
+                {
+                    throw new NullReferenceException($"{nameof(InvokeRemoteMethodAsync)} failed: {nameof(invokeResult)}.{nameof(invokeResult.Errors)} is null.");
+                }
+
                 var error = invokeResult.Errors.FirstOrDefault();
                 if (error != null)
-                    throw new RpcException(RpcException.FormatErrorMessage(error, "AsyncCoupler failed to complete message with error:"));
+                {
+                    throw new RpcException(RpcException.FormatErrorMessage(error, "{nameof(InvokeRemoteMethodAsync)} failed: AsyncCoupler failed to complete message with error:"));
+                }
+            }
+
+            if (invokeResult.Result == null)
+            {
+                throw new NullReferenceException($"{nameof(InvokeRemoteMethodAsync)} failed: {nameof(invokeResult)}.{nameof(invokeResult.Result)} is null.");
             }
 
             return (IResponse)invokeResult.Result;
@@ -72,47 +109,50 @@ namespace LagoVista.Core.Rpc.Client
         {
             if (targetMethod.GetCustomAttribute<RpcIgnoreAttribute>() != null)
             {
-                throw new NotSupportedException($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+                throw new NotSupportedException($"{nameof(Proxy)}.{nameof(Invoke)}: method not suported: {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
             }
-
-            //todo: ML - add logging
 
             // setup and transmit the request
             var request = new Request(targetMethod, args, _proxySettings.OrganizationId, _proxySettings.InstanceId, _replyPath);
-            var responseTask = InvokeRemoteMethod(request);
+            var responseTask = InvokeRemoteMethodAsync(request);
 
             // wait for response and handle exceptions
             responseTask.Wait();
             if (responseTask.Status == TaskStatus.Faulted && responseTask.Exception != null)
             {
-                //todo: ML - log exception
                 throw new RpcException($"Proxy for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed with message '{responseTask.Exception.Message}'. See inner exception for details.", responseTask.Exception);
             }
             else if (responseTask.Status != TaskStatus.RanToCompletion)
             {
-                //todo: ML - log unexpected status
-                throw new RpcException($"ProxyClient for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} terminated with unexpected status: '{responseTask.Status}'");
+                throw new RpcException($"Proxy for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} terminated with unexpected status: '{responseTask.Status}'.");
             }
 
             // test response for server side exceptions
             var response = responseTask.Result;
+            if (response == null)
+            {
+                throw new NullReferenceException($"{nameof(Proxy)}.{nameof(Invoke)} failed: {nameof(response)} is null.");
+            }
+
             if (!response.Success)
             {
-                //todo: ML - log exception
-                throw new RpcException($"ProxyServer for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed with message '{response.Exception.Message}'. See inner exception for details.", response.Exception);
+                if (response.Exception != null)
+                {
+                    throw new RpcException($"ProxyServer for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed with message '{response.Exception.Message}'. See inner exception for details.", response.Exception);
+                }
+                else
+                {
+                    throw new RpcException($"ProxyServer for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed. No reason given.");
+                }
             }
 
             // return response result to the proxy caller
             var taskFromResult = GetGenericTaskFromResult(targetMethod);
+
             // if task from result method is null then this method didn't return an awaitable Task
-            if (taskFromResult != null)
-            {
-                return taskFromResult.Invoke(null, new object[] { response.ReturnValue });
-            }
-            else
-            {
-                return response.ReturnValue;
-            }
+            return taskFromResult != null
+                ? taskFromResult.Invoke(null, new object[] { response.ReturnValue })
+                : response.ReturnValue;
         }
 
         private MethodInfo GetGenericTaskFromResult(MethodInfo targetMethod)
@@ -121,14 +161,9 @@ namespace LagoVista.Core.Rpc.Client
             if (targetMethod.ReturnType.BaseType == typeof(Task))
             {
                 var genericArguments = targetMethod.ReturnType.GetGenericArguments();
-                if (genericArguments.Length > 0)
-                {
-                    generic_Task_FromResult = _fromResultMethodInfo.MakeGenericMethod(genericArguments);
-                }
-                else
-                {
-                    generic_Task_FromResult = _fromResultMethodInfo.MakeGenericMethod();
-                }
+                generic_Task_FromResult = genericArguments.Length > 0
+                    ? _fromResultMethodInfo.MakeGenericMethod(genericArguments)
+                    : _fromResultMethodInfo.MakeGenericMethod();
             }
             return generic_Task_FromResult;
         }
