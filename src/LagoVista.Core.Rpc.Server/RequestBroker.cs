@@ -74,10 +74,13 @@ namespace LagoVista.Core.Rpc.Server
 
         public async Task<IResponse> InvokeAsync(IRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             // 1. get handler
-            if (!_subjectRegistry.TryGetValue(request.DestinationPath, out InstanceMethodPair messageHandler))
+            if (!_subjectRegistry.TryGetValue(request.DestinationPath, out var messageHandler))
             {
                 throw new KeyNotFoundException($"Handler not found for {request.DestinationPath}");
             }
@@ -88,12 +91,11 @@ namespace LagoVista.Core.Rpc.Server
             {
                 response = await messageHandler.Invoke(request);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //todo: ML - log exception
                 response = new Response(request, ex);
             }
-
             return response;
         }
     }

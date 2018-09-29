@@ -25,20 +25,30 @@ namespace LagoVista.Core.Rpc.Server
         public void Start()
         {
             if (_started)
+            {
                 return;
+            }
+
             CustomStart();
             _started = true;
         }
 
         public async Task TransmitAsync(IMessage message)
         {
-            if (message == null) throw new ArgumentNullException(nameof(message));
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
             await CustomTransmitMessageAsync(message);
         }
 
         public async Task ReceiveAsync(IMessage message)
         {
-            if (message == null) throw new ArgumentNullException(nameof(message));
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             var response = await _requestBroker.InvokeAsync((IRequest)message);
             await TransmitAsync(response);

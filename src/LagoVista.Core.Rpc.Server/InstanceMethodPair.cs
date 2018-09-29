@@ -22,12 +22,21 @@ namespace LagoVista.Core.Rpc.Server
 
         internal static object[] GetArguments(IRequest request, ParameterInfo[] parameters)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
 
             // 1. check request value count == param count
             if (request.ArgumentCount != parameters.Length)
+            {
                 throw new ArgumentException($"parameter count mismatch. params {parameters.Length}, args {request.ArgumentCount}.");
+            }
 
             var arguments = new object[parameters.Length];
 
@@ -37,15 +46,18 @@ namespace LagoVista.Core.Rpc.Server
                 var parameter = parameters[i];
 
                 if (parameter.GetCustomAttribute(typeof(ParamArrayAttribute)) != null)
+                {
                     throw new NotSupportedException($"unsupported type - params keyword not allowed. type: '{parameter.Name}'.");
+                }
 
                 var argValue = request.GetValue(parameters[i].Name);
                 if (argValue != null)
                 {
                     var argType = argValue.GetType();
                     if (parameter.ParameterType != argType)
+                    {
                         throw new ArgumentException($"parameter type mismatch. param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
-
+                    }
                 }
                 arguments[i] = argValue;
             }
@@ -54,12 +66,15 @@ namespace LagoVista.Core.Rpc.Server
 
         public async Task<IResponse> Invoke(IRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
 
             var arguments = GetArguments(request, _parameters);
 
-            var invokeResult = _isAwaitable 
-                ? (object)await (dynamic)_methodInfo.Invoke(_instance, arguments) 
+            var invokeResult = _isAwaitable
+                ? (object)await (dynamic)_methodInfo.Invoke(_instance, arguments)
                 : _methodInfo.Invoke(_instance, arguments);
 
             return (IResponse)Activator.CreateInstance(typeof(Response), new object[] { request, invokeResult });
