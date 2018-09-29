@@ -59,9 +59,9 @@ namespace LagoVista.Core.Utils
 
         protected Task<InvokeResult> InternalCompleteAsync(string correlationId, object item)
         {
-            if (Sessions.TryGetValue(correlationId, out var tcs))
+            if (Sessions.TryGetValue(correlationId, out var requestAwaiter))
             {
-                tcs.CompletionSource.SetResult(item);
+                requestAwaiter.CompletionSource.SetResult(item);
                 return Task.FromResult(InvokeResult.Success);
             }
             return Task.FromResult(InvokeResult.FromErrors(new ErrorMessage("Could not find anyone waiting for supplied correlation id.") { Details = $"CorrelationId={correlationId}" }));
