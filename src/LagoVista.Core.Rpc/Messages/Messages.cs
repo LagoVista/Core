@@ -98,7 +98,7 @@ namespace LagoVista.Core.Rpc.Messages
                 throw new ArgumentException($"key can't start with '__'.  '{key}'");
             }
 
-            if (!_data.TryGetValue(key, out object result))
+            if (!_data.TryGetValue(key, out var result))
             {
                 throw new KeyNotFoundException(key);
             }
@@ -113,7 +113,7 @@ namespace LagoVista.Core.Rpc.Messages
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (!_data.TryGetValue(key, out object result))
+            if (!_data.TryGetValue(key, out var result))
             {
                 throw new KeyNotFoundException(key);
             }
@@ -124,75 +124,76 @@ namespace LagoVista.Core.Rpc.Messages
         public T GetValue<T>(string key)
         {
             var result = GetValue(key);
-
-            if (!(result is T))
+            if (result != null)
             {
-                throw new InvalidCastException($"the value of {key} is not of type {typeof(T).FullName}");
+                if (!(result is T))
+                {
+                    throw new InvalidCastException($"the value of {key} is not of type {typeof(T).FullName}");
+                }
+                return (T)result;
             }
-
-            return (T)result;
+            return default(T);
         }
 
         public T InternalGetValue<T>(string key)
         {
             var result = InternalGetValue(key);
-
-            if (!(result is T))
+            if (result != null)
             {
-                throw new InvalidCastException($"the value of {key} is not of type {typeof(T).FullName}");
+                if (!(result is T))
+                {
+                    throw new InvalidCastException($"the value of {key} is not of type {typeof(T).FullName}");
+                }
+                return (T)result;
             }
-
-            return (T)result;
+            return default(T);
         }
 
         public string DestinationPath
         {
-            get { return InternalGetValue<string>(_pathKey); }
-            set { InternalSetValue(_pathKey, value, true); }
+            get => InternalGetValue<string>(_pathKey);
+            set => InternalSetValue(_pathKey, value, true);
         }
 
         public string ReplyPath
         {
-            get { return InternalGetValue<string>(_replyToPathKey); }
-            set { InternalSetValue(_replyToPathKey, value, true); }
+            get => InternalGetValue<string>(_replyToPathKey);
+            set => InternalSetValue(_replyToPathKey, value, true);
         }
 
         public string Id
         {
-            get { return InternalGetValue<string>(_idKey); }
-            set { InternalSetValue(_idKey, value, true); }
+            get => InternalGetValue<string>(_idKey);
+            set => InternalSetValue(_idKey, value, true);
         }
 
         public string CorrelationId
         {
-            get { return InternalGetValue<string>(_correlationIdKey); }
-            set { InternalSetValue(_correlationIdKey, value, true); }
+            get => InternalGetValue<string>(_correlationIdKey);
+            set => InternalSetValue(_correlationIdKey, value, true);
         }
 
         public DateTime TimeStamp
         {
-            get { return InternalGetValue<DateTime>(_dateTimeStampKey); }
-            set { InternalSetValue(_dateTimeStampKey, value, true); }
+            get => InternalGetValue<DateTime>(_dateTimeStampKey);
+            set => InternalSetValue(_dateTimeStampKey, value, true);
         }
 
         public string OrganizationId
         {
-            get { return InternalGetValue<string>(_organizationId); }
-            set { InternalSetValue(_organizationId, value, true); }
+            get => InternalGetValue<string>(_organizationId);
+            set => InternalSetValue(_organizationId, value, true);
         }
         public string InstanceId
         {
-            get { return InternalGetValue<string>(_instanceId); }
-            set { InternalSetValue(_instanceId, value, true); }
+            get => InternalGetValue<string>(_instanceId);
+            set => InternalSetValue(_instanceId, value, true);
         }
 
         [JsonIgnore]
         public byte[] Payload
         {
-            get
-            {
-                return Encoding.UTF8.GetBytes(Json);
-            }
+            get => Encoding.UTF8.GetBytes(Json);
             protected set
             {
                 if (value != null && value.Length > 0)
@@ -246,12 +247,21 @@ namespace LagoVista.Core.Rpc.Messages
 
         internal static void ValidateArguments(ParameterInfo[] parameters, object[] args)
         {
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
-            if (args == null) throw new ArgumentNullException(nameof(args));
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (args == null)
+            {
+                throw new ArgumentNullException(nameof(args));
+            }
 
             // 1. check request value count == param count
             if (args.Length != parameters.Length)
+            {
                 throw new ArgumentException($"parameter count mismatch. params {parameters.Length}, args {args.Length}.");
+            }
 
             // 2. validate the types
             for (var i = 0; i < parameters.Length; ++i)
@@ -259,13 +269,17 @@ namespace LagoVista.Core.Rpc.Messages
                 var parameter = parameters[i];
 
                 if (parameter.GetCustomAttribute(typeof(ParamArrayAttribute)) != null)
+                {
                     throw new NotSupportedException($"unsupported type - params keyword not allowed. type: '{parameter.Name}'.");
+                }
 
                 if (args[i] != null)
                 {
                     var argType = args[i].GetType();
                     if (parameter.ParameterType != argType)
+                    {
                         throw new ArgumentException($"parameter type mismatch. param: '{parameter.Name}', param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
+                    }
                 }
             }
         }
@@ -290,20 +304,18 @@ namespace LagoVista.Core.Rpc.Messages
                 throw new ArgumentNullException(nameof(request));
             }
 
-            // null might be a valid return value
-            ReturnValue = value; // ?? throw new ArgumentNullException(nameof(value));
-
-            Exception = null;
-            Success = true;
-
-            Initialize(request);
-        }
-
-        public Response(IRequest request, Exception exception) : base()
-        {
-            Success = false;
-            Exception = exception;
-            ReturnValue = null;
+            if (value == null || !(value is Exception))
+            {
+                Success = true;
+                ReturnValue = value;
+                Exception = null;
+            }
+            else
+            {
+                Success = false;
+                ReturnValue = null;
+                Exception = value as Exception;
+            }
 
             Initialize(request);
         }
@@ -323,31 +335,31 @@ namespace LagoVista.Core.Rpc.Messages
 
         public bool Success
         {
-            get { return (bool)InternalGetValue(_successKey); }
-            private set { InternalSetValue(_successKey, value, true); }
+            get => InternalGetValue<bool>(_successKey);
+            private set => InternalSetValue(_successKey, value, true);
         }
 
         public Exception Exception
         {
-            get { return (Exception)InternalGetValue(_exceptionKey); }
-            private set { InternalSetValue(_exceptionKey, value, true); }
+            get => InternalGetValue<Exception>(_exceptionKey);
+            private set => InternalSetValue(_exceptionKey, value, true);
         }
 
         public object ReturnValue
         {
-            get { return InternalGetValue(_returnValueKey); }
-            private set { InternalSetValue(_returnValueKey, value, true); }
-        }
-
-        public string RequestId
-        {
-            get { return (string)InternalGetValue(_requestIdKey); }
-            private set { InternalSetValue(_requestIdKey, value, true); }
+            get => InternalGetValue(_returnValueKey);
+            private set => InternalSetValue(_returnValueKey, value, true);
         }
 
         public T GetTypedReturnValue<T>()
         {
-            return (T)ReturnValue;
+            return InternalGetValue<T>(_returnValueKey);
+        }
+
+        public string RequestId
+        {
+            get => InternalGetValue<string>(_requestIdKey);
+            private set => InternalSetValue(_requestIdKey, value, true);
         }
     }
 }
