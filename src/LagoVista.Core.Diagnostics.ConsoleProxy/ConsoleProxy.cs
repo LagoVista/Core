@@ -26,13 +26,13 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
 
     public class ConsoleProxy : DispatchProxy
     {
-        private IConsoleWriter _console;
+        private IConsoleWriter _writer;
         private object _instance;
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             object result = null;
-            _console.WriteLine($"-> {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+            _writer.WriteLine($">>> {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
             if (args != null && args.Length > 0)
             {
                 var parameters = targetMethod.GetParameters();
@@ -40,11 +40,12 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
                 {
                     try
                     {
-                        _console.WriteLine($"{parameters[i].Name}: {JsonConvert.SerializeObject(args[i])}");
+                        _writer.WriteLine($"{parameters[i].Name}: ");
+                        _writer.WriteLine(JsonConvert.SerializeObject(args[i], Formatting.Indented));
                     }
                     catch (Exception ex)
                     {
-                        _console.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed to convert args for param '{parameters[i].Name}' to json. Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
+                        _writer.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed to convert args for param '{parameters[i].Name}' to json. Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
                     }
                 }
             }
@@ -52,12 +53,12 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
             try
             {
                 result = targetMethod.Invoke(_instance, args);
-                _console.WriteLine($"<- {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+                _writer.WriteLine($"<<< {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
             }
             catch (Exception ex)
             {
-                _console.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
-                _console.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} Stack Trace: {ex.StackTrace}");
+                _writer.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
+                _writer.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} Stack Trace: {ex.StackTrace}");
                 throw;
             }
             return result;
@@ -67,7 +68,7 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
         {
             var result = Create<TInterface, ConsoleProxy>();
             var proxy = (result as ConsoleProxy);
-            proxy._console = console ?? throw new ArgumentNullException(nameof(console));
+            proxy._writer = console ?? throw new ArgumentNullException(nameof(console));
             proxy._instance = instance ?? throw new ArgumentNullException(nameof(instance));
             return result;
         }
