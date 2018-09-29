@@ -17,7 +17,7 @@ namespace LagoVista.Core.Utils
             Details = new List<string>();
         }
 
-        public List<String> Details { get; private set; }
+        public List<string> Details { get; private set; }
 
         public string CorrelationId { get; private set; }
 
@@ -32,7 +32,7 @@ namespace LagoVista.Core.Utils
         protected IUsageMetrics UsageMetrics { get; private set; }
         protected ConcurrentDictionary<string, WaitOnRequest<object>> Sessions { get; } = new ConcurrentDictionary<string, WaitOnRequest<object>>();
 
-        public AsyncCouplerBase(ILogger logger, IUsageMetrics  usageMetrics)
+        public AsyncCouplerBase(ILogger logger, IUsageMetrics usageMetrics)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             UsageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
@@ -67,7 +67,7 @@ namespace LagoVista.Core.Utils
             return Task.FromResult(InvokeResult.FromErrors(new ErrorMessage("Could not find anyone waiting for supplied correlation id.") { Details = $"CorrelationId={correlationId}" }));
         }
 
-        public int ActiveSessions { get { return Sessions.Count; } }
+        public int ActiveSessions => Sessions.Count;
 
         protected Task<InvokeResult<TAsyncResult>> WaitOnAsyncInternal<TAsyncResult>(string correlationId, TimeSpan timeout)
         {
@@ -79,7 +79,7 @@ namespace LagoVista.Core.Utils
                 wor.CompletionSource.Task.Wait(timeout);
                 UsageMetrics.MessagesProcessed++;
                 UsageMetrics.ActiveCount--;
-                
+
                 UsageMetrics.ElapsedMS = (DateTime.Now - wor.Enqueued).TotalMilliseconds;
 
                 if (!wor.CompletionSource.Task.IsCompleted)
@@ -115,7 +115,7 @@ namespace LagoVista.Core.Utils
             }
             finally
             {
-                Sessions.TryRemove(correlationId, out WaitOnRequest<Object> obj);
+                Sessions.TryRemove(correlationId, out var obj);
             }
         }
     }
