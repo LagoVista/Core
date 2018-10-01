@@ -22,7 +22,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         private async Task CreateTopicAsync(string entityPath)
         {
-            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
             var client = new ManagementClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
@@ -73,7 +73,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         }
 
         protected override async Task CustomStartAsync()
-        {            
+        {
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey

@@ -22,7 +22,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         private async Task CreateTopicAsync(string entityPath)
         {
-            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
             var client = new ManagementClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
