@@ -314,7 +314,7 @@ namespace LagoVista.Core.Rpc.Messages
             {
                 Success = false;
                 ReturnValue = null;
-                Exception = value as Exception;
+                Exception = (Exception)value;
             }
 
             Initialize(request);
