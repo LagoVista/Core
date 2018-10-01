@@ -22,14 +22,14 @@ namespace LagoVista.Core.Rpc.Server
 
         private bool _started = false;
 
-        public void Start()
+        public async Task StartAsync()
         {
             if (_started)
             {
                 return;
             }
 
-            CustomStart();
+            await CustomStartAsync();
             _started = true;
         }
 
@@ -54,7 +54,7 @@ namespace LagoVista.Core.Rpc.Server
             await TransmitAsync(response);
         }
 
-        protected abstract void CustomStart();
+        protected abstract Task CustomStartAsync();
         protected abstract Task CustomTransmitMessageAsync(IMessage message);
     }
 }

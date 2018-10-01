@@ -1,7 +1,9 @@
-﻿using LagoVista.Core.PlatformSupport;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Azure.ServiceBus.Management;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,15 +12,33 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 {
     public sealed class ServiceBusRequestServer : AbstractRequestServer
     {
-        #region Fields
+        #region Fields        
+        private readonly IConnectionSettings _topicConstructorSettings;
+        private readonly IConnectionSettings _receiverSettings;
         private readonly string _topicConnectionString;
         private readonly string _destinationEntityPath;
-        private readonly SubscriptionClient _subscriptionClient;
+        private SubscriptionClient _subscriptionClient;
         #endregion
+
+        private async Task CreateTopicAsync(string entityPath)
+        {
+            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+
+            var client = new ManagementClient(connstr);
+            if (!await client.TopicExistsAsync(entityPath))
+            {
+                await client.CreateTopicAsync(entityPath);
+                await client.CreateSubscriptionAsync(entityPath, "application");
+                await client.CreateSubscriptionAsync(entityPath, "admin");
+            }
+        }
 
         public ServiceBusRequestServer(ITransceiverConnectionSettings connectionSettings, IRequestBroker requestBroker, ILogger logger) :
             base(connectionSettings, requestBroker, logger)
         {
+            _topicConstructorSettings = connectionSettings.RpcTopicConstructor;
+            _receiverSettings = connectionSettings.RpcReceiver;
+
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
@@ -27,18 +47,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
             _destinationEntityPath = topicSettings.ResourceName;
 
-            // Endpoint - AccountId
-            // SharedAccessKeyName - UserName
-            // SharedAccessKey - AccessKey
-            // SourceEntityPath - ResourceName
-            // SubscriptionPath - Uri
-            var subscriptionSettings = connectionSettings.RpcReceiver;
-            var receiverConnectionString = $"Endpoint=sb://{subscriptionSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={subscriptionSettings.UserName};SharedAccessKey={subscriptionSettings.AccessKey};";
-            var sourceEntityPath = subscriptionSettings.ResourceName;
-            var subscriptionPath = subscriptionSettings.Uri;
-
-            //todo: ML - need to set retry policy and operation timeout etc.
-            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
         }
 
         private async Task MessageReceived(Microsoft.Azure.ServiceBus.Message message, CancellationToken cancelationToken)
@@ -64,8 +72,21 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             return Task.FromResult<object>(null);
         }
 
-        protected override void CustomStart()
-        {
+        protected override async Task CustomStartAsync()
+        {            
+            // Endpoint - AccountId
+            // SharedAccessKeyName - UserName
+            // SharedAccessKey - AccessKey
+            // SourceEntityPath - ResourceName
+            // SubscriptionPath - Uri
+            var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
+            var sourceEntityPath = _receiverSettings.ResourceName;
+            var subscriptionPath = "application";
+
+            await CreateTopicAsync(sourceEntityPath);
+
+            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
+
             var options = new MessageHandlerOptions(HandleException)
             {
                 AutoComplete = false,
@@ -80,11 +101,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            //todo: ML - if service bus topic and subscription doesn't exist, then create it: https://github.com/Azure-Samples/service-bus-dotnet-management/tree/master/src/service-bus-dotnet-management
-
-            //todo: ML - need to set retry policy and operation timeout etc.
-            //todo: ML - figured out retry:   var retryPolicy = new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10);
-            var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), null);
+            // no need to create topic - we wouldn't even be here if the other side hadn't done it's part
+            var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
             try
             {
                 // package response in service bus message and send to topic

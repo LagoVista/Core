@@ -10,14 +10,17 @@ namespace LagoVista.Core.Rpc.Tests.Models
         public SimulatedConnectionSettings() : base()
         {
             RpcTransmitter = new ConnectionSettings();
-            RpcReceiver = new ConnectionSettings();
-            RpcReceiver.Uri = Constants.MessageReplyPath;
-            RpcReceiver.ResourceName = Constants.MessageInBox;
+            RpcReceiver = new ConnectionSettings
+            {
+                Uri = Constants.MessageReplyPath,
+                ResourceName = Constants.MessageInBox
+            };
 
             RpcTransmitter.TimeoutInSeconds = Constants.TimeoutInSeconds;
         }
 
         public IConnectionSettings RpcTransmitter { get; }
         public IConnectionSettings RpcReceiver { get; }
+        public IConnectionSettings RpcTopicConstructor { get; }
     }
 }

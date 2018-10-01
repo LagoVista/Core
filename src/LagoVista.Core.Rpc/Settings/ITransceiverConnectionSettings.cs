@@ -14,6 +14,15 @@ namespace LagoVista.Core.Rpc.Settings
         /// DestinationEntityPath - ResourceName
         /// client request timeout - TimeoutInSeconds
         /// </summary>
+        IConnectionSettings RpcTopicConstructor { get; }
+
+        /// <summary>
+        /// Endpoint - AccountId
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// DestinationEntityPath - ResourceName
+        /// client request timeout - TimeoutInSeconds
+        /// </summary>
         IConnectionSettings RpcTransmitter { get; }
 
         /// <summary>

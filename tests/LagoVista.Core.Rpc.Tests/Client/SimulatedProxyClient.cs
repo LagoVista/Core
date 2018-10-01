@@ -25,9 +25,10 @@ namespace LagoVista.Core.Rpc.Tests.Client
             _queue = queue ?? throw new ArgumentNullException(nameof(queue));
         }
 
-        protected override void CustomStart()
+        protected override Task CustomStartAsync()
         {
             _queue.RegisterListener(this, QueueSimulator.ListenerType.Response);
+            return Task.FromResult<object>(null);
         }
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)

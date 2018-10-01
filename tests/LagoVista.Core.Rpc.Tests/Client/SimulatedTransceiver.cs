@@ -26,7 +26,10 @@ namespace LagoVista.Core.Rpc.Tests.Client
             _result = result;
         }
 
-        protected override void CustomStart() { }
+        protected override Task CustomStartAsync()
+        {
+            return Task.FromResult<object>(null);
+        }
 
         protected override Task CustomTransmitMessageAsync(IMessage message)
         {
