@@ -3,7 +3,6 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.Management;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,17 +19,18 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private SubscriptionClient _subscriptionClient;
         #endregion
 
-        private async Task CreateTopicAsync(string entityPath)
+        private Task CreateTopicAsync(string entityPath)
         {
-            var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            //var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
-            var client = new ManagementClient(connstr);
-            if (!await client.TopicExistsAsync(entityPath))
-            {
-                await client.CreateTopicAsync(entityPath);
-                await client.CreateSubscriptionAsync(entityPath, "application");
-                await client.CreateSubscriptionAsync(entityPath, "admin");
-            }
+            //var client = new ManagementClient(connstr);
+            //if (!await client.TopicExistsAsync(entityPath))
+            //{
+            //    await client.CreateTopicAsync(entityPath);
+            //    await client.CreateSubscriptionAsync(entityPath, "application");
+            //    await client.CreateSubscriptionAsync(entityPath, "admin");
+            //}
+            return Task.FromResult<object>(null);
         }
 
         #region Constructors
@@ -59,6 +59,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         protected override async Task CustomStartAsync()
         {
+            Console.WriteLine("ServiceBusProxyClient.CustomStartAsync enter");
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
@@ -66,11 +67,14 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SubscriptionPath - Uri
             var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
             var sourceEntityPath = _receiverSettings.ResourceName;
-            var subscriptionPath = "application";
+            var subscriptionPath = _receiverSettings.Uri;
+            Console.WriteLine(receiverConnectionString);
+            Console.WriteLine(sourceEntityPath);
+            Console.WriteLine(subscriptionPath);
 
             await CreateTopicAsync(sourceEntityPath);
-
-            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
+            //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
+            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
 
             var options = new MessageHandlerOptions(HandleException)
             {
@@ -82,6 +86,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 #endif
             };
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
+            Console.WriteLine("ServiceBusProxyClient.CustomStartAsync exit");
         }
 
         #endregion
@@ -90,21 +95,28 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         private async Task MessageReceived(Microsoft.Azure.ServiceBus.Message message, CancellationToken cancelationToken)
         {
+            Console.WriteLine("ServiceBusProxyClient.MessageReceived enter");
             try
             {
                 var response = new Response(message.Body);
+                Console.WriteLine(response.Json);
                 await ReceiveAsync(response);
                 await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"ServiceBusProxyClient.MessageReceived exception: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                message.Label = ex.Message;
                 await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
                 throw;
             }
+            Console.WriteLine("ServiceBusProxyClient.MessageReceived exit");
         }
 
         private Task HandleException(ExceptionReceivedEventArgs e)
         {
+            Console.WriteLine($"!!!!!!!!!!!!!!! HandleException: {(e.Exception!= null? e.Exception.Message : "no message")}");
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
@@ -124,7 +136,8 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             await CreateTopicAsync(entityPath);
 
-            var topicClient = new TopicClient(_topicConnectionString, entityPath, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
+            //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
+            var topicClient = new TopicClient(_topicConnectionString, entityPath, null);
             try
             {
                 // package response in service bus message and send to topic

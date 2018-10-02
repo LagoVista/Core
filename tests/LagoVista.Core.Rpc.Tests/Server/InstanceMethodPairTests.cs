@@ -33,7 +33,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
             Assert.IsNotNull(response);
         }
 
@@ -46,7 +46,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
             Assert.IsTrue(response.Success);
         }
 
@@ -59,7 +59,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
             Assert.AreEqual(request.CorrelationId, response.CorrelationId);
             Assert.AreEqual(request.Id, response.RequestId);
             Assert.AreEqual(ProxySubject.EchoValueConst, response.ReturnValue);
@@ -86,7 +86,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
             Assert.IsNotNull(response);
         }
 
@@ -99,7 +99,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
             Assert.IsTrue(response.Success);
         }
 
@@ -112,7 +112,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
             Assert.AreEqual(request.CorrelationId, response.CorrelationId);
             Assert.AreEqual(request.Id, response.RequestId);
             Assert.AreEqual(ProxySubject.EchoValueConst, response.ReturnValue);
@@ -130,7 +130,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var pair = new InstanceMethodPair(subject, methodInfo);
             IRequest request = null;
 
-            var response = await pair.Invoke(request);
+            var response = await pair.InvokeAsync(request);
         }
         #endregion
 

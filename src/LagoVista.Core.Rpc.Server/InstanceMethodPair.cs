@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Rpc.Messages;
+using Newtonsoft.Json;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace LagoVista.Core.Rpc.Server
             return arguments;
         }
 
-        public async Task<IResponse> Invoke(IRequest request)
+        public async Task<IResponse> InvokeAsync(IRequest request)
         {
             if (request == null)
             {
@@ -73,9 +74,20 @@ namespace LagoVista.Core.Rpc.Server
 
             var arguments = GetArguments(request, _parameters);
 
+            Console.WriteLine($"====== InstanceMethodPair.InvokeAsync: path: {request.DestinationPath}");
+
             var invokeResult = _isAwaitable
                 ? (object)await (dynamic)_methodInfo.Invoke(_instance, arguments)
                 : _methodInfo.Invoke(_instance, arguments);
+            if (invokeResult != null)
+            {
+                Console.WriteLine("====== InstanceMethodPair.InvokeAsync: response:");
+                Console.WriteLine(JsonConvert.SerializeObject(invokeResult));
+            }
+            else
+            {
+                Console.WriteLine($"====== InstanceMethodPair.InvokeAsync: response: NULL");
+            }
 
             return (IResponse)Activator.CreateInstance(typeof(Response), new object[] { request, invokeResult });
         }

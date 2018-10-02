@@ -22,7 +22,8 @@ namespace LagoVista.Core.Rpc.Messages
         {
             // note: do not change this to auto or array or all - only works with TypeNameHandling.Objects
             TypeNameHandling = TypeNameHandling.Objects,
-            Formatting = Newtonsoft.Json.Formatting.None,
+            //Formatting = Formatting.None,
+            Formatting = Formatting.Indented,
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore,
             TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,

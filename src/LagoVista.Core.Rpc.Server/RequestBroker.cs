@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Rpc.Attributes;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -89,10 +90,21 @@ namespace LagoVista.Core.Rpc.Server
             IResponse response = null;
             try
             {
-                response = await messageHandler.Invoke(request);
+                Console.WriteLine($"----- RequestBroker.InvokeAsync: path: {request.DestinationPath}");
+                response = await messageHandler.InvokeAsync(request);
+                if(response != null)
+                {
+                    Console.WriteLine("----- RequestBroker.InvokeAsync: response: ");
+                    Console.WriteLine(JsonConvert.SerializeObject(response));
+                }
+                else
+                {
+                    Console.WriteLine($"----- RequestBroker.InvokeAsync: response: NULL");
+                }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"----- RequestBroker.InvokeAsync: exception: {ex.Message}");
                 //todo: ML - log exception
                 response = new Response(request, ex);
             }
