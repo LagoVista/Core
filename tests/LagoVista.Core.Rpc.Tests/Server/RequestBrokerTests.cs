@@ -20,7 +20,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var methodsRegistered = broker.AddService(_controlInstance);
 
             var instanceMethodCount = typeof(IProxySubject).GetMethods().Count();
-            Assert.AreEqual(5, instanceMethodCount);
+            Assert.AreEqual(7, instanceMethodCount);
             Assert.AreEqual(instanceMethodCount - 1, methodsRegistered);
         }
 
