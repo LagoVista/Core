@@ -9,7 +9,7 @@ namespace LagoVista.Core.Validation
 
         public static InvokeResult<T> Create(T result)
         {
-            return new InvokeResult<T>() { Result = result } ;
+            return new InvokeResult<T>() { Result = result };
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
-        public static InvokeResult<T> FromException(String tag, Exception ex)
+        public static InvokeResult<T> FromException(string tag, Exception ex)
         {
             var result = new InvokeResult<T>();
             result.Errors.Add(new ErrorMessage()
@@ -85,9 +85,9 @@ namespace LagoVista.Core.Validation
         {
             var idx = 1;
             var kvps = new List<KeyValuePair<string, string>>();
-            foreach(var err in Errors)
+            foreach (var err in Errors)
             {
-                if (String.IsNullOrEmpty(err.ErrorCode))
+                if (string.IsNullOrEmpty(err.ErrorCode))
                 {
                     kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", err.Message));
                 }
@@ -96,18 +96,14 @@ namespace LagoVista.Core.Validation
                     kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", $"{err.ErrorCode} - {err.Message}"));
                 }
             }
-            return kvps.ToArray();            
+            return kvps.ToArray();
         }
     }
 
 
     public class InvokeResult : ValidationResult
     {
-        public static InvokeResult Success
-        {
-            get { return new InvokeResult(); }
-        }
-
+        public static InvokeResult Success => new InvokeResult();
 
         public static InvokeResult FromError(string err, string errorCode = "")
         {
@@ -127,7 +123,7 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
-        public static InvokeResult FromException(String tag, Exception ex)
+        public static InvokeResult FromException(string tag, Exception ex)
         {
             var result = new InvokeResult();
             result.Errors.Add(new ErrorMessage()
@@ -159,7 +155,7 @@ namespace LagoVista.Core.Validation
             var kvps = new List<KeyValuePair<string, string>>();
             foreach (var err in Errors)
             {
-                if (String.IsNullOrEmpty(err.ErrorCode))
+                if (string.IsNullOrEmpty(err.ErrorCode))
                 {
                     kvps.Add(new KeyValuePair<string, string>($"Err{idx++}", err.Message));
                 }
