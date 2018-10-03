@@ -63,7 +63,7 @@ namespace LagoVista.Core.Rpc.Server
 
             var methods = interfaceType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Except(_objectMethods)
-                .Where(m => m.GetCustomAttribute<RpcIgnoreAttribute>() == null);
+                .Where(m => m.GetCustomAttribute<RpcIgnoreMethodAttribute>() == null);
             var methodCount = 0;
             foreach (var method in methods)
             {

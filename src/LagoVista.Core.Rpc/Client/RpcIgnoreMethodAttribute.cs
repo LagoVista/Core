@@ -3,7 +3,7 @@
 namespace LagoVista.Core.Rpc.Attributes
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class RpcIgnoreAttribute : Attribute
+    public class RpcIgnoreMethodAttribute : Attribute
     {
     }
 }

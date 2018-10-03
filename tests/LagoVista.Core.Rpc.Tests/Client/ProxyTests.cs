@@ -77,6 +77,42 @@ namespace LagoVista.Core.Rpc.Tests.Client
         }
 
         [TestMethod]
+        public void Proxy_IgnoreParametersAtInterface()
+        {
+            var array = new string[] { ProxySubject.EchoValueConst };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
+
+            var logger = new Mock<ILogger>();
+            var client = new SimulatedTransceiver(
+                Constants.ConnectionSettings,
+                Constants.AsyncCoupler,
+                logger.Object,
+                json);
+            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+            var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+
+            var methodResult = proxySubject.IgnoreParametersAtInterface("param1", "param2");
+        }
+
+        [TestMethod]
+        public void Proxy_IgnoreParametersAtImplementation()
+        {
+            var array = new string[] { ProxySubject.EchoValueConst };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
+
+            var logger = new Mock<ILogger>();
+            var client = new SimulatedTransceiver(
+                Constants.ConnectionSettings,
+                Constants.AsyncCoupler,
+                logger.Object,
+                json);
+            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+            var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+
+            var methodResult = proxySubject.IgnoreParametersAtImplementation("param1", "param2");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void Proxy_PassStringParams_PassingSingleArgIntoParamsMethod_ResultIsCorrectValue2()
         {

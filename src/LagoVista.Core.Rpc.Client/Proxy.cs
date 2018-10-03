@@ -107,9 +107,20 @@ namespace LagoVista.Core.Rpc.Client
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            if (targetMethod.GetCustomAttribute<RpcIgnoreAttribute>() != null)
+            if (targetMethod.GetCustomAttribute<RpcIgnoreMethodAttribute>() != null)
             {
                 throw new NotSupportedException($"{nameof(Proxy)}.{nameof(Invoke)}: method not suported: {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+            }
+
+            // set ignored parmeters to null
+            var parameters = targetMethod.GetParameters();
+            for (var i = 0; i < parameters.Length; ++i)
+            {
+                var parameter = parameters[i];
+                if (parameter.GetCustomAttribute<RpcIgnoreParameterAttribute>() != null)
+                {
+                    args[parameter.Position] = null;
+                }
             }
 
             // setup and transmit the request

@@ -10,7 +10,10 @@ namespace LagoVista.Core.Rpc.Tests.Models
         string PassStringParams(params string[] value);
         string PassObjectParams(params object[] value);
 
-        [RpcIgnore]
+        string IgnoreParametersAtInterface([RpcIgnoreParameter]string param1, string param2);
+        string IgnoreParametersAtImplementation(string param1, string param2);
+
+        [RpcIgnoreMethod]
         string SkipMe();
     }
 
@@ -28,6 +31,11 @@ namespace LagoVista.Core.Rpc.Tests.Models
             return await Task.FromResult(value);
         }
 
+        public string IgnoreParametersAtInterface(string param1, string param2)
+        {
+            return param1 + param2;
+        }
+
         public string PassStringParams(params string[] value)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(value);
@@ -42,5 +50,12 @@ namespace LagoVista.Core.Rpc.Tests.Models
         {
             return EchoValueConst;
         }
+
+        // proxy does not see the ignore attribute
+        public string IgnoreParametersAtImplementation([RpcIgnoreParameter]string param1, string param2)
+        {
+            return param1 + param2;
+        }
     }
 }
+

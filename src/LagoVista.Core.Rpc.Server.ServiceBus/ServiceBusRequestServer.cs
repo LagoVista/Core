@@ -121,15 +121,17 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                 };
                 await topicClient.SendAsync(messageOut);
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
                 //todo: ML - log exception
+                Console.WriteLine($"ServiceBusRequestServer.CustomTransmitMessageAsync: exeception: {ex.GetType().Name}.Message: {ex.Message}");
                 throw;
             }
             finally
             {
                 await topicClient.CloseAsync();
             }
+            Console.WriteLine("ServiceBusRequestServer.CustomTransmitMessageAsync: exit");
         }
     }
 }
