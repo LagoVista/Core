@@ -74,8 +74,10 @@ namespace LagoVista.Core.Rpc.Client
                 throw new ArgumentNullException(nameof(request));
             }
 
-            await _client.TransmitAsync(request);
-            var invokeResult = await _asyncCoupler.WaitOnAsync(request.CorrelationId, _requestTimeout);
+            var invokeResult = await _asyncCoupler.WaitOnAsync(
+                async () => await _client.TransmitAsync(request), 
+                request.CorrelationId, 
+                _requestTimeout);
 
             if (invokeResult == null)
             {

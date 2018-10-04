@@ -1,10 +1,10 @@
-﻿using LagoVista.Core.Coupler.Utils.Tests;
+﻿using LagoVista.Core.AsyncCoupler.Utils.Tests;
 using LagoVista.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Coupler.Tests
+namespace LagoVista.Core.AsyncCoupler.Tests
 {
     [TestClass]
     public class CouplerTestsGeneric
@@ -80,7 +80,7 @@ namespace LagoVista.Core.Coupler.Tests
 
             Assert.IsNotNull(result);
             Assert.IsFalse(result.Successful);
-            Assert.AreEqual("Could not find anyone waiting for supplied correlation id.", result.Errors[0].Message);
+            Assert.AreEqual($"Correlation id not found: {id}.", result.Errors[0].Message);
             Assert.AreEqual(0, _coupler.ActiveSessions);
         }
 

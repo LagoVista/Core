@@ -1,7 +1,7 @@
 ﻿using LagoVista.Core.Interfaces;
 using System;
 
-namespace LagoVista.Core.Coupler.Utils.Tests
+namespace LagoVista.Core.AsyncCoupler.Utils.Tests
 {
     public sealed class TestUsageMetrics : IUsageMetrics
     {

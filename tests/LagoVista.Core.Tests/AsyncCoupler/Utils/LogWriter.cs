@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LagoVista.Core.Coupler.Utils.Tests
+namespace LagoVista.Core.AsyncCoupler.Utils.Tests
 {
     public class TestLogger : ILogger
     {
