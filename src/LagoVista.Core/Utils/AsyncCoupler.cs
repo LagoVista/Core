@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Utils
 {
-    public sealed class WaitOnRequest<TModel>
+    public sealed class WaitOnRequest<TResult>
     {
         public WaitOnRequest(string correlationId)
         {
-            CompletionSource = new TaskCompletionSource<TModel>();
+            CompletionSource = new TaskCompletionSource<TResult>();
             CorrelationId = correlationId;
             Details = new List<string>();
         }
@@ -23,7 +23,7 @@ namespace LagoVista.Core.Utils
 
         public DateTime Enqueued { get; private set; }
 
-        public TaskCompletionSource<TModel> CompletionSource { get; private set; }
+        public TaskCompletionSource<TResult> CompletionSource { get; private set; }
     }
 
     public class AsyncCoupler : IAsyncCoupler
@@ -59,7 +59,7 @@ namespace LagoVista.Core.Utils
 
         protected Task<InvokeResult> InternalCompleteAsync(string correlationId, object item)
         {
-            if (Sessions.TryGetValue(correlationId, out var requestAwaiter))
+            if (Sessions.TryRemove(correlationId, out var requestAwaiter))
             {
                 requestAwaiter.CompletionSource.SetResult(item);
                 return Task.FromResult(InvokeResult.Success);
@@ -115,10 +115,6 @@ namespace LagoVista.Core.Utils
                 UsageMetrics.ErrorCount++;
 
                 return Task.FromResult(InvokeResult<TAsyncResult>.FromException("AsyncCoupler_WaitOnAsync", ex));
-            }
-            finally
-            {
-                Sessions.TryRemove(correlationId, out var obj);
             }
         }
 

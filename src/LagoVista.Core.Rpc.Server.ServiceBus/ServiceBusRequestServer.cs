@@ -65,6 +65,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         private Task HandleException(ExceptionReceivedEventArgs e)
         {
+            Console.WriteLine($"!!!!!!!!!!!!!!! HandleException: {(e.Exception != null ? e.Exception.Message : "no message")}");
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
