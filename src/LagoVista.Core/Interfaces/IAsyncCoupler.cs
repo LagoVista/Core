@@ -17,5 +17,4 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult<TResponseItem>> WaitOnAsync(string correlationId, TimeSpan timeout);
         IUsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion);
     }
-
 }

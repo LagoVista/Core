@@ -26,13 +26,13 @@ namespace LagoVista.Core.Utils
         public TaskCompletionSource<TModel> CompletionSource { get; private set; }
     }
 
-    public class AsyncCouplerBase
+    public class AsyncCoupler : IAsyncCoupler
     {
         protected ILogger Logger { get; }
         protected IUsageMetrics UsageMetrics { get; private set; }
         protected ConcurrentDictionary<string, WaitOnRequest<object>> Sessions { get; } = new ConcurrentDictionary<string, WaitOnRequest<object>>();
 
-        public AsyncCouplerBase(ILogger logger, IUsageMetrics usageMetrics)
+        public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             UsageMetrics = usageMetrics ?? throw new ArgumentNullException(nameof(usageMetrics));
@@ -75,7 +75,10 @@ namespace LagoVista.Core.Utils
             {
                 UsageMetrics.ActiveCount++;
                 var wor = new WaitOnRequest<object>(correlationId);
-                Sessions[correlationId] = wor;
+                if (!Sessions.TryAdd(correlationId, wor))
+                {
+                    return Task.FromResult(InvokeResult<TAsyncResult>.FromError($"Could not add correlation id {correlationId}."));
+                }
                 wor.CompletionSource.Task.Wait(timeout);
                 UsageMetrics.MessagesProcessed++;
                 UsageMetrics.ActiveCount--;
@@ -118,13 +121,6 @@ namespace LagoVista.Core.Utils
                 Sessions.TryRemove(correlationId, out var obj);
             }
         }
-    }
-
-    public class AsyncCoupler : AsyncCouplerBase, IAsyncCoupler
-    {
-        public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics) : base(logger, usageMetrics)
-        {
-        }
 
         public Task<InvokeResult> CompleteAsync<TResponseItem>(string correlationId, TResponseItem item)
         {
@@ -137,7 +133,7 @@ namespace LagoVista.Core.Utils
         }
     }
 
-    public class AsyncCoupler<TResponseItem> : AsyncCouplerBase, IAsyncCoupler<TResponseItem>
+    public class AsyncCoupler<TResponseItem> : AsyncCoupler, IAsyncCoupler<TResponseItem>
     {
         public AsyncCoupler(ILogger logger, IUsageMetrics usageMetrics) : base(logger, usageMetrics)
         {
