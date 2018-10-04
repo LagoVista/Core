@@ -128,7 +128,7 @@ namespace LagoVista.Core.Rpc.Client
             var responseTask = InvokeRemoteMethodAsync(request);
 
             // wait for response and handle exceptions
-            responseTask.Wait();
+            responseTask.Wait(_requestTimeout);
             if (responseTask.Status == TaskStatus.Faulted && responseTask.Exception != null)
             {
                 throw new RpcException($"Proxy for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed with message '{responseTask.Exception.Message}'. See inner exception for details.", responseTask.Exception);
