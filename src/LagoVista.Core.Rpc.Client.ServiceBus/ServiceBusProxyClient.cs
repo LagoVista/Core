@@ -108,6 +108,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                 Console.WriteLine($"ServiceBusProxyClient.MessageReceived exception: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 message.Label = ex.Message;
+                Console.WriteLine($"ServiceBusProxyClient.MessageReceived dead lettering message: {message.CorrelationId}");
                 await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
                 throw;
             }
