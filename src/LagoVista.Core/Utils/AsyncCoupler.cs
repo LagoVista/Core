@@ -76,9 +76,9 @@ namespace LagoVista.Core.Utils
         {
             if (!Sessions.TryAdd(correlationId, new AsyncRequest<object>(correlationId)))
             {
-                UsageMetrics.ActiveCount++;
                 throw new Exception($"Could not add correlation id {correlationId}.");
             }
+            UsageMetrics.ActiveCount++;
         }
 
         private AsyncRequest<object> Wait(string correlationId,  TimeSpan timeout)
