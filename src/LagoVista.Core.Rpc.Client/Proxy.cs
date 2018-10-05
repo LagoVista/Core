@@ -160,7 +160,7 @@ namespace LagoVista.Core.Rpc.Client
             }
 
             // return response result to the proxy caller
-            var taskFromResult = GetGenericTaskFromResult(targetMethod);
+            var taskFromResult = GetTaskFromResultMethod(targetMethod);
 
             // if task from result method is null then this method didn't return an awaitable Task
             return taskFromResult != null
@@ -168,17 +168,21 @@ namespace LagoVista.Core.Rpc.Client
                 : response.ReturnValue;
         }
 
-        private MethodInfo GetGenericTaskFromResult(MethodInfo targetMethod)
+        private MethodInfo GetTaskFromResultMethod(MethodInfo targetMethod)
         {
-            MethodInfo generic_Task_FromResult = null;
-            if (targetMethod.ReturnType.BaseType == typeof(Task))
+            MethodInfo taskFromResultMethod = null;
+            if (targetMethod.ReturnType.IsGenericType && targetMethod.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
             {
                 var genericArguments = targetMethod.ReturnType.GetGenericArguments();
-                generic_Task_FromResult = genericArguments.Length > 0
+                taskFromResultMethod = genericArguments.Length > 0
                     ? _fromResultMethodInfo.MakeGenericMethod(genericArguments)
                     : _fromResultMethodInfo.MakeGenericMethod();
             }
-            return generic_Task_FromResult;
+            else if(targetMethod.ReturnType == typeof(Task))
+            {
+                taskFromResultMethod = _fromResultMethodInfo.MakeGenericMethod(new Type[]{ typeof(object)});
+            }
+            return taskFromResultMethod;
         }
     }
 }

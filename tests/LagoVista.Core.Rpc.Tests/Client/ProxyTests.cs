@@ -22,6 +22,34 @@ namespace LagoVista.Core.Rpc.Tests.Client
         }
 
         [TestMethod]
+        public void Proxy_VoidMethod()
+        {
+            var logger = new Mock<ILogger>();
+            var client = new SimulatedTransceiver(
+                Constants.ConnectionSettings,
+                Constants.AsyncCoupler,
+                logger.Object,
+                null);
+            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+            var proxy = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+            proxy.VoidMethod();
+        }
+
+        [TestMethod]
+        public async Task Proxy_VoidTaskMethod()
+        {
+            var logger = new Mock<ILogger>();
+            var client = new SimulatedTransceiver(
+                Constants.ConnectionSettings,
+                Constants.AsyncCoupler,
+                logger.Object,
+                null);
+            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+            var proxy = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+            await proxy.VoidTaskMethod();
+        }
+
+        [TestMethod]
         public void Proxy_Echo_ResultIsNotNull()
         {
             var echoResult = _proxySubect.Echo(ProxySubject.EchoValueConst);
