@@ -90,21 +90,10 @@ namespace LagoVista.Core.Rpc.Server
             IResponse response = null;
             try
             {
-                Console.WriteLine($"----- RequestBroker.InvokeAsync: path: {request.DestinationPath}");
                 response = await messageHandler.InvokeAsync(request);
-                if(response != null)
-                {
-                    Console.WriteLine("----- RequestBroker.InvokeAsync: response: ");
-                    Console.WriteLine(JsonConvert.SerializeObject(response));
-                }
-                else
-                {
-                    Console.WriteLine($"----- RequestBroker.InvokeAsync: response: NULL");
-                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"----- RequestBroker.InvokeAsync: exception: {ex.Message}");
                 //todo: ML - log exception
                 response = new Response(request, ex);
             }

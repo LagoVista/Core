@@ -40,9 +40,7 @@ namespace LagoVista.Core.Rpc.Client
                 throw new ArgumentNullException(nameof(message));
             }
 
-            Console.WriteLine("AbstractProxyClient.ReceiveAsync before _asyncCoupler.CompleteAsync");
             var invokeResult = await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
-            Console.WriteLine("AbstractProxyClient.ReceiveAsync after _asyncCoupler.CompleteAsync");
 
             if (!invokeResult.Successful)
             {

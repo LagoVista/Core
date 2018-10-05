@@ -74,8 +74,6 @@ namespace LagoVista.Core.Rpc.Server
 
             var arguments = GetArguments(request, _parameters);
 
-            Console.WriteLine($"====== InstanceMethodPair.InvokeAsync: path: {request.DestinationPath}");
-
             object invokeResult = null;
             if (_isAwaitable)
             {
@@ -98,16 +96,6 @@ namespace LagoVista.Core.Rpc.Server
                 {
                     invokeResult = _methodInfo.Invoke(_instance, arguments);
                 }
-            }
-
-            if (invokeResult != null)
-            {
-                Console.WriteLine("====== InstanceMethodPair.InvokeAsync: response:");
-                Console.WriteLine(JsonConvert.SerializeObject(invokeResult));
-            }
-            else
-            {
-                Console.WriteLine($"====== InstanceMethodPair.InvokeAsync: response: NULL");
             }
 
             return (IResponse)Activator.CreateInstance(typeof(Response), new object[] { request, invokeResult });

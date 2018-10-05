@@ -65,7 +65,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         private Task HandleException(ExceptionReceivedEventArgs e)
         {
-            Console.WriteLine($"!!!!!!!!!!!!!!! HandleException: {(e.Exception != null ? e.Exception.Message : "no message")}");
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
@@ -102,9 +101,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            Console.WriteLine("ServiceBusRequestServer.CustomTransmitMessageAsync: Message.Json: ");
-            Console.WriteLine(message.Json);
-            
             // no need to create topic - we wouldn't even be here if the other side hadn't done it's part
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
             var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), null);
@@ -122,17 +118,15 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                 };
                 await topicClient.SendAsync(messageOut);
             }
-            catch (Exception ex)
-            {
-                //todo: ML - log exception
-                Console.WriteLine($"ServiceBusRequestServer.CustomTransmitMessageAsync: exeception: {ex.GetType().Name}.Message: {ex.Message}");
-                throw;
-            }
+            //catch (Exception ex)
+            //{
+            //    //todo: ML - log exception
+            //    throw;
+            //}
             finally
             {
                 await topicClient.CloseAsync();
             }
-            Console.WriteLine("ServiceBusRequestServer.CustomTransmitMessageAsync: exit");
         }
     }
 }

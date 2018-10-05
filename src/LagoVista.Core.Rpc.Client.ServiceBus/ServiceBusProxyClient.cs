@@ -59,7 +59,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         protected override async Task CustomStartAsync()
         {
-            Console.WriteLine("ServiceBusProxyClient.CustomStartAsync enter");
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
@@ -68,9 +67,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
             var sourceEntityPath = _receiverSettings.ResourceName;
             var subscriptionPath = _receiverSettings.Uri;
-            Console.WriteLine(receiverConnectionString);
-            Console.WriteLine(sourceEntityPath);
-            Console.WriteLine(subscriptionPath);
 
             await CreateTopicAsync(sourceEntityPath);
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
@@ -86,7 +82,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 #endif
             };
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
-            Console.WriteLine("ServiceBusProxyClient.CustomStartAsync exit");
         }
 
         #endregion
@@ -95,29 +90,22 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         private async Task MessageReceived(Microsoft.Azure.ServiceBus.Message message, CancellationToken cancelationToken)
         {
-            Console.WriteLine("ServiceBusProxyClient.MessageReceived enter");
             try
             {
                 var response = new Response(message.Body);
-                Console.WriteLine(response.Json);
                 await ReceiveAsync(response);
                 await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ServiceBusProxyClient.MessageReceived exception: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
                 message.Label = ex.Message;
-                Console.WriteLine($"ServiceBusProxyClient.MessageReceived dead lettering message: {message.CorrelationId}");
                 await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
                 throw;
             }
-            Console.WriteLine("ServiceBusProxyClient.MessageReceived exit");
         }
 
         private Task HandleException(ExceptionReceivedEventArgs e)
         {
-            Console.WriteLine($"!!!!!!!!!!!!!!! HandleException: {(e.Exception!= null? e.Exception.Message : "no message")}");
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
