@@ -72,7 +72,7 @@ namespace LagoVista.Core.Utils
             }
         }
 
-        private void RegisterWaitOnRequest(string correlationId)
+        private void RegisterAsyncRequest(string correlationId)
         {
             if (!Sessions.TryAdd(correlationId, new AsyncRequest<object>(correlationId)))
             {
@@ -81,7 +81,7 @@ namespace LagoVista.Core.Utils
             UsageMetrics.ActiveCount++;
         }
 
-        private AsyncRequest<object> Wait(string correlationId,  TimeSpan timeout)
+        private AsyncRequest<object> Wait(string correlationId, TimeSpan timeout)
         {
             // if the async request isn't found it's because it's already been completed (race condition)
             if (Sessions.TryGetValue(correlationId, out var asyncRequest))
@@ -89,7 +89,7 @@ namespace LagoVista.Core.Utils
                 var timedOut = !asyncRequest.CompletionSource.Task.Wait(timeout);
                 if (timedOut)
                 {
-                    // no need to check success 
+                    // no need to check success except for debugging
                     Sessions.TryRemove(correlationId, out var requestAwaiter);
                 }
                 UsageMetrics.MessagesProcessed++;
@@ -106,23 +106,22 @@ namespace LagoVista.Core.Utils
                 UsageMetrics.ErrorCount++;
                 return Task.FromResult(InvokeResult<TAsyncResult>.FromError("Timeout waiting for response."));
             }
-            else if (asyncRequest.CompletionSource.Task.Result == null)
+
+            if (asyncRequest.CompletionSource.Task.Result == null)
             {
                 UsageMetrics.ErrorCount++;
                 return Task.FromResult(InvokeResult<TAsyncResult>.FromError("Null Response From Completion Routine."));
             }
+
+            var result = asyncRequest.CompletionSource.Task.Result;
+            if (result is TAsyncResult typedResult)
+            {
+                return Task.FromResult(InvokeResult<TAsyncResult>.Create(typedResult));
+            }
             else
             {
-                var result = asyncRequest.CompletionSource.Task.Result;
-                if (result is TAsyncResult typedResult)
-                {
-                    return Task.FromResult(InvokeResult<TAsyncResult>.Create(typedResult));
-                }
-                else
-                {
-                    UsageMetrics.ErrorCount++;
-                    return Task.FromResult(InvokeResult<TAsyncResult>.FromError($"Type Mismatch - Expected: {typeof(TAsyncResult).Name} - Actual: {result.GetType().Name}."));
-                }
+                UsageMetrics.ErrorCount++;
+                return Task.FromResult(InvokeResult<TAsyncResult>.FromError($"Type Mismatch - Expected: {typeof(TAsyncResult).Name} - Actual: {result.GetType().Name}."));
             }
         }
 
@@ -130,7 +129,7 @@ namespace LagoVista.Core.Utils
         {
             try
             {
-                RegisterWaitOnRequest(correlationId);
+                RegisterAsyncRequest(correlationId);
                 var asyncRequest = Wait(correlationId, timeout);
                 return GetAsyncResult<TAsyncResult>(asyncRequest);
             }
@@ -147,7 +146,7 @@ namespace LagoVista.Core.Utils
         {
             try
             {
-                RegisterWaitOnRequest(correlationId);
+                RegisterAsyncRequest(correlationId);
                 action();
                 var asyncRequest = Wait(correlationId, timeout);
                 return GetAsyncResult<TAsyncResult>(asyncRequest);
@@ -165,7 +164,7 @@ namespace LagoVista.Core.Utils
         {
             try
             {
-                RegisterWaitOnRequest(correlationId);
+                RegisterAsyncRequest(correlationId);
                 await function();
                 var asyncRequest = Wait(correlationId, timeout);
                 return await GetAsyncResult<TAsyncResult>(asyncRequest);
