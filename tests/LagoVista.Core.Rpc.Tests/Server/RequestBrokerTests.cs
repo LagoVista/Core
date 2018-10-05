@@ -11,16 +11,15 @@ namespace LagoVista.Core.Rpc.Tests.Server
     [TestClass]
     public class RequestBrokerTests
     {
-        private readonly IProxySubject _controlInstance = new ProxySubject();
-
         [TestMethod]
         public void RequestBroker_RegisterSubject_Success()
         {
+            IProxySubject controlInstance = new ProxySubject();
+
             var broker = new RequestBroker();
-            var methodsRegistered = broker.AddService(_controlInstance);
+            var methodsRegistered = broker.AddService(controlInstance);
 
             var instanceMethodCount = typeof(IProxySubject).GetMethods().Count();
-            Assert.AreEqual(7, instanceMethodCount);
             Assert.AreEqual(instanceMethodCount - 1, methodsRegistered);
         }
 
@@ -43,8 +42,10 @@ namespace LagoVista.Core.Rpc.Tests.Server
         [TestMethod]
         public async Task RequestBroker_Invoke()
         {
+            IProxySubject controlInstance = new ProxySubject();
+
             var broker = new RequestBroker();
-            var methodsRegistered = broker.AddService(_controlInstance);
+            var methodsRegistered = broker.AddService(controlInstance);
             var request = RequestTests.CreateControlEchoRequest();
 
             var response = await broker.InvokeAsync(request);
@@ -53,6 +54,40 @@ namespace LagoVista.Core.Rpc.Tests.Server
             Assert.AreEqual(request.CorrelationId, response.CorrelationId);
             Assert.AreEqual(request.Id, response.RequestId);
             Assert.AreEqual(ProxySubject.EchoValueConst, response.ReturnValue);
+        }
+
+        [TestMethod]
+        public async Task RequestBroker_InvokeVoidTask()
+        {
+            IProxySubject controlInstance = new ProxySubject();
+
+            var broker = new RequestBroker();
+            var methodsRegistered = broker.AddService(controlInstance);
+            var request = RequestTests.CreateControlVoidTaskRequest();
+
+            var response = await broker.InvokeAsync(request);
+
+            Assert.AreEqual(true, response.Success);
+            Assert.AreEqual(request.CorrelationId, response.CorrelationId);
+            Assert.AreEqual(request.Id, response.RequestId);
+            Assert.IsNull(response.ReturnValue);
+        }
+
+        [TestMethod]
+        public async Task RequestBroker_InvokeVoid()
+        {
+            IProxySubject controlInstance = new ProxySubject();
+
+            var broker = new RequestBroker();
+            var methodsRegistered = broker.AddService(controlInstance);
+            var request = RequestTests.CreateControlVoidRequest();
+
+            var response = await broker.InvokeAsync(request);
+
+            Assert.AreEqual(true, response.Success);
+            Assert.AreEqual(request.CorrelationId, response.CorrelationId);
+            Assert.AreEqual(request.Id, response.RequestId);
+            Assert.IsNull(response.ReturnValue);
         }
     }
 }

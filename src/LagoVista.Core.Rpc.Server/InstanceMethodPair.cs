@@ -76,9 +76,30 @@ namespace LagoVista.Core.Rpc.Server
 
             Console.WriteLine($"====== InstanceMethodPair.InvokeAsync: path: {request.DestinationPath}");
 
-            var invokeResult = _isAwaitable
-                ? (object)await (dynamic)_methodInfo.Invoke(_instance, arguments)
-                : _methodInfo.Invoke(_instance, arguments);
+            object invokeResult = null;
+            if (_isAwaitable)
+            {
+                if (_methodInfo.ReturnType.IsGenericType)
+                {
+                    invokeResult = (object)await (dynamic)_methodInfo.Invoke(_instance, arguments);
+                }
+                else
+                {
+                    await (Task)_methodInfo.Invoke(_instance, arguments);
+                }
+            }
+            else
+            {
+                if (_methodInfo.ReturnType == typeof(void))
+                {
+                    _methodInfo.Invoke(_instance, arguments);
+                }
+                else
+                {
+                    invokeResult = _methodInfo.Invoke(_instance, arguments);
+                }
+            }
+
             if (invokeResult != null)
             {
                 Console.WriteLine("====== InstanceMethodPair.InvokeAsync: response:");

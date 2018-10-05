@@ -12,6 +12,8 @@ namespace LagoVista.Core.Rpc.Tests.Models
 
         string IgnoreParametersAtInterface([RpcIgnoreParameter]string param1, string param2);
         string IgnoreParametersAtImplementation(string param1, string param2);
+        Task VoidTaskMethod();
+        void VoidMethod();
 
         [RpcIgnoreMethod]
         string SkipMe();
@@ -55,6 +57,16 @@ namespace LagoVista.Core.Rpc.Tests.Models
         public string IgnoreParametersAtImplementation([RpcIgnoreParameter]string param1, string param2)
         {
             return param1 + param2;
+        }
+
+        public async Task VoidTaskMethod()
+        {
+            await Task.FromResult<object>(null);
+        }
+
+        public void VoidMethod()
+        {
+            var s = string.Empty;
         }
     }
 }

@@ -16,6 +16,16 @@ namespace LagoVista.Core.Rpc.Tests.Messages
             return new Request(Constants.EchoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
         }
 
+        public static IRequest CreateControlVoidTaskRequest()
+        {
+            return new Request(Constants.VoidTaskMethodInfo, null, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+        }
+
+        public static IRequest CreateControlVoidRequest()
+        {
+            return new Request(Constants.VoidMethodInfo, null, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+        }
+
         [TestMethod]
         public void Request_Constructor_MethodInfo_Args()
         {

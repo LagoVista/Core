@@ -31,6 +31,8 @@ namespace LagoVista.Core.Rpc.Tests.Utils
 
         #region Echo
         public static readonly MethodInfo EchoMethodInfo = typeof(IProxySubject).GetMethod(nameof(IProxySubject.Echo));
+        public static readonly MethodInfo VoidTaskMethodInfo = typeof(IProxySubject).GetMethod(nameof(IProxySubject.VoidTaskMethod));
+        public static readonly MethodInfo VoidMethodInfo = typeof(IProxySubject).GetMethod(nameof(IProxySubject.VoidMethod));
         public static readonly object[] EchoArgs = new object[1] { ProxySubject.EchoValueConst };
         public static readonly string EchoMethodParamValue = ProxySubject.EchoValueConst;
         public static readonly string EchoMethodParamName = "value";
