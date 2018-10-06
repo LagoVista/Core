@@ -3,7 +3,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.Management;
+//using Microsoft.Azure.ServiceBus.Management;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,6 +58,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"{ex.GetType().Name}: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
                 await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
                 throw;
             }
@@ -65,6 +67,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         private Task HandleException(ExceptionReceivedEventArgs e)
         {
+            Console.WriteLine($"{e.Exception.GetType().Name}: {e.Exception.Message}");
+            Console.WriteLine(e.Exception.StackTrace);
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
