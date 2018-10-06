@@ -20,8 +20,9 @@ namespace LagoVista.Core.Rpc.Messages
 
         private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
-            // note: do not change this to auto or array or all - only works with TypeNameHandling.Objects
-            TypeNameHandling = TypeNameHandling.Objects,
+            // note: if we use TypeNameHandling.All it means we have to be VERY explicit on the types of lists we return
+            // Json.Net will fail on deserializing results of Linq expressions, so if you do something like l.Select(i=>f(i)) you need to add .ToList() or .ToArray()
+            TypeNameHandling = TypeNameHandling.All,
             //Formatting = Formatting.None,
             Formatting = Formatting.Indented,
             NullValueHandling = NullValueHandling.Ignore,
@@ -349,6 +350,8 @@ namespace LagoVista.Core.Rpc.Messages
         public object ReturnValue
         {
             get => InternalGetValue(_returnValueKey);
+            // todo: it would be nice to check for Linq expression types and call ToArray() on them before assigning.
+            // that would allow us to change TypeNameHandling from TypeNameHandling.All back to TypeNameHandling.Objects
             private set => InternalSetValue(_returnValueKey, value, true);
         }
 
