@@ -39,11 +39,21 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_LastName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string LastName { get; set; }
 
-        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin_Help, IsRequired: true, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin_Help, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsSystemAdmin { get; set; }
 
-        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin_Help, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsOrgAdmin_Help, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsOrgAdmin { get; set; }
+
+        [FormField(LabelResource: AuthenticationResources.Names.UserInfo_IsAppBuilder, FieldType: FieldTypes.CheckBox, ResourceType: typeof(AuthenticationResources))]
+        public bool IsAppBuilder { get; set; }
+
+        [FormField(LabelResource: AuthenticationResources.Names.UserInfo_IsUserDevice, FieldType: FieldTypes.CheckBox, ResourceType: typeof(AuthenticationResources))]
+        public bool IsUserDevice { get; set; }
+
+        [FormField(LabelResource: AuthenticationResources.Names.UserInfo_IsRuntimeUser, FieldType: FieldTypes.CheckBox, ResourceType: typeof(AuthenticationResources))]
+        public bool IsRuntimeUser { get; set; }
+
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsPreviewUser { get; set; }
@@ -55,6 +65,11 @@ namespace LagoVista.Core.Models
         public bool PhoneNumberConfirmed { get; set; }
 
         public EntityHeader CurrentOrganization { get; set; }
+
+        public EntityHeader PrimaryDevice { get; set; }
+        public EntityHeader DeviceRepo { get; set; }
+        public EntityHeader DeviceConfiguration { get; set; }
+
 
         public ImageDetails ProfileImageUrl { get; set; }
 
@@ -80,6 +95,11 @@ namespace LagoVista.Core.Models
                 Key = Id,
                 Name = $"{FirstName} {LastName}",
                 Email = Email,
+                IsSystemAdmin = IsSystemAdmin,
+                IsAppBuilder = IsAppBuilder,
+                IsUserDevice = IsUserDevice,
+                IsOrgAdmin = IsOrgAdmin,
+                IsRuntimeUser = IsRuntimeUser,
                 ProfileImageUrl = ProfileImageUrl,
                 EmailConfirmed = EmailConfirmed,
                 PhoneNumberConfirmed = PhoneNumberConfirmed
@@ -101,7 +121,12 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsOrgAdmin, ResourceType: typeof(AuthenticationResources))]
         public bool IsOrgAdmin { get; set; }
-
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsAppBuilder, ResourceType: typeof(AuthenticationResources))]
+        public bool IsAppBuilder { get; set; }
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsUserDevice, ResourceType: typeof(AuthenticationResources))]
+        public bool IsUserDevice { get; set; }
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsRuntimeUser, ResourceType: typeof(AuthenticationResources))]
+        public bool IsRuntimeUser { get; set; }
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
         public String Name { get; set; }

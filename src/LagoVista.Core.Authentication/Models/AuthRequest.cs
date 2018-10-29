@@ -1,10 +1,13 @@
-﻿using System;
+﻿using LagoVista.Core.Interfaces;
+using System;
 
 namespace LagoVista.Core.Authentication.Models
 {
     //  [EntityDescription(Name:"Authentication Request", Description:"The Authentication Request contains fields necessary to authenticate against a server resource or get a refresh token.", Domain:Domains.AuthenticationDomain)]
     public class AuthRequest
     {
+        public AuthTypes AuthType { get; set; } = AuthTypes.User;
+
         /// <summary>
         /// Grant type supported are password and refreshtoken
         /// </summary>
@@ -19,6 +22,8 @@ namespace LagoVista.Core.Authentication.Models
         /// Unique ID from the physical hardware (if available) 
         /// </summary>
         public String DeviceId {get; set; }
+
+        public String DeviceRepoId { get; set; }
 
         /// <summary>
         /// Unqiue Generated ID generated for the installation, will be generated from
@@ -41,6 +46,8 @@ namespace LagoVista.Core.Authentication.Models
         /// </summary>
         public string OrgId { get; set; }
         public string OrgName { get; set; }
+        public string InstanceId { get; set; }
+        public string InstanceAuthKey { get; set; }
     }
 }
                                                                                                                                                                                                                                                                                                                                                                 

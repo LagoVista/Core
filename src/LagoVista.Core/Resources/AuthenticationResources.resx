@@ -210,4 +210,13 @@
   <data name="UserInfo_Title" xml:space="preserve">
     <value>User Information</value>
   </data>
+  <data name="UserInfo_IsAppBuilder" xml:space="preserve">
+    <value>Is App Builder</value>
+  </data>
+  <data name="UserInfo_IsUserDevice" xml:space="preserve">
+    <value>Is User Device</value>
+  </data>
+  <data name="UserInfo_IsRuntimeUser" xml:space="preserve">
+    <value>Is Runtime User</value>
+  </data>
 </root>

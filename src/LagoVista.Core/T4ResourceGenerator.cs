@@ -1,4 +1,4 @@
-﻿/*10/23/2017 07:11:24*/
+﻿/*10/29/2018 11:08:11*/
 using System.Globalization;
 using System.Reflection;
 
@@ -114,6 +114,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_Help
 
 		public static string UserInfo_Help { get { return GetResourceString("UserInfo_Help"); } }
+//Resources:AuthenticationResources:UserInfo_IsAppBuilder
+
+		public static string UserInfo_IsAppBuilder { get { return GetResourceString("UserInfo_IsAppBuilder"); } }
 //Resources:AuthenticationResources:UserInfo_IsEmailConfirmed
 
 		public static string UserInfo_IsEmailConfirmed { get { return GetResourceString("UserInfo_IsEmailConfirmed"); } }
@@ -132,12 +135,18 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_IsPreviewUser
 
 		public static string UserInfo_IsPreviewUser { get { return GetResourceString("UserInfo_IsPreviewUser"); } }
+//Resources:AuthenticationResources:UserInfo_IsRuntimeUser
+
+		public static string UserInfo_IsRuntimeUser { get { return GetResourceString("UserInfo_IsRuntimeUser"); } }
 //Resources:AuthenticationResources:UserInfo_IsSystemAdmin
 
 		public static string UserInfo_IsSystemAdmin { get { return GetResourceString("UserInfo_IsSystemAdmin"); } }
 //Resources:AuthenticationResources:UserInfo_IsSystemAdmin_Help
 
 		public static string UserInfo_IsSystemAdmin_Help { get { return GetResourceString("UserInfo_IsSystemAdmin_Help"); } }
+//Resources:AuthenticationResources:UserInfo_IsUserDevice
+
+		public static string UserInfo_IsUserDevice { get { return GetResourceString("UserInfo_IsUserDevice"); } }
 //Resources:AuthenticationResources:UserInfo_LastName
 
 		public static string UserInfo_LastName { get { return GetResourceString("UserInfo_LastName"); } }
@@ -171,14 +180,17 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_Email = "UserInfo_Email";
 			public const string UserInfo_FirstName = "UserInfo_FirstName";
 			public const string UserInfo_Help = "UserInfo_Help";
+			public const string UserInfo_IsAppBuilder = "UserInfo_IsAppBuilder";
 			public const string UserInfo_IsEmailConfirmed = "UserInfo_IsEmailConfirmed";
 			public const string UserInfo_IsOrgAdmin = "UserInfo_IsOrgAdmin";
 			public const string UserInfo_IsOrgAdmin_Help = "UserInfo_IsOrgAdmin_Help";
 			public const string UserInfo_IsPhoneConfirmed = "UserInfo_IsPhoneConfirmed";
 			public const string UserInfo_IsPreviewUse_Help = "UserInfo_IsPreviewUse_Help";
 			public const string UserInfo_IsPreviewUser = "UserInfo_IsPreviewUser";
+			public const string UserInfo_IsRuntimeUser = "UserInfo_IsRuntimeUser";
 			public const string UserInfo_IsSystemAdmin = "UserInfo_IsSystemAdmin";
 			public const string UserInfo_IsSystemAdmin_Help = "UserInfo_IsSystemAdmin_Help";
+			public const string UserInfo_IsUserDevice = "UserInfo_IsUserDevice";
 			public const string UserInfo_LastName = "UserInfo_LastName";
 			public const string UserInfo_PhoneNumber = "UserInfo_PhoneNumber";
 			public const string UserInfo_Title = "UserInfo_Title";

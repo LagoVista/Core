@@ -9,7 +9,8 @@ namespace LagoVista.Core.Interfaces
         WebAPI,
         WindowsUWP,
         iPhone,
-        Android
+        Android,
+        Runtime
     }
 
     public enum Environments
@@ -22,10 +23,19 @@ namespace LagoVista.Core.Interfaces
         Local
     }
 
+    public enum AuthTypes
+    {
+        User,
+        DeviceUser,
+        ClientApp,
+        Runtime
+    }
+
     public interface IAppConfig
     {
         PlatformTypes PlatformType { get; }
         Environments Environment { get; }
+        AuthTypes AuthType { get; }
 
         String WebAddress { get; }
 
@@ -43,6 +53,13 @@ namespace LagoVista.Core.Interfaces
 
         String AppLogo { get; }
         String CompanyLogo { get; }
+
+        string InstanceId { get; set; }
+        string InstanceAuthKey { get; set; }
+
+        String DeviceId { get; set; }
+        String DeviceRepoId { get; set; }
+
 
         bool EmitTestingCode { get; }
         VersionInfo Version { get; }
