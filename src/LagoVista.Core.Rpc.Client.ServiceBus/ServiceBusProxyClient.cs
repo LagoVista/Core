@@ -119,14 +119,13 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            var entityPath = $"{_destinationEntityPath}_{message.OrganizationId}_{message.InstanceId}"
+            var entityPath = $"{_destinationEntityPath}_{message.InstanceId}"
                 .Replace("__", "_")
                 .ToLower();
 
             await CreateTopicAsync(entityPath);
 
-            //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
-            var topicClient = new TopicClient(_topicConnectionString, entityPath, null);
+            var topicClient = new TopicClient(_topicConnectionString, entityPath, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
             try
             {
                 // package response in service bus message and send to topic
