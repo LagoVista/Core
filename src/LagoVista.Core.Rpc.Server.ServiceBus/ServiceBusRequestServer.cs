@@ -88,8 +88,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             var subscriptionPath = "application";
 
             await CreateTopicAsync(sourceEntityPath);
-            //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
-            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
+
+            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
 
             var options = new MessageHandlerOptions(HandleException)
             {
