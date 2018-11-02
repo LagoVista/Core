@@ -3,7 +3,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using Microsoft.Azure.ServiceBus;
-//using Microsoft.Azure.ServiceBus.Management;
+using Microsoft.Azure.ServiceBus.Management;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,18 +20,18 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         private SubscriptionClient _subscriptionClient;
         #endregion
 
-        private Task CreateTopicAsync(string entityPath)
+        private async Task CreateTopicAsync(string entityPath)
         {
-            //var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
-            //var client = new ManagementClient(connstr);
-            //if (!await client.TopicExistsAsync(entityPath))
-            //{
-            //    await client.CreateTopicAsync(entityPath);
-            //    await client.CreateSubscriptionAsync(entityPath, "application");
-            //    await client.CreateSubscriptionAsync(entityPath, "admin");
-            //}
-            return Task.FromResult<object>(null);
+            var client = new ManagementClient(connstr);
+            if (!await client.TopicExistsAsync(entityPath))
+            {
+                await client.CreateTopicAsync(entityPath);
+                await client.CreateSubscriptionAsync(entityPath, "application");
+                await client.CreateSubscriptionAsync(entityPath, "admin");
+            }
+            //return Task.FromResult<object>(null);
         }
 
         public ServiceBusRequestServer(ITransceiverConnectionSettings connectionSettings, IRequestBroker requestBroker, ILogger logger) :
