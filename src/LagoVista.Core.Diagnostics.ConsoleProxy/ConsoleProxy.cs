@@ -45,7 +45,7 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
                     }
                     catch (Exception ex)
                     {
-                        _writer.WriteError($"{targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed to convert args for param '{parameters[i].Name}' to json. Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
+                        _writer.WriteWarning($"{typeof(ConsoleProxyFactory).Name}::{targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed to convert args for param '{parameters[i].Name}' to json. Exception: {ex.GetType().Name}, {ex.Message}, {ex.Source}");
                     }
                 }
             }

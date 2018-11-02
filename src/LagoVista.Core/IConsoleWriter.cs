@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core
 {
     public interface IConsoleWriter
     {
-        void WriteLine(String message);
-        void WriteError(String message);
-        void WriteWarning(String message);
+        void WriteLine(string message);
+        void WriteError(string message);
+        void WriteWarning(string message);
     }
 
     public interface ILocalTime
