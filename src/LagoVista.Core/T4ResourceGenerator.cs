@@ -1,4 +1,4 @@
-﻿/*10/29/2018 11:08:11*/
+﻿/*11/7/2018 11:38:13*/
 using System.Globalization;
 using System.Reflection;
 
@@ -114,6 +114,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_Help
 
 		public static string UserInfo_Help { get { return GetResourceString("UserInfo_Help"); } }
+//Resources:AuthenticationResources:UserInfo_IsAccountDisabled
+
+		public static string UserInfo_IsAccountDisabled { get { return GetResourceString("UserInfo_IsAccountDisabled"); } }
 //Resources:AuthenticationResources:UserInfo_IsAppBuilder
 
 		public static string UserInfo_IsAppBuilder { get { return GetResourceString("UserInfo_IsAppBuilder"); } }
@@ -180,6 +183,7 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_Email = "UserInfo_Email";
 			public const string UserInfo_FirstName = "UserInfo_FirstName";
 			public const string UserInfo_Help = "UserInfo_Help";
+			public const string UserInfo_IsAccountDisabled = "UserInfo_IsAccountDisabled";
 			public const string UserInfo_IsAppBuilder = "UserInfo_IsAppBuilder";
 			public const string UserInfo_IsEmailConfirmed = "UserInfo_IsEmailConfirmed";
 			public const string UserInfo_IsOrgAdmin = "UserInfo_IsOrgAdmin";

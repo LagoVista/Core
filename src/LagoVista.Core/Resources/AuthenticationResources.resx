@@ -219,4 +219,7 @@
   <data name="UserInfo_IsRuntimeUser" xml:space="preserve">
     <value>Is Runtime User</value>
   </data>
+  <data name="UserInfo_IsAccountDisabled" xml:space="preserve">
+    <value>Is Account Disabled</value>
+  </data>
 </root>

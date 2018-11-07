@@ -54,6 +54,8 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: AuthenticationResources.Names.UserInfo_IsRuntimeUser, FieldType: FieldTypes.CheckBox, ResourceType: typeof(AuthenticationResources))]
         public bool IsRuntimeUser { get; set; }
 
+        [FormField(LabelResource: AuthenticationResources.Names.UserInfo_IsAccountDisabled, FieldType: FieldTypes.CheckBox, ResourceType: typeof(AuthenticationResources))]
+        public bool IsAccountDisabled { get; set; }
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsPreviewUser { get; set; }
@@ -99,6 +101,7 @@ namespace LagoVista.Core.Models
                 IsAppBuilder = IsAppBuilder,
                 IsUserDevice = IsUserDevice,
                 IsOrgAdmin = IsOrgAdmin,
+                IsAccountDisabled = IsAccountDisabled,
                 IsRuntimeUser = IsRuntimeUser,
                 ProfileImageUrl = ProfileImageUrl,
                 EmailConfirmed = EmailConfirmed,
@@ -127,6 +130,9 @@ namespace LagoVista.Core.Models
         public bool IsUserDevice { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsRuntimeUser, ResourceType: typeof(AuthenticationResources))]
         public bool IsRuntimeUser { get; set; }
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsAccountDisabled, ResourceType: typeof(AuthenticationResources))]
+        public bool IsAccountDisabled { get; set; }
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
         public String Name { get; set; }
