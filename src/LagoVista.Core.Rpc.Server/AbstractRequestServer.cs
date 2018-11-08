@@ -19,19 +19,19 @@ namespace LagoVista.Core.Rpc.Server
             _requestBroker = requestBroker ?? throw new ArgumentNullException(nameof(requestBroker));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
-        private bool _started = false;
+        
+        public bool IsRunning { get; private set; } = false;
 
         public async Task StartAsync()
         {
-            if (_started)
+            if (IsRunning)
             {
                 return;
             }
 
             await CustomStartAsync();
-            _started = true;
-        }
+            IsRunning = true;
+        }        
 
         public async Task TransmitAsync(IMessage message)
         {

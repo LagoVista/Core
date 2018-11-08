@@ -52,16 +52,17 @@ namespace LagoVista.Core.Rpc.Client
             }
         }
 
-        private bool _started = false;
+        public bool IsRunning { get; private set; } = false;
+
         public async Task StartAsync()
         {
-            if (_started)
+            if (IsRunning)
             {
                 return;
             }
 
             await CustomStartAsync();
-            _started = true;
+            IsRunning = true;
         }
 
         protected abstract Task CustomStartAsync();

@@ -18,6 +18,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private readonly string _topicConnectionString;
         private readonly string _destinationEntityPath;
         private SubscriptionClient _subscriptionClient;
+        ILogger _logger;
         #endregion
 
         private async Task CreateTopicAsync(string entityPath)
@@ -44,6 +45,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             _topicConstructorSettings = connectionSettings.RpcTopicConstructor;
             _receiverSettings = connectionSettings.RpcReceiver;
+            _logger = logger;
 
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
@@ -68,7 +70,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
             var sourceEntityPath = _receiverSettings.ResourceName;
             var subscriptionPath = _receiverSettings.Uri;
-
+            
             await CreateTopicAsync(sourceEntityPath);
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);

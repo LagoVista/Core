@@ -5,7 +5,7 @@ namespace LagoVista.Core.Rpc.Middleware
 {
     public interface IReceiver
     {
-        Task StartAsync();
+        Task StartAsync();        
 
         Task ReceiveAsync(IMessage message);
     }

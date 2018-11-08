@@ -27,9 +27,22 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             var client = new ManagementClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
             {
-                await client.CreateTopicAsync(entityPath);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Topic does not exist, creating now: " + entityPath);
+                Console.ResetColor();
+                var response = await client.CreateTopicAsync(entityPath);
+                if(response == null)
+                {
+                    throw new Exception("Could not create topic.");
+                }
                 await client.CreateSubscriptionAsync(entityPath, "application");
                 await client.CreateSubscriptionAsync(entityPath, "admin");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Topic Exists using: " + entityPath);
+                Console.ResetColor();
             }
             //return Task.FromResult<object>(null);
         }

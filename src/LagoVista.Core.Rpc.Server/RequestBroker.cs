@@ -39,7 +39,12 @@ namespace LagoVista.Core.Rpc.Server
 
             if (_subjectRegistry.ContainsKey(subjectKey))
             {
-                throw new ArgumentException($"Subject key '{subjectKey}' already registed with RequestBroker.");
+                // When we reload an instance it will re-register the module the handlers so we want
+                // want fresh instances.
+                if(!_subjectRegistry.TryRemove(subjectKey, out InstanceMethodPair value))
+                {
+                    throw new RpcException($"Could not register subject key '{subjectKey}' with RequestBroker.");
+                }
             }
 
             if (!_subjectRegistry.TryAdd(subjectKey, new InstanceMethodPair(subject, methodInfo)))
