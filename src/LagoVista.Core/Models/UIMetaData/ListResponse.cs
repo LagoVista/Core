@@ -40,7 +40,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public static ListResponse<TModel> Create(IEnumerable<TModel> model)
         {
             var response = new ListResponse<TModel>();
-            response.Model = model;
+            /* Make sure the enumeration is populated before sending to the client */
+            response.Model = model.ToList();
 
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttribute<EntityDescriptionAttribute>();
 
@@ -69,11 +70,19 @@ namespace LagoVista.Core.Models.UIMetaData
                 {
                     columns.Add(ListColumn.Create(property.Name.ToLower(), fieldAttributes.First()));
                 }
-            }
+            }            
 
             response.Columns = columns;
             response.PageSize = model.Count();
 
+            return response;
+        }
+
+        public static ListResponse<TModel> Create(ListRequest request, IEnumerable<TModel> model)
+        {
+            var response = ListResponse<TModel>.Create(model);
+            response.HasMoreRecords = request.PageSize == response.PageSize;
+            response.PageIndex = request.PageIndex;
             return response;
         }
     }

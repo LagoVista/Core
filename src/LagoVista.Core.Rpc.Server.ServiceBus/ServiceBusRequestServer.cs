@@ -5,6 +5,8 @@ using LagoVista.Core.Rpc.Settings;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
 using System;
+using System.IO;
+using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +33,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                 Console.WriteLine("Topic does not exist, creating now: " + entityPath);
                 Console.ResetColor();
                 var response = await client.CreateTopicAsync(entityPath);
-                if(response == null)
+                if (response == null)
                 {
                     throw new Exception("Could not create topic.");
                 }
@@ -66,8 +68,17 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         {
             try
             {
-                await ReceiveAsync(new Request(message.Body));
-                await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
+                using (var compressedStream = new MemoryStream(message.Body))
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                {
+                    using (var decompressedStream = new MemoryStream())
+                    {
+                        decompressorStream.CopyTo(decompressedStream);
+
+                        await ReceiveAsync(new Request(decompressedStream.ToArray()));
+                        await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);                        
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -118,22 +129,37 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
+            Console.WriteLine("WIRTING OUTPUT MESSAGE 2");
+
             // no need to create topic - we wouldn't even be here if the other side hadn't done it's part
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
             var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), null);
             try
             {
-                // package response in service bus message and send to topic
-                var messageOut = new Microsoft.Azure.ServiceBus.Message(message.Payload)
+                using(var ms = new MemoryStream(message.Payload))
+                using (var mso = new MemoryStream())
                 {
-                    ContentType = message.GetType().FullName,
-                    MessageId = message.Id,
-                    CorrelationId = message.CorrelationId,
-                    To = message.DestinationPath,
-                    ReplyTo = message.ReplyPath,
-                    Label = message.DestinationPath,
-                };
-                await topicClient.SendAsync(messageOut);
+                    using (var ds = new DeflateStream(mso, CompressionMode.Compress))
+                    {
+                        ms.CopyTo(ds);
+                    }
+
+                    var buffer = mso.ToArray();
+
+                    Console.Write($"Original message: {message.Payload.Length}  Compressed: {buffer.Length}");
+
+                    var messageOut = new Microsoft.Azure.ServiceBus.Message(buffer)
+                    {
+                        ContentType = message.GetType().FullName,
+                        MessageId = message.Id,
+                        CorrelationId = message.CorrelationId,
+                        To = message.DestinationPath,
+                        ReplyTo = message.ReplyPath,
+                        Label = message.DestinationPath,
+                    };
+
+                    await topicClient.SendAsync(messageOut);
+                }
             }
             //catch (Exception ex)
             //{

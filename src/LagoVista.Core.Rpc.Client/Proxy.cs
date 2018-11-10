@@ -89,19 +89,19 @@ namespace LagoVista.Core.Rpc.Client
             {
                 if (invokeResult.Errors == null)
                 {
-                    throw new NullReferenceException($"{nameof(InvokeRemoteMethodAsync)} failed: {nameof(invokeResult)}.{nameof(invokeResult.Errors)} is null.");
+                    throw new NullReferenceException($"RPC for {request.DestinationPath} failed, {nameof(invokeResult)}.{nameof(invokeResult.Errors)} is null.");
                 }
 
                 var error = invokeResult.Errors.FirstOrDefault();
                 if (error != null)
                 {
-                    throw new RpcException(RpcException.FormatErrorMessage(error, "{nameof(InvokeRemoteMethodAsync)} failed: AsyncCoupler failed to complete message with error:"));
+                    throw new RpcException($"RPC for {request.DestinationPath} failed, {error.Message}");
                 }
             }
 
             if (invokeResult.Result == null)
             {
-                throw new NullReferenceException($"{nameof(InvokeRemoteMethodAsync)} failed: {nameof(invokeResult)}.{nameof(invokeResult.Result)} is null.");
+                throw new NullReferenceException($"RPC for {request.DestinationPath} failed, {nameof(invokeResult)}.{nameof(invokeResult.Result)} is null.");
             }
 
             return (IResponse)invokeResult.Result;
@@ -128,9 +128,9 @@ namespace LagoVista.Core.Rpc.Client
             // setup and transmit the request
             var request = new Request(targetMethod, args, _proxySettings.OrganizationId, _proxySettings.InstanceId, _replyPath);
             var responseTask = InvokeRemoteMethodAsync(request);
-
+            
             // wait for response and handle exceptions
-            responseTask.Wait(_requestTimeout);
+            responseTask.Wait(_requestTimeout.Add(TimeSpan.FromSeconds(30)));
             if (responseTask.Status == TaskStatus.Faulted && responseTask.Exception != null)
             {
                 throw new RpcException($"Proxy for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} failed with message '{responseTask.Exception.Message}'. See inner exception for details.", responseTask.Exception);

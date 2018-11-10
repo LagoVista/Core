@@ -1,7 +1,6 @@
 ﻿using LagoVista.Core.Rpc.Attributes;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
