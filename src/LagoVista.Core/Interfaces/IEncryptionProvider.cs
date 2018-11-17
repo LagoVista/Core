@@ -6,7 +6,7 @@ namespace LagoVista.Core.Interfaces
 {
     public interface IEncryptionProvider
     {
-        string Encrypt(string plainTextString);
-        string Decrypt(string encryptedString); 
+        string Encrypt(string plainTextString, string encryptionKeyModifier = null);
+        string Decrypt(string encryptedString, string encryptionKeyModifier = null); 
     }
 }

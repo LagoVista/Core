@@ -15,27 +15,27 @@ namespace LagoVista.Core.Interfaces
         /// <param name="id">Id to store secret</param>
         /// <param name="value">Secret</param>
         /// <returns>Id as passed in</returns>
-        Task<InvokeResult<string>> AddSecretAsync(string id, string value);
+        Task<InvokeResult<string>> AddSecretAsync(EntityHeader org, string id, string value);
 
         /// <summary>
         /// Add a secret and generate and id
         /// </summary>
         /// <param name="value">Secret</param>
         /// <returns>Generated Id</returns>
-        Task<InvokeResult<string>> AddSecretAsync(string value);
+        Task<InvokeResult<string>> AddSecretAsync(EntityHeader org, string value);
 
         /// <summary>
         /// Returns a Secret
         /// </summary>
         /// <param name="id">ID used for secret</param>
         /// <returns>plain text value for secret</returns>
-        Task<InvokeResult<string>> GetSecretAsync(string id, EntityHeader user, EntityHeader org);
+        Task<InvokeResult<string>> GetSecretAsync(EntityHeader org, string id, EntityHeader user);
 
         /// <summary>
         /// Removes a secret
         /// </summary>
         /// <param name="id">ID of Secret to remove</param>
         /// <returns></returns>
-        Task<InvokeResult> RemoveSecretAsync(string id);
+        Task<InvokeResult> RemoveSecretAsync(EntityHeader org, string id);
     }
 }
