@@ -17,6 +17,7 @@ namespace LagoVista.Core.Interfaces
         String Password { get; set; }
         String Port { get; set; }
         String ResourceName { get; set; }
+        string ValidThrough { get; set; }
         bool IsSSL { get; set; }
         Func<bool> ValidationAction { get; set; }
         Func<string> GetValidationErrors { get; set; }
