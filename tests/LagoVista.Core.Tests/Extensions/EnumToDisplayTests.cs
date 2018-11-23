@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Extensions
 {
 
+    [TestClass]
     public class EnumToDisplayTests
     {
         public enum SampleEnum
@@ -27,10 +28,10 @@ namespace LagoVista.Core.Tests.Extensions
         }
 
 
-        [Fact]
+        [TestMethod]
         public void ResolveName()
         {
-            Assert.Equal("Five","enum5".GetEnumLabel<SampleEnum>());
+            Assert.AreEqual("Five","enum5".GetEnumLabel<SampleEnum>());
         }
 
     }

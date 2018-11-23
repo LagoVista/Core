@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Validation
 {
+    [TestClass]
     public class ValidatorObjectGraphTests : ValidationTestBase
     {
         public Models.ValidationModel GetValidModel()
@@ -36,7 +37,7 @@ namespace LagoVista.Core.Tests.Validation
             return graph;
         }
 
-        [Fact]
+        [TestMethod]
         public void Validator_ObjectGraph_Valid()
         {
             var objectGraph = GetValidObjectGraph();
@@ -46,7 +47,7 @@ namespace LagoVista.Core.Tests.Validation
             AssertIsValid(result);            
         }
 
-        [Fact]
+        [TestMethod]
         public void Validator_ObjectGraph_PropertyInvalid()
         {
             /* Test to ensure validation takes place on all child single instance objects marked as IValidatable */
@@ -57,7 +58,7 @@ namespace LagoVista.Core.Tests.Validation
             AssertIsInValid(result);
         }
 
-        [Fact]
+        [TestMethod]
         public void Validator_ObjectGraph_PropertyOnListIsInvalid()
         {
             /* Test to ensure validation takes place on all child single instance within list */

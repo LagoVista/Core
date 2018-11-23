@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Validation
 {
+    [TestClass]
     public class ChildEntityHeaderTests : ValidationTestBase
     {
         private Models.EntityHeaderChildValueModels GetValidModel()
@@ -37,7 +38,7 @@ namespace LagoVista.Core.Tests.Validation
             return model;
         }
 
-        [Fact]
+        [TestMethod]
         public void EntityHeader_ValidModel()
         {
             var model = GetValidModel();
@@ -47,7 +48,7 @@ namespace LagoVista.Core.Tests.Validation
             AssertIsValid(result);
         }
 
-        [Fact]
+        [TestMethod]
         public void EntityHeader_ChildHasEHButValueNotPopulated_And_NotRequireFullObjectGraphTraversal()
         {
             var model = GetValidModel();
@@ -60,7 +61,7 @@ namespace LagoVista.Core.Tests.Validation
             AssertIsValid(result);
         }
 
-        [Fact]
+        [TestMethod]
         public void EntityHeader_ChildHasEHButValueNotPopulated_And_RequireFullObjectGraphTraversal()
         {
             var model = GetValidModel();
@@ -72,7 +73,7 @@ namespace LagoVista.Core.Tests.Validation
         }
 
 
-        [Fact]
+        [TestMethod]
         public void EntityHeader_ChildMissingInvalid()
         {
             var model = GetValidModel();
@@ -84,7 +85,7 @@ namespace LagoVista.Core.Tests.Validation
         }
 
 
-        [Fact]
+        [TestMethod]
         public void EntityHeader_GrandChild_MissingChild_Invalid()
         {
             var model = GetValidModel();
@@ -94,7 +95,7 @@ namespace LagoVista.Core.Tests.Validation
             AssertIsInValid(result);
         }
 
-        [Fact]
+        [TestMethod]
         public void EntityHeader_GrandChild_ChildMissingChild_Invalid()
         {
             var model = GetValidModel();

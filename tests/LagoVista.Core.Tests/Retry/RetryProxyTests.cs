@@ -1,10 +1,11 @@
 ﻿using LagoVista.Core.Retry;
 using System;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Retry
 {
 
+    [TestClass]
     public class RetryProxyTests
     {
         private class RetryTestException : Exception
@@ -41,68 +42,68 @@ namespace LagoVista.Core.Tests.Retry
             }
         }
 
-        [Fact]
+        [TestMethod]
         public void RetryProxy_Success()
         {
             var instance = new RetryTester();
 
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(5)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
             var result = retryProxy.Succeed();
-            Assert.Equal("succeed", result);
+            Assert.AreEqual("succeed", result);
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void RetryProxy_Fail_TransientFunctionEvaluatesTrue()
         {
             var instance = new RetryTester();
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(1000)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
-            var exception = Record.Exception(() => retryProxy.Fail());
+            retryProxy.Fail();
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void RetryProxy_Fail_TransientEnumerationEvaluatesTrue()
         {
             var instance = new RetryTester();
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(5)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
-            var exception = Record.Exception(() => retryProxy.Fail());
-            Assert.IsType<ExceededMaxAttemptsException>(exception);
+            retryProxy.Fail();
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(RetryNotAllowedException))]
         public void RetryProxy_Fail_NotTransientByFunction()
         {
             var instance = new RetryTester();
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(5)), exceptionBlackList: new Type[] { typeof(RetryTestException) });
-            var exception = Record.Exception(() => retryProxy.Fail());
-            Assert.IsType<RetryNotAllowedException>(exception);
+            retryProxy.Fail();
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(RetryNotAllowedException))]
         public void RetryProxy_Fail_NotTransientByEnumerable()
         {
             var instance = new RetryTester();
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(60)), exceptionWhiteList: new Type[] { typeof(NullReferenceException) });
-            var exception = Record.Exception(() => retryProxy.Fail());
-            Assert.IsType<RetryNotAllowedException>(exception);
-            Assert.Equal(RetryNotAllowedReason.WhiteList, (exception as RetryNotAllowedException).Reason);            
+            retryProxy.Fail();
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void RetryProxy_Fail_ExceedMaxAttempts()
         {
             var instance = new RetryTester();
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(60)));
-            var exception = Record.Exception(() => retryProxy.Fail());
-            Assert.IsType<ExceededMaxAttemptsException>(exception);
+            retryProxy.Fail();
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(ExceededMaxWaitTimeException))]
         public void RetryProxy_Fail_ExceedMaxWaitTime()
         {
             var instance = new RetryTester();
             var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(10000, TimeSpan.FromSeconds(1)));
-            var exception = Record.Exception(() => retryProxy.Fail());
-            Assert.IsType<ExceededMaxWaitTimeException>(exception);
+            retryProxy.Fail();
         }
     }
 }

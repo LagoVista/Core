@@ -1,11 +1,12 @@
 ﻿using LagoVista.Core.AsyncCoupler.Utils.Tests;
 using LagoVista.Core.Utils;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace LagoVista.Core.AsyncCoupler.Tests
 {
+    [TestClass]
     public class CouplerTestsGeneric
     {
         AsyncCoupler<TestModelGenerics> _coupler;
@@ -33,7 +34,7 @@ namespace LagoVista.Core.AsyncCoupler.Tests
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task Enqueue_Dequeue_Generic_Class_Simple_Valid()
         {
             var id = "C41DE0C9658143E1A4EB00ABFE638CAD";
@@ -55,16 +56,16 @@ namespace LagoVista.Core.AsyncCoupler.Tests
             var delta = DateTime.Now - start;
 
             /* Just sanity check ot make sure that we waited for at least how long the process should be decoupled */
-            Assert.True(delta.TotalMilliseconds > delay);
-            Assert.NotNull(result);
-            Assert.True(result.Successful);
-            Assert.Equal(testModel.Id, result.Result.Id);
-            Assert.Equal(testModel.Name, result.Result.Name);
-            Assert.Equal(0, _coupler.ActiveSessions);
+            Assert.IsTrue(delta.TotalMilliseconds > delay);
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Successful);
+            Assert.AreEqual(testModel.Id, result.Result.Id);
+            Assert.AreEqual(testModel.Name, result.Result.Name);
+            Assert.AreEqual(0, _coupler.ActiveSessions);
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task Enqueue_Dequeue_Generic_Class_CorrelationId_DoesNotExistd()
         {
             var id = "C41DE0C9658143E1A4EB00ABFE638CAD";
@@ -77,13 +78,13 @@ namespace LagoVista.Core.AsyncCoupler.Tests
 
             var result = await _coupler.CompleteAsync(id, testModel);
 
-            Assert.NotNull(result);
-            Assert.False(result.Successful);
-            Assert.Equal($"Correlation id not found: {id}.", result.Errors[0].Message);
-            Assert.Equal(0, _coupler.ActiveSessions);
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.Successful);
+            Assert.AreEqual($"Correlation id not found: {id}.", result.Errors[0].Message);
+            Assert.AreEqual(0, _coupler.ActiveSessions);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task Enqueue_Dequeue_Generic_Class_Simple_Timeout_Failed()
         {
             var id = "C41DE0C9658143E1A4EB00ABFE638CAD";
@@ -96,14 +97,14 @@ namespace LagoVista.Core.AsyncCoupler.Tests
 
             var result = await _coupler.WaitOnAsync(id, TimeSpan.FromMilliseconds(500));
 
-            Assert.NotNull(result);
-            Assert.False(result.Successful);
-            Assert.Equal("Timeout waiting for response.", result.Errors[0].Message);
-            Assert.Equal(0, _coupler.ActiveSessions);
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.Successful);
+            Assert.AreEqual("Timeout waiting for response.", result.Errors[0].Message);
+            Assert.AreEqual(0, _coupler.ActiveSessions);
         }
 
 
-        [Fact]
+        [TestMethod]
         public async Task Enqueue_Dequeue_Generic_Class_Null_Failed()
         {
             var id = "C41DE0C9658143E1A4EB00ABFE638CAD";
@@ -118,10 +119,10 @@ namespace LagoVista.Core.AsyncCoupler.Tests
 
             var result = await _coupler.WaitOnAsync(id, TimeSpan.FromMilliseconds(1500));
 
-            Assert.NotNull(result);
-            Assert.False(result.Successful);
-            Assert.Equal("Null Response From Completion Routine.", result.Errors[0].Message);
-            Assert.Equal(0, _coupler.ActiveSessions);
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.Successful);
+            Assert.AreEqual("Null Response From Completion Routine.", result.Errors[0].Message);
+            Assert.AreEqual(0, _coupler.ActiveSessions);
         }
     }
 }

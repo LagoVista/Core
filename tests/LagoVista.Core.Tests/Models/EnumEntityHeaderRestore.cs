@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Models
 {
@@ -35,7 +35,7 @@ namespace LagoVista.Core.Tests.Models
         }
 
        
-        [Fact()]
+        [TestMethod]
         public void ShowRestoreValueOnEnumEntityHeaderType()
         {
             var eh = new EntityHeader<SampleEnum>();
@@ -46,27 +46,27 @@ namespace LagoVista.Core.Tests.Models
 
             var restoredEh = JsonConvert.DeserializeObject<EntityHeader<SampleEnum>>(json);
 
-            Assert.Equal(restoredEh.Value,SampleEnum.Enum4);
+            Assert.AreEqual(restoredEh.Value,SampleEnum.Enum4);
         }
 
-        [Fact()]
+        [TestMethod]
         public void EHCreate()
         {
             var eh = EntityHeader<SampleEnum>.Create(SampleEnum.Enum1);
 
-            Assert.Equal("enum1", eh.Id);
-            Assert.Equal(ValidationResources.EnumOne, eh.Text);
-            Assert.Equal(SampleEnum.Enum1, eh.Value);
+            Assert.AreEqual("enum1", eh.Id);
+            Assert.AreEqual(ValidationResources.EnumOne, eh.Text);
+            Assert.AreEqual(SampleEnum.Enum1, eh.Value);
         }
 
-        [Fact()]
+        [TestMethod]
         public void EHCreateWithoutLabel()
         {
             var eh = EntityHeader<EnumWithOutLabel>.Create(EnumWithOutLabel.EnumWOLabel1);
 
-            Assert.Equal("EnumWOLabel1", eh.Id);
-            Assert.Equal(EnumWithOutLabel.EnumWOLabel1.ToString(), eh.Text);
-            Assert.Equal(EnumWithOutLabel.EnumWOLabel1, eh.Value);
+            Assert.AreEqual("EnumWOLabel1", eh.Id);
+            Assert.AreEqual(EnumWithOutLabel.EnumWOLabel1.ToString(), eh.Text);
+            Assert.AreEqual(EnumWithOutLabel.EnumWOLabel1, eh.Value);
         }
     }
 }

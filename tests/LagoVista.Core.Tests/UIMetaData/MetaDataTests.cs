@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.UIMetaData
 {
+    [TestClass]
     public class MetaDataTests
     {
-        [Fact]
+        [TestMethod]
         public void ShouldAddAssemblies()
         {
             MetaDataHelper.Instance.RegisterAssembly(this.GetType().Assembly);

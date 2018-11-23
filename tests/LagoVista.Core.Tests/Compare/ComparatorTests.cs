@@ -2,7 +2,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Resources;
 using LagoVista.Core.Tests.Models;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +11,14 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Tests.Compare
 {
+    [TestClass]
     public class ComparatorTests
     {
         private const int VALUE_1_ORIGINAL = 42;
         private const int NULLABLE_ORIGINAL = 100;
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_TypeMismatch_Exception()
         {
             var objA = new Models.ComparatorModelSimple();
@@ -25,32 +27,35 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objC, user));
+            Comparator.Compare(objA, objC, user);
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_MissingUser_Exception()
         {
             Models.ComparatorModelModerate objA = null;
             Models.ComparatorModelModerate objB = null;
             EntityHeader user = null;
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objB, user));
+            Comparator.Compare(objA, objB, user);
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_EmptyUser_Exception()
         {
             Models.ComparatorModelModerate objA = null;
             Models.ComparatorModelModerate objB = null;
             var user = new EntityHeader() { Id = Guid.NewGuid().ToId() };
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objB, user));
+            Comparator.Compare(objA, objB, user);
         }
 
 
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_BothNull_Exception()
         {
             Models.ComparatorModelModerate objA = null;
@@ -58,10 +63,11 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objB, user));
+            Comparator.Compare(objA, objB, user);
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_FirstNull_Exception()
         {
             Models.ComparatorModelModerate objA = null;
@@ -69,10 +75,11 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objB, user));
+            Comparator.Compare(objA, objB, user);
         }
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_SecondNull_Exception()
         {
             var objA = new Models.ComparatorModelSimple();
@@ -80,11 +87,12 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objB, user));
+            Comparator.Compare(objA, objB, user);
         }
 
 
-        [Fact]
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_IDMisMatch_Exception()
         {
             var objA = new Models.ComparatorModelSimple();
@@ -95,10 +103,10 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Assert.Throws<InvalidOperationException>(() => Comparator.Compare(objA, objB, user));
+            Comparator.Compare(objA, objB, user);
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_PopulatesUserAndDateStamp_Valid()
         {
             var id = Guid.NewGuid().ToId();
@@ -109,9 +117,9 @@ namespace LagoVista.Core.Tests.Compare
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
             var result = Comparator.Compare(objA, objB, user);
-            Assert.Equal(user.Id, result.User.Id);
-            Assert.Equal(user.Text, result.User.Text);
-            Assert.True(result.DateStamp.SuccessfulJSONDate());
+            Assert.AreEqual(user.Id, result.User.Id);
+            Assert.AreEqual(user.Text, result.User.Text);
+            Assert.IsTrue(result.DateStamp.SuccessfulJSONDate());
         }
 
         public ComparatorModelSimple GetSimpleModel(String id)
@@ -126,7 +134,7 @@ namespace LagoVista.Core.Tests.Compare
 
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_Match()
         {
             var id = Guid.NewGuid().ToId();
@@ -136,10 +144,10 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.False(result.IsDirty);
+            Assert.IsFalse(result.IsDirty);
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_FirstEmpty_SecondNotNull_NoMatch()
         {
             var id = Guid.NewGuid().ToId();
@@ -149,14 +157,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(ComparatorResources.EmptyValue, result.Changes.First().OldValue);
-            Assert.Equal("Kevin", result.Changes.First().NewValue);
-            Assert.Equal(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(ComparatorResources.EmptyValue, result.Changes.First().OldValue);
+            Assert.AreEqual("Kevin", result.Changes.First().NewValue);
+            Assert.AreEqual(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_FirstNull_SecondNotNull_NoMatch()
         {
             var id = Guid.NewGuid().ToId();
@@ -166,14 +174,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(ComparatorResources.EmptyValue, result.Changes.First().OldValue);
-            Assert.Equal("Kevin", result.Changes.First().NewValue);
-            Assert.Equal(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(ComparatorResources.EmptyValue, result.Changes.First().OldValue);
+            Assert.AreEqual("Kevin", result.Changes.First().NewValue);
+            Assert.AreEqual(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_SecondEmpty_SecondNotNull_NoMatch()
         {
             var id = Guid.NewGuid().ToId();
@@ -183,14 +191,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(ComparatorResources.EmptyValue, result.Changes.First().NewValue);
-            Assert.Equal("Kevin", result.Changes.First().OldValue);
-            Assert.Equal(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(ComparatorResources.EmptyValue, result.Changes.First().NewValue);
+            Assert.AreEqual("Kevin", result.Changes.First().OldValue);
+            Assert.AreEqual(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_SecondNull_SecondNotNull_NoMatch()
         {
             var id = Guid.NewGuid().ToId();
@@ -200,14 +208,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(ComparatorResources.EmptyValue, result.Changes.First().NewValue);
-            Assert.Equal("Kevin", result.Changes.First().OldValue);
-            Assert.Equal(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(ComparatorResources.EmptyValue, result.Changes.First().NewValue);
+            Assert.AreEqual("Kevin", result.Changes.First().OldValue);
+            Assert.AreEqual(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_Change_BothValues_NoMatch()
         {
             var id = Guid.NewGuid().ToId();
@@ -217,14 +225,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal("Beth", result.Changes.First().NewValue);
-            Assert.Equal("Kevin", result.Changes.First().OldValue);
-            Assert.Equal(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual("Beth", result.Changes.First().NewValue);
+            Assert.AreEqual("Kevin", result.Changes.First().OldValue);
+            Assert.AreEqual(Resources.Models.ValidationResources.FirstNameLabel, result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_ChangeValue1_First_To_44_Value()
         {
             var id = Guid.NewGuid().ToId();
@@ -234,14 +242,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(objB.Value1.ToString(), result.Changes.First().NewValue);
-            Assert.Equal(VALUE_1_ORIGINAL.ToString(), result.Changes.First().OldValue);
-            Assert.Equal(nameof(objA.Value1), result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(objB.Value1.ToString(), result.Changes.First().NewValue);
+            Assert.AreEqual(VALUE_1_ORIGINAL.ToString(), result.Changes.First().OldValue);
+            Assert.AreEqual(nameof(objA.Value1), result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_Change_Nullable_From_NullToValue()
         {
             var id = Guid.NewGuid().ToId();
@@ -251,14 +259,14 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(ComparatorResources.EmptyValue, result.Changes.First().OldValue);
-            Assert.Equal(NULLABLE_ORIGINAL.ToString(), result.Changes.First().NewValue);            
-            Assert.Equal(nameof(objA.NullableValue), result.Changes.First().Name);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(ComparatorResources.EmptyValue, result.Changes.First().OldValue);
+            Assert.AreEqual(NULLABLE_ORIGINAL.ToString(), result.Changes.First().NewValue);            
+            Assert.AreEqual(nameof(objA.NullableValue), result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_Change_Nullable_From_ValueToNull()
         {
             var id = Guid.NewGuid().ToId();
@@ -268,15 +276,15 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(NULLABLE_ORIGINAL.ToString(), result.Changes.First().OldValue);
-            Assert.Equal(ComparatorResources.EmptyValue, result.Changes.First().NewValue);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(NULLABLE_ORIGINAL.ToString(), result.Changes.First().OldValue);
+            Assert.AreEqual(ComparatorResources.EmptyValue, result.Changes.First().NewValue);
             
-            Assert.Equal(nameof(objA.NullableValue), result.Changes.First().Name);
+            Assert.AreEqual(nameof(objA.NullableValue), result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 
-        [Fact]
+        [TestMethod]
         public void SimpleCompare_Change_Nullable_From_ValueToDiffentValue()
         {
             var id = Guid.NewGuid().ToId();
@@ -286,11 +294,11 @@ namespace LagoVista.Core.Tests.Compare
 
             var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
             var result = Comparator.Compare(objA, objB, user);
-            Assert.True(result.IsDirty);
-            Assert.Equal(NULLABLE_ORIGINAL.ToString(), result.Changes.First().OldValue);
-            Assert.Equal(objB.NullableValue.Value.ToString(), result.Changes.First().NewValue);
+            Assert.IsTrue(result.IsDirty);
+            Assert.AreEqual(NULLABLE_ORIGINAL.ToString(), result.Changes.First().OldValue);
+            Assert.AreEqual(objB.NullableValue.Value.ToString(), result.Changes.First().NewValue);
 
-            Assert.Equal(nameof(objA.NullableValue), result.Changes.First().Name);
+            Assert.AreEqual(nameof(objA.NullableValue), result.Changes.First().Name);
             Console.WriteLine(result.Changes.First());
         }
 

@@ -5,15 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Validation
 {
-    
+
+    [TestClass]
     public class RegExTests
     {
 
-        [Fact]
+        [TestMethod]
         public void RegEx_Valid()
         {
             var regExModel = new Models.RegExModel()
@@ -23,10 +24,10 @@ namespace LagoVista.Core.Tests.Validation
             };
 
             var validationResult = Validator.Validate(regExModel);
-            Assert.True(validationResult.Successful);
+            Assert.IsTrue(validationResult.Successful);
         }
 
-        [Fact]
+        [TestMethod]
         public void RegEx_ManualRegEx_Invalid()
         {
             var regExModel = new Models.RegExModel()
@@ -36,11 +37,11 @@ namespace LagoVista.Core.Tests.Validation
             };
 
             var validationResult = Validator.Validate(regExModel);
-            Assert.False(validationResult.Successful);
-            Assert.Single(validationResult.Errors.Where(err => err.Message == ValidationResources.RegExMessage));
+            Assert.IsFalse(validationResult.Successful);
+            Assert.AreEqual(1, validationResult.Errors.Where(err => err.Message == ValidationResources.RegExMessage).Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void RegEx_Key_Invalid()
         {
             var regExModel = new Models.RegExModel()
@@ -50,8 +51,8 @@ namespace LagoVista.Core.Tests.Validation
             };
 
             var validationResult = Validator.Validate(regExModel);
-            Assert.False(validationResult.Successful);
-            Assert.Single(validationResult.Errors.Where(err => err.Message == LagoVista.Core.Resources.ValidationResource.Common_Key_Validation));
+            Assert.IsFalse(validationResult.Successful);
+            Assert.AreEqual(1, validationResult.Errors.Where(err => err.Message == LagoVista.Core.Resources.ValidationResource.Common_Key_Validation).Count());
         }
     }
 }
