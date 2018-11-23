@@ -1,17 +1,16 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.Core.Tests.Resources.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace LagoVista.Core.Tests.Models
 {
-    [TestClass]
     public class EnumEntityHeaderRestore
     {
         public enum SampleEnum
@@ -36,7 +35,7 @@ namespace LagoVista.Core.Tests.Models
         }
 
        
-        [TestMethod()]
+        [Fact()]
         public void ShowRestoreValueOnEnumEntityHeaderType()
         {
             var eh = new EntityHeader<SampleEnum>();
@@ -47,27 +46,27 @@ namespace LagoVista.Core.Tests.Models
 
             var restoredEh = JsonConvert.DeserializeObject<EntityHeader<SampleEnum>>(json);
 
-            Assert.AreEqual(restoredEh.Value,SampleEnum.Enum4);
+            Assert.Equal(restoredEh.Value,SampleEnum.Enum4);
         }
 
-        [TestMethod]
+        [Fact()]
         public void EHCreate()
         {
             var eh = EntityHeader<SampleEnum>.Create(SampleEnum.Enum1);
 
-            Assert.AreEqual("enum1", eh.Id);
-            Assert.AreEqual(ValidationResources.EnumOne, eh.Text);
-            Assert.AreEqual(SampleEnum.Enum1, eh.Value);
+            Assert.Equal("enum1", eh.Id);
+            Assert.Equal(ValidationResources.EnumOne, eh.Text);
+            Assert.Equal(SampleEnum.Enum1, eh.Value);
         }
 
-        [TestMethod]
+        [Fact()]
         public void EHCreateWithoutLabel()
         {
             var eh = EntityHeader<EnumWithOutLabel>.Create(EnumWithOutLabel.EnumWOLabel1);
 
-            Assert.AreEqual("EnumWOLabel1", eh.Id);
-            Assert.AreEqual(EnumWithOutLabel.EnumWOLabel1.ToString(), eh.Text);
-            Assert.AreEqual(EnumWithOutLabel.EnumWOLabel1, eh.Value);
+            Assert.Equal("EnumWOLabel1", eh.Id);
+            Assert.Equal(EnumWithOutLabel.EnumWOLabel1.ToString(), eh.Text);
+            Assert.Equal(EnumWithOutLabel.EnumWOLabel1, eh.Value);
         }
     }
 }

@@ -1,15 +1,14 @@
 ﻿using LagoVista.Core.Models.Geo;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Xunit;
 
 namespace LagoVista.Core.Tests.Geo
 {
 
-    [TestClass]
     public class GeoLocationMathTests
     {
 
-        [TestMethod]
+        [Fact()]
         public void GeogrpahyType_Find_North()
         {
             var start = new GeoLocation()
@@ -26,10 +25,10 @@ namespace LagoVista.Core.Tests.Geo
 
             var heading = start.HeadingTo(end);
             Console.WriteLine($"heading => {heading}");
-            Assert.AreEqual(0, heading, 0.01);
+            Assert.Equal(0, heading, 2);
         }
 
-        [TestMethod]
+        [Fact()]
         public void GeogrpahyType_Find_South()
         {
             var start = new GeoLocation()
@@ -46,10 +45,10 @@ namespace LagoVista.Core.Tests.Geo
 
             var heading = start.HeadingTo(end);
             Console.WriteLine($"heading => {heading}");
-            Assert.AreEqual(180, heading, 0.01);
+            Assert.Equal(180, heading, 2);
         }
 
-        [TestMethod]
+        [Fact()]
         public void GeogrpahyType_Find_West()
         {
             var start = new GeoLocation()
@@ -66,11 +65,11 @@ namespace LagoVista.Core.Tests.Geo
 
             var heading = start.HeadingTo(end);
             Console.WriteLine($"heading => {heading}");
-            Assert.AreEqual(270, heading, 0.5);
+            Assert.Equal(270, Convert.ToInt32(heading));
         }
 
 
-        [TestMethod]
+        [Fact()]
         public void GeogrpahyType_Find_East()
         {
             var start = new GeoLocation()
@@ -87,7 +86,7 @@ namespace LagoVista.Core.Tests.Geo
 
             var heading = start.HeadingTo(end);
             Console.WriteLine($"heading => {heading}");
-            Assert.AreEqual(90, heading, 0.5);
+            Assert.Equal(Convert.ToInt32(90), Convert.ToInt32(heading));
         }
 
     }

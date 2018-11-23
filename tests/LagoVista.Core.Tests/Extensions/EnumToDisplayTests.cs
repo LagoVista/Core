@@ -1,16 +1,15 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Tests.Resources.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace LagoVista.Core.Tests.Extensions
 {
 
-    [TestClass]
     public class EnumToDisplayTests
     {
         public enum SampleEnum
@@ -28,10 +27,10 @@ namespace LagoVista.Core.Tests.Extensions
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ResolveName()
         {
-            Assert.AreEqual("Five","enum5".GetEnumLabel<SampleEnum>());
+            Assert.Equal("Five","enum5".GetEnumLabel<SampleEnum>());
         }
 
     }
