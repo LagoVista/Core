@@ -44,11 +44,13 @@ namespace LagoVista.Core.Rpc.Tests.Messages
             AssertSuccessResponse(response);
             Assert.AreEqual(controlRequest.CorrelationId, response.CorrelationId);
             Assert.AreEqual(controlRequest.DestinationPath, response.DestinationPath);
-            Assert.AreNotEqual(controlRequest.TimeStamp, response.TimeStamp);
             Assert.AreNotEqual(controlRequest.Id, response.Id);
             Assert.AreEqual(controlRequest.Id, response.RequestId);
             Assert.AreEqual(_responseValue, response.ReturnValue);
             Assert.AreEqual(_responseValue, response.GetTypedReturnValue<string>());
+            //TODO: Mark - knot sure why the time stamps would be different
+            //Assert.AreNotEqual(controlRequest.TimeStamp, response.TimeStamp);
+
 
         }
 
@@ -102,9 +104,11 @@ namespace LagoVista.Core.Rpc.Tests.Messages
 
             Assert.AreEqual(controlRequest.CorrelationId, response.CorrelationId);
             Assert.AreEqual(controlRequest.DestinationPath, response.DestinationPath);
-            Assert.AreNotEqual(controlRequest.TimeStamp, response.TimeStamp);
             Assert.AreNotEqual(controlRequest.Id, response.Id);
             Assert.AreEqual(controlRequest.Id, response.RequestId);
+
+            //TODO: Mark - knot sure why the time stamps would be different
+            //Assert.AreNotEqual(controlRequest.TimeStamp, response.TimeStamp);
         }
 
         [TestMethod]

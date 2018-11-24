@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\LagoVista.Core.RetryProxy\LagoVista.Core.Retry.csproj" />
+    <ProjectReference Include="..\..\src\LagoVista.Core.RetryProxy\LagoVista.Core.Retry.csproj" />
   </ItemGroup>
 
 </Project>
