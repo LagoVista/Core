@@ -52,7 +52,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         public ServiceBusRequestServer(ITransceiverConnectionSettings connectionSettings, IRequestBroker requestBroker, ILogger logger) :
             base(connectionSettings, requestBroker, logger)
         {
-            _topicConstructorSettings = connectionSettings.RpcTopicConstructor;
+            _topicConstructorSettings = connectionSettings.RpcAdmin;
             _receiverSettings = connectionSettings.RpcReceiver;
 
             // Endpoint - AccountId

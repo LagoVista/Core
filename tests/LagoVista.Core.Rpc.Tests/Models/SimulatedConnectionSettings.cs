@@ -21,6 +21,6 @@ namespace LagoVista.Core.Rpc.Tests.Models
 
         public IConnectionSettings RpcTransmitter { get; }
         public IConnectionSettings RpcReceiver { get; }
-        public IConnectionSettings RpcTopicConstructor { get; }
+        public IConnectionSettings RpcAdmin { get; }
     }
 }

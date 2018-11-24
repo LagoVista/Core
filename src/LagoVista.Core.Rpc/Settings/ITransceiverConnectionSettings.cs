@@ -14,7 +14,7 @@ namespace LagoVista.Core.Rpc.Settings
         /// DestinationEntityPath - ResourceName
         /// client request timeout - TimeoutInSeconds
         /// </summary>
-        IConnectionSettings RpcTopicConstructor { get; }
+        IConnectionSettings RpcAdmin { get; }
 
         /// <summary>
         /// Endpoint - AccountId

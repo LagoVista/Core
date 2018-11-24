@@ -45,7 +45,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             ILogger logger) :
             base(connectionSettings, asyncCoupler, logger)
         {
-            _topicConstructorSettings = connectionSettings.RpcTopicConstructor;
+            _topicConstructorSettings = connectionSettings.RpcAdmin;
             _receiverSettings = connectionSettings.RpcReceiver;
             _logger = logger;
 
