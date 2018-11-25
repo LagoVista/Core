@@ -16,7 +16,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
     {
         #region Fields
         private IConnectionSettings _topicConstructorSettings;
-        private IConnectionSettings _receiverSettings;
+        private IConnectionSettings _subscriberSettings;
         private string _transmitterConnectionSettings;
         private string _serverTopicPrefix;
         private SubscriptionClient _subscriptionClient;
@@ -25,14 +25,13 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         private async Task CreateTopicAsync(string entityPath)
         {
-            var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
             var client = new ManagementClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
             {
                 await client.CreateTopicAsync(entityPath);
-                await client.CreateSubscriptionAsync(entityPath, "application");
-                await client.CreateSubscriptionAsync(entityPath, "admin");
+                await client.CreateSubscriptionAsync(entityPath, _subscriberSettings.Uri);
             }
         }
 
@@ -50,7 +49,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
         {
             _topicConstructorSettings = settings.RpcAdmin;
-            _receiverSettings = settings.RpcClientReceiver;
+            _subscriberSettings = settings.RpcClientReceiver;
          
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
@@ -72,11 +71,15 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SharedAccessKey - AccessKey
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
-            var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
-            var sourceEntityPath = _receiverSettings.ResourceName;
-            var subscriptionPath = _receiverSettings.Uri;
+            var receiverConnectionString = $"Endpoint=sb://{_subscriberSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+            var sourceEntityPath = _subscriberSettings.ResourceName;
+            var subscriptionPath = _subscriberSettings.Uri;
 
-            await CreateTopicAsync(sourceEntityPath);
+            if (_topicConstructorSettings != null)
+            {
+                await CreateTopicAsync(sourceEntityPath);
+            }
+
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
 
@@ -135,9 +138,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            var entityPath = $"{_serverTopicPrefix}_{message.InstanceId}"
-                .Replace("__", "_")
-                .ToLower();
+            var entityPath = $"{_serverTopicPrefix}_{message.InstanceId}".ToLower();
 
             await CreateTopicAsync(entityPath);
 

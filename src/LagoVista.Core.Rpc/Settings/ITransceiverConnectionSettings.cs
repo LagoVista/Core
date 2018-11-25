@@ -43,5 +43,15 @@ namespace LagoVista.Core.Rpc.Settings
         /// SharedAccessKey - AccessKey
         /// </summary>
         IConnectionSettings RpcServerTransmitter { get; }
+
+        /// <summary>
+        /// Used to subscribe and receive messages from client requests
+        /// should have readonly to topic that the instance subscribes to
+        /// Endpoint - AccountId
+        /// SharedAccessKeyName - UserName
+        /// SharedAccessKey - AccessKey
+        /// SubscriptionPath - Uri
+        /// </summary>
+        IConnectionSettings RpcServerReceiver { get; }
     }
 }

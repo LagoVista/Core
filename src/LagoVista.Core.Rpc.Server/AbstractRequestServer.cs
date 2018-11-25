@@ -9,7 +9,6 @@ namespace LagoVista.Core.Rpc.Server
 {
     public abstract class AbstractRequestServer : ITransceiver
     {
-        protected ITransceiverConnectionSettings _connectionSettings;
         private readonly IRequestBroker _requestBroker;
         protected readonly ILogger _logger;
 
@@ -23,12 +22,14 @@ namespace LagoVista.Core.Rpc.Server
 
         public async Task StartAsync(ITransceiverConnectionSettings connectionSettings)
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+            if(connectionSettings == null) throw new ArgumentNullException(nameof(connectionSettings));
 
             if (IsRunning)
             {
                 return;
             }
+
+            ConfigureSettings(connectionSettings);
 
             await CustomStartAsync();
             IsRunning = true;

@@ -14,7 +14,6 @@ namespace LagoVista.Core.Rpc.Client
         #region Fields
         private readonly IAsyncCoupler<IMessage> _asyncCoupler;
         protected readonly ILogger _logger;
-        protected ITransceiverConnectionSettings _connectionSettings;
         #endregion
 
         #region Constructors
@@ -55,7 +54,8 @@ namespace LagoVista.Core.Rpc.Client
 
         public async Task StartAsync(ITransceiverConnectionSettings connectionSettings)
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+            if(connectionSettings == null) throw new ArgumentNullException(nameof(connectionSettings));
+            ConfigureSettings(connectionSettings);
 
             if (IsRunning)
             {

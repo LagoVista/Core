@@ -15,8 +15,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
     public sealed class ServiceBusRequestServer : AbstractRequestServer
     {
         #region Fields        
-        private IConnectionSettings _receiverSettings;
-        private string _topicConnectionString;
+        private IConnectionSettings _subscriberSettings;
+        private string _transmitterConnectionString;
         private string _destinationEntityPath;
         private SubscriptionClient _subscriptionClient;
         #endregion
@@ -58,21 +58,22 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         protected override void ConfigureSettings(ITransceiverConnectionSettings connectionSettings)
         {
-            _receiverSettings = connectionSettings.RpcClientReceiver;
+            _subscriberSettings = connectionSettings.RpcServerReceiver;
 
-            var topicSettings = connectionSettings.RpcClientTransmitter;
-            _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
+            var topicSettings = connectionSettings.RpcServerTransmitter;
+            _transmitterConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
             _destinationEntityPath = topicSettings.ResourceName;
-
         }
 
         protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)
         {
-            _receiverSettings = connectionSettings.RpcClientReceiver;
+            _subscriberSettings = connectionSettings.RpcServerReceiver;
 
-            var topicSettings = connectionSettings.RpcClientTransmitter;
-            _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
-            _destinationEntityPath = topicSettings.ResourceName;
+            var transmitterSettings = connectionSettings.RpcServerTransmitter;
+            _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
+            _destinationEntityPath = transmitterSettings.ResourceName;
+
+            Restart();
         }
 
 
@@ -87,6 +88,12 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             return Task.FromResult<object>(null);
         }
 
+        private async void Restart()
+        {
+            await _subscriptionClient.CloseAsync();
+            await CustomStartAsync();
+        }
+
         protected override Task CustomStartAsync()
         {
             // Endpoint - AccountId
@@ -94,8 +101,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             // SharedAccessKey - AccessKey
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
-            var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
-            var sourceEntityPath = _receiverSettings.ResourceName;
+            var receiverConnectionString = $"Endpoint=sb://{_subscriberSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+            var sourceEntityPath = _subscriberSettings.ResourceName;
             var subscriptionPath = "application";
          
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
@@ -118,7 +125,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         {
             // no need to create topic - we wouldn't even be here if the other side hadn't done it's part
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
-            var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), null);
+            var topicClient = new TopicClient(_transmitterConnectionString, message.ReplyPath.ToLower(), null);
             try
             {
                 using(var ms = new MemoryStream(message.Payload))
