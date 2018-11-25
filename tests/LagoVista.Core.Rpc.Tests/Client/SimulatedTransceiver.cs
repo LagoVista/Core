@@ -17,13 +17,17 @@ namespace LagoVista.Core.Rpc.Tests.Client
         private readonly object _result;
 
         public SimulatedTransceiver(
-            ITransceiverConnectionSettings connectionSettings,
             IAsyncCoupler<IMessage> asyncCoupler,
             ILogger logger,
             object result) :
-            base(connectionSettings, asyncCoupler, logger)
+            base(asyncCoupler, logger)
         {
             _result = result;
+        }
+
+        protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
+        {
+            throw new NotImplementedException();
         }
 
         protected override Task CustomStartAsync()

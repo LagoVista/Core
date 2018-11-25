@@ -51,18 +51,18 @@ namespace LagoVista.Core.Rpc.Client
                 throw new ArgumentNullException(nameof(proxySettings.InstanceId));
             }
 
-            if (string.IsNullOrEmpty(connectionSettings.RpcReceiver.ResourceName))
+            if (string.IsNullOrEmpty(connectionSettings.RpcClientReceiver.ResourceName))
             {
-                throw new ArgumentNullException(nameof(connectionSettings.RpcReceiver.ResourceName));
+                throw new ArgumentNullException(nameof(connectionSettings.RpcClientReceiver.ResourceName));
             }
 
-            proxy._replyPath = connectionSettings.RpcReceiver.ResourceName;
-            if (connectionSettings.RpcTransmitter.TimeoutInSeconds == 0)
+            proxy._replyPath = connectionSettings.RpcClientReceiver.ResourceName;
+            if (connectionSettings.RpcClientTransmitter.TimeoutInSeconds == 0)
             {
-                throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcReceiver.Uri));
+                throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcClientReceiver.TimeoutInSeconds));
             }
 
-            proxy._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcTransmitter.TimeoutInSeconds);
+            proxy._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcClientTransmitter.TimeoutInSeconds);
 
             return result;
         }

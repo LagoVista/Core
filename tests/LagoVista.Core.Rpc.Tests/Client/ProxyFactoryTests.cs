@@ -18,7 +18,6 @@ namespace LagoVista.Core.Rpc.Tests.Client
         {
             var logger = new Mock<ILogger>();
             var client = new SimulatedTransceiver(
-                Constants.ConnectionSettings,
                 Constants.AsyncCoupler,
                 logger.Object,
                 ProxySubject.EchoValueConst);

@@ -17,12 +17,16 @@ namespace LagoVista.Core.Rpc.Tests.Client
         private readonly QueueSimulator _queue;
 
         public SimulatedProxyClient(
-            ITransceiverConnectionSettings connectionSettings, 
             IAsyncCoupler<IMessage> asyncCoupler, 
             ILogger logger, 
-            QueueSimulator queue) : base(connectionSettings, asyncCoupler, logger)
+            QueueSimulator queue) : base(asyncCoupler, logger)
         {
             _queue = queue ?? throw new ArgumentNullException(nameof(queue));
+        }
+
+        protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
+        {
+
         }
 
         protected override Task CustomStartAsync()

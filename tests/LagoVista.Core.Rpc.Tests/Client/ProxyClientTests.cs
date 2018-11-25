@@ -19,7 +19,6 @@ namespace LagoVista.Core.Rpc.Tests.Client
         public ITransceiver ProxyClient_Constructor()
         {
             var client = new SimulatedProxyClient(
-                Constants.ConnectionSettings,
                 Constants.AsyncCoupler,
                 new Mock<ILogger>().Object,
                 Constants.QueueSimulator);

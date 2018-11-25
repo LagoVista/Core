@@ -15,10 +15,10 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
     public sealed class ServiceBusProxyClient : AbstractProxyClient
     {
         #region Fields
-        private readonly IConnectionSettings _topicConstructorSettings;
-        private readonly IConnectionSettings _receiverSettings;
-        private readonly string _topicConnectionString;
-        private readonly string _destinationEntityPath;
+        private IConnectionSettings _topicConstructorSettings;
+        private IConnectionSettings _receiverSettings;
+        private string _transmitterConnectionSettings;
+        private string _serverTopicPrefix;
         private SubscriptionClient _subscriptionClient;
         ILogger _logger;
         #endregion
@@ -34,28 +34,31 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                 await client.CreateSubscriptionAsync(entityPath, "application");
                 await client.CreateSubscriptionAsync(entityPath, "admin");
             }
-            //return Task.FromResult<object>(null);
         }
 
         #region Constructors
 
         public ServiceBusProxyClient(
-            ITransceiverConnectionSettings connectionSettings,
             IAsyncCoupler<IMessage> asyncCoupler,
             ILogger logger) :
-            base(connectionSettings, asyncCoupler, logger)
+            base(asyncCoupler, logger)
         {
-            _topicConstructorSettings = connectionSettings.RpcAdmin;
-            _receiverSettings = connectionSettings.RpcReceiver;
             _logger = logger;
 
+        }
+
+        protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
+        {
+            _topicConstructorSettings = settings.RpcAdmin;
+            _receiverSettings = settings.RpcClientReceiver;
+         
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
-            var topicSettings = connectionSettings.RpcTransmitter;
-            _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
-            _destinationEntityPath = topicSettings.ResourceName;
+            var transmitterSettings = settings.RpcClientTransmitter;
+            _transmitterConnectionSettings = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
+            _serverTopicPrefix = transmitterSettings.ResourceName;
         }
 
         #endregion
@@ -132,13 +135,13 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            var entityPath = $"{_destinationEntityPath}_{message.InstanceId}"
+            var entityPath = $"{_serverTopicPrefix}_{message.InstanceId}"
                 .Replace("__", "_")
                 .ToLower();
 
             await CreateTopicAsync(entityPath);
 
-            var topicClient = new TopicClient(_topicConnectionString, entityPath, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
+            var topicClient = new TopicClient(_transmitterConnectionSettings, entityPath, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
             try
             {
                 using (var ms = new MemoryStream(message.Payload))

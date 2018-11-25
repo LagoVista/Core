@@ -9,21 +9,22 @@ namespace LagoVista.Core.Rpc.Server
 {
     public abstract class AbstractRequestServer : ITransceiver
     {
-        protected readonly ITransceiverConnectionSettings _connectionSettings;
+        protected ITransceiverConnectionSettings _connectionSettings;
         private readonly IRequestBroker _requestBroker;
         protected readonly ILogger _logger;
 
-        public AbstractRequestServer(ITransceiverConnectionSettings connectionSettings, IRequestBroker requestBroker, ILogger logger)
+        public AbstractRequestServer(IRequestBroker requestBroker, ILogger logger)
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _requestBroker = requestBroker ?? throw new ArgumentNullException(nameof(requestBroker));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
         public bool IsRunning { get; private set; } = false;
 
-        public async Task StartAsync()
+        public async Task StartAsync(ITransceiverConnectionSettings connectionSettings)
         {
+            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+
             if (IsRunning)
             {
                 return;
@@ -53,6 +54,10 @@ namespace LagoVista.Core.Rpc.Server
             var response = await _requestBroker.InvokeAsync((IRequest)message);
             await TransmitAsync(response);
         }
+
+        protected abstract void ConfigureSettings(ITransceiverConnectionSettings settings);
+        protected abstract void UpdateSettings(ITransceiverConnectionSettings settings);
+
 
         protected abstract Task CustomStartAsync();
         protected abstract Task CustomTransmitMessageAsync(IMessage message);

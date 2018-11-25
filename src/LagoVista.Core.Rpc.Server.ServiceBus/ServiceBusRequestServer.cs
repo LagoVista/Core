@@ -15,53 +15,20 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
     public sealed class ServiceBusRequestServer : AbstractRequestServer
     {
         #region Fields        
-        private readonly IConnectionSettings _topicConstructorSettings;
-        private readonly IConnectionSettings _receiverSettings;
-        private readonly string _topicConnectionString;
-        private readonly string _destinationEntityPath;
+        private IConnectionSettings _receiverSettings;
+        private string _topicConnectionString;
+        private string _destinationEntityPath;
         private SubscriptionClient _subscriptionClient;
         #endregion
 
-        private async Task CreateTopicAsync(string entityPath)
+        public ServiceBusRequestServer(IRequestBroker requestBroker, ILogger logger) :
+            base(requestBroker, logger)
         {
-            var connstr = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
-
-            var client = new ManagementClient(connstr);
-            if (!await client.TopicExistsAsync(entityPath))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Topic does not exist, creating now: " + entityPath);
-                Console.ResetColor();
-                var response = await client.CreateTopicAsync(entityPath);
-                if (response == null)
-                {
-                    throw new Exception("Could not create topic.");
-                }
-                await client.CreateSubscriptionAsync(entityPath, "application");
-                await client.CreateSubscriptionAsync(entityPath, "admin");
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Topic Exists using: " + entityPath);
-                Console.ResetColor();
-            }
-            //return Task.FromResult<object>(null);
-        }
-
-        public ServiceBusRequestServer(ITransceiverConnectionSettings connectionSettings, IRequestBroker requestBroker, ILogger logger) :
-            base(connectionSettings, requestBroker, logger)
-        {
-            _topicConstructorSettings = connectionSettings.RpcAdmin;
-            _receiverSettings = connectionSettings.RpcReceiver;
 
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
-            var topicSettings = connectionSettings.RpcTransmitter;
-            _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
-            _destinationEntityPath = topicSettings.ResourceName;
         }
 
         private async Task MessageReceived(Microsoft.Azure.ServiceBus.Message message, CancellationToken cancelationToken)
@@ -89,6 +56,26 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             }
         }
 
+        protected override void ConfigureSettings(ITransceiverConnectionSettings connectionSettings)
+        {
+            _receiverSettings = connectionSettings.RpcClientReceiver;
+
+            var topicSettings = connectionSettings.RpcClientTransmitter;
+            _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
+            _destinationEntityPath = topicSettings.ResourceName;
+
+        }
+
+        protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)
+        {
+            _receiverSettings = connectionSettings.RpcClientReceiver;
+
+            var topicSettings = connectionSettings.RpcClientTransmitter;
+            _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
+            _destinationEntityPath = topicSettings.ResourceName;
+        }
+
+
         private Task HandleException(ExceptionReceivedEventArgs e)
         {
             Console.WriteLine($"{e.Exception.GetType().Name}: {e.Exception.Message}");
@@ -100,7 +87,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             return Task.FromResult<object>(null);
         }
 
-        protected override async Task CustomStartAsync()
+        protected override Task CustomStartAsync()
         {
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
@@ -110,9 +97,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             var receiverConnectionString = $"Endpoint=sb://{_receiverSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_receiverSettings.UserName};SharedAccessKey={_receiverSettings.AccessKey};";
             var sourceEntityPath = _receiverSettings.ResourceName;
             var subscriptionPath = "application";
-
-            await CreateTopicAsync(sourceEntityPath);
-
+         
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
 
             var options = new MessageHandlerOptions(HandleException)
@@ -125,12 +110,12 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 #endif
             };
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
+
+            return Task.FromResult(default(object));
         }
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
         {
-            Console.WriteLine("WIRTING OUTPUT MESSAGE 2");
-
             // no need to create topic - we wouldn't even be here if the other side hadn't done it's part
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
             var topicClient = new TopicClient(_topicConnectionString, message.ReplyPath.ToLower(), null);

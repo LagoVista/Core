@@ -14,14 +14,13 @@ namespace LagoVista.Core.Rpc.Client
         #region Fields
         private readonly IAsyncCoupler<IMessage> _asyncCoupler;
         protected readonly ILogger _logger;
-        protected readonly ITransceiverConnectionSettings _connectionSettings;
+        protected ITransceiverConnectionSettings _connectionSettings;
         #endregion
 
         #region Constructors
 
-        public AbstractProxyClient(ITransceiverConnectionSettings connectionSettings, IAsyncCoupler<IMessage> asyncCoupler, ILogger logger) : base()
+        public AbstractProxyClient(IAsyncCoupler<IMessage> asyncCoupler, ILogger logger) : base()
         {
-            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
             _asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -54,8 +53,10 @@ namespace LagoVista.Core.Rpc.Client
 
         public bool IsRunning { get; private set; } = false;
 
-        public async Task StartAsync()
+        public async Task StartAsync(ITransceiverConnectionSettings connectionSettings)
         {
+            _connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
+
             if (IsRunning)
             {
                 return;
@@ -68,6 +69,8 @@ namespace LagoVista.Core.Rpc.Client
         protected abstract Task CustomStartAsync();
 
         #endregion
+
+        protected abstract void ConfigureSettings(ITransceiverConnectionSettings settings);
 
         #region Rpc Transmitter Methods
 
