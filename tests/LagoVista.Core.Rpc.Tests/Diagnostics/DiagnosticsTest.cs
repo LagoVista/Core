@@ -10,10 +10,6 @@ namespace LagoVista.Core.Rpc.Tests.Diagnostics
     [TestClass]
     public class DiagnosticsTest
     {
-        //TODO: Tests don't run under NET 4.6.1,
-        //Error: Could not load file or assembly 'System.Reflection.DispatchProxy, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' 
-        //       or one of its dependencies. The system cannot find the file specified.
-        /*
         [TestMethod]
         public void ConsoleProxyFactory_Create_ReturnsNonNull()
         {
@@ -50,6 +46,6 @@ namespace LagoVista.Core.Rpc.Tests.Diagnostics
             var consoleProxy = proxyFactory.Create<IProxySubject>(subject);
             var value = consoleProxy.SkipMe();
             Assert.AreEqual(ProxySubject.EchoValueConst, value);
-        }*/
+        }
     }
 }
