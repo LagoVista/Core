@@ -60,9 +60,10 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         {
             _subscriberSettings = connectionSettings.RpcServerReceiver;
 
-            var topicSettings = connectionSettings.RpcServerTransmitter;
-            _transmitterConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
-            _destinationEntityPath = topicSettings.ResourceName;
+            var transmitterSettings = connectionSettings.RpcServerTransmitter;
+            _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
+            _destinationEntityPath = transmitterSettings.ResourceName;
+            Console.WriteLine(_transmitterConnectionString);
         }
 
         protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)
@@ -70,7 +71,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _subscriberSettings = connectionSettings.RpcServerReceiver;
 
             var transmitterSettings = connectionSettings.RpcServerTransmitter;
-            _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
+            _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";           
             _destinationEntityPath = transmitterSettings.ResourceName;
 
             Restart();
@@ -101,11 +102,19 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             // SharedAccessKey - AccessKey
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
-            var receiverConnectionString = $"Endpoint=sb://{_subscriberSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
-            var sourceEntityPath = _subscriberSettings.ResourceName;
-            var subscriptionPath = "application";
-         
-            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
+            var parts = _subscriberSettings.ResourceName.Split('/');
+            if (parts.Length != 2) throw new Exception("Resource Name for Server Listener must be [TOPIC]/[SUBSCRIPTION]");
+
+            var topic = parts[0];
+            var subscrption = parts[1];
+
+            var connectionBuilder = new ServiceBusConnectionStringBuilder($"Endpoint={_subscriberSettings.Uri}")
+            {
+                EntityPath = topic,
+                SasToken = _subscriberSettings.AccessKey,
+            };
+
+            _subscriptionClient = new SubscriptionClient(connectionBuilder, subscrption, ReceiveMode.PeekLock, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
 
             var options = new MessageHandlerOptions(HandleException)
             {
