@@ -20,7 +20,8 @@ namespace LagoVista.Core.Interfaces
         Beta,
         Testing,
         Development,
-        Local
+        Local,
+        LocalDevelopment
     }
 
     public enum AuthTypes
