@@ -62,5 +62,13 @@ namespace LagoVista.Core.Rpc.Server
 
         protected abstract Task CustomStartAsync();
         protected abstract Task CustomTransmitMessageAsync(IMessage message);
+
+
+        public Task RefreshConnection(ITransceiverConnectionSettings connectionSettings)
+        {
+            UpdateSettings(connectionSettings);
+            return Task.FromResult(default(object));
+        }
+
     }
 }

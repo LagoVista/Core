@@ -75,8 +75,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _destinationEntityPath = transmitterSettings.ResourceName;
 
             Restart();
-        }
-
+        }    
 
         private Task HandleException(ExceptionReceivedEventArgs e)
         {

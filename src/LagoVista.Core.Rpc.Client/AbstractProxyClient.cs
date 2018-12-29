@@ -72,6 +72,13 @@ namespace LagoVista.Core.Rpc.Client
 
         protected abstract void ConfigureSettings(ITransceiverConnectionSettings settings);
 
+
+        public Task RefreshConnection(ITransceiverConnectionSettings connectionSettings)
+        {
+            ConfigureSettings(connectionSettings);
+            return Task.FromResult(default(object));
+        }
+
         #region Rpc Transmitter Methods
 
         /// <summary>

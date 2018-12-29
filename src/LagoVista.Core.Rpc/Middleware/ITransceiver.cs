@@ -8,6 +8,8 @@ namespace LagoVista.Core.Rpc.Middleware
     {
         Task StartAsync(ITransceiverConnectionSettings connectionSettings);
 
+        Task RefreshConnection(ITransceiverConnectionSettings connectionSettings);
+
         bool IsRunning { get; }
     }
 }
