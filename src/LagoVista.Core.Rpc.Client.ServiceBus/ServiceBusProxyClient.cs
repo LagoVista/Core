@@ -155,8 +155,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
                     var buffer = mso.ToArray();
 
-                    Console.Write($"Original message: {message.Payload.Length}  Compressed: {buffer.Length}");
-
                     var messageOut = new Microsoft.Azure.ServiceBus.Message(buffer)
                     {
                         ContentType = message.GetType().FullName,

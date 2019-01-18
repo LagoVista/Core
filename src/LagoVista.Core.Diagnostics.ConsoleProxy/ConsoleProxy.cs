@@ -40,8 +40,8 @@ namespace LagoVista.Core.Diagnostics.ConsoleProxy
                 {
                     try
                     {
-                        _writer.WriteLine($"{parameters[i].Name}: ");
-                        _writer.WriteLine(JsonConvert.SerializeObject(args[i], Formatting.Indented));
+                        _writer.WriteLine($"{i}. {parameters[i].Name}.");
+                        //_writer.WriteLine(JsonConvert.SerializeObject(args[i], Formatting.Indented));
                     }
                     catch (Exception ex)
                     {

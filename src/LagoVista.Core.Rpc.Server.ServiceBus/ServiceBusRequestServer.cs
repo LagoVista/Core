@@ -62,8 +62,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
             var transmitterSettings = connectionSettings.RpcServerTransmitter;
             _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
-            _destinationEntityPath = transmitterSettings.ResourceName;
-            Console.WriteLine(_transmitterConnectionString);
         }
 
         protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)
@@ -72,7 +70,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
             var transmitterSettings = connectionSettings.RpcServerTransmitter;
             _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";           
-            _destinationEntityPath = transmitterSettings.ResourceName;
 
             Restart();
         }    
@@ -161,11 +158,11 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                     await topicClient.SendAsync(messageOut);
                 }
             }
-            //catch (Exception ex)
-            //{
-            //    //todo: ML - log exception
-            //    throw;
-            //}
+            catch (Exception ex)
+            {
+                _logger.AddException("Custom Transmit Message", ex, message.DestinationPath.ToKVP("destinationPath"));
+                throw;
+            }
             finally
             {
                 await topicClient.CloseAsync();
