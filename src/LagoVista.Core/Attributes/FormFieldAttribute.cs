@@ -35,6 +35,7 @@ namespace LagoVista.Core.Attributes
         GeoLocation,
         EntityHeaderPicker,
         Byte,
+        Secret
     }
 
     public enum NamespaceTypes
