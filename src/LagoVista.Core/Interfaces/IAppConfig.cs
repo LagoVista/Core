@@ -47,6 +47,7 @@ namespace LagoVista.Core.Interfaces
 
         String AppName { get; }
         String AppId { get; }
+        String APIToken { get; }
         String AppDescription { get; }
         String TermsAndConditionsLink { get; }
         String PrivacyStatementLink { get; }
