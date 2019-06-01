@@ -10,13 +10,18 @@ namespace LagoVista.Core.Exceptions
 {
     public class InvalidDataException : System.Exception
     {
-        public InvalidDataException([CallerMemberName] string checkLocation = null,  string[] errors = null)  : base("SystemInvalidDataException")
+        public InvalidDataException([CallerMemberName] string area = null,  string[] errors = null)  : base("SystemInvalidDataException")
         {
-            ValidationErrors = errors.ToList();
+            Area = area;
+            if (errors != null)
+            {
+                ValidationErrors = errors.ToList();
+            }
         }        
 
         public List<String> ValidationErrors { get; private set; }
 
+        public string Area { get; }
         
     }
 
