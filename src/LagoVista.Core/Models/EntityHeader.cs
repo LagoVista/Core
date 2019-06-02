@@ -169,17 +169,25 @@ namespace LagoVista.Core.Models
             }
         }
 
+        private static bool HasInterface<TType, TInterface>()
+        {
+            return typeof(TType).GetTypeInfo().ImplementedInterfaces.Any(i => i == typeof(TInterface));
+        }
+
         /// <summary>
         /// Create an Entity Header based on something that implements IIDEntity and INamedEntity 
         /// or an enum that has an EnumLabel attribte.
         /// </summary>
         public static EntityHeader<T> Create(T value)
         {
-            if (typeof(T) == typeof(IIDEntity) && typeof(T) == typeof(INamedEntity))
+            if (HasInterface<T, IIDEntity>() && HasInterface<T, INamedEntity>())
             {
-                var eh = new EntityHeader<T>();
-                eh.Id = ((IIDEntity)value).Id;
-                eh.Text = ((INamedEntity)value).Name;
+                var eh = new EntityHeader<T>
+                {
+                    Id = ((IIDEntity)value).Id,
+                    Text = ((INamedEntity)value).Name,
+                    Value = value,
+                };
                 return eh;
             }
 
@@ -197,19 +205,23 @@ namespace LagoVista.Core.Models
                         var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
                         if (enumAttr != null)
                         {
-                            var eh = new EntityHeader<T>();
-                            eh.Id = enumAttr.Key;
-                            eh.Value = value;
+                            var eh = new EntityHeader<T>
+                            {
+                                Id = enumAttr.Key,
+                                Value = value
+                            };
                             var labelProperty = enumAttr.ResourceType.GetTypeInfo().GetDeclaredProperty(enumAttr.LabelResource);
                             eh.Text = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
                             return eh;
                         }
                         else
                         {
-                            var eh = new EntityHeader<T>();
-                            eh.Id = value.ToString();
-                            eh.Text = value.ToString();
-                            eh.Value = value;
+                            var eh = new EntityHeader<T>
+                            {
+                                Id = value.ToString(),
+                                Text = value.ToString(),
+                                Value = value
+                            };
                             return eh;
                         }
                     }
