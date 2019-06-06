@@ -1,4 +1,4 @@
-﻿/*11/7/2018 11:38:13*/
+﻿/*6/6/2019 08:10:38*/
 using System.Globalization;
 using System.Reflection;
 
@@ -623,7 +623,7 @@ namespace LagoVista.Core.Resources
 //Resources:IPCameraResources:YouCanView
 
 		public static string YouCanView { get { return GetResourceString("YouCanView"); } }
-//Resources:LagoVistaCommonStrings:Common_Description
+//Resources:LagoVistaCommonStrings:Address_Address1
 
 		public static class Names
 		{
@@ -781,6 +781,57 @@ namespace LagoVista.Core.Resources
 			return new HtmlString(str);
         }*/
 		
+		public static string Address_Address1 { get { return GetResourceString("Address_Address1"); } }
+//Resources:LagoVistaCommonStrings:Address_Address2
+
+		public static string Address_Address2 { get { return GetResourceString("Address_Address2"); } }
+//Resources:LagoVistaCommonStrings:Address_AddressType
+
+		public static string Address_AddressType { get { return GetResourceString("Address_AddressType"); } }
+//Resources:LagoVistaCommonStrings:Address_AddressType_Business
+
+		public static string Address_AddressType_Business { get { return GetResourceString("Address_AddressType_Business"); } }
+//Resources:LagoVistaCommonStrings:Address_AddressType_Other
+
+		public static string Address_AddressType_Other { get { return GetResourceString("Address_AddressType_Other"); } }
+//Resources:LagoVistaCommonStrings:Address_AddressType_Residential
+
+		public static string Address_AddressType_Residential { get { return GetResourceString("Address_AddressType_Residential"); } }
+//Resources:LagoVistaCommonStrings:Address_AddressType_Select
+
+		public static string Address_AddressType_Select { get { return GetResourceString("Address_AddressType_Select"); } }
+//Resources:LagoVistaCommonStrings:Address_City
+
+		public static string Address_City { get { return GetResourceString("Address_City"); } }
+//Resources:LagoVistaCommonStrings:Address_Country
+
+		public static string Address_Country { get { return GetResourceString("Address_Country"); } }
+//Resources:LagoVistaCommonStrings:Address_Description
+
+		public static string Address_Description { get { return GetResourceString("Address_Description"); } }
+//Resources:LagoVistaCommonStrings:Address_GeoLocation
+
+		public static string Address_GeoLocation { get { return GetResourceString("Address_GeoLocation"); } }
+//Resources:LagoVistaCommonStrings:Address_Help
+
+		public static string Address_Help { get { return GetResourceString("Address_Help"); } }
+//Resources:LagoVistaCommonStrings:Address_PostalCode
+
+		public static string Address_PostalCode { get { return GetResourceString("Address_PostalCode"); } }
+//Resources:LagoVistaCommonStrings:Address_StateOrProvince
+
+		public static string Address_StateOrProvince { get { return GetResourceString("Address_StateOrProvince"); } }
+//Resources:LagoVistaCommonStrings:Address_Title
+
+		public static string Address_Title { get { return GetResourceString("Address_Title"); } }
+//Resources:LagoVistaCommonStrings:Address_UnitNumber
+
+		public static string Address_UnitNumber { get { return GetResourceString("Address_UnitNumber"); } }
+//Resources:LagoVistaCommonStrings:Address_UnitNumber_Help
+
+		public static string Address_UnitNumber_Help { get { return GetResourceString("Address_UnitNumber_Help"); } }
+//Resources:LagoVistaCommonStrings:Common_Description
+
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
 //Resources:LagoVistaCommonStrings:Common_IsPublic
 
@@ -797,6 +848,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_No
 
 		public static string Common_No { get { return GetResourceString("Common_No"); } }
+//Resources:LagoVistaCommonStrings:Common_Notes
+
+		public static string Common_Notes { get { return GetResourceString("Common_Notes"); } }
 //Resources:LagoVistaCommonStrings:Common_PleaseWait
 
 		public static string Common_PleaseWait { get { return GetResourceString("Common_PleaseWait"); } }
@@ -813,12 +867,30 @@ namespace LagoVista.Core.Resources
 
 		public static class Names
 		{
+			public const string Address_Address1 = "Address_Address1";
+			public const string Address_Address2 = "Address_Address2";
+			public const string Address_AddressType = "Address_AddressType";
+			public const string Address_AddressType_Business = "Address_AddressType_Business";
+			public const string Address_AddressType_Other = "Address_AddressType_Other";
+			public const string Address_AddressType_Residential = "Address_AddressType_Residential";
+			public const string Address_AddressType_Select = "Address_AddressType_Select";
+			public const string Address_City = "Address_City";
+			public const string Address_Country = "Address_Country";
+			public const string Address_Description = "Address_Description";
+			public const string Address_GeoLocation = "Address_GeoLocation";
+			public const string Address_Help = "Address_Help";
+			public const string Address_PostalCode = "Address_PostalCode";
+			public const string Address_StateOrProvince = "Address_StateOrProvince";
+			public const string Address_Title = "Address_Title";
+			public const string Address_UnitNumber = "Address_UnitNumber";
+			public const string Address_UnitNumber_Help = "Address_UnitNumber_Help";
 			public const string Common_Description = "Common_Description";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
 			public const string Common_Loading = "Common_Loading";
 			public const string Common_Name = "Common_Name";
 			public const string Common_No = "Common_No";
+			public const string Common_Notes = "Common_Notes";
 			public const string Common_PleaseWait = "Common_PleaseWait";
 			public const string Common_Yes = "Common_Yes";
 			public const string ErrorMakingCall = "ErrorMakingCall";
