@@ -11,7 +11,7 @@ namespace LagoVista.Core.Models
     /* The AppUser is used for managing identity for the system, we want something with basic user information that doesn't
      * do anything with security or identity...this is that object */
 
-    [EntityDescription(Domain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_Title, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
+    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_Title, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
     public class UserInfo : IUserInfo
     {
         public String Id { get; set; }

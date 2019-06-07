@@ -24,8 +24,6 @@ namespace LagoVista.Core.Models
         public const string AddressType_Residential = "residential";
         public const string AddressType_Other = "other";
 
-        [FormField(LabelResource: Resources.LagoVistaCommonStrings.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.LagoVistaCommonStrings))]
-        public string Name { get; set; }
         [FormField(LabelResource: Resources.LagoVistaCommonStrings.Names.Address_AddressType, FieldType: FieldTypes.Picker, WaterMark: Resources.LagoVistaCommonStrings.Names.Address_AddressType_Select, ResourceType: typeof(Resources.LagoVistaCommonStrings))]
         public string AddressType { get; set; }
         [FormField(LabelResource: Resources.LagoVistaCommonStrings.Names.Address_GeoLocation, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.LagoVistaCommonStrings))]

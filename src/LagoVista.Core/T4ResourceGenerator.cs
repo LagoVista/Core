@@ -1,4 +1,4 @@
-﻿/*6/6/2019 08:10:38*/
+﻿/*6/6/2019 16:31:41*/
 using System.Globalization;
 using System.Reflection;
 
@@ -857,6 +857,24 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Yes
 
 		public static string Common_Yes { get { return GetResourceString("Common_Yes"); } }
+//Resources:LagoVistaCommonStrings:Company_Description
+
+		public static string Company_Description { get { return GetResourceString("Company_Description"); } }
+//Resources:LagoVistaCommonStrings:Company_Help
+
+		public static string Company_Help { get { return GetResourceString("Company_Help"); } }
+//Resources:LagoVistaCommonStrings:Company_Title
+
+		public static string Company_Title { get { return GetResourceString("Company_Title"); } }
+//Resources:LagoVistaCommonStrings:Contact_Description
+
+		public static string Contact_Description { get { return GetResourceString("Contact_Description"); } }
+//Resources:LagoVistaCommonStrings:Contact_Help
+
+		public static string Contact_Help { get { return GetResourceString("Contact_Help"); } }
+//Resources:LagoVistaCommonStrings:Contact_Title
+
+		public static string Contact_Title { get { return GetResourceString("Contact_Title"); } }
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
@@ -893,6 +911,12 @@ namespace LagoVista.Core.Resources
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_PleaseWait = "Common_PleaseWait";
 			public const string Common_Yes = "Common_Yes";
+			public const string Company_Description = "Company_Description";
+			public const string Company_Help = "Company_Help";
+			public const string Company_Title = "Company_Title";
+			public const string Contact_Description = "Contact_Description";
+			public const string Contact_Help = "Contact_Help";
+			public const string Contact_Title = "Contact_Title";
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string NoConnection = "NoConnection";
 		}

@@ -195,6 +195,24 @@
   <data name="Common_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Company_Description" xml:space="preserve">
+    <value>Stores company information</value>
+  </data>
+  <data name="Company_Help" xml:space="preserve">
+    <value>Stores company information</value>
+  </data>
+  <data name="Company_Title" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Contact_Description" xml:space="preserve">
+    <value>Stores contact information</value>
+  </data>
+  <data name="Contact_Help" xml:space="preserve">
+    <value>Stores contact information</value>
+  </data>
+  <data name="Contact_Title" xml:space="preserve">
+    <value>Contact</value>
+  </data>
   <data name="ErrorMakingCall" xml:space="preserve">
     <value>Sorry, there was an error talking to the server, please try again later.</value>
   </data>
