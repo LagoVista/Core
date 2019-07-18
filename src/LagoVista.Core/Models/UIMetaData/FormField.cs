@@ -22,6 +22,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public const string FieldType_Key = "Key";
         public const string FieldType_LinkButton = "LinkButton";
         public const string FieldType_ChildList = "ChildList";
+        public const string FieldType_ChildView = "ChildView";
+        public const string FieldType_ChildItem = "ChildItem";
         public const string FieldType_Decimal = "Decimal";
         public const string FieldType_Integer = "Integer";
         public const string FieldType_Bool = "Bool";
@@ -50,10 +52,13 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsVisible { get; set; }
         public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
+        public IDictionary<string, FormField> FormFields { get; set; }
         
-        public static  FormField Create(String name, FormFieldAttribute attr)
+        public static FormField Create(String name, FormFieldAttribute attr, PropertyInfo property)
         {
             var field = new FormField();
+            field.Name = name;
+            field.FieldType = attr.FieldType.ToString();
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
@@ -64,6 +69,24 @@ namespace LagoVista.Core.Models.UIMetaData
 
                 var labelProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelDisplayResource);
                 field.Label = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
+            }
+
+            if(field.FieldType == FormField.FieldType_ChildView)
+            {
+                field.FormFields = new Dictionary<string, FormField>();
+
+                var childProperties = property.PropertyType.GetRuntimeProperties();
+                foreach (var childProperty in childProperties)
+                {
+                    var fieldAttributes = childProperty.GetCustomAttributes<FormFieldAttribute>();
+                    if (fieldAttributes.Any())
+                    {
+                        var camelCaseName = childProperty.Name.Substring(0, 1).ToLower() + childProperty.Name.Substring(1);
+                        var childField = FormField.Create(camelCaseName, fieldAttributes.First(), childProperty);
+                        field.FormFields.Add(camelCaseName, field);
+                    }
+                }
+                return field;
             }
 
             field.IsRequired = attr.IsRequired;
@@ -85,9 +108,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
-            field.IsUserEditable = attr.IsUserEditable;
-            field.FieldType = attr.FieldType.ToString();
-            field.Name = name;
+            field.IsUserEditable = attr.IsUserEditable;            
             field.MinLength = attr.MinLength;
             field.MaxLength = attr.MaxLength;
             field.IsEnabled = true;

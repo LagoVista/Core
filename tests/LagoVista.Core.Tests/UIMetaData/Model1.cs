@@ -34,5 +34,8 @@ namespace LagoVista.Core.Tests.UIMetaData
 
         [FormField(LabelResource: MetaDataResources.Names.Field4_Label, FieldType:FieldTypes.Picker, EnumType:typeof(EnumValues), ResourceType: typeof(MetaDataResources))]
         public EntityHeader EnumField { get; set; }
+
+        [FormField(LabelResource: MetaDataResources.Names.Field5_Label, FieldType: FieldTypes.ChildView, ResourceType: typeof(MetaDataResources))]
+        public Model2 Field5 { get; set; }
     }
 }

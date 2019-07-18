@@ -44,7 +44,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 if (fieldAttributes.Any())
                 {
                     var camelCaseName = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
-                    var field = FormField.Create(camelCaseName, fieldAttributes.First());
+                    var field = FormField.Create(camelCaseName, fieldAttributes.First(), property);
                     var defaultValue = property.GetValue(model);
                     if (defaultValue != null)
                     {

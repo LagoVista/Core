@@ -21,7 +21,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
                 if (fieldAttributes.Any())
                 {
-                    entityDescription.Elements.Add(FormField.Create(property.Name, fieldAttributes.First()));
+                    entityDescription.Elements.Add(FormField.Create(property.Name, fieldAttributes.First(), property));
                 }
 
                 var listAttributes = property.GetCustomAttributes<ListColumnAttribute>();

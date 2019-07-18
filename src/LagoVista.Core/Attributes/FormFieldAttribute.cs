@@ -27,6 +27,7 @@ namespace LagoVista.Core.Attributes
         Bool,
         ChildList,
         ChildItem,
+        ChildView,
         NodeScript,
         JsonDateTime,
         NameSpace,
@@ -35,7 +36,7 @@ namespace LagoVista.Core.Attributes
         GeoLocation,
         EntityHeaderPicker,
         Byte,
-        Secret
+        Secret,
     }
 
     public enum NamespaceTypes
