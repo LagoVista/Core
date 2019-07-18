@@ -83,7 +83,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     {
                         var camelCaseName = childProperty.Name.Substring(0, 1).ToLower() + childProperty.Name.Substring(1);
                         var childField = FormField.Create(camelCaseName, fieldAttributes.First(), childProperty);
-                        field.FormFields.Add(camelCaseName, field);
+                        field.FormFields.Add(camelCaseName, childField);
                     }
                 }
                 return field;
