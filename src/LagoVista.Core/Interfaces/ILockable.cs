@@ -11,6 +11,5 @@ namespace LagoVista.Core.Interfaces
         EntityHeader LockedBy { get; set; }
 
         String LockedDateStamp { get; set; }
-
     }
 }
