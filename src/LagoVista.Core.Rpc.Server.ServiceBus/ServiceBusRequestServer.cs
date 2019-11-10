@@ -17,7 +17,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         #region Fields        
         private IConnectionSettings _subscriberSettings;
         private string _transmitterConnectionString;
-        private string _destinationEntityPath;
         private SubscriptionClient _subscriptionClient;
         #endregion
 

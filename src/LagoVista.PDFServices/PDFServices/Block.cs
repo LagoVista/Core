@@ -38,7 +38,7 @@ namespace LagoVista.PDFServices
         /// <summary>
         /// Represents a single word.
         /// </summary>
-        class Block
+        public class Block
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="Block"/> class.

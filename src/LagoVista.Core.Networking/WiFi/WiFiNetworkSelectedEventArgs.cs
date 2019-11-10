@@ -4,11 +4,11 @@ namespace LagoVista.Core.Networking.WiFi
 {
     public class WiFiNetworkSelectedEventArgs : EventArgs
     {
-        public WiFiNetworkSelectedEventArgs(WiFiAdapterId wiFiAdapaterId) : base()
+        public WiFiNetworkSelectedEventArgs(WiFiAdapter wiFiAdapater) : base()
         {
-            WiFiAdapaterId = wiFiAdapaterId ?? throw new ArgumentNullException(nameof(wiFiAdapaterId));
+            WiFiAdapater = wiFiAdapater ?? throw new ArgumentNullException(nameof(wiFiAdapater));
         }
 
-        public WiFiAdapterId WiFiAdapaterId { get; }
+        public WiFiAdapter WiFiAdapater { get; }
     }
 }

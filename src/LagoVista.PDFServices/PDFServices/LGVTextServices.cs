@@ -320,7 +320,7 @@ namespace LagoVista.PDFServices
 
         readonly List<Block> blocks = new List<Block>();
 
-        enum BlockType
+        public enum BlockType
         {
             Text, Space, Hyphen, LineBreak,
         }

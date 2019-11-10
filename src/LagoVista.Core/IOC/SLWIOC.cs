@@ -195,6 +195,19 @@ namespace LagoVista.Core.IOC
             return parameters;
         }
 
+        public static void Unregister<T>()
+        {
+            SLWIOC.Unregister(typeof(T));
+        }
+
+        public static void Unregister(Type type)
+        {
+            if(_registeredTypes.ContainsKey(type))
+            {
+                _registeredTypes.Remove(type);
+            }
+        }
+
         public static bool Contains(Type type)
         {
             return _registeredTypes.ContainsKey(type);

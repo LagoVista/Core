@@ -33,7 +33,7 @@ namespace LagoVista.Core
                 if (lon > 180 || lon < -180) return defaultValue;
 
                 ///NuvIoT doesn't include altitude...perhaps someday it should.
-                return new GeoLocation() { Latitude = lat, Longitude = lon };
+                return new GeoLocation(lat, lon);
             }
             else
             {

@@ -3,11 +3,11 @@
 namespace LagoVista.Core.Networking.WiFi
 {
 
-    public class WiFiAdapterId
+    public class WiFiAdapter
     {
-        public WiFiAdapterId() { }
+        public WiFiAdapter() { }
 
-        public WiFiAdapterId(string name, string id)
+        public WiFiAdapter(string name, string id)
         {
             Name = name;
             Id = id;
@@ -15,10 +15,6 @@ namespace LagoVista.Core.Networking.WiFi
 
         public string Name { get; }
         public string Id { get; }
-
-        public string Bssid { get; set; }
-
-        public double SignalStrengthDB { get; set; }
 
         public override string ToString()
         {

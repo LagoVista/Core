@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LagoVista.Core.Geo
+﻿namespace LagoVista.Core.Geo
 {
     public interface IGeoLocation
     {
-        double Altitude { get; set; }
-        string LastUpdated { get; set; }
-        double Latitude { get; set; }
-        double Longitude { get; set; }
+        double? Altitude { get; }
+        double ? Heading { get; }
+        string LastUpdated { get; }
+        double? Latitude { get; }
+        double? Longitude { get; }
+
+        double? AccuraceyMeters { get; }
+        double? Hdop { get; }
+        double? Vdop { get; }
+
+        bool HasLocation { get; }
+
+        int NumberSatellites { get; }
     }
 }
