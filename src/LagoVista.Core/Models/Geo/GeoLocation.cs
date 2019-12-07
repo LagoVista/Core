@@ -26,7 +26,7 @@ namespace LagoVista.Core.Models.Geo
             this.LastUpdated = DateTime.UtcNow.ToJSONString();
         }
 
-        public GeoLocation(double latitude, double longitude, double? altitude)  :this(latitude, longitude)
+        public GeoLocation(double latitude, double longitude, double? altitude) : this(latitude, longitude)
         {
             Altitude = altitude;
         }
@@ -52,22 +52,22 @@ namespace LagoVista.Core.Models.Geo
             NumberSatellites = numberSatellites;
         }
 
-        public double? Altitude { get; }
-        public string LastUpdated { get; }
-        public double? Latitude { get; }
-        public double? Longitude { get; }
+        public double? Altitude { get; set; }
+        public string LastUpdated { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
-        public double? AccuraceyMeters { get; }
+        public double? AccuraceyMeters { get; set; }
 
-        public double? Hdop { get; }
+        public double? Hdop { get; set; }
 
-        public double? Vdop { get;  }
+        public double? Vdop { get; set; }
 
         public bool HasLocation => Latitude.HasValue && Longitude.HasValue;
 
-        public double? Heading { get; }
+        public double? Heading { get; set; }
 
-        public int NumberSatellites {get;}
+        public int NumberSatellites { get; set; }
 
         /// <summary>
         /// Get distance between two points
@@ -76,7 +76,7 @@ namespace LagoVista.Core.Models.Geo
         /// <returns></returns>
         public double DistanceFrom(GeoLocation location, DistanceUnits distanceUnits = DistanceUnits.NauticalMiles)
         {
-            if(!HasLocation)
+            if (!HasLocation)
             {
                 return 0;
             }
@@ -93,10 +93,10 @@ namespace LagoVista.Core.Models.Geo
             double delta = Math.Atan2(y, x);
             var nm = delta.ToDegrees() * 60;
 
-            switch(distanceUnits)
+            switch (distanceUnits)
             {
                 case DistanceUnits.Kilometers: return nm * 1.852;
-                case DistanceUnits.Meters:return nm * 1852;
+                case DistanceUnits.Meters: return nm * 1852;
                 case DistanceUnits.Miles: return nm * 1.15077945;
             }
 
