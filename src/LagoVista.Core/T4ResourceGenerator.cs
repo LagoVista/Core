@@ -1,4 +1,4 @@
-﻿/*6/6/2019 16:31:41*/
+﻿/*1/4/2020 07:18:49*/
 using System.Globalization;
 using System.Reflection;
 
@@ -102,6 +102,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
+//Resources:AuthenticationResources:UserInfo_DateCreated
+
+		public static string UserInfo_DateCreated { get { return GetResourceString("UserInfo_DateCreated"); } }
 //Resources:AuthenticationResources:UserInfo_Description
 
 		public static string UserInfo_Description { get { return GetResourceString("UserInfo_Description"); } }
@@ -179,6 +182,7 @@ namespace LagoVista.Core.Resources
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
 			public const string Common_Role = "Common_Role";
 			public const string Common_Status = "Common_Status";
+			public const string UserInfo_DateCreated = "UserInfo_DateCreated";
 			public const string UserInfo_Description = "UserInfo_Description";
 			public const string UserInfo_Email = "UserInfo_Email";
 			public const string UserInfo_FirstName = "UserInfo_FirstName";

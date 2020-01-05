@@ -95,6 +95,7 @@ namespace LagoVista.Core.Models
             {
                 Id = Id,
                 Key = Id,
+                CreationDate = CreationDate,
                 Name = $"{FirstName} {LastName}",
                 Email = Email,
                 IsSystemAdmin = IsSystemAdmin,
@@ -121,6 +122,9 @@ namespace LagoVista.Core.Models
         
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsSystemAdmin, ResourceType: typeof(AuthenticationResources))]
         public bool IsSystemAdmin { get; set; }
+
+        [ListColumn(HeaderResource:AuthenticationResources.Names.UserInfo_DateCreated, ResourceType: typeof(AuthenticationResources))]
+        public string CreationDate { get; set; }
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsOrgAdmin, ResourceType: typeof(AuthenticationResources))]
         public bool IsOrgAdmin { get; set; }

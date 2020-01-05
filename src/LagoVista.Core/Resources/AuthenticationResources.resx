@@ -222,4 +222,7 @@
   <data name="UserInfo_IsAccountDisabled" xml:space="preserve">
     <value>Is Account Disabled</value>
   </data>
+  <data name="UserInfo_DateCreated" xml:space="preserve">
+    <value>Date Created</value>
+  </data>
 </root>
