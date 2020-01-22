@@ -113,12 +113,27 @@ namespace LagoVista.Core.Models.Geo
 
         public string ToNuvIoTFormat()
         {
-            return $"{Latitude.Value:0.0000000},{Longitude.Value:0.0000000}";
+            if (Latitude.HasValue && Longitude.HasValue)
+            {
+                return $"{Latitude.Value:0.0000000},{Longitude.Value:0.0000000}";
+            }
+            else
+            {
+                return $"0.0000000,0.0000000";
+            }
         }
 
         public override string ToString()
         {
-            return $"Latitude = {Latitude.Value:0.0000000}; Longitude = {Longitude.Value:0.0000000}";
+            if (Latitude.HasValue && Longitude.HasValue)
+            {
+                return $"Latitude = {Latitude.Value:0.0000000}; Longitude = {Longitude.Value:0.0000000}";
+            }
+            else
+            {
+                return $"Latitude = ?; Longitude = ?";
+            }
+
         }
     }
 }
