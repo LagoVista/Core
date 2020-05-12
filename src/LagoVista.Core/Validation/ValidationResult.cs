@@ -22,13 +22,13 @@ namespace LagoVista.Core.Validation
         public List<ErrorMessage> Warnings { get; private set; }
         public List<ErrorMessage> Errors { get; private set; }
 
-        public void AddUserError(String error)
+        public void AddUserError(String error, string context = null)
         {
-            Errors.Add(new ErrorMessage(error));
+            Errors.Add(new ErrorMessage(error) { Context = context });
         }
-        public void AddSystemError(String error)
+        public void AddSystemError(String error, string context = null)
         {
-            Errors.Add(new ErrorMessage(error, true));
+            Errors.Add(new ErrorMessage(error, true) { Context = context });
         }
 
         public InvokeResult<T> ToActionResult<T>(T result)
