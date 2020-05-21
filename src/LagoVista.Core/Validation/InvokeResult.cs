@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace LagoVista.Core.Validation
 {
@@ -165,6 +166,25 @@ namespace LagoVista.Core.Validation
                 }
             }
             return kvps.ToArray();
+        }
+
+        public override string ToString()
+        {
+            var bldr = new StringBuilder();
+            if (Errors.Count == 0)
+            {
+                bldr.Append("Success");
+            }
+            else
+            {
+                bldr.Append("Failed: ");
+                foreach(var err in Errors)
+                {
+                    bldr.Append($" {err};");
+                }
+            }
+
+            return bldr.ToString();
         }
     }
 }
