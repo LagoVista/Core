@@ -20,11 +20,15 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private string _transmitterConnectionSettings;
         private string _serverTopicPrefix;
         private SubscriptionClient _subscriptionClient;
-        ILogger _logger;
         #endregion
 
         private async Task CreateTopicAsync(string entityPath)
         {
+            if(_topicConstructorSettings == null)
+            {
+                throw new ArgumentNullException(nameof(_topicConstructorSettings));
+            }
+
             var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
             var client = new ManagementClient(connstr);
@@ -42,8 +46,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             ILogger logger) :
             base(asyncCoupler, logger)
         {
-            _logger = logger;
-
         }
 
         protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
@@ -82,6 +84,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
             _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
+            Console.WriteLine($"RPC Subscription Created {sourceEntityPath} - {subscriptionPath}");
 
             var options = new MessageHandlerOptions(HandleException)
             {
@@ -142,6 +145,8 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             await CreateTopicAsync(entityPath);
 
+            Console.WriteLine($"Sending message async entity: {_transmitterConnectionSettings} - {entityPath} - {message.DestinationPath} - {message.Payload} - {message.ReplyPath}");
+
             var topicClient = new TopicClient(_transmitterConnectionSettings, entityPath, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
             try
             {
@@ -169,7 +174,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                 }
             }
             catch //(Exception ex)
-            {
+            {                
                 //todo: ML - log exception
                 throw;
             }

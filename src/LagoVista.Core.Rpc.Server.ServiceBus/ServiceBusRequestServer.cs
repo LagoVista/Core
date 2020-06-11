@@ -120,9 +120,12 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                 MaxConcurrentCalls = 100,
 #endif
             };
+
             _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
 
-            return Task.FromResult(default(object));
+            Console.WriteLine($"Starting ServiceBusRequestServer - {_subscriberSettings.Uri} - {_subscriberSettings.ResourceName}");
+
+            return Task.CompletedTask;
         }
 
         protected override async Task CustomTransmitMessageAsync(IMessage message)
