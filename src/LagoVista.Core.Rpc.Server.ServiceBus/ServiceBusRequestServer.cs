@@ -2,6 +2,7 @@
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
+using LagoVista.Core.Validation;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
 using System;
@@ -12,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Server.ServiceBus
 {
+    /* 
+     * In this case, the server is the component that is accepting requests to be processed, it is 
+     * running on the instance.
+     */
     public sealed class ServiceBusRequestServer : AbstractRequestServer
     {
         #region Fields        
@@ -128,7 +133,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             return Task.CompletedTask;
         }
 
-        protected override async Task CustomTransmitMessageAsync(IMessage message)
+        protected override async Task<InvokeResult> CustomTransmitMessageAsync(IMessage message)
         {
             // no need to create topic - we wouldn't even be here if the other side hadn't done it's part
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
@@ -158,6 +163,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                     };
 
                     await topicClient.SendAsync(messageOut);
+                    return InvokeResult.Success;
                 }
             }
             catch (Exception ex)

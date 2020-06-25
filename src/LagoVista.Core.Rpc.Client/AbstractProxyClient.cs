@@ -3,6 +3,7 @@ using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using LagoVista.Core.Rpc.Settings;
+using LagoVista.Core.Validation;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,23 +32,11 @@ namespace LagoVista.Core.Rpc.Client
         /// <summary>
         /// receives responses from the server
         /// </summary>
-        public async Task ReceiveAsync(IMessage message)
+        public async Task<InvokeResult> ReceiveAsync(IMessage message)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            if (message == null)  throw new ArgumentNullException(nameof(message));
 
-            var invokeResult = await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
-
-            if (!invokeResult.Successful)
-            {
-                var error = invokeResult.Errors.FirstOrDefault();
-                if (error != null)
-                {
-                    throw new RpcException(RpcException.FormatErrorMessage(error, "AsyncCoupler failed to complete message with error:"));
-                }
-            }
+            return await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
         }
 
         public bool IsRunning { get; private set; } = false;
@@ -84,17 +73,13 @@ namespace LagoVista.Core.Rpc.Client
         /// <summary>
         /// transmits requests and waits on response
         /// </summary>
-        public async Task TransmitAsync(IMessage message)
+        public async Task<InvokeResult> TransmitAsync(IMessage message)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            await CustomTransmitMessageAsync(message);
+            if (message == null) throw new ArgumentNullException(nameof(message));
+            return await CustomTransmitMessageAsync(message);
         }
 
-        protected abstract Task CustomTransmitMessageAsync(IMessage message);
+        protected abstract Task<InvokeResult> CustomTransmitMessageAsync(IMessage message);
 
         #endregion
     }

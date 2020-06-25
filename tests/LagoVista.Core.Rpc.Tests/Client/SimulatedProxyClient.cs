@@ -4,6 +4,7 @@ using LagoVista.Core.Rpc.Client;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using LagoVista.Core.Rpc.Tests.Middelware;
+using LagoVista.Core.Validation;
 using System;
 using System.Threading.Tasks;
 
@@ -35,9 +36,10 @@ namespace LagoVista.Core.Rpc.Tests.Client
             return Task.FromResult<object>(null);
         }
 
-        protected override async Task CustomTransmitMessageAsync(IMessage message)
+        protected override async Task<InvokeResult> CustomTransmitMessageAsync(IMessage message)
         {
             await _queue.SendAsync((IRequest)message);
+            return InvokeResult.Success;
         }
     }
 }

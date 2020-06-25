@@ -2,6 +2,7 @@
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
 using LagoVista.Core.Rpc.Settings;
+using LagoVista.Core.Validation;
 using System;
 using System.Threading.Tasks;
 
@@ -35,17 +36,17 @@ namespace LagoVista.Core.Rpc.Server
             IsRunning = true;
         }        
 
-        public async Task TransmitAsync(IMessage message)
+        public async Task<InvokeResult> TransmitAsync(IMessage message)
         {
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
 
-            await CustomTransmitMessageAsync(message);
+            return await CustomTransmitMessageAsync(message);
         }
 
-        public async Task ReceiveAsync(IMessage message)
+        public async Task<InvokeResult> ReceiveAsync(IMessage message)
         {
             if (message == null)
             {
@@ -53,7 +54,7 @@ namespace LagoVista.Core.Rpc.Server
             }
 
             var response = await _requestBroker.InvokeAsync((IRequest)message);
-            await TransmitAsync(response);
+            return await TransmitAsync(response);
         }
 
         protected abstract void ConfigureSettings(ITransceiverConnectionSettings settings);
@@ -61,7 +62,7 @@ namespace LagoVista.Core.Rpc.Server
 
 
         protected abstract Task CustomStartAsync();
-        protected abstract Task CustomTransmitMessageAsync(IMessage message);
+        protected abstract Task<InvokeResult> CustomTransmitMessageAsync(IMessage message);
 
 
         public Task RefreshConnection(ITransceiverConnectionSettings connectionSettings)

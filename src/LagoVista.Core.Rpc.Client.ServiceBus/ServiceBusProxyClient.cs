@@ -2,6 +2,7 @@
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
+using LagoVista.Core.Validation;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
 using System;
@@ -12,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Client.ServiceBus
 {
+    /* 
+     * The client is the component that is actually making requests of a remote server (which happens
+     * to be some sort of IoT runtime instance)
+     */
     public sealed class ServiceBusProxyClient : AbstractProxyClient
     {
         #region Fields
@@ -113,8 +118,16 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     {
                         decompressorStream.CopyTo(decompressedStream);
 
-                        await ReceiveAsync(new Response(decompressedStream.ToArray()));
-                        await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
+                        /* 
+                         * it is possible that this may not be the client that asked for the RPC request
+                         * but it could be the one that consumed the message.  If this is the case the 
+                         * asyn coupler will say, nope I didn't ask for this and will not processe it.
+                         * return it back to the pool to see if another client can handle it.
+                         */ 
+                        if((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful) 
+                            await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
+                        else
+                            await _subscriptionClient.AbandonAsync(message.SystemProperties.LockToken);
                     }
                 }
             }
@@ -139,7 +152,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         #region Rpc Transmitter Methods
 
-        protected override async Task CustomTransmitMessageAsync(IMessage message)
+        protected override async Task<InvokeResult> CustomTransmitMessageAsync(IMessage message)
         {
             var entityPath = $"{_serverTopicPrefix}_{message.InstanceId}".ToLower();
 
@@ -171,6 +184,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     };
 
                     await topicClient.SendAsync(messageOut);
+                    return InvokeResult.Success;
                 }
             }
             catch //(Exception ex)
