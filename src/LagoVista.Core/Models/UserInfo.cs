@@ -140,8 +140,14 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
         public String Name { get; set; }
+
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_Email, ResourceType: typeof(AuthenticationResources))]
         public String Email { get; set; }
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_PhoneNumber, ResourceType: typeof(AuthenticationResources))]
+        public String PhoneNumber { get; set; }
+
+
         [ListColumn(Visible: false)]
         public ImageDetails ProfileImageUrl { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsEmailConfirmed, ResourceType: typeof(AuthenticationResources))]

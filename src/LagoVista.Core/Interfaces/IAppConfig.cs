@@ -38,6 +38,8 @@ namespace LagoVista.Core.Interfaces
         Environments Environment { get; }
         AuthTypes AuthType { get; }
 
+        EntityHeader SystemOwnerOrg { get; }
+
         String WebAddress { get; }
 
         String CompanyName { get; }
