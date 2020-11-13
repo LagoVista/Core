@@ -131,6 +131,17 @@ namespace LagoVista.Core
             return value.Length == 32;
         }
 
+        public static bool IsValidId(this string id)
+        {
+            if(String.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            var regEx = new Regex("^[0-9A-F]{32}$");
+            return regEx.Match(id).Success;
+        }
+
         public static DateTime ToDateTime(this string value)
         {
             if (String.IsNullOrEmpty(value))
@@ -163,14 +174,14 @@ namespace LagoVista.Core
                 }
             }
 
-            if(value.Length < 19)
+            if (value.Length < 19)
             {
                 throw new Exception("Input Time Too Short, minimum is yyy-mm-ddThh:mm:ssZ");
             }
 
             var normalizedValue = NormalizeFormatString(value);
 
-            if(DateTime.TryParseExact(normalizedValue, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime dateTime))
+            if (DateTime.TryParseExact(normalizedValue, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime dateTime))
             {
                 return dateTime.ToUniversalTime();
             }
