@@ -29,7 +29,8 @@ namespace LagoVista.Core.Interfaces
         Color ButtonBackground { get; }
         Color ButtonBorder { get; }
         Color ButtonForeground { get; }
-
+            
+        Color ListItemColor { get; }
 
         Color ButtonBackgroundActive { get; }
         Color ButtonBorderActive { get; }
@@ -38,5 +39,20 @@ namespace LagoVista.Core.Interfaces
         Color HighlightColor { get; }
 
         Color RowSeperatorColor { get; }
+
+        string HeaderFont { get; }
+        string ContentFont { get; }
+        string LabelFont { get; }
+        string EntryFont { get; }
+        string MenuFont { get; }
+        string ListItemFont { get; }
+
+
+        double HeaderFontSize { get; }
+        double LabelFontSize { get; }
+        double EntryFontSize { get; }
+        double ContentFontSize { get; }
+        double MenuFontSize { get; }
+        double ListItemFontSize { get; }
     }
 }
