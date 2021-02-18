@@ -30,6 +30,16 @@
         public EntityHeader Organization { get; set; }
 
         /// <summary>
+        /// User that requested the report (optional)
+        /// </summary>
+        public EntityHeader RequestedByUser { get; set; }
+
+        /// <summary>
+        /// True if this was initiated by a schedule false, if by a user.
+        /// </summary>
+        public bool Scheduled { get; set; }
+
+        /// <summary>
         /// Procesor will be used to determine which queue will be used to process the job
         /// </summary>
         public EntityHeader Processor { get; set; }
