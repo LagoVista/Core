@@ -17,13 +17,28 @@
         public string Id { get; set; }
 
         /// <summary>
+        /// This is the ID that will be used to send notifications as to job status via a push mechanism, consumers
+        /// can subscribe to this, primarily through a web socket.
+        /// </summary>
+        public string NotificationId { get; set; }
+
+        /// <summary>
         /// Used to identify the job type id, this is usually specific to the job that will be picked up
         /// the processor needs to know how to handle the job.
         /// 
         /// It will be specific to the processoor.
         /// </summary>
         public EntityHeader JobType { get; set; }
-        
+
+        /// <summary>
+        /// In some cases a job/report may have versions that we want to run in parallel,
+        /// this can be added in the JobVersion field if present, if not it will use the 
+        /// most current or the one default one associated with the job/report
+        /// 
+        /// It will be specific to the processoor.
+        /// </summary>
+        public EntityHeader JobVersion { get; set; }
+
         /// <summary>
         /// Name of the organization
         /// </summary>
