@@ -50,6 +50,12 @@
         public EntityHeader RequestedByUser { get; set; }
 
         /// <summary>
+        /// Distribution list of users that should be notified when this job has been completed
+        /// as well as receive any work products generated from this job.
+        /// </summary>
+        public EntityHeader DistroList { get; set; }
+
+        /// <summary>
         /// True if this was initiated by a schedule false, if by a user.
         /// </summary>
         public bool Scheduled { get; set; }
