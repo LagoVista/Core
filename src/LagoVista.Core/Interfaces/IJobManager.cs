@@ -14,8 +14,7 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult> MarkJobAsQueued(string jobId, string jobTypeId);
         Task<InvokeResult> MarkJobAsStarted(string jobId, string jobTypeId);
         Task<InvokeResult> UpdateJobProgress(string jobId, string jobTypeId, int percent);
-        Task<InvokeResult> MarkJobAsCompletedAsync(string jobId, string jobTypeId, string message = "");
-        Task<InvokeResult> MarkJobAsFailedAsync(string jobId, string jobTypeId, string error);
-
+        Task<InvokeResult> MarkJobAsCompletedAsync(JobOutput output);
+        Task<InvokeResult> MarkJobAsFailedAsync(JobOutput output);
     }
 }
