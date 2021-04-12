@@ -228,7 +228,7 @@ namespace LagoVista.Core.Models
                 }
             }
 
-            throw new Exception($"Cannot map type {typeof(T).Name} to Entity Header.");
+            throw new Exception($"Not an enum type, Cannot map type {typeof(T).Name} to Entity Header.");
         }
 
         public new EntityHeader<T> Clone()
