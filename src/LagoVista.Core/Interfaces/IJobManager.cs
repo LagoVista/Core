@@ -7,7 +7,8 @@ namespace LagoVista.Core.Interfaces
 {
     public interface IJobManager
     {
-        Task<InvokeResult<string>> QueueJobAsync(Job job);
+        Task<InvokeResult<string>> EnqueueScheduledReportAsync(string scheduledReportId);
+        Task<InvokeResult<string>> EnqueueJobAsync(Job job);
         Task<ListResponse<Job>> GetJobsForJobTypeAsync(string jobTypeId, ListRequest request);
         Task<Job> GetJobAsync(string jobId, string jobTypeId);
         Task<string> GetJobPayloadAsync(string jobId, string jobTypeId);
