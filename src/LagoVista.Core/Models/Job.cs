@@ -61,6 +61,11 @@
         public bool Scheduled { get; set; }
 
         /// <summary>
+        /// If this report is scheduled, what schedule was this associated with.
+        /// </summary>
+        public EntityHeader ScheduledItem { get; set; }
+
+        /// <summary>
         /// Procesor will be used to determine which queue will be used to process the job
         /// </summary>
         public EntityHeader Processor { get; set; }
