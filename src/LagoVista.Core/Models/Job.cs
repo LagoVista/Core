@@ -109,5 +109,20 @@
         /// Payload for the job, will be stored in blob storage.
         /// </summary>
         public string Payload { get; set; }
+
+        /// <summary>
+        /// Type of artificat for this job
+        /// </summary>
+        public string ArtifactType { get; set; }
+
+        /// <summary>
+        /// ID of the artifact
+        /// </summary>
+        public string ArtifactId { get; set; }
+
+        /// <summary>
+        /// URL to dwownload the artifcat (this is a non public link)
+        /// </summary>
+        public string ArtifactUrl { get; set; }
     }
 }
