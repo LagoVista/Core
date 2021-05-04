@@ -9,6 +9,8 @@
         public double ExecutionTimeSeconds { get; set; }
         public string Notes { get; set; }
         public string Error { get; set; }
-        public string Artifact { get; set; }
+        public string ArtifactType { get; set; }
+        public string ArtifactId { get; set; }
+        public string ArtifactUrl { get; set; }
     }
 }
