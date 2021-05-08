@@ -124,5 +124,10 @@
         /// URL to dwownload the artifcat (this is a non public link)
         /// </summary>
         public string ArtifactUrl { get; set; }
+
+        /// <summary>
+        /// Notes to be passed along with the report.
+        /// </summary>
+        public string Notes { get; set; }
     }
 }
