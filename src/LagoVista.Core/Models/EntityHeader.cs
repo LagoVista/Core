@@ -20,6 +20,8 @@ namespace LagoVista.Core.Models
         }
         public String Text { get; set; }
 
+        public string Key { get; set; }
+
         public override string ToString()
         {
             return Text;
@@ -144,7 +146,7 @@ namespace LagoVista.Core.Models
 
         public EntityHeader Clone()
         {
-            return new EntityHeader() { Id = Id, Text = Text };
+            return new EntityHeader() { Id = Id, Text = Text, Key = Key };
         }
     }
 

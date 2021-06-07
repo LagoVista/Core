@@ -12,5 +12,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public int PageSize { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
+        public string GroupBy { get; set; }
+        public int GroupBySize { get; set; }
     }
 }
