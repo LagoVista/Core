@@ -130,12 +130,12 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if(attr.FieldType == FieldTypes.NameSpace)
             {
-                field.RegEx=@"^[a-z0-9]{6,30}$";
+                field.RegEx=@"^[a-z][a-z0-9]{5,30}$";
                 field.RegExMessage = ValidationResource.Validation_RegEx_Namespace;
             }
             else if (attr.FieldType == FieldTypes.Key)
             {
-                field.RegEx = @"^[a-z0-9]{3,30}$";
+                field.RegEx = @"^[a-z][a-z0-9]{2,50}$";
                 field.RegExMessage = ValidationResource.Common_Key_Validation;
             }
             else
