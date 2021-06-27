@@ -37,5 +37,40 @@ namespace LagoVista.Core
 
             throw new Exception("GetEnumLabel only works with Enums.");
         }
+
+        public static bool TryGetFromValue<TEnum>(this string value, out TEnum outValue) 
+        {
+            outValue = default(TEnum);
+            if(String.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+            
+            if (typeof(TEnum).GetTypeInfo().IsEnum)
+            {
+                var valueMember = typeof(TEnum).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == value.ToString()).FirstOrDefault();
+
+                var enumValues = Enum.GetValues(typeof(TEnum));
+                var len = enumValues.GetLength(0);
+                for (var idx = 0; idx < len; idx++)
+                {
+                    var enumValue = enumValues.GetValue(idx);
+                    var enumMember = typeof(TEnum).GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == enumValue.ToString()).FirstOrDefault();
+                    var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
+                    if (enumAttr != null)
+                    {
+                        if (enumAttr.Key == value)
+                        {
+                            outValue = (TEnum)enumValue;
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            throw new Exception("GetEnumLabel only works with Enums.");
+        }
     }
 }

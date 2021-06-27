@@ -34,5 +34,20 @@ namespace LagoVista.Core.Tests.Extensions
             Assert.AreEqual("Five","enum5".GetEnumLabel<SampleEnum>());
         }
 
+
+        [TestMethod]
+        public void ResolveStringToEnum()
+        {
+            SampleEnum enumValue;
+            Assert.IsTrue("enum5".TryGetFromValue<SampleEnum>(out enumValue));
+            Assert.AreEqual(SampleEnum.Enum5, enumValue);
+        }
+
+        [TestMethod]
+        public void Should_Fail_To_Resolve_Null_To_Enum()
+        {
+            SampleEnum enumValue;
+            Assert.IsFalse(((string)null).TryGetFromValue<SampleEnum>(out enumValue));
+        }
     }
 }
