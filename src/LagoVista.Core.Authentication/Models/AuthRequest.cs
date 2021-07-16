@@ -9,12 +9,12 @@ namespace LagoVista.Core.Authentication.Models
         public AuthTypes AuthType { get; set; } = AuthTypes.User;
 
         /// <summary>
-        /// Grant type supported are password and refreshtoken
+        /// Grant type supported are password and refresh token
         /// </summary>
         public string GrantType { get; set; }
 
         /// <summary>
-        /// Regsitered App Id for Calling Web Service
+        /// Registered App Id for Calling Web Service
         /// </summary>
         public string AppId { get; set; }
 
@@ -26,7 +26,7 @@ namespace LagoVista.Core.Authentication.Models
         public String DeviceRepoId { get; set; }
 
         /// <summary>
-        /// Unqiue Generated ID generated for the installation, will be generated from
+        /// Unique Generated ID generated for the installation, will be generated from
         /// server on initial install if not passed in as a parameter, if passed in
         /// as a parameter we will assume the user is just logging in for a second time.
         /// </summary>
@@ -42,7 +42,7 @@ namespace LagoVista.Core.Authentication.Models
         public string RefreshToken { get; set; }
 
         /// <summary>
-        /// If Present will login with the context of this user id, if not will use the login from the last logino
+        /// If Present will login with the context of this user id, if not will use the login from the last login
         /// </summary>
         public string OrgId { get; set; }
         public string OrgName { get; set; }
