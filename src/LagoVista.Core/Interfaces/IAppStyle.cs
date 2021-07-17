@@ -40,14 +40,23 @@ namespace LagoVista.Core.Interfaces
 
         Color RowSeperatorColor { get; }
 
+        Color TabForground { get; }
+        Color TabForgroundActive { get; }
+        Color TabBackgroundActive { get; }
+        Color TabBackground { get; }
+
+        Color TabBarBackground { get; }
+
         string HeaderFont { get; }
         string ContentFont { get; }
         string LabelFont { get; }
         string EntryFont { get; }
         string MenuFont { get; }
         string ListItemFont { get; }
+        string TabBarFont { get; }
 
-
+        double TabBarIconFontSize { get; }
+        double TabBarFontSize { get; }
         double HeaderFontSize { get; }
         double LabelFontSize { get; }
         double EntryFontSize { get; }

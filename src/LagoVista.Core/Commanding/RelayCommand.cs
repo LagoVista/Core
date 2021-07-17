@@ -109,6 +109,11 @@ namespace LagoVista.Core.Commanding
 
         public event EventHandler CanExecuteChanged;
 
+        public static RelayCommand<TParam> Create(Action<TParam> action)
+        {
+            return new RelayCommand<TParam>() { _cmdAction = action };
+        }
+
         public static RelayCommand<TParam> Create(Action<TParam> action, TParam parameter)
         {
             return new RelayCommand<TParam>() { _parameter = parameter, _cmdAction = action };
@@ -146,20 +151,20 @@ namespace LagoVista.Core.Commanding
             }
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object parameter = null)
         {
             if (!Enabled)
                 return false;
 
             if (_canExecuteParam != null)
-                return _canExecuteParam(_parameter);
+                return _canExecuteParam(parameter != null ? (TParam)parameter : _parameter);
 
             return true;
         }
 
-        public void Execute(object parameter)
+        public void Execute(object parameter = null)
         {
-            _cmdAction(_parameter);
+            _cmdAction(parameter != null ? (TParam)parameter : _parameter);
         }
     }
 
