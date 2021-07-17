@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Models;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.Core.Interfaces
 {
@@ -67,5 +68,7 @@ namespace LagoVista.Core.Interfaces
 
         bool EmitTestingCode { get; }
         VersionInfo Version { get; }
+
+        IEnumerable<AppSpecificSensorTypes>  AppSpecificSensorTypes { get; }
     }
 }

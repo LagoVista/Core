@@ -26,7 +26,7 @@
         /// Used to identify the job type id, this is usually specific to the job that will be picked up
         /// the processor needs to know how to handle the job.
         /// 
-        /// It will be specific to the processoor.
+        /// It will be specific to the processor.
         /// </summary>
         public EntityHeader JobType { get; set; }
 
@@ -35,7 +35,7 @@
         /// this can be added in the JobVersion field if present, if not it will use the 
         /// most current or the one default one associated with the job/report
         /// 
-        /// It will be specific to the processoor.
+        /// It will be specific to the processor.
         /// </summary>
         public EntityHeader JobVersion { get; set; }
 
@@ -111,7 +111,7 @@
         public string Payload { get; set; }
 
         /// <summary>
-        /// Type of artificat for this job
+        /// Type of artifact for this job
         /// </summary>
         public string ArtifactType { get; set; }
 
@@ -121,7 +121,7 @@
         public string ArtifactId { get; set; }
 
         /// <summary>
-        /// URL to dwownload the artifcat (this is a non public link)
+        /// URL to download the artifact (this is a non public link)
         /// </summary>
         public string ArtifactUrl { get; set; }
 

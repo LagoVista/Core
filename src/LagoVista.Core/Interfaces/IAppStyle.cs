@@ -9,6 +9,8 @@ namespace LagoVista.Core.Interfaces
     {
         Color TitleBarBackground { get; }
         Color TitleBarText { get; }
+        Color SectionHeaderColor { get; }
+
         Color PageBackground { get; }
         Color PageText { get; }
 
@@ -31,21 +33,22 @@ namespace LagoVista.Core.Interfaces
         Color ButtonForeground { get; }
             
         Color ListItemColor { get; }
+        Color ListItemDetailColor { get; }
+        Color RowSeperatorColor { get; }
 
         Color ButtonBackgroundActive { get; }
         Color ButtonBorderActive { get; }
         Color ButtonForegroundActive { get; }
 
         Color HighlightColor { get; }
-
-        Color RowSeperatorColor { get; }
+        
 
         Color TabForground { get; }
         Color TabForgroundActive { get; }
         Color TabBackgroundActive { get; }
         Color TabBackground { get; }
-
         Color TabBarBackground { get; }
+
 
         string HeaderFont { get; }
         string ContentFont { get; }
