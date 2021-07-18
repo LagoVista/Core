@@ -27,5 +27,13 @@ namespace LagoVista.Core.Models
         public string Description { get; set; }
         public string WebLink { get; set; }
         public int SensorConfigId { get; set; }
+
+        public bool HasConfigurableThreshold { get; set; } 
+
+        public double DefaultLowTolerance { get; set; }
+        public double DefaultHighTolerance { get; set; }
+
+        public string DefaultLowValueErrorCode { get; set; }
+        public string DefaultHighValueErrorCode { get; set; }
     }
 }
