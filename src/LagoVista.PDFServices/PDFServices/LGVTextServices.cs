@@ -32,9 +32,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Collections;
 using System.Text;
-using Didstopia.PDFSharp.Drawing;
-using Didstopia.PDFSharp.Drawing.Layout;
-using Didstopia.PDFSharp.Pdf.IO;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Drawing.Layout;
+using PdfSharpCore.Pdf.IO;
 
 namespace LagoVista.PDFServices
 {

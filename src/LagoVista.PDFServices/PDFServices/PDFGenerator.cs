@@ -1,13 +1,11 @@
-﻿using Didstopia.PDFSharp.Drawing;
-using Didstopia.PDFSharp.Pdf;
-using Didstopia.PDFSharp;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using Didstopia.PDFSharp.Fonts;
-using Didstopia.PDFSharp.Drawing.Layout;
 using System.IO;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Fonts;
 
 namespace LagoVista.PDFServices
 {
@@ -199,6 +197,32 @@ namespace LagoVista.PDFServices
             _textFormatter = new LGVTextServices(_graphics);
         }
 
+        public void AddLabelValue(String label, string value, XSolidBrush brush = null)
+        {
+            if (_renderMode == RenderMode.Table)
+            {
+                throw new Exception("Current render mode is table");
+            }
+
+            var width = _currentPage.Width - (Margin.Left + Margin.Right);
+            var labelFont = ResolveFont(Style.Body, XFontStyle.Bold);
+            var valueFont = ResolveFont(Style.Body, XFontStyle.Regular);
+
+            if (brush == null) brush = XBrushes.Black;
+
+            var labelHeight = _graphics.MeasureStringExact(label, labelFont, width).Height;
+            var valueHeight = _graphics.MeasureStringExact(label, valueFont, width).Height + ParagraphBottomMargin;
+            if (CurrentY + (labelHeight + valueHeight) + 50 > (_currentPage.Height - (Margin.Bottom)))
+            {
+                NewPage();
+            }
+
+            _graphics.DrawString(label, labelFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
+            CurrentY += labelHeight;
+            _graphics.DrawString(value, valueFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
+            CurrentY += valueHeight;
+        }
+
         public void AddHeader(Style style, String text, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
         {
             if (_renderMode == RenderMode.Table)
@@ -236,8 +260,49 @@ namespace LagoVista.PDFServices
             if (brush == null) brush = XBrushes.Black;
             var font = ResolveFont(Style.Body, fontStyle);
             var height = _graphics.MeasureStringExact(text, font, width.Value).Height + ParagraphBottomMargin;
+            if (CurrentY + (height) + 50 > (_currentPage.Height - (Margin.Bottom)))
+            {
+                NewPage();
+            }
+
             _textFormatter.DrawString(text, font, brush, new XRect(Margin.Left, CurrentY, _currentPage.Width - (Margin.Left + Margin.Right), height), align);
             CurrentY += height;
+        }
+
+        public void AddParagraph(String text, string label, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
+        {
+            if (_renderMode == RenderMode.Table)
+            {
+                throw new Exception("Current render mode is table");
+            }
+
+            if (align == null) align = XStringFormats.TopLeft;
+            if (!width.HasValue) width = _currentPage.Width;
+            if (brush == null) brush = XBrushes.Black;
+            var font = ResolveFont(Style.Body, fontStyle);
+            var labelFont = ResolveFont(Style.Body, XFontStyle.Bold);
+            var labelHeight = _graphics.MeasureStringExact(label, labelFont, width.Value).Height;
+            var height = _graphics.MeasureStringExact(text, font, width.Value).Height + ParagraphBottomMargin;
+
+            if (CurrentY + (labelHeight + height) + 50 > (_currentPage.Height - (Margin.Bottom)))
+            {
+                NewPage();
+            }
+
+            _graphics.DrawString(label, labelFont, brush, new XRect(Margin.Left, CurrentY, width.Value, 0), XStringFormats.TopLeft);
+            CurrentY += labelHeight;
+            _textFormatter.DrawString(text, font, brush, new XRect(Margin.Left, CurrentY, _currentPage.Width - (Margin.Left + Margin.Right), height), align);
+            CurrentY += height;
+        }
+
+        public void AddImage(MemoryStream ms, int maxWidth, int maxHeight)
+        {
+            using (var img = XImage.FromStream(() => ms))
+            {
+                Console.WriteLine("IMAGE HEIGHT: " + img.PointHeight.ToString());
+                _graphics.DrawImage(img, Margin.Left, CurrentY, img.PixelWidth, img.PointHeight);
+                CurrentY += img.PixelHeight;
+            }
         }
 
         public void AddColText(Style style, int colIdx, String text, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)

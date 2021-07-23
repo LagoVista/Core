@@ -28,8 +28,9 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using Didstopia.PDFSharp.Drawing;
-using Didstopia.PDFSharp.Drawing.Layout;
+
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Drawing.Layout;
 
 namespace LagoVista.PDFServices
 {

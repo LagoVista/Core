@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using Didstopia.PDFSharp.Drawing;
+using PdfSharpCore.Drawing;
 
 namespace LagoVista.PDFServices
 {

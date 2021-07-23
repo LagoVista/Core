@@ -1,10 +1,10 @@
-﻿using Didstopia.PDFSharp.Fonts;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using PdfSharpCore.Fonts;
 
 namespace LagoVista.PDFServices
 {

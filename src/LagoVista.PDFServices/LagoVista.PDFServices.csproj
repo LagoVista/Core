@@ -24,6 +24,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Didstopia.PDFSharp" Version="1.0.0-beta8" />
+    <PackageReference Include="PdfSharpCore" Version="1.2.17" />
   </ItemGroup>
 </Project>
