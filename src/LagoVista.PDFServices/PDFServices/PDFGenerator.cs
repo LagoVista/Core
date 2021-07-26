@@ -211,7 +211,7 @@ namespace LagoVista.PDFServices
             if (brush == null) brush = XBrushes.Black;
 
             var labelHeight = _graphics.MeasureStringExact(label, labelFont, width).Height;
-            var valueHeight = _graphics.MeasureStringExact(label, valueFont, width).Height + ParagraphBottomMargin;
+            var valueHeight = _graphics.MeasureStringExact(value, valueFont, width).Height + ParagraphBottomMargin;
             if (CurrentY + (labelHeight + valueHeight) + 50 > (_currentPage.Height - (Margin.Bottom)))
             {
                 NewPage();
@@ -221,6 +221,42 @@ namespace LagoVista.PDFServices
             CurrentY += labelHeight;
             _graphics.DrawString(value, valueFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
             CurrentY += valueHeight;
+        }
+
+
+        public void AddClickableLink(string name, string link, string description = "")
+        {
+            var fullPageWidth = _currentPage.Width - (Margin.Left + Margin.Right);
+            var valueFont = ResolveFont(Style.Body, XFontStyle.Regular);
+            var linkFont = ResolveFont(Style.Body, XFontStyle.Underline);
+            var linkBrush = XBrushes.Blue;
+            var valueSize = _graphics.MeasureStringExact(name, linkFont, fullPageWidth);
+            var valueWidth = valueSize.Width;
+            var valueHeight = valueSize.Height;
+
+            var rect = new XRect(Margin.Left, CurrentY, valueWidth, valueHeight);
+            var pdfRect = _graphics.Transformer.WorldToDefaultPage(rect);
+
+            _currentPage.AddWebLink(new PdfRectangle(pdfRect), link);
+            _graphics.DrawString(name, linkFont, linkBrush, rect, XStringFormats.TopLeft);
+
+            if (!String.IsNullOrEmpty(description))
+            {
+                var descriptionSize = _graphics.MeasureStringExact(description, valueFont, fullPageWidth - (100));
+                var descriptionWidth = descriptionSize.Width;   
+                var descriptionHeight = descriptionSize.Height;
+                Console.WriteLine($" {descriptionWidth} - {descriptionHeight}");
+
+                var brush = XBrushes.Black;
+                var descriptionRect = new XRect(Margin.Left + 100, CurrentY, descriptionWidth, descriptionHeight);
+                _textFormatter.DrawString(description, valueFont, brush, descriptionRect, XStringFormats.TopLeft);
+
+                CurrentY += descriptionHeight + ParagraphBottomMargin;
+            }
+            else
+            {
+                CurrentY += valueHeight;
+            }
         }
 
         public void AddHeader(Style style, String text, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
@@ -376,7 +412,6 @@ namespace LagoVista.PDFServices
                 }
             }
         }
-
 
         public void StartRow()
         {
