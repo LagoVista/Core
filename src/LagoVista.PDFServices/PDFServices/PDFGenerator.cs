@@ -307,6 +307,11 @@ namespace LagoVista.PDFServices
 
         public void AddParagraph(String text, string label, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
         {
+            if (String.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
             if (_renderMode == RenderMode.Table)
             {
                 throw new Exception("Current render mode is table");
@@ -335,9 +340,9 @@ namespace LagoVista.PDFServices
         {
             using (var img = XImage.FromStream(() => ms))
             {
-                Console.WriteLine("IMAGE HEIGHT: " + img.PointHeight.ToString());
-                _graphics.DrawImage(img, Margin.Left, CurrentY, img.PixelWidth, img.PointHeight);
-                CurrentY += img.PixelHeight;
+                var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
+                _graphics.DrawImage(img, Margin.Left, CurrentY, img.PixelWidth * scalingFactor, img.PointHeight * scalingFactor);
+                CurrentY += img.PixelHeight * scalingFactor;
             }
         }
 
