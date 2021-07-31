@@ -7,16 +7,30 @@ using LagoVista.Core.Validation;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
-    public class ListResponse<TModel>  : InvokeResult where TModel :class
-    {        
+    public interface IListResponse
+    {
+        string Title { get; }
+        string Help { get; }
+        IEnumerable<ListColumn> Columns { get; }
+
+        int PageSize { get; }
+        int PageIndex { get; }
+        int PageCount { get; }
+        string NextPartitionKey { get; }
+        string NextRowKey { get; }
+        bool HasMoreRecords { get; }
+    }
+
+    public class ListResponse<TModel> : InvokeResult, IListResponse where TModel : class
+    {
         public string Title { get; set; }
         public string Help { get; set; }
 
-        public IEnumerable<ListColumn> Columns { get;  set; }
+        public IEnumerable<ListColumn> Columns { get; set; }
 
-        public IEnumerable<TModel> Model { get;  set; }
+        public IEnumerable<TModel> Model { get; set; }
 
-        public int PageSize { get;  set; }
+        public int PageSize { get; set; }
         public int PageIndex { get; set; }
         public int PageCount { get; set; }
         public string NextPartitionKey { get; set; }
@@ -70,14 +84,14 @@ namespace LagoVista.Core.Models.UIMetaData
                 {
                     columns.Add(ListColumn.Create(property.Name.ToLower(), fieldAttributes.First()));
                 }
-            }            
+            }
 
             response.Columns = columns;
             response.PageSize = model.Count();
 
             return response;
         }
-
+        
         public static ListResponse<TModel> Create(ListRequest request, IEnumerable<TModel> model)
         {
             var response = ListResponse<TModel>.Create(model);
@@ -86,4 +100,32 @@ namespace LagoVista.Core.Models.UIMetaData
             return response;
         }
     }
+
+    public static class ListResponseExtensions
+    {
+        /// <summary>
+        /// Override to create a model from an existing list response (used to transform
+        /// between collection types while maintaining parameters such as page size, page count etc...).
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static ListResponse<TModel> Create<TModel>(this IListResponse source, IEnumerable<TModel> items) where TModel : class
+        {
+            return new ListResponse<TModel>()
+            {
+                Model = items,
+                Columns = source.Columns,
+
+                Help = source.Help,
+                Title = source.Title,
+                PageCount = source.PageCount,
+                PageIndex = source.PageIndex,
+                PageSize = source.PageSize,
+                NextPartitionKey = source.NextPartitionKey,
+                NextRowKey = source.NextRowKey,
+                HasMoreRecords = source.HasMoreRecords,
+            };
+        }
+    }
+
 }
