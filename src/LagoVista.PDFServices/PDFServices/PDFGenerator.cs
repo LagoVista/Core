@@ -54,7 +54,16 @@ namespace LagoVista.PDFServices
 
     public class Margin
     {
-        public double Top { get; set; }
+        public Margin() { }
+        public Margin(double value)
+        {
+            Top = value;
+            Bottom = value;
+            Left = value;
+            Right = value;
+        }
+
+        public double Top { get; set; } 
         public double Bottom { get; set; }
         public double Left { get; set; }
         public double Right { get; set; }
@@ -83,7 +92,7 @@ namespace LagoVista.PDFServices
 
         public double ColumnRightMargin { get; set; } = 10;
 
-        public double RowBottomMargin { get; set; } = 8;
+        public double RowBottomMargin { get; set; } = 4;
 
         public double ParagraphBottomMargin { get; set; } = 8;
 
@@ -162,11 +171,11 @@ namespace LagoVista.PDFServices
         {
             switch (style)
             {
-                case Style.H1: return new XFont("Roboto", 22, fontStyle);
-                case Style.H2: return new XFont("Roboto", 20, fontStyle);
-                case Style.H3: return new XFont("Roboto", 18, fontStyle);
-                case Style.H4: return new XFont("Roboto", 16, fontStyle);
-                case Style.H5: return new XFont("Roboto", 14, fontStyle);
+                case Style.H1: return new XFont("Roboto", 20, fontStyle);
+                case Style.H2: return new XFont("Roboto", 18, fontStyle);
+                case Style.H3: return new XFont("Roboto", 16, fontStyle);
+                case Style.H4: return new XFont("Roboto", 14, fontStyle);
+                case Style.H5: return new XFont("Roboto", 12, fontStyle);
                 case Style.Body: return new XFont("Roboto", 10, fontStyle);
                 case Style.ColHeader: return new XFont("Roboto", 10, fontStyle);
             }
@@ -197,7 +206,7 @@ namespace LagoVista.PDFServices
             _textFormatter = new LGVTextServices(_graphics);
         }
 
-        public void AddLabelValue(String label, string value, XSolidBrush brush = null)
+        public void AddLabelValue(String label, string value, XSolidBrush brush = null, bool horizontalAlign = false, double? labelWidth = null)
         {
             if (_renderMode == RenderMode.Table)
             {
@@ -210,6 +219,9 @@ namespace LagoVista.PDFServices
 
             if (brush == null) brush = XBrushes.Black;
 
+            if (labelWidth == null)
+                labelWidth = _graphics.MeasureStringExact(label, labelFont, width).Width;
+
             var labelHeight = _graphics.MeasureStringExact(label, labelFont, width).Height;
             var valueHeight = _graphics.MeasureStringExact(value, valueFont, width).Height + ParagraphBottomMargin;
             if (CurrentY + (labelHeight + valueHeight) + 50 > (_currentPage.Height - (Margin.Bottom)))
@@ -217,10 +229,20 @@ namespace LagoVista.PDFServices
                 NewPage();
             }
 
-            _graphics.DrawString(label, labelFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
-            CurrentY += labelHeight;
-            _graphics.DrawString(value, valueFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
-            CurrentY += valueHeight;
+            if (horizontalAlign)
+            {
+                _graphics.DrawString(label, labelFont, brush, new XRect(Margin.Left, CurrentY, labelWidth.Value, 0), XStringFormats.TopLeft);
+                _graphics.DrawString(value, valueFont, brush, new XRect(labelWidth.Value, CurrentY, width - labelWidth.Value, 0), XStringFormats.TopLeft);
+
+                CurrentY += valueHeight;
+            }
+            else
+            {
+                _graphics.DrawString(label, labelFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
+                CurrentY += labelHeight;
+                _graphics.DrawString(value, valueFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
+                CurrentY += valueHeight;
+            }
         }
 
 
@@ -243,7 +265,7 @@ namespace LagoVista.PDFServices
             if (!String.IsNullOrEmpty(description))
             {
                 var descriptionSize = _graphics.MeasureStringExact(description, valueFont, fullPageWidth - (100));
-                var descriptionWidth = descriptionSize.Width;   
+                var descriptionWidth = descriptionSize.Width;
                 var descriptionHeight = descriptionSize.Height;
                 Console.WriteLine($" {descriptionWidth} - {descriptionHeight}");
 
@@ -341,8 +363,8 @@ namespace LagoVista.PDFServices
             using (var img = XImage.FromStream(() => ms))
             {
                 var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
-                _graphics.DrawImage(img, Margin.Left, CurrentY, img.PixelWidth * scalingFactor, img.PointHeight * scalingFactor);
-                CurrentY += img.PixelHeight * scalingFactor;
+                _graphics.DrawImage(img, Margin.Left, CurrentY, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                CurrentY += img.PointHeight * scalingFactor;
             }
         }
 
