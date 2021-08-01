@@ -245,7 +245,6 @@ namespace LagoVista.PDFServices
             }
         }
 
-
         public void AddClickableLink(string name, string link, string description = "")
         {
             var fullPageWidth = _currentPage.Width - (Margin.Left + Margin.Right);
