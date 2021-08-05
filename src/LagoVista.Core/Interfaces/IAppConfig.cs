@@ -68,7 +68,5 @@ namespace LagoVista.Core.Interfaces
 
         bool EmitTestingCode { get; }
         VersionInfo Version { get; }
-
-        IEnumerable<AppSpecificSensorTypes>  AppSpecificSensorTypes { get; }
     }
 }
