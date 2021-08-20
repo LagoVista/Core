@@ -97,6 +97,50 @@ namespace LagoVista.Core.Tests.Extensions
         }
 
         [TestMethod]
+        public void DateValidation_DateOnly()
+        {
+            var dateStr = "2020-08-03";
+            var date = dateStr.ToDateTime();
+
+            Assert.AreEqual(2020, date.Year);
+            Assert.AreEqual(08, date.Month);
+            Assert.AreEqual(03, date.Day);
+        }
+
+        [TestMethod]
+        public void DateValidation_DateOnly1()
+        {
+            var dateStr = "2020-8-3";
+            var date = dateStr.ToDateTime();
+
+            Assert.AreEqual(2020, date.Year);
+            Assert.AreEqual(08, date.Month);
+            Assert.AreEqual(03, date.Day);
+        }
+
+        [TestMethod]
+        public void DateValidation_DateOnly2()
+        {
+            var dateStr = "2020-10-3";
+            var date = dateStr.ToDateTime();
+
+            Assert.AreEqual(2020, date.Year);
+            Assert.AreEqual(10, date.Month);
+            Assert.AreEqual(03, date.Day);
+        }
+
+        [TestMethod]
+        public void DateValidation_DateOnly3()
+        {
+            var dateStr = "2020/8/3";
+            var date = dateStr.ToDateTime();
+
+            Assert.AreEqual(2020, date.Year);
+            Assert.AreEqual(08, date.Month);
+            Assert.AreEqual(03, date.Day);
+        }
+
+        [TestMethod]
         public void DateValidation_ValidFormat()
         {
             var dateStr = "2017-08-03T14:44:32.0034251451140Z";

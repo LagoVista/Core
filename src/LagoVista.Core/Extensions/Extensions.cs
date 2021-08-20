@@ -154,7 +154,7 @@ namespace LagoVista.Core
                10 Chars for Date
                1  for T
                8 for hh:mm:ss
-               . for ms seperator
+               . for ms separator
                ms portion
                Z
 
@@ -163,6 +163,14 @@ namespace LagoVista.Core
 
             if (!value.EndsWith("Z"))
             {
+                if(value.Length >=8 && value.Length <= 10)
+                {
+                    if (DateTime.TryParse(value, out DateTime dateTimeValue))
+                    {
+                        return dateTimeValue;
+                    }
+                }
+                else 
                 //HACK: - Maybe, sometimes the deserilaizer tries to help us by converting the ISO format into current date format, if so use that...not sure if this could be a sleeping bug.
                 if (DateTime.TryParse(value, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTimeValue))
                 {
