@@ -178,13 +178,13 @@ namespace LagoVista.Core
                 }
                 else
                 {
-                    throw new Exception("Invalid Date Format, expected JSON ISO format in GMT ending with Z");
+                    throw new Exception($"Invalid Date Format, expected JSON ISO format in GMT ending with Z, value provided {value}");
                 }
             }
 
             if (value.Length < 19)
             {
-                throw new Exception("Input Time Too Short, minimum is yyy-mm-ddThh:mm:ssZ");
+                throw new Exception($"Input Time Too Short, minimum is yyyy-mm-ddThh:mm:sssZ, value provided {value}");
             }
 
             var normalizedValue = NormalizeFormatString(value);
@@ -194,8 +194,7 @@ namespace LagoVista.Core
                 return dateTime.ToUniversalTime();
             }
 
-            throw new Exception("Could Not Parse DateTime.");
-
+            throw new Exception($"Could Not Parse DateTime, value provided {value}.");
         }
 
         public static String ToJSONString(this DateTime dateTime)
