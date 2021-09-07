@@ -65,6 +65,8 @@ namespace LagoVista.Core.Interfaces
         String DeviceId { get; set; }
         String DeviceRepoId { get; set; }
 
+        String DefaultDeviceLabel { get; }
+        String DefaultDeviceLabelPlural { get; }
 
         bool EmitTestingCode { get; }
         VersionInfo Version { get; }
