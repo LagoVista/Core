@@ -90,7 +90,7 @@ namespace LagoVista.Core.Managers
 
         protected Task AuthorizeOrgAccessAsync(string userId, string orgId, Type entityType = null, Actions action = Actions.Any, object data = null)
         {
-            return _security.AuthorizeOrgAccessAsync(userId, orgId, entityType);
+            return _security.AuthorizeOrgAccessAsync(userId, orgId, entityType, action);
         }
 
 
@@ -114,6 +114,15 @@ namespace LagoVista.Core.Managers
             return _security.AuthorizeAsync(userId, orgId, action, data);
         }
 
+        protected Task AuthorizeAsync(EntityHeader user, EntityHeader org, Type entityType, Actions action)
+        {
+            return _security.AuthorizeAsync(user, org, entityType, action);
+        }
+
+        protected Task AuthorizeAsync(EntityHeader user, EntityHeader org, Type entityType, Actions action, string id)
+        {
+            return _security.AuthorizeAsync(user, org, entityType, action, id);
+        }
 
         protected Task AuthorizeOrgAccessAsync(EntityHeader user, string orgId, Type entityType = null, Actions action = Actions.Any, object data = null)
         {

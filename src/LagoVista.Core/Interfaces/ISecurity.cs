@@ -12,6 +12,8 @@ namespace LagoVista.Core.Interfaces
     {
         Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, string actionName);
         Task AuthorizeAsync(EntityHeader user, EntityHeader org, string actionName, Object data );
+        Task AuthorizeAsync(EntityHeader user, EntityHeader org, Type entityType, Actions action, string id);
+        Task AuthorizeAsync(EntityHeader user, EntityHeader org, Type entityType, Actions action);
         Task AuthorizeAsync(string user, string org, string actionName, Object data );
         Task AuthorizeOrgAccessAsync(EntityHeader user, EntityHeader org, Type entityType = null, Actions action = Actions.Any);
         Task AuthorizeOrgAccessAsync(EntityHeader user, string orgId, Type entityType = null, Actions action = Actions.Any);
