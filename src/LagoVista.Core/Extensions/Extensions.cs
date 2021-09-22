@@ -40,6 +40,7 @@ namespace LagoVista.Core
         private static readonly string[] roadTypeAbbreviations = new[] { "ALY.", "ANX.", "ARC.", "AVE.", "BCH.", "BG.", "BGS.", "BLF.", "BLFS.", "BLVD.", "BND.", "BR.", "BRG.", "BRK.", "BRKS.", "BTM.", "BYP.", "BYU.", "CIR.", "CIRS.", "CLB.", "CLF.", "CLFS.", "CMN.", "COR.", "CORS.", "CP.", "CPE.", "CRES.", "CRK.", "CRSE.", "CRST.", "CSWY.", "CT.", "CTR.", "CTRS.", "CTS.", "CURV.", "CV.", "CVS.", "CYN.", "DL.", "DM.", "DR.", "DRS.", "DV.", "EST.", "ESTS.", "EXPY.", "EXT.", "EXTS.", "FALL.", "FLD.", "FLDS.", "FLS.", "FLT.", "FLTS.", "FRD.", "FRDS.", "FRG.", "FRGS.", "FRK.", "FRKS.", "FRST.", "FRY.", "FT.", "FWY.", "GDN.", "GDNS.", "GLN.", "GLNS.", "GRN.", "GRNS.", "GRV.", "GRVS.", "GTWY.", "HBR.", "HBRS.", "HL.", "HLS.", "HOLW.", "HTS.", "HVN.", "HWY.", "I.", "INLT.", "IS.", "ISLE.", "ISS.", "JCT.", "JCTS.", "KNL.", "KNLS.", "KY.", "KYS.", "LAND.", "LCK.", "LCKS.", "LDG.", "LF.", "LGT.", "LGTS.", "LK.", "LKS.", "LN.", "LNDG.", "LOOP.", "MALL.", "MDW.", "MDWS.", "MEWS.", "MHD.", "ML.", "MLS.", "MNR.", "MNRS.", "MSN.", "MT.", "MTN.", "MTNS.", "MTWY.", "NCK.", "OPAS.", "ORCH.", "OVAL.", "PARK.", "PARK.", "PASS.", "PATH.", "PIKE.", "PKWY.", "PKWY.", "PL.", "PLN.", "PLNS.", "PLZ.", "PNE.", "PNES.", "PR.", "PRT.", "PRTS.", "PSGE.", "PT.", "PTS.", "RADL.", "RAMP.", "RD.", "RDG.", "RDGS.", "RDS.", "RIV.", "RNCH.", "ROW.", "RPD.", "RPDS.", "RST.", "RTE.", "RUE.", "RUN.", "SHL.", "SHLS.", "SHR.", "SHRS.", "SKWY.", "SMT.", "SPG.", "SPGS.", "SPUR.", "SQ.", "SQS.", "ST.", "STA.", "STRM.", "STS.", "TER.", "TPKE.", "TRAK.", "TRCE.", "TRL.", "TRWY.", "TUNL.", "UN.", "UNS.", "UPAS.", "VIA.", "VIS.", "VL.", "VLG.", "VLGS.", "VLY.", "VLYS.", "VW.", "VWS.", "WALK.", "WALK.", "WALL.", "WAY.", "WAYS.", "WL.", "WLS.", "XING.", "XRD." };
 
         private const string JSON_DATE_FORMAT = "yyyy-MM-ddTHH\\:mm\\:ss.fffZ";
+        private const string DATE_ONLY_FORMAT = "yyyy/MM/dd";
 
         public static bool IsEmpty(this string value)
         {
@@ -133,7 +134,7 @@ namespace LagoVista.Core
 
         public static bool IsValidId(this string id)
         {
-            if(String.IsNullOrEmpty(id))
+            if (String.IsNullOrEmpty(id))
             {
                 return false;
             }
@@ -163,14 +164,14 @@ namespace LagoVista.Core
 
             if (!value.EndsWith("Z"))
             {
-                if(value.Length >=8 && value.Length <= 10)
+                if (value.Length >= 8 && value.Length <= 10)
                 {
                     if (DateTime.TryParse(value, out DateTime dateTimeValue))
                     {
                         return dateTimeValue;
                     }
                 }
-                else 
+                else
                 //HACK: - Maybe, sometimes the deserilaizer tries to help us by converting the ISO format into current date format, if so use that...not sure if this could be a sleeping bug.
                 if (DateTime.TryParse(value, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTimeValue))
                 {
@@ -199,7 +200,31 @@ namespace LagoVista.Core
 
         public static String ToJSONString(this DateTime dateTime)
         {
-            return dateTime.ToUniversalTime().ToString(JSON_DATE_FORMAT);
+            if (dateTime.Kind == DateTimeKind.Utc)
+            {
+                return dateTime.ToString(JSON_DATE_FORMAT);
+            }
+            else
+            {
+                return dateTime.ToUniversalTime().ToString(JSON_DATE_FORMAT);
+            }
+        }
+
+        public static String ToDateOnly(this DateTime dateTime)
+        {
+            return dateTime.ToString(DATE_ONLY_FORMAT);
+        }
+
+        public static String ToDateOnly(this DateTime? dateTime)
+        {
+            if (dateTime == null)
+            {
+                return null;
+            }
+            else
+            {
+                return dateTime.Value.ToString(DATE_ONLY_FORMAT);
+            }
         }
 
         public static String ToJSONString(this DateTime? dateTime)
@@ -210,7 +235,7 @@ namespace LagoVista.Core
             }
             else
             {
-                return dateTime.Value.ToUniversalTime().ToString(JSON_DATE_FORMAT);
+                return dateTime.Value.ToString(JSON_DATE_FORMAT);
             }
         }
 

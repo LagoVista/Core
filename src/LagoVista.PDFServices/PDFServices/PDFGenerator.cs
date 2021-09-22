@@ -6,6 +6,7 @@ using System.IO;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Fonts;
+using System.Reflection;
 
 namespace LagoVista.PDFServices
 {
@@ -63,7 +64,15 @@ namespace LagoVista.PDFServices
             Right = value;
         }
 
-        public double Top { get; set; } 
+        public Margin(double left, double top, double right, double bottom)
+        {
+            Top = top;
+            Bottom = bottom;
+            Left = left;
+            Right = right;
+        }
+
+        public double Top { get; set; }
         public double Bottom { get; set; }
         public double Left { get; set; }
         public double Right { get; set; }
@@ -84,17 +93,20 @@ namespace LagoVista.PDFServices
         XGraphics _graphics;
         LGVTextServices _textFormatter;
         ColWidth[] _colWidths;
+        bool _addLogo;
 
         public Margin Margin
         {
             get; set;
         }
 
+        public string Footer { get; set; }
+
         public double ColumnRightMargin { get; set; } = 10;
 
         public double RowBottomMargin { get; set; } = 4;
 
-        public double ParagraphBottomMargin { get; set; } = 8;
+        public double ParagraphBottomMargin { get; set; } = 0;
 
         public double HeaderTopMargin { get; set; } = 7;
         public double HeaderBottomMargin { get; set; } = 2;
@@ -183,12 +195,16 @@ namespace LagoVista.PDFServices
             throw new NotSupportedException("Invalid Font Style");
         }
 
-        public void StartDocument()
+        public void StartDocument(bool addLogo = true)
         {
+            _addLogo = addLogo;
             _currentPage = _pdfDocument.AddPage();
             _pages.Add(_currentPage);
             _graphics = XGraphics.FromPdfPage(_currentPage);
             _textFormatter = new LGVTextServices(_graphics);
+            if (addLogo)
+                AddLogoToHeader(100, 100);
+
             CurrentY = Margin.Top;
         }
 
@@ -204,6 +220,9 @@ namespace LagoVista.PDFServices
 
             _graphics = XGraphics.FromPdfPage(_currentPage);
             _textFormatter = new LGVTextServices(_graphics);
+
+            if (_addLogo)
+                AddLogoToHeader(100, 100);
         }
 
         public void AddLabelValue(String label, string value, XSolidBrush brush = null, bool horizontalAlign = false, double? labelWidth = null)
@@ -233,7 +252,6 @@ namespace LagoVista.PDFServices
             {
                 _graphics.DrawString(label, labelFont, brush, new XRect(Margin.Left, CurrentY, labelWidth.Value, 0), XStringFormats.TopLeft);
                 _graphics.DrawString(value, valueFont, brush, new XRect(labelWidth.Value, CurrentY, width - labelWidth.Value, 0), XStringFormats.TopLeft);
-
                 CurrentY += valueHeight;
             }
             else
@@ -243,6 +261,8 @@ namespace LagoVista.PDFServices
                 _graphics.DrawString(value, valueFont, brush, new XRect(Margin.Left, CurrentY, width, 0), XStringFormats.TopLeft);
                 CurrentY += valueHeight;
             }
+
+            CurrentY += 5;
         }
 
         public void AddClickableLink(string name, string link, string description = "")
@@ -260,23 +280,21 @@ namespace LagoVista.PDFServices
 
             _currentPage.AddWebLink(new PdfRectangle(pdfRect), link);
             _graphics.DrawString(name, linkFont, linkBrush, rect, XStringFormats.TopLeft);
+            var labelSize = _graphics.MeasureStringExact(name, valueFont, fullPageWidth);
+            CurrentY += valueHeight;
 
             if (!String.IsNullOrEmpty(description))
             {
-                var descriptionSize = _graphics.MeasureStringExact(description, valueFont, fullPageWidth - (100));
+                var descriptionSize = _graphics.MeasureStringExact(description, valueFont, fullPageWidth);
                 var descriptionWidth = descriptionSize.Width;
                 var descriptionHeight = descriptionSize.Height;
                 Console.WriteLine($" {descriptionWidth} - {descriptionHeight}");
 
                 var brush = XBrushes.Black;
-                var descriptionRect = new XRect(Margin.Left + 100, CurrentY, descriptionWidth, descriptionHeight);
+                var descriptionRect = new XRect(Margin.Left, CurrentY, descriptionWidth, descriptionHeight);
                 _textFormatter.DrawString(description, valueFont, brush, descriptionRect, XStringFormats.TopLeft);
 
                 CurrentY += descriptionHeight + ParagraphBottomMargin;
-            }
-            else
-            {
-                CurrentY += valueHeight;
             }
         }
 
@@ -316,7 +334,7 @@ namespace LagoVista.PDFServices
             if (!width.HasValue) width = _currentPage.Width;
             if (brush == null) brush = XBrushes.Black;
             var font = ResolveFont(Style.Body, fontStyle);
-            var height = _graphics.MeasureStringExact(text, font, width.Value).Height + ParagraphBottomMargin;
+            var height = _graphics.MeasureStringExact(text, font, width.Value - (Margin.Left + Margin.Right)).Height + ParagraphBottomMargin;
             if (CurrentY + (height) + 50 > (_currentPage.Height - (Margin.Bottom)))
             {
                 NewPage();
@@ -333,6 +351,8 @@ namespace LagoVista.PDFServices
                 return;
             }
 
+            text = text.Replace("\n", "\n\n");
+
             if (_renderMode == RenderMode.Table)
             {
                 throw new Exception("Current render mode is table");
@@ -343,8 +363,8 @@ namespace LagoVista.PDFServices
             if (brush == null) brush = XBrushes.Black;
             var font = ResolveFont(Style.Body, fontStyle);
             var labelFont = ResolveFont(Style.Body, XFontStyle.Bold);
-            var labelHeight = _graphics.MeasureStringExact(label, labelFont, width.Value).Height;
-            var height = _graphics.MeasureStringExact(text, font, width.Value).Height + ParagraphBottomMargin;
+            var labelHeight = _graphics.MeasureStringExact(label, labelFont, width.Value - (Margin.Left + Margin.Right)).Height;
+            var height = _graphics.MeasureStringExact(text, font, width.Value - (Margin.Left + Margin.Right)).Height + ParagraphBottomMargin;
 
             if (CurrentY + (labelHeight + height) + 50 > (_currentPage.Height - (Margin.Bottom)))
             {
@@ -355,6 +375,73 @@ namespace LagoVista.PDFServices
             CurrentY += labelHeight;
             _textFormatter.DrawString(text, font, brush, new XRect(Margin.Left, CurrentY, _currentPage.Width - (Margin.Left + Margin.Right), height), align);
             CurrentY += height;
+        }
+
+        public byte[] GetFont(string imageName)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
+                var fullName = $"{assembly.FullName}.images.{imageName}";
+                var resources = assembly.GetManifestResourceNames();
+                var resourceName = resources.First(x => x == imageName);
+                using (var rs = assembly.GetManifestResourceStream(resourceName))
+                {
+                    rs.CopyTo(ms);
+                    ms.Position = 0;
+                    return ms.ToArray();
+                }
+            }
+        }
+
+        public void AddLogoToHeader(int maxWidth, int maxHeight)
+        {
+            var imageName = "sllogo.png";
+            using (var ms = new MemoryStream())
+            {
+                var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
+                var fullName = $"{assembly.GetName().Name}.images.{imageName}";
+                var resources = assembly.GetManifestResourceNames();
+                var resourceName = resources.SingleOrDefault(x => x == imageName);
+                if (resourceName == null)
+                {
+                    //   throw new ArgumentOutOfRangeException("Could not find resource: " + fullName);
+                }
+
+                using (var rs = assembly.GetManifestResourceStream(fullName))
+                {
+                    rs.CopyTo(ms);
+                    ms.Position = 0;
+                    using (var img = XImage.FromStream(() => ms))
+                    {
+                        var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
+                        _graphics.DrawImage(img, Margin.Left, 10, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                    }
+                }
+            }
+        }
+
+
+        public void AddLogoToHeader(string imageName, int maxWidth, int maxHeight)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
+                var fullName = $"{assembly.FullName}.images.{imageName}";
+                var resources = assembly.GetManifestResourceNames();
+                var resourceName = resources.First(x => x == imageName);
+                using (var rs = assembly.GetManifestResourceStream(resourceName))
+                {
+                    rs.CopyTo(ms);
+                    ms.Position = 0;
+                    using (var img = XImage.FromStream(() => ms))
+                    {
+                        var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
+                        _graphics.DrawImage(img, Margin.Left, CurrentY, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                        CurrentY += img.PointHeight * scalingFactor;
+                    }
+                }
+            }
         }
 
         public void AddImage(MemoryStream ms, int maxWidth, int maxHeight)
@@ -469,12 +556,21 @@ namespace LagoVista.PDFServices
             {
                 if (_showPageNumbers && _pageIndex > 0 || _pageNumberOnFirstPage)
                 {
-                    var centerRect = new XRect(0, page.Height - 22, _currentPage.Width, 22);
+                    var centerRect = new XRect(Margin.Left, page.Height - 34, _currentPage.Width - (Margin.Left + Margin.Right), 34);
                     var font = ResolveFont(Style.Body);
                     using (var gx = XGraphics.FromPdfPage(page))
                     {
+                        gx.DrawLine(XPens.DarkGray, Margin.Left, page.Height - 35, _currentPage.Width - Margin.Left, page.Height - 35);
                         var pageMessage = $"Page {idx++} of {_pages.Count}";
-                        gx.DrawString(pageMessage, font, XBrushes.Black, centerRect, XStringFormats.Center);
+                        if (!String.IsNullOrEmpty(Footer))
+                        {
+                            gx.DrawString(Footer, font, XBrushes.Black, centerRect, XStringFormats.CenterLeft);
+                            gx.DrawString(pageMessage, font, XBrushes.Black, centerRect, XStringFormats.CenterRight);
+                        }
+                        else
+                        {
+                            gx.DrawString(pageMessage, font, XBrushes.Black, centerRect, XStringFormats.Center);
+                        }
                     }
                 }
             }

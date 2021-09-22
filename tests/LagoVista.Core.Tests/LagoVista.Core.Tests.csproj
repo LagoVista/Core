@@ -11,6 +11,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLipsum" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System" />
@@ -22,6 +23,7 @@
     <ProjectReference Include="..\..\src\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.RetryProxy\LagoVista.Core.Retry.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core\LagoVista.Core.csproj" />
+    <ProjectReference Include="..\..\src\LagoVista.PDFServices\LagoVista.PDFServices.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
