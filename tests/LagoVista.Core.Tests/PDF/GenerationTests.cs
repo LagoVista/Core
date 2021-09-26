@@ -30,9 +30,38 @@ namespace LagoVista.Core.Tests.PDF
             var generator = new PDFServices.PDFGenerator();
             generator.Margin = new Margin(50, 100, 50, 100);
             generator.StartDocument();
-            generator.AddLogoToHeader(100,100);
+            generator.AddLogo(100,100);
             generator.AddClickableLink("Top margin should be twice as the left margin", "http://www.bing.com", GenerateText(120));
             generator.AddClickableLink("Has a very, very long label, want to see how this renders", "http://www.bing.com", GenerateText(120));
+
+            using (var stream = new System.IO.MemoryStream())
+            {
+                generator.Write(stream);
+
+                var writer = new StreamWriter(stream);
+                System.IO.File.WriteAllBytes("X:\\links.pdf", (stream as MemoryStream).GetBuffer());
+            }
+        }
+
+        [TestMethod]
+        public async Task TitlePage()
+        {
+            var generator = new PDFServices.PDFGenerator();
+            generator.Margin = new Margin(50, 50, 50, 50);
+            generator.HasTItlePage = true;
+            generator.DocumentTitle = "This Document";
+            generator.PreparedForOrgName = "Some Other Company";
+            generator.PreparedByOrgName = "Software Logistics";
+            generator.PreparedByUserName = "Kevin D. Wolf";
+            generator.DocumentSubTitle = "And Sub Title";
+            generator.ShowPageNumbersOnTitlelPage = false;
+            
+            generator.StartDocument();
+            generator.AddParagraph(GenerateText(20, 1), "Notes ");
+            generator.AddParagraph(GenerateText(50, 1), "Notes 1");
+            generator.AddParagraph(GenerateText(100, 1), "Notes 2");
+            generator.AddParagraph(GenerateText(100, 2), "Notes 3");
+            generator.AddParagraph(GenerateText(100, 3), "Notes 4");
 
             using (var stream = new System.IO.MemoryStream())
             {
@@ -83,7 +112,7 @@ namespace LagoVista.Core.Tests.PDF
                 generator.Write(stream);
 
                 var writer = new StreamWriter(stream);
-                System.IO.File.WriteAllBytes("X:\\P1.pdf", (stream as MemoryStream).GetBuffer());
+                System.IO.File.WriteAllBytes("X:\\paragraphs.pdf", (stream as MemoryStream).GetBuffer());
             }
         }
     }
