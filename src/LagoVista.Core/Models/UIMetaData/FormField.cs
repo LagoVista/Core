@@ -116,6 +116,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.Options = new List<EnumDescription>();
             if(attr.EnumType != null)
             {
+                var options = new List<EnumDescription>();
                 var values = Enum.GetValues(attr.EnumType);
                 for (var idx = 0; idx < values.GetLength(0); ++idx)
                 {
@@ -124,11 +125,16 @@ namespace LagoVista.Core.Models.UIMetaData
                     var enumMember = attr.EnumType.GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == value.ToString()).FirstOrDefault();
                     var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
 
-                    field.Options.Add(EnumDescription.Create(enumAttr, value));
+                    if (enumAttr.IsActive)
+                    {
+                        options.Add(EnumDescription.Create(enumAttr, value, idx));
+                    }
                 }
+
+                field.Options = options.OrderBy(opt => opt.SortOrder).ToList();
             }
 
-            if(attr.FieldType == FieldTypes.NameSpace)
+            if (attr.FieldType == FieldTypes.NameSpace)
             {
                 field.RegEx=@"^[a-z][a-z0-9]{5,30}$";
                 field.RegExMessage = ValidationResource.Validation_RegEx_Namespace;

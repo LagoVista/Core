@@ -8,13 +8,15 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         public String Name { get; set; }
         public String Key { get; set; }
+        public int SortOrder { get; set; }
         public String Label { get; set; }
         public String Help { get; set; }
 
-        public static EnumDescription Create(EnumLabelAttribute attr, String name)
+        public static EnumDescription Create(EnumLabelAttribute attr, String name, int value)
         {
             var enumLabel = new EnumDescription();
             enumLabel.Key = attr.Key;
+            enumLabel.SortOrder = attr.SortOrder != -1 ? attr.SortOrder : value;
             enumLabel.Name = name;
 
             var labelProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelResource);
