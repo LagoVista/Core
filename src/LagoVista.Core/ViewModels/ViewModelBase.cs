@@ -275,7 +275,6 @@ namespace LagoVista.Core.ViewModels
             await ViewModelNavigation.GoBackAsync();
         }
 
-
         public bool IsNetworkConnected
         {
             get { return PlatformSupport.Services.Network.IsInternetConnected; }

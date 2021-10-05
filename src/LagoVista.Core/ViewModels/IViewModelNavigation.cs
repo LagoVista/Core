@@ -24,5 +24,6 @@ namespace LagoVista.Core.ViewModels
 
         bool CanGoBack();
         Task GoBackAsync();
-     }
+        Task GoBackAsync(int dropPageCount);
+    }
 }
