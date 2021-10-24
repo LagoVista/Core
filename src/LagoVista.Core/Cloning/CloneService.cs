@@ -64,26 +64,26 @@ namespace LagoVista.Core.Cloning
 
         private static void UpdateProperty(Object value, EntityHeader user, EntityHeader org, int level)
         {
-            if (value.GetType().GetTypeInfo().ImplementedInterfaces.Contains(typeof(IEnumerable)))
+            if (!(value is String))
             {
-                var items = value as IEnumerable;
-                foreach (var item in items)
+                if (value.GetType().GetTypeInfo().ImplementedInterfaces.Contains(typeof(IEnumerable)))
                 {
-                    var itemChildProperties = item.GetType().GetTypeInfo().GetAllProperties();
-                    foreach (var itemChildProp in itemChildProperties)
+                    var items = value as IEnumerable;
+                    foreach (var item in items)
                     {
-                        var attr = itemChildProp.GetCustomAttributes(typeof(CloneOptionsAttribute), true).OfType<CloneOptionsAttribute>().FirstOrDefault();
-                        if (attr == null || attr.AutoClone)
+                        var itemChildProperties = item.GetType().GetTypeInfo().GetAllProperties();
+                        foreach (var itemChildProp in itemChildProperties)
                         {
-                            var childValue = itemChildProp.GetValue(item);
-                            UpdateProperty(childValue, user, org, level);
+                            var attr = itemChildProp.GetCustomAttributes(typeof(CloneOptionsAttribute), true).OfType<CloneOptionsAttribute>().FirstOrDefault();
+                            if (attr == null || attr.AutoClone)
+                            {
+                                var childValue = itemChildProp.GetValue(item);
+                                UpdateProperty(childValue, user, org, level);
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                if (!(value is String))
+                else
                 {
                     var childProperties = value.GetType().GetTypeInfo().GetAllProperties();
                     foreach (var childProperty in childProperties)
