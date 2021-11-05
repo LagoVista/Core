@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.Interfaces
 {
-    public interface ILabeledEntity
+    public interface ILabeledEntity: IIDEntity, INamedEntity, IDescriptionEntity, INoSQLEntity
     {
         List<Label> Labels { get; set; }
     }
