@@ -1,6 +1,7 @@
-﻿//#define TEST_SERVICE_BUS
+﻿#define TEST_SERVICE_BUS
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Azure.ServiceBus.Management;
 #if TEST_SERVICE_BUS
 using LagoVista.Core.Models;
 using LagoVista.Core.Rpc.Tests.Utils;
@@ -18,16 +19,15 @@ namespace LagoVista.Core.Rpc.Tests.Server
         [TestMethod]
         public async Task ServiceBus_TopicClient_SendAsync()
         {
-            var topicSettings = new ConnectionSettings
-            {
-                AccountId = "localrequestbus-dev",
-                UserName = "SendAccessKey",
-                AccessKey = "B2bGyjZVtiNsgQ/BvjCqwtk9FgCYGdA7np99etWzHLc=",
-                ResourceName = "rpc_request"
-            };
-            var _destinationEntityPath = topicSettings.ResourceName;
 
-            var _topicConnectionString = $"Endpoint=sb://{topicSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={topicSettings.UserName};SharedAccessKey={topicSettings.AccessKey};";
+            var ResourceName = "rpc_request";
+            var _destinationEntityPath = ResourceName;
+
+            var topicConnectionString = System.Environment.GetEnvironmentVariable("SB_LOCAL_REQUEST_BUS");
+            if(String.IsNullOrEmpty(topicConnectionString))
+            {
+                throw new ArgumentNullException("must define environment variable [SB_LOCAL_REQUEST_BUS]");
+            }
 
             var message = new Rpc.Messages.Message
             {
@@ -46,8 +46,13 @@ namespace LagoVista.Core.Rpc.Tests.Server
                 .ToLower();
             Assert.AreEqual("rpc_request_c8ad4589f26842e7a1aefbaefc979c9b_9e88c7f6b5894dbfb3bc09d20736705e", entityPath);
 
-            //var entityPath = "lagovistatest";
-            var topicClient = new TopicClient(_topicConnectionString, entityPath, RetryPolicy.Default);
+            var client = new ManagementClient(topicConnectionString);
+            if (!await client.TopicExistsAsync(entityPath))
+            {
+                await client.CreateTopicAsync(entityPath);
+            }
+
+            var topicClient = new TopicClient(topicConnectionString, entityPath, RetryPolicy.Default);
 
             var messageOut = new Microsoft.Azure.ServiceBus.Message(message.Payload)
             {
