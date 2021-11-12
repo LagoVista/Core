@@ -4,8 +4,13 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.Models
 {
-    public class LabelSet : IIDEntity, IOwnedEntity, IAuditableEntity
+    public class LabelSet : INoSQLEntity, IIDEntity, IOwnedEntity, IAuditableEntity
     {
+        public LabelSet()
+        {
+            Labels = new List<Label>();
+        }
+
         [JsonProperty("id")]
         public string Id { get; set; }
         public string CreationDate { get; set; }
@@ -16,6 +21,8 @@ namespace LagoVista.Core.Models
         public EntityHeader OwnerOrganization { get; set; }
         public EntityHeader OwnerUser { get; set; }
         public List<Label> Labels { get; set; }
+        public string DatabaseName { get; set; }
+        public string EntityType { get; set; }
     }
 
     public class Label
