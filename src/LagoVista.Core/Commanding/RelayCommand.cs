@@ -101,7 +101,7 @@ namespace LagoVista.Core.Commanding
         }        
     }
 
-    public class RelayCommand<TParam> 
+    public class RelayCommand<TParam> : ICommand
     {
         TParam _parameter;
         Action<TParam> _cmdAction;
