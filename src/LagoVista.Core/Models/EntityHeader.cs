@@ -59,6 +59,32 @@ namespace LagoVista.Core.Models
             };
         }
 
+        public static EntityHeader Create(String id, string key, string text)
+        {
+            if (String.IsNullOrEmpty(id))
+            {
+                throw new InvalidDataException("Id is required for creating an entity header.");
+            }
+
+            if (String.IsNullOrEmpty(text))
+            {
+                throw new InvalidDataException("Text is required for creating an entity header.");
+            }
+
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new InvalidDataException("Key is required for creating an entity header.");
+            }
+
+            return new EntityHeader()
+            {
+                Id = id,
+                Key = key,
+                Text = text,
+            };
+        }
+
+
         public static bool IsNullOrEmpty(EntityHeader header)
         {
             if (header == null)
@@ -182,6 +208,18 @@ namespace LagoVista.Core.Models
         /// </summary>
         public static EntityHeader<T> Create(T value)
         {
+            if (HasInterface<T, IIDEntity>() && HasInterface<T, INamedEntity>() && HasInterface<T, IKeyedEntity>())
+            {
+                var eh = new EntityHeader<T>
+                {
+                    Id = ((IIDEntity)value).Id,
+                    Key = ((IKeyedEntity)value).Key,
+                    Text = ((INamedEntity)value).Name,
+                    Value = value,
+                };
+                return eh;
+            }
+
             if (HasInterface<T, IIDEntity>() && HasInterface<T, INamedEntity>())
             {
                 var eh = new EntityHeader<T>
@@ -230,7 +268,7 @@ namespace LagoVista.Core.Models
                 }
             }
 
-            throw new Exception($"Not an enum type, Cannot map type {typeof(T).Name} to Entity Header.");
+            throw new Exception($"Not an enum type and does not implement IIDEntity, INamedEntity.  Cannot map type {typeof(T).Name} to Entity Header.");
         }
 
         public new EntityHeader<T> Clone()
