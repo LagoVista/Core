@@ -102,12 +102,17 @@ namespace LagoVista.Core.Models
 
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            if (obj is EntityHeader eh)
+            {
+                return eh.Id == Id;
+            }
+
+            return false;   
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return Id.GetHashCode();
         }
 
         public static bool operator !=(EntityHeader hdr1, EntityHeader hdr2)
