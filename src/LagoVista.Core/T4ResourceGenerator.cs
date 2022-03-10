@@ -1,4 +1,4 @@
-﻿/*1/4/2020 07:18:49*/
+﻿/*3/9/2022 03:37:24*/
 using System.Globalization;
 using System.Reflection;
 
@@ -159,6 +159,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_PhoneNumber
 
 		public static string UserInfo_PhoneNumber { get { return GetResourceString("UserInfo_PhoneNumber"); } }
+//Resources:AuthenticationResources:UserInfo_TeamsAccountName
+
+		public static string UserInfo_TeamsAccountName { get { return GetResourceString("UserInfo_TeamsAccountName"); } }
 //Resources:AuthenticationResources:UserInfo_Title
 
 		public static string UserInfo_Title { get { return GetResourceString("UserInfo_Title"); } }
@@ -201,6 +204,7 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_IsUserDevice = "UserInfo_IsUserDevice";
 			public const string UserInfo_LastName = "UserInfo_LastName";
 			public const string UserInfo_PhoneNumber = "UserInfo_PhoneNumber";
+			public const string UserInfo_TeamsAccountName = "UserInfo_TeamsAccountName";
 			public const string UserInfo_Title = "UserInfo_Title";
 		}
 	}

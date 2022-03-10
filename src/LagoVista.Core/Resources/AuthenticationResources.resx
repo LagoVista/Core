@@ -225,4 +225,7 @@
   <data name="UserInfo_DateCreated" xml:space="preserve">
     <value>Date Created</value>
   </data>
+  <data name="UserInfo_TeamsAccountName" xml:space="preserve">
+    <value>Teams Account Name</value>
+  </data>
 </root>

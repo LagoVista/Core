@@ -63,6 +63,9 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.AuthenticationResources))]
         public string PhoneNumber { get; set; }
 
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_TeamsAccountName, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string TeamsAccountName { get; set; }
+
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsPhoneConfirmed, IsUserEditable: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool PhoneNumberConfirmed { get; set; }
 
@@ -106,7 +109,8 @@ namespace LagoVista.Core.Models
                 IsRuntimeUser = IsRuntimeUser,
                 ProfileImageUrl = ProfileImageUrl,
                 EmailConfirmed = EmailConfirmed,
-                PhoneNumberConfirmed = PhoneNumberConfirmed
+                PhoneNumberConfirmed = PhoneNumberConfirmed,
+                TeamsAccountName = TeamsAccountName,
             };
         }
     }
@@ -146,6 +150,9 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_PhoneNumber, ResourceType: typeof(AuthenticationResources))]
         public String PhoneNumber { get; set; }
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_TeamsAccountName, ResourceType: typeof(AuthenticationResources))]
+        public string TeamsAccountName { get; set; }
 
 
         [ListColumn(Visible: false)]
