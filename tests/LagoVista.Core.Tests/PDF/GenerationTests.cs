@@ -25,7 +25,7 @@ namespace LagoVista.Core.Tests.PDF
 
 
         [TestMethod]
-        public async Task TopMargin()
+        public Task TopMargin()
         {
             var generator = new PDFServices.PDFGenerator();
             generator.Margin = new Margin(50, 100, 50, 100);
@@ -41,10 +41,12 @@ namespace LagoVista.Core.Tests.PDF
                 var writer = new StreamWriter(stream);
                 System.IO.File.WriteAllBytes("X:\\links.pdf", (stream as MemoryStream).GetBuffer());
             }
+
+            return Task.CompletedTask;
         }
 
         [TestMethod]
-        public async Task TitlePage()
+        public Task TitlePage()
         {
             var generator = new PDFServices.PDFGenerator();
             generator.Margin = new Margin(50, 50, 50, 50);
@@ -70,10 +72,12 @@ namespace LagoVista.Core.Tests.PDF
                 var writer = new StreamWriter(stream);
                 System.IO.File.WriteAllBytes("X:\\links.pdf", (stream as MemoryStream).GetBuffer());
             }
+
+            return Task.CompletedTask;
         }
 
         [TestMethod]
-        public async Task HyperlinkRendering()
+        public Task HyperlinkRendering()
         {
             var generator = new PDFServices.PDFGenerator();
             generator.StartDocument();
@@ -89,10 +93,12 @@ namespace LagoVista.Core.Tests.PDF
                 var writer = new StreamWriter(stream);
                 System.IO.File.WriteAllBytes("X:\\links.pdf", (stream as MemoryStream).GetBuffer());
             }
+
+            return Task.CompletedTask;
         }
 
         [TestMethod]
-        public async Task ParagraphRendering()
+        public Task ParagraphRendering()
         {
             var generator = new PDFServices.PDFGenerator();
             generator.Margin = new Margin(50);
@@ -114,6 +120,8 @@ namespace LagoVista.Core.Tests.PDF
                 var writer = new StreamWriter(stream);
                 System.IO.File.WriteAllBytes("X:\\paragraphs.pdf", (stream as MemoryStream).GetBuffer());
             }
+
+            return Task.CompletedTask;
         }
     }
 }

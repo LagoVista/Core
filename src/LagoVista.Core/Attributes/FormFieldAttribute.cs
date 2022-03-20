@@ -60,6 +60,7 @@ namespace LagoVista.Core.Attributes
         private string _regExValidationMessageResource;
         private bool _isRequired;
         private bool _isUserEditable;
+        private bool _isMarkDown;
         private string _helpResource;
         private string _waterMark;
         private int? _minLength;
@@ -90,6 +91,7 @@ namespace LagoVista.Core.Attributes
                                   int MaxLength = -1,
                                   bool IsRequired = false,
                                   bool IsUserEditable = true,
+                                  bool IsMarkDown = false,
                                   FieldTypes FieldType = FieldTypes.Text,
                                   Type ResourceType = null,
                                   Type EnumType = null)
@@ -106,6 +108,7 @@ namespace LagoVista.Core.Attributes
             _resourceType = ResourceType;
             _pickerType = PickerType;
             _pickerFor = PickerFor;
+            _isMarkDown = IsMarkDown;
             _waterMark = WaterMark;
             _minLength = MinLength < 0 ? (int?)null : MinLength;
             _maxLength = MaxLength < 0 ? (int?)null : MaxLength;
@@ -125,6 +128,7 @@ namespace LagoVista.Core.Attributes
         public String RegExValidation { get { return _regExValidation; } }
         public String RegExValidationMessageResource { get { return _regExValidationMessageResource; } }
         public bool IsRequired { get { return _isRequired; } }
+        public bool IsMarkDown { get { return _isMarkDown; } }
         public bool IsUserEditable { get { return _isUserEditable; } }
         public FieldTypes FieldType { get { return _fieldType; } }
         public Type ResourceType { get { return _resourceType; } }
