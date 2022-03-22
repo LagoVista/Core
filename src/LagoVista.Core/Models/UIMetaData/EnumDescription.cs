@@ -12,15 +12,21 @@ namespace LagoVista.Core.Models.UIMetaData
         public String Label { get; set; }
         public String Help { get; set; }
 
+        public string Id { get; set; }
+
+        public string Text { get; set; }
+
         public static EnumDescription Create(EnumLabelAttribute attr, String name, int value)
         {
             var enumLabel = new EnumDescription();
             enumLabel.Key = attr.Key;
             enumLabel.SortOrder = attr.SortOrder != -1 ? attr.SortOrder : value;
             enumLabel.Name = name;
+            enumLabel.Id = attr.Key;
 
             var labelProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelResource);
             enumLabel.Label = labelProperty.GetValue(labelProperty.DeclaringType, null) as String;
+            enumLabel.Text = enumLabel.Label;
 
             if(!String.IsNullOrEmpty(attr.HelpResource))
             {

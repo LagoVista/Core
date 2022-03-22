@@ -57,7 +57,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public static List<EnumDescription> GetEnumOptions<Type>()
         {
-            var enumType = typeof(EnumDescription);
+            var enumType = typeof(Type);
 
             new List<EnumDescription>();
             var options = new List<EnumDescription>();
