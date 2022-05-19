@@ -17,6 +17,12 @@ namespace LagoVista.Core.PlatformSupport
         ConfigurationError
     }
 
+    public enum MetricType
+    {
+        Event,
+        Aggregate
+    }
+
     public interface ILogger
     {
         bool DebugMode { get; set; }
@@ -31,6 +37,10 @@ namespace LagoVista.Core.PlatformSupport
         void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args);
 
         void TrackEvent(string message, Dictionary<string, string> parameters);
+
+        void TrackMetric(string kind, string name, MetricType metricType, double count, params KeyValuePair<string, string>[] args);
+
+        void TrackMetric(string kind, string name, MetricType metricType, int count, params KeyValuePair<string, string>[] args);
     }
 
     public class TimedEvent

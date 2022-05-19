@@ -228,4 +228,22 @@
   <data name="UserInfo_TeamsAccountName" xml:space="preserve">
     <value>Teams Account Name</value>
   </data>
+  <data name="ExternalLogin_GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="ExternalLogin_Google" xml:space="preserve">
+    <value>Google</value>
+  </data>
+  <data name="ExternalLogin_LinkedIn" xml:space="preserve">
+    <value>Linked In</value>
+  </data>
+  <data name="ExternalLogin_Microsoft" xml:space="preserve">
+    <value>Microsoft</value>
+  </data>
+  <data name="UserInfo_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="UserInfo_ShowWelcome" xml:space="preserve">
+    <value>Show Welcome on Login</value>
+  </data>
 </root>

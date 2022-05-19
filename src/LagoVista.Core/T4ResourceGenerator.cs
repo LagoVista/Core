@@ -1,4 +1,4 @@
-﻿/*3/9/2022 03:37:24*/
+﻿/*5/18/2022 5:17:56 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -102,6 +102,18 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
+//Resources:AuthenticationResources:ExternalLogin_GitHub
+
+		public static string ExternalLogin_GitHub { get { return GetResourceString("ExternalLogin_GitHub"); } }
+//Resources:AuthenticationResources:ExternalLogin_Google
+
+		public static string ExternalLogin_Google { get { return GetResourceString("ExternalLogin_Google"); } }
+//Resources:AuthenticationResources:ExternalLogin_LinkedIn
+
+		public static string ExternalLogin_LinkedIn { get { return GetResourceString("ExternalLogin_LinkedIn"); } }
+//Resources:AuthenticationResources:ExternalLogin_Microsoft
+
+		public static string ExternalLogin_Microsoft { get { return GetResourceString("ExternalLogin_Microsoft"); } }
 //Resources:AuthenticationResources:UserInfo_DateCreated
 
 		public static string UserInfo_DateCreated { get { return GetResourceString("UserInfo_DateCreated"); } }
@@ -156,9 +168,15 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_LastName
 
 		public static string UserInfo_LastName { get { return GetResourceString("UserInfo_LastName"); } }
+//Resources:AuthenticationResources:UserInfo_Notes
+
+		public static string UserInfo_Notes { get { return GetResourceString("UserInfo_Notes"); } }
 //Resources:AuthenticationResources:UserInfo_PhoneNumber
 
 		public static string UserInfo_PhoneNumber { get { return GetResourceString("UserInfo_PhoneNumber"); } }
+//Resources:AuthenticationResources:UserInfo_ShowWelcome
+
+		public static string UserInfo_ShowWelcome { get { return GetResourceString("UserInfo_ShowWelcome"); } }
 //Resources:AuthenticationResources:UserInfo_TeamsAccountName
 
 		public static string UserInfo_TeamsAccountName { get { return GetResourceString("UserInfo_TeamsAccountName"); } }
@@ -185,6 +203,10 @@ namespace LagoVista.Core.Resources
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
 			public const string Common_Role = "Common_Role";
 			public const string Common_Status = "Common_Status";
+			public const string ExternalLogin_GitHub = "ExternalLogin_GitHub";
+			public const string ExternalLogin_Google = "ExternalLogin_Google";
+			public const string ExternalLogin_LinkedIn = "ExternalLogin_LinkedIn";
+			public const string ExternalLogin_Microsoft = "ExternalLogin_Microsoft";
 			public const string UserInfo_DateCreated = "UserInfo_DateCreated";
 			public const string UserInfo_Description = "UserInfo_Description";
 			public const string UserInfo_Email = "UserInfo_Email";
@@ -203,7 +225,9 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_IsSystemAdmin_Help = "UserInfo_IsSystemAdmin_Help";
 			public const string UserInfo_IsUserDevice = "UserInfo_IsUserDevice";
 			public const string UserInfo_LastName = "UserInfo_LastName";
+			public const string UserInfo_Notes = "UserInfo_Notes";
 			public const string UserInfo_PhoneNumber = "UserInfo_PhoneNumber";
+			public const string UserInfo_ShowWelcome = "UserInfo_ShowWelcome";
 			public const string UserInfo_TeamsAccountName = "UserInfo_TeamsAccountName";
 			public const string UserInfo_Title = "UserInfo_Title";
 		}

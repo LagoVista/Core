@@ -8,12 +8,26 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
+
+    public enum ExternalLoginTypes
+    {
+        [EnumLabel(ExternalLogin.ExternalLogin_GitHub, AuthenticationResources.Names.ExternalLogin_GitHub, ResourceType: typeof(AuthenticationResources))]
+        GitHub,
+        [EnumLabel(ExternalLogin.ExternalLogin_LinkedIn, AuthenticationResources.Names.ExternalLogin_LinkedIn, ResourceType: typeof(AuthenticationResources))]
+        LinkedIn,
+        [EnumLabel(ExternalLogin.ExternalLogin_Microsoft, AuthenticationResources.Names.ExternalLogin_Microsoft, ResourceType: typeof(AuthenticationResources))]
+        Microsoft,
+        [EnumLabel(ExternalLogin.ExternalLogin_Google, AuthenticationResources.Names.ExternalLogin_Google, ResourceType: typeof(AuthenticationResources))]
+        Google,
+    }
+
     /* The AppUser is used for managing identity for the system, we want something with basic user information that doesn't
      * do anything with security or identity...this is that object */
 
     [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_Title, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
     public class UserInfo : IUserInfo
     {
+     
         public String Id { get; set; }
 
         public String Key { get; set; }
@@ -69,6 +83,13 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsPhoneConfirmed, IsUserEditable: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool PhoneNumberConfirmed { get; set; }
 
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_ShowWelcome, IsUserEditable: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
+        public bool ShowWelcome{ get; set; }
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Notes, FieldType: FieldTypes.ChildList, ResourceType: typeof(Resources.AuthenticationResources))]
+        public List<EntityHeader<string>> Notes { get; set; }
+
+
         public EntityHeader CurrentOrganization { get; set; }
 
         public EntityHeader PrimaryDevice { get; set; }
@@ -82,6 +103,8 @@ namespace LagoVista.Core.Models
         public string Email { get; set; }
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsEmailConfirmed, IsUserEditable: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool EmailConfirmed { get; set; }
+
+        public List<ExternalLogin> ExternalLogins { get; set; } = new List<ExternalLogin>();
 
         public EntityHeader ToEntityHeader()
         {
@@ -161,5 +184,21 @@ namespace LagoVista.Core.Models
         public bool EmailConfirmed { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsPhoneConfirmed, ResourceType: typeof(AuthenticationResources))]
         public bool PhoneNumberConfirmed { get; set; }
+    }
+
+    public class ExternalLogin
+    {
+        public const string ExternalLogin_GitHub = "github";
+        public const string ExternalLogin_Microsoft = "microsoft";
+        public const string ExternalLogin_Google = "google";
+        public const string ExternalLogin_LinkedIn = "linkedin";
+
+        public EntityHeader<ExternalLoginTypes> Provider { get; set; }
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Organization { get; set; }
     }
 }
