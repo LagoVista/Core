@@ -207,7 +207,7 @@
   <data name="UserInfo_PhoneNumber" xml:space="preserve">
     <value>Phone Number</value>
   </data>
-  <data name="UserInfo_Title" xml:space="preserve">
+  <data name="UserInfo_ObjectTitle" xml:space="preserve">
     <value>User Information</value>
   </data>
   <data name="UserInfo_IsAppBuilder" xml:space="preserve">
@@ -245,5 +245,32 @@
   </data>
   <data name="UserInfo_ShowWelcome" xml:space="preserve">
     <value>Show Welcome on Login</value>
+  </data>
+  <data name="UserInfo_Bio" xml:space="preserve">
+    <value>Bio</value>
+  </data>
+  <data name="UserInfo_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="UserInfo_UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="UserInfo_Address1" xml:space="preserve">
+    <value>Address1</value>
+  </data>
+  <data name="UserInfo_Address2" xml:space="preserve">
+    <value>Address2</value>
+  </data>
+  <data name="UserInfo_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="UserInfo_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="UserInfo_PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="UserInfo_StateProvince" xml:space="preserve">
+    <value>State or Province</value>
   </data>
 </root>

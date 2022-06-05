@@ -24,7 +24,7 @@ namespace LagoVista.Core.Models
     /* The AppUser is used for managing identity for the system, we want something with basic user information that doesn't
      * do anything with security or identity...this is that object */
 
-    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_Title, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
+    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
     public class UserInfo : IUserInfo
     {
      
@@ -50,8 +50,15 @@ namespace LagoVista.Core.Models
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_FirstName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string FirstName { get; set; }
+
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_LastName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string LastName { get; set; }
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Title, IsRequired: false, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string Title { get; set; }
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Bio, IsRequired: false, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string Bio { get; set; }
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsSystemAdmin_Help, FieldType:FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsSystemAdmin { get; set; }
@@ -74,6 +81,10 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, HelpResource: Resources.AuthenticationResources.Names.UserInfo_IsPreviewUser, IsRequired: true, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool IsPreviewUser { get; set; }
 
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_UserName, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public String UserName { get; set; }
+
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PhoneNumber, FieldType: FieldTypes.Phone, ResourceType: typeof(Resources.AuthenticationResources))]
         public string PhoneNumber { get; set; }
 
@@ -90,12 +101,30 @@ namespace LagoVista.Core.Models
         public List<EntityHeader<string>> Notes { get; set; }
 
 
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string Address1 { get; set; }
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Address2, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string Address2 { get; set; }
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_City, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string City { get; set; }
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_StateProvince, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string State { get; set; }
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Country, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string Country { get; set; }
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string PostalCode { get; set; }
+
+        public bool TermsAndConditionsAccepted { get; set; }
+        public string TermsAndConditionsAcceptedIPAddress { get; set; }
+        public string TermsAndConditionsAcceptedDateTime { get; set; }
+
         public EntityHeader CurrentOrganization { get; set; }
 
         public EntityHeader PrimaryDevice { get; set; }
         public EntityHeader DeviceRepo { get; set; }
         public EntityHeader DeviceConfiguration { get; set; }
 
+        public List<EntityHeader> MediaResources { get; set; }
 
         public ImageDetails ProfileImageUrl { get; set; }
 
@@ -124,6 +153,7 @@ namespace LagoVista.Core.Models
                 CreationDate = CreationDate,
                 Name = $"{FirstName} {LastName}",
                 Email = Email,
+                UserName = UserName,
                 IsSystemAdmin = IsSystemAdmin,
                 IsAppBuilder = IsAppBuilder,
                 IsUserDevice = IsUserDevice,
@@ -164,6 +194,10 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsAccountDisabled, ResourceType: typeof(AuthenticationResources))]
         public bool IsAccountDisabled { get; set; }
+
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_UserName, ResourceType: typeof(AuthenticationResources))]
+        public String UserName { get; set; }
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
         public String Name { get; set; }

@@ -1,4 +1,4 @@
-﻿/*5/18/2022 5:17:56 AM*/
+﻿/*6/3/2022 6:07:10 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -114,6 +114,21 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:ExternalLogin_Microsoft
 
 		public static string ExternalLogin_Microsoft { get { return GetResourceString("ExternalLogin_Microsoft"); } }
+//Resources:AuthenticationResources:UserInfo_Address1
+
+		public static string UserInfo_Address1 { get { return GetResourceString("UserInfo_Address1"); } }
+//Resources:AuthenticationResources:UserInfo_Address2
+
+		public static string UserInfo_Address2 { get { return GetResourceString("UserInfo_Address2"); } }
+//Resources:AuthenticationResources:UserInfo_Bio
+
+		public static string UserInfo_Bio { get { return GetResourceString("UserInfo_Bio"); } }
+//Resources:AuthenticationResources:UserInfo_City
+
+		public static string UserInfo_City { get { return GetResourceString("UserInfo_City"); } }
+//Resources:AuthenticationResources:UserInfo_Country
+
+		public static string UserInfo_Country { get { return GetResourceString("UserInfo_Country"); } }
 //Resources:AuthenticationResources:UserInfo_DateCreated
 
 		public static string UserInfo_DateCreated { get { return GetResourceString("UserInfo_DateCreated"); } }
@@ -171,18 +186,30 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_Notes
 
 		public static string UserInfo_Notes { get { return GetResourceString("UserInfo_Notes"); } }
+//Resources:AuthenticationResources:UserInfo_ObjectTitle
+
+		public static string UserInfo_ObjectTitle { get { return GetResourceString("UserInfo_ObjectTitle"); } }
 //Resources:AuthenticationResources:UserInfo_PhoneNumber
 
 		public static string UserInfo_PhoneNumber { get { return GetResourceString("UserInfo_PhoneNumber"); } }
+//Resources:AuthenticationResources:UserInfo_PostalCode
+
+		public static string UserInfo_PostalCode { get { return GetResourceString("UserInfo_PostalCode"); } }
 //Resources:AuthenticationResources:UserInfo_ShowWelcome
 
 		public static string UserInfo_ShowWelcome { get { return GetResourceString("UserInfo_ShowWelcome"); } }
+//Resources:AuthenticationResources:UserInfo_StateProvince
+
+		public static string UserInfo_StateProvince { get { return GetResourceString("UserInfo_StateProvince"); } }
 //Resources:AuthenticationResources:UserInfo_TeamsAccountName
 
 		public static string UserInfo_TeamsAccountName { get { return GetResourceString("UserInfo_TeamsAccountName"); } }
 //Resources:AuthenticationResources:UserInfo_Title
 
 		public static string UserInfo_Title { get { return GetResourceString("UserInfo_Title"); } }
+//Resources:AuthenticationResources:UserInfo_UserName
+
+		public static string UserInfo_UserName { get { return GetResourceString("UserInfo_UserName"); } }
 //Resources:ComparatorResources:EmptyValue
 
 		public static class Names
@@ -207,6 +234,11 @@ namespace LagoVista.Core.Resources
 			public const string ExternalLogin_Google = "ExternalLogin_Google";
 			public const string ExternalLogin_LinkedIn = "ExternalLogin_LinkedIn";
 			public const string ExternalLogin_Microsoft = "ExternalLogin_Microsoft";
+			public const string UserInfo_Address1 = "UserInfo_Address1";
+			public const string UserInfo_Address2 = "UserInfo_Address2";
+			public const string UserInfo_Bio = "UserInfo_Bio";
+			public const string UserInfo_City = "UserInfo_City";
+			public const string UserInfo_Country = "UserInfo_Country";
 			public const string UserInfo_DateCreated = "UserInfo_DateCreated";
 			public const string UserInfo_Description = "UserInfo_Description";
 			public const string UserInfo_Email = "UserInfo_Email";
@@ -226,10 +258,14 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_IsUserDevice = "UserInfo_IsUserDevice";
 			public const string UserInfo_LastName = "UserInfo_LastName";
 			public const string UserInfo_Notes = "UserInfo_Notes";
+			public const string UserInfo_ObjectTitle = "UserInfo_ObjectTitle";
 			public const string UserInfo_PhoneNumber = "UserInfo_PhoneNumber";
+			public const string UserInfo_PostalCode = "UserInfo_PostalCode";
 			public const string UserInfo_ShowWelcome = "UserInfo_ShowWelcome";
+			public const string UserInfo_StateProvince = "UserInfo_StateProvince";
 			public const string UserInfo_TeamsAccountName = "UserInfo_TeamsAccountName";
 			public const string UserInfo_Title = "UserInfo_Title";
+			public const string UserInfo_UserName = "UserInfo_UserName";
 		}
 	}
 	public class ComparatorResources
