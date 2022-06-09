@@ -224,10 +224,10 @@ namespace LagoVista.PDFServices
 
             Margin = new Margin()
             {
-                Left = 24,
-                Right = 36,
-                Top = 36,
-                Bottom = 36,
+                Left = 50,
+                Right = 50,
+                Top = 50,
+                Bottom = 50,
             };
         }
 
@@ -460,8 +460,6 @@ namespace LagoVista.PDFServices
                 text += "\r\n";
             }
 
-            text = text.Replace("\n", "\n\n");
-
             if (align == null) align = XStringFormats.TopLeft;
             if (!width.HasValue) width = _currentPage.Width;
             if (brush == null) brush = XBrushes.Black;
@@ -475,6 +473,29 @@ namespace LagoVista.PDFServices
             _textFormatter.DrawString(text, font, brush, new XRect(Margin.Left, CurrentY, _currentPage.Width - (Margin.Left + Margin.Right), height), align);
             CurrentY += height;
         }
+
+        public void AddLine(String text, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
+        {
+            if (_renderMode == RenderMode.Table)
+            {
+                throw new Exception("Current render mode is table");
+            }
+
+
+            if (align == null) align = XStringFormats.TopLeft;
+            if (!width.HasValue) width = _currentPage.Width;
+            if (brush == null) brush = XBrushes.Black;
+            var font = ResolveFont(Style.Body, fontStyle);
+            var height = _graphics.MeasureStringExact(text, font, width.Value - (Margin.Left + Margin.Right)).Height;
+            if (CurrentY + (height) + 50 > (_currentPage.Height - (Margin.Bottom)))
+            {
+                NewPage();
+            }
+
+            _textFormatter.DrawString(text, font, brush, new XRect(Margin.Left, CurrentY, _currentPage.Width - (Margin.Left + Margin.Right), height), align);
+            CurrentY += height;
+        }
+
 
         public void AddParagraph(String text, string label, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
         {
