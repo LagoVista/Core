@@ -29,6 +29,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public const string FieldType_Bool = "Bool";
         public const string FieldType_NameSpace = "NameSpace";
         public const string FieldType_Password = "Password";
+        public const string FieldType_MultilineText = "MultiLineText";
 
         private FormField() { }
 
