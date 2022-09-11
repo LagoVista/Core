@@ -273,4 +273,10 @@
   <data name="UserInfo_StateProvince" xml:space="preserve">
     <value>State or Province</value>
   </data>
+  <data name="ExternalLogin_Facebook" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="ExternalLogin_Twitter" xml:space="preserve">
+    <value>Twitter</value>
+  </data>
 </root>

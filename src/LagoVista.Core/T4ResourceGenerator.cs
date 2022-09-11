@@ -1,4 +1,4 @@
-﻿/*6/3/2022 6:07:10 AM*/
+﻿/*9/10/2022 5:21:54 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -102,6 +102,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
+//Resources:AuthenticationResources:ExternalLogin_Facebook
+
+		public static string ExternalLogin_Facebook { get { return GetResourceString("ExternalLogin_Facebook"); } }
 //Resources:AuthenticationResources:ExternalLogin_GitHub
 
 		public static string ExternalLogin_GitHub { get { return GetResourceString("ExternalLogin_GitHub"); } }
@@ -114,6 +117,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:ExternalLogin_Microsoft
 
 		public static string ExternalLogin_Microsoft { get { return GetResourceString("ExternalLogin_Microsoft"); } }
+//Resources:AuthenticationResources:ExternalLogin_Twitter
+
+		public static string ExternalLogin_Twitter { get { return GetResourceString("ExternalLogin_Twitter"); } }
 //Resources:AuthenticationResources:UserInfo_Address1
 
 		public static string UserInfo_Address1 { get { return GetResourceString("UserInfo_Address1"); } }
@@ -230,10 +236,12 @@ namespace LagoVista.Core.Resources
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
 			public const string Common_Role = "Common_Role";
 			public const string Common_Status = "Common_Status";
+			public const string ExternalLogin_Facebook = "ExternalLogin_Facebook";
 			public const string ExternalLogin_GitHub = "ExternalLogin_GitHub";
 			public const string ExternalLogin_Google = "ExternalLogin_Google";
 			public const string ExternalLogin_LinkedIn = "ExternalLogin_LinkedIn";
 			public const string ExternalLogin_Microsoft = "ExternalLogin_Microsoft";
+			public const string ExternalLogin_Twitter = "ExternalLogin_Twitter";
 			public const string UserInfo_Address1 = "UserInfo_Address1";
 			public const string UserInfo_Address2 = "UserInfo_Address2";
 			public const string UserInfo_Bio = "UserInfo_Bio";

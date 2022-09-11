@@ -19,6 +19,10 @@ namespace LagoVista.Core.Models
         Microsoft,
         [EnumLabel(ExternalLogin.ExternalLogin_Google, AuthenticationResources.Names.ExternalLogin_Google, ResourceType: typeof(AuthenticationResources))]
         Google,
+        [EnumLabel(ExternalLogin.ExternalLogin_Twitter, AuthenticationResources.Names.ExternalLogin_Twitter, ResourceType: typeof(AuthenticationResources))]
+        Twitter,
+        [EnumLabel(ExternalLogin.ExternalLogin_Facebook, AuthenticationResources.Names.ExternalLogin_Facebook, ResourceType: typeof(AuthenticationResources))]
+        Facebook,
     }
 
     /* The AppUser is used for managing identity for the system, we want something with basic user information that doesn't
@@ -226,6 +230,8 @@ namespace LagoVista.Core.Models
         public const string ExternalLogin_Microsoft = "microsoft";
         public const string ExternalLogin_Google = "google";
         public const string ExternalLogin_LinkedIn = "linkedin";
+        public const string ExternalLogin_Facebook = "facebook";
+        public const string ExternalLogin_Twitter = "twitter";
 
         public EntityHeader<ExternalLoginTypes> Provider { get; set; }
         public string Id { get; set; }
