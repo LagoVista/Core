@@ -240,5 +240,9 @@ namespace LagoVista.Core.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Organization { get; set; }
+        public string OAuthToken { get; set; }
+        public string OAuthTokenSecretId { get; set; }
+        public string OAuthTokenVerifier { get; set; }
+        public string OAuthTokenVerifierSecretId { get; set; }
     }
 }
