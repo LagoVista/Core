@@ -1,11 +1,11 @@
 ﻿#define TEST_SERVICE_BUS
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Azure.ServiceBus.Management;
+using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus.Administration;
 #if TEST_SERVICE_BUS
 using LagoVista.Core.Models;
 using LagoVista.Core.Rpc.Tests.Utils;
-using Microsoft.Azure.ServiceBus;
 using System;
 using System.Threading.Tasks;
 #endif
@@ -46,25 +46,29 @@ namespace LagoVista.Core.Rpc.Tests.Server
                 .ToLower();
             Assert.AreEqual("rpc_request_c8ad4589f26842e7a1aefbaefc979c9b_9e88c7f6b5894dbfb3bc09d20736705e", entityPath);
 
-            var client = new ManagementClient(topicConnectionString);
+            var client = new ServiceBusAdministrationClient(topicConnectionString);
             if (!await client.TopicExistsAsync(entityPath))
             {
                 await client.CreateTopicAsync(entityPath);
             }
 
-            var topicClient = new TopicClient(topicConnectionString, entityPath, RetryPolicy.Default);
+            var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
+            var senderClient = new ServiceBusClient(topicConnectionString, clientOptions);
+            var sender = senderClient.CreateSender(entityPath);
 
-            var messageOut = new Microsoft.Azure.ServiceBus.Message(message.Payload)
+
+            
+            var messageOut = new ServiceBusMessage(message.Payload)
             {
                 ContentType = message.GetType().FullName,
                 MessageId = message.Id,
                 CorrelationId = message.CorrelationId,
                 To = message.DestinationPath,
                 ReplyTo = message.ReplyPath,
-                Label = message.DestinationPath,
+                Subject = message.DestinationPath,
             };
 
-            await topicClient.SendAsync(messageOut);
+            await sender.SendMessageAsync(messageOut);
         }
 #endif
     }

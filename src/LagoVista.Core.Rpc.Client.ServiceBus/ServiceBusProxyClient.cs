@@ -1,10 +1,10 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus.Administration;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
 using LagoVista.Core.Validation;
-using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.Management;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -24,19 +24,24 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private IConnectionSettings _subscriberSettings;
         private string _transmitterConnectionSettings;
         private string _serverTopicPrefix;
-        private SubscriptionClient _subscriptionClient;
+        private ServiceBusClient _senderClient;
+        private ServiceBusSender _sender;
+
+        private ServiceBusClient _processorClient;
+        private ServiceBusProcessor _processor;
+
         #endregion
 
         private async Task CreateTopicAsync(string entityPath)
         {
-            if(_topicConstructorSettings == null)
+            if (_topicConstructorSettings == null)
             {
                 throw new ArgumentNullException(nameof(_topicConstructorSettings));
             }
 
             var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
 
-            var client = new ManagementClient(connstr);
+            var client = new ServiceBusAdministrationClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
             {
                 await client.CreateTopicAsync(entityPath);
@@ -57,7 +62,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             _topicConstructorSettings = settings.RpcAdmin;
             _subscriberSettings = settings.RpcClientReceiver;
-         
+
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
@@ -87,65 +92,49 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                 await CreateTopicAsync(sourceEntityPath);
             }
 
-            //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
-            _subscriptionClient = new SubscriptionClient(receiverConnectionString, sourceEntityPath, subscriptionPath, ReceiveMode.PeekLock, null);
-            Console.WriteLine($"RPC Subscription Created {sourceEntityPath} - {subscriptionPath}");
-
-            var options = new MessageHandlerOptions(HandleException)
-            {
-                AutoComplete = false,
-#if DEBUG
-                MaxConcurrentCalls = 1,
-#else
-                MaxConcurrentCalls = 100,
-#endif
-            };
-            _subscriptionClient.RegisterMessageHandler(MessageReceived, options);
+            var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
+            _processorClient = new ServiceBusClient(receiverConnectionString, clientOptions);
+            _processor = _processorClient.CreateProcessor(_serverTopicPrefix, new ServiceBusProcessorOptions());
+            _processor.ProcessMessageAsync += _processor_ProcessMessageAsync; ;
+            _processor.ProcessErrorAsync += _processor_ProcessErrorAsync; ;
         }
 
-        #endregion
-
-        #region ServiceBus Subscription Methods
-
-        private async Task MessageReceived(Microsoft.Azure.ServiceBus.Message message, CancellationToken cancelationToken)
-        {
-            try
-            {
-                using (var compressedStream = new MemoryStream(message.Body))
-                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
-                {
-                    using (var decompressedStream = new MemoryStream())
-                    {
-                        decompressorStream.CopyTo(decompressedStream);
-
-                        /* 
-                         * it is possible that this may not be the client that asked for the RPC request
-                         * but it could be the one that consumed the message.  If this is the case the 
-                         * asyn coupler will say, nope I didn't ask for this and will not processe it.
-                         * return it back to the pool to see if another client can handle it.
-                         */ 
-                        if((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful) 
-                            await _subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
-                        else
-                            await _subscriptionClient.AbandonAsync(message.SystemProperties.LockToken);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                message.Label = ex.Message;
-                await _subscriptionClient.DeadLetterAsync(message.SystemProperties.LockToken, ex.GetType().FullName, ex.Message);
-                throw;
-            }
-        }
-
-        private Task HandleException(ExceptionReceivedEventArgs e)
+        private Task _processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
         {
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
             //LogException("AzureServiceBusListener_Listen", ex.Exception);
             return Task.FromResult<object>(null);
+        }
+
+        private async Task _processor_ProcessMessageAsync(ProcessMessageEventArgs arg)
+        {
+            try
+            {
+                /* 
+                 * it is possible that this may not be the client that asked for the RPC request
+                 * but it could be the one that consumed the message.  If this is the case the 
+                 * asyn coupler will say, nope I didn't ask for this and will not processe it.
+                 * return it back to the pool to see if another client can handle it.
+                 */
+
+                using (var compressedStream = new MemoryStream(arg.Message.Body.ToArray()))
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
+                using (var decompressedStream = new MemoryStream())
+                {
+                    decompressorStream.CopyTo(decompressedStream);
+                    if ((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful)
+                        await arg.CompleteMessageAsync(arg.Message);
+                    else
+                        await arg.AbandonMessageAsync(arg.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
+                throw;
+            }
         }
 
         #endregion
@@ -158,9 +147,13 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             await CreateTopicAsync(entityPath);
 
+            var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
+            _senderClient = new ServiceBusClient(_transmitterConnectionSettings, clientOptions);
+            _sender = _senderClient.CreateSender(entityPath);
+
+
             Console.WriteLine($"Sending message async entity: {_transmitterConnectionSettings} - {entityPath} - {message.DestinationPath} - {message.Payload} - {message.ReplyPath}");
 
-            var topicClient = new TopicClient(_transmitterConnectionSettings, entityPath, new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10));
             try
             {
                 using (var ms = new MemoryStream(message.Payload))
@@ -172,29 +165,26 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     }
 
                     var buffer = mso.ToArray();
+                    var sbMsg = new ServiceBusMessage(buffer);
+                    sbMsg.ContentType = message.GetType().FullName;
 
-                    var messageOut = new Microsoft.Azure.ServiceBus.Message(buffer)
-                    {
-                        ContentType = message.GetType().FullName,
-                        MessageId = message.Id,
-                        CorrelationId = message.CorrelationId,
-                        To = message.DestinationPath,
-                        ReplyTo = message.ReplyPath,
-                        Label = message.DestinationPath,
-                    };
-
-                    await topicClient.SendAsync(messageOut);
+                    sbMsg.To = message.DestinationPath;
+                    sbMsg.ReplyTo = message.ReplyPath;
+                    sbMsg.Subject = message.DestinationPath;
+                    sbMsg.MessageId = Guid.NewGuid().ToId();
+                    await _sender.SendMessageAsync(sbMsg);
                     return InvokeResult.Success;
                 }
             }
             catch //(Exception ex)
-            {                
+            {
                 //todo: ML - log exception
                 throw;
             }
             finally
             {
-                await topicClient.CloseAsync();
+                await _sender.DisposeAsync();
+                await _senderClient.DisposeAsync();
             }
         }
 
