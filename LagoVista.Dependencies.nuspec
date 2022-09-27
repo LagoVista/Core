@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>LagoVista.Dependencies</id>
+    <version>3.0.1959.1339</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>Package that contains approved dependencies for the LagoVista frameworks and NuvIoT application.</description>
+    <releaseNotes>On Going</releaseNotes>
+    <copyright>Copyright 2022</copyright>
+    <tags>HomeAutomation IoT LagoVista NuvIoT</tags>
+  </metadata>
+</package>
