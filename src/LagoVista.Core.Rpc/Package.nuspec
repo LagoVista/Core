@@ -1,19 +1,29 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
-    <metadata>
-        <id>LagoVista.Core.Rpc</id>
-        <version>3.0.1959.1339</version>
-        <authors>Software Logistics, LLC</authors>
-        <owners>Software Logistics, LLC</owners>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
-        <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-        <description>Common RPC Network Functionality and Interfaces for Building Apps with the LagoVista IoT and Devices Framework</description>
-        <releaseNotes>Early Unstable Release</releaseNotes>
-        <copyright>Copyright 2018</copyright>
-        <tags>HomeAutomation IoT RPC</tags>
-    </metadata>
+  <metadata>
+    <id>LagoVista.Core.Rpc</id>
+    <version>3.0.1963.1145</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.nuviot.com</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>Common RPC Network Functionality and Interfaces for Building Apps with the LagoVista IoT and Devices Framework</description>
+    <copyright>Copyright Software Logistics - 2022</copyright>
+    <tags>HomeAutomation IoT RPC</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="netstandard1.2">
+        <dependency id="Newtonsoft.Json" version="13.0.1" />
+        <dependency id="LagoVista.Core" version="3.0.1963.1145" />
+      </group>
+    </dependencies>
+  </metadata>
   <files>
-    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard1.2\LagoVista.Core.Rpc.dll" target="lib\netstandard1.2\LagoVista.Core.Rpc.dll" />
+    <file src="bin\release\netstandard1.2\LagoVista.Core.Rpc.pdb" target="lib\netstandard1.2\LagoVista.Core.Rpc.pdb" />
   </files>
 </package>

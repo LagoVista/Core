@@ -1,19 +1,28 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.Core</id>
-    <version>3.0.1959.1339</version>
+    <version>3.0.1963.1145</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <icon>LagoVistaIcon.png</icon>
     <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
-    <releaseNotes>Pre-release Software</releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright Software Logistics - 2022</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
+    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="netstandard1.2">
+        <dependency id="Newtonsoft.Json" version="13.0.1" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
-    <file src="bin\release\netstandard1.2\*.dll" target="lib\netstandard1.2" />
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard1.2\LagoVista.Core.dll" target="lib\netstandard1.2\LagoVista.Core.dll" />
+    <file src="bin\release\netstandard1.2\LagoVista.Core.pdb" target="lib\netstandard1.2\LagoVista.Core.pdb" />
   </files>
 </package>

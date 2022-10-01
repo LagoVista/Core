@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.2</TargetFramework>
+    <Description>Core Methods for Authentication</Description>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <FileVersion>0.8.0.0</FileVersion>
+    <Company>Software Logistics, LLC</Company>
+    <Authors>Software Logistics, LLC</Authors>
+    <Version>0.8</Version>
+    <Product>LagoVista IoT and Home Automation Frameworks</Product>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>LagoVista.Core.Authentication.snk</AssemblyOriginatorKeyFile>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Resources\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <None Remove="Resources\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
+    <ProjectReference Include="..\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="T4ResourceGenerator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4ResourceGenerator.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="T4ResourceGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

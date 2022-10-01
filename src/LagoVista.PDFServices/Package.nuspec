@@ -1,22 +1,28 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.PDFServices</id>
-    <version>3.0.1959.1339</version>
+    <version>3.0.1963.1145</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>http://www.lagovista-iot.com/opensource</projectUrl>
+    <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>PDF Generation Services for use with applications built with the LagoVista IoT Frameworks</description>
-    <releaseNotes>Pre-release Software</releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <copyright>Copyright Software Logistics - 2022</copyright>
     <tags>HomeAutomation IoT LagoVista PDF</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <dependency id="Didstopia.PDFSharp" version="1.0.0-beta8" />
+      <group targetFramework="netstandard2.1">
+        <dependency id="PdfSharpCore" version="1.3.40" />
+      </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\release\netstandard2.1\*.dll" target="lib\netstandard2.1" />
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard2.1\LagoVista.PDFServices.dll" target="lib\netstandard2.1\LagoVista.PDFServices.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.PDFServices.pdb" target="lib\netstandard2.1\LagoVista.PDFServices.pdb" />
   </files>
 </package>
