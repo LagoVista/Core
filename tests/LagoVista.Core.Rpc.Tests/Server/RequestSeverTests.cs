@@ -3,6 +3,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
+using System.Threading;
 #if TEST_SERVICE_BUS
 using LagoVista.Core.Models;
 using LagoVista.Core.Rpc.Tests.Utils;
@@ -53,11 +54,30 @@ namespace LagoVista.Core.Rpc.Tests.Server
             }
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            var senderClient = new ServiceBusClient(topicConnectionString, clientOptions);
-            var sender = senderClient.CreateSender(entityPath);
-
-
+            var sbClient = new ServiceBusClient(topicConnectionString, clientOptions);
+            var sender = sbClient.CreateSender(entityPath);
             
+            var receiver = sbClient.CreateProcessor(entityPath, "application");
+
+            var receiveCount = 0;
+
+            receiver.ProcessMessageAsync += (ProcessMessageEventArgs arg) =>
+            {
+                receiveCount += 1;
+                Console.WriteLine("Message Received");
+                return Task.CompletedTask;
+                
+            };
+
+            receiver.ProcessErrorAsync += (ProcessErrorEventArgs arg) => 
+            {
+                Console.WriteLine("got an error");
+                return Task.CompletedTask;
+            }
+;
+
+            await receiver.StartProcessingAsync();
+
             var messageOut = new ServiceBusMessage(message.Payload)
             {
                 ContentType = message.GetType().FullName,
@@ -69,7 +89,15 @@ namespace LagoVista.Core.Rpc.Tests.Server
             };
 
             await sender.SendMessageAsync(messageOut);
+
+            while(receiveCount < 1)
+            {
+                await Task.Delay(50);
+            }
         }
+
+        
+
 #endif
     }
 }

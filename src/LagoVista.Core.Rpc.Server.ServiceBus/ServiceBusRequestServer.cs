@@ -21,7 +21,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         #region Fields        
         private IConnectionSettings _subscriberSettings;
         private string _transmitterConnectionString;
-        
+
         private ServiceBusClient _processorClient;
         private ServiceBusProcessor _processor;
 
@@ -51,22 +51,22 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _subscriberSettings = connectionSettings.RpcServerReceiver;
 
             var transmitterSettings = connectionSettings.RpcServerTransmitter;
-            _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";           
+            _transmitterConnectionString = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
 
             Restart();
-        }    
+        }
 
-     
+
         private async void Restart()
         {
             await _processor.CloseAsync();
-            await _processor.DisposeAsync();            
-        
+            await _processor.DisposeAsync();
+
             await _processorClient.DisposeAsync();
             await CustomStartAsync();
         }
 
-        protected override Task CustomStartAsync()
+        protected override async Task CustomStartAsync()
         {
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
@@ -79,17 +79,19 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             var topic = parts[0];
             var subscrption = parts[1];
 
-            var receiverConnectionString = $"Endpoint=sb://{_subscriberSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+            var receiverConnectionString = $"EndPoint={_subscriberSettings.Uri};{_subscriberSettings.AccessKey};";
+
+            var connectionString = ServiceBusConnectionStringProperties.Parse(receiverConnectionString);
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
             _processorClient = new ServiceBusClient(receiverConnectionString, clientOptions);
-            _processor = _processorClient.CreateProcessor(_subscriberSettings.ResourceName, new ServiceBusProcessorOptions());
+            _processor = _processorClient.CreateProcessor(topic, subscrption);
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
 
-            Console.WriteLine($"Starting ServiceBusRequestServer - {_subscriberSettings.Uri} - {_subscriberSettings.ResourceName}");
-
-            return Task.CompletedTask;
+            Console.WriteLine($"[Starting] ServiceBusRequestServer - {_subscriberSettings.Uri} - {_subscriberSettings.ResourceName}");
+            await _processor.StartProcessingAsync();
+            Console.WriteLine($"[Started] ServiceBusRequestServer - {_subscriberSettings.Uri} - {_subscriberSettings.ResourceName}");
         }
 
         private Task _processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
@@ -107,6 +109,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                     using (var decompressedStream = new MemoryStream())
                     {
                         decompressorStream.CopyTo(decompressedStream);
+                        Console.WriteLine($"[Received]: {arg.Message.CorrelationId}");
+                        Console.WriteLine($"[Received]: {arg.Message.Subject}");
 
                         await ReceiveAsync(new Request(decompressedStream.ToArray()));
                         await arg.CompleteMessageAsync(arg.Message);
@@ -117,7 +121,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             {
                 Console.WriteLine($"{ex.GetType().Name}: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
-                await  arg.DeadLetterMessageAsync(arg.Message, ex.GetType().FullName, ex.Message);
+                await arg.DeadLetterMessageAsync(arg.Message, ex.GetType().FullName, ex.Message);
                 throw;
             }
         }
@@ -133,7 +137,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
             try
             {
-                using(var ms = new MemoryStream(message.Payload))
+                using (var ms = new MemoryStream(message.Payload))
                 using (var mso = new MemoryStream())
                 {
                     using (var ds = new DeflateStream(mso, CompressionMode.Compress))
@@ -154,7 +158,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                         ReplyTo = message.ReplyPath,
                         Subject = message.DestinationPath,
                     };
-                    
+
                     await sender.SendMessageAsync(messageOut);
                     return InvokeResult.Success;
                 }
