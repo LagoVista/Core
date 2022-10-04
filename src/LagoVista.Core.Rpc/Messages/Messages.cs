@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -104,6 +105,7 @@ namespace LagoVista.Core.Rpc.Messages
             {
                 throw new KeyNotFoundException(key);
             }
+
 
             return result;
         }

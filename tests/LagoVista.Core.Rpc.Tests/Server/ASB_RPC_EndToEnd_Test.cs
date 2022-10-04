@@ -10,6 +10,7 @@ using LagoVista.Core.Rpc.Server.ServiceBus;
 using LagoVista.Core.Rpc.Settings;
 using LagoVista.Core.Rpc.Tests.Server.Utils;
 using LagoVista.Core.Utils;
+using LagoVista.Core.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -90,11 +91,21 @@ namespace LagoVista.Core.Rpc.Tests.Server
         public interface IRemoteClass
         {
             int AddIt(int a, int b);
+            Task<InvokeResult<List<string>>> GetItems(int count);
         }
 
         public class RemoteClass : IRemoteClass
         {
             public int AddIt(int a, int b) => a + b;
+
+            public async Task<InvokeResult<List<string>>> GetItems(int count)
+            {
+                var items = new List<string>();
+                for (var idx = 0; idx < count; idx++)
+                    items.Add(idx.ToString());
+                await Task.Delay(5);
+                return InvokeResult<List<string>>.Create(items);
+            }
         }
 
 
@@ -117,18 +128,23 @@ namespace LagoVista.Core.Rpc.Tests.Server
 
             var proxyFactory = new LagoVista.Core.Rpc.Client.ProxyFactory(GetSettings(), client, coupler, logger);
 
-
             var proxy = proxyFactory.Create<IRemoteClass>(new ProxySettings()
             {
                  InstanceId = INSTANCE_ID,
                  OrganizationId = ORG_ID
             });
 
-
             await client.StartAsync(GetSettings());
             await server.StartAsync(GetSettings());
 
             var result = proxy.AddIt(1, 1);
+            Assert.AreEqual(2, result);
+
+            var results = await proxy.GetItems(5);
+            foreach(var item in results.Result)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }

@@ -109,7 +109,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
                     using (var decompressedStream = new MemoryStream())
                     {
                         decompressorStream.CopyTo(decompressedStream);
-                        Console.WriteLine($"[Received]: {arg.Message.CorrelationId}");
                         Console.WriteLine($"[Received]: {arg.Message.Subject}");
 
                         await ReceiveAsync(new Request(decompressedStream.ToArray()));
@@ -119,7 +118,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.GetType().Name}: {ex.Message}");
+                Console.WriteLine($"[Client Process Message] {ex.GetType().Name}: {ex.Message}");
                 Console.WriteLine(ex.StackTrace);
                 await arg.DeadLetterMessageAsync(arg.Message, ex.GetType().FullName, ex.Message);
                 throw;
@@ -147,7 +146,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
                     var buffer = mso.ToArray();
 
-                    Console.Write($"Original message: {message.Payload.Length}  Compressed: {buffer.Length}");
+                    Console.WriteLine($"[SendingFromServer]: {message.ReplyPath} {message.Payload.Length}  Compressed: {buffer.Length}");
 
                     var messageOut = new ServiceBusMessage(buffer)
                     {
@@ -165,6 +164,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[Client Send  Message] {ex.GetType().Name}: {ex.Message}");
                 _logger.AddException("Custom Transmit Message", ex, message.DestinationPath.ToKVP("destinationPath"));
                 throw;
             }

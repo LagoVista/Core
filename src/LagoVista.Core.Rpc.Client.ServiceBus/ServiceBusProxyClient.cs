@@ -94,9 +94,15 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
             _processorClient = new ServiceBusClient(receiverConnectionString, clientOptions);
-            _processor = _processorClient.CreateProcessor(_serverTopicPrefix, new ServiceBusProcessorOptions());
+
+            await CreateTopicAsync(_subscriberSettings.ResourceName);
+
+            _processor = _processorClient.CreateProcessor(_subscriberSettings.ResourceName, _subscriberSettings.Uri);
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync; ;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync; ;
+            Console.WriteLine($"[ClientListenerStarting] {_subscriberSettings.ResourceName}  {_subscriberSettings.Uri}");
+            await _processor.StartProcessingAsync();
+            Console.WriteLine($"[ClientListenerStarted] {_subscriberSettings.ResourceName}  {_subscriberSettings.Uri}");
         }
 
         private Task _processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
@@ -119,19 +125,28 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                  * return it back to the pool to see if another client can handle it.
                  */
 
+                Console.WriteLine($"[ReceivedOnClient]");
+
                 using (var compressedStream = new MemoryStream(arg.Message.Body.ToArray()))
                 using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
                 using (var decompressedStream = new MemoryStream())
                 {
                     decompressorStream.CopyTo(decompressedStream);
                     if ((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful)
+                    {
                         await arg.CompleteMessageAsync(arg.Message);
+                        Console.WriteLine($"[Success Processed]");
+                    }
                     else
+                    {
                         await arg.AbandonMessageAsync(arg.Message);
+                        Console.WriteLine($"[Failed Processed]");
+                    }
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[Dead Letter] {arg.Message} {ex.Message}");
                 await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
                 throw;
             }
@@ -151,8 +166,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _senderClient = new ServiceBusClient(_transmitterConnectionSettings, clientOptions);
             _sender = _senderClient.CreateSender(entityPath);
 
-
-            Console.WriteLine($"Sending message async entity: {_transmitterConnectionSettings} - {entityPath} - {message.DestinationPath} - {message.Payload} - {message.ReplyPath}");
+            Console.WriteLine($"[SendingFromClient]: {entityPath}");
 
             try
             {

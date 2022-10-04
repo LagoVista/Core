@@ -162,11 +162,29 @@ namespace LagoVista.Core.Rpc.Client
             // return response result to the proxy caller
             var taskFromResult = GetTaskFromResultMethod(targetMethod);
 
+            var returnValue = response.ReturnValue;
+
+            if(returnValue != null && returnValue.GetType() == typeof(Int64))
+            {
+                if(targetMethod.ReturnType == typeof(Int32))
+                {
+                    returnValue = Convert.ToInt32(returnValue);
+                }
+                else if (targetMethod.ReturnType == typeof(Int16))
+                {
+                    returnValue = Convert.ToInt16(returnValue);
+                }
+                else if (targetMethod.ReturnType == typeof(byte))
+                {
+                    returnValue = Convert.ToByte(returnValue);
+                }
+            }
+
             // if task from result method is null then this method didn't return an awaitable Task
             return taskFromResult != null
-                ? taskFromResult.Invoke(null, new object[] { response.ReturnValue })
-                : response.ReturnValue;
-        }
+                ? taskFromResult.Invoke(null, new object[] { returnValue })
+                : returnValue;
+            }
 
         private MethodInfo GetTaskFromResultMethod(MethodInfo targetMethod)
         {

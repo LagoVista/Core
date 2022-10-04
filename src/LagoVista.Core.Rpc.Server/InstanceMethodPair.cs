@@ -54,7 +54,18 @@ namespace LagoVista.Core.Rpc.Server
                 if (argValue != null)
                 {
                     var argType = argValue.GetType();
-                    if (parameter.ParameterType != argType)
+                    if(argType == typeof(Int64))
+                    {
+                        if(parameter.ParameterType == typeof(Int32))
+                            argValue = Convert.ToInt32(argValue);
+
+                        if (parameter.ParameterType == typeof(Int16))
+                            argValue = Convert.ToInt16(argValue);
+
+                        if (parameter.ParameterType == typeof(byte))
+                            argValue = Convert.ToByte(argValue);
+                    }
+                    else if (parameter.ParameterType == argType)
                     {
                         throw new ArgumentException($"parameter type mismatch. param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
                     }
