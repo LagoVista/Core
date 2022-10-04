@@ -181,7 +181,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     var buffer = mso.ToArray();
                     var sbMsg = new ServiceBusMessage(buffer);
                     sbMsg.ContentType = message.GetType().FullName;
-
+                    sbMsg.CorrelationId = message.CorrelationId;
                     sbMsg.To = message.DestinationPath;
                     sbMsg.ReplyTo = message.ReplyPath;
                     sbMsg.Subject = message.DestinationPath;

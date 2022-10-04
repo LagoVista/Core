@@ -141,6 +141,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             Assert.AreEqual(2, result);
 
             var results = await proxy.GetItems(5);
+            Assert.AreEqual(5, results.Result.Count);
             foreach(var item in results.Result)
             {
                 Console.WriteLine(item);
