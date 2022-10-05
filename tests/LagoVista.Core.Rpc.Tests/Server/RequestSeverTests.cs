@@ -4,6 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using System.Threading;
+using LagoVista.Core.Rpc.Server.ServiceBus;
+using LagoVista.Core.Rpc.Tests.Server.Utils;
+using LagoVista.Core.Utils;
+using LagoVista.Core.Rpc.Messages;
 #if TEST_SERVICE_BUS
 using LagoVista.Core.Models;
 using LagoVista.Core.Rpc.Tests.Utils;
@@ -14,12 +18,14 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Rpc.Tests.Server
 {
     [TestClass]
-    public class RequestSeverTests
+    public class RequestSeverTests : RPC_TestBase
     {
 #if TEST_SERVICE_BUS
         [TestMethod]
         public async Task ServiceBus_TopicClient_SendAsync()
         {
+
+            const string INSTANCE_ID = "24603e698fa04d0cb5e4b81515ae68cc";
 
             var ResourceName = "rpc_request";
             var _destinationEntityPath = ResourceName;
@@ -33,7 +39,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
             var message = new Rpc.Messages.Message
             {
                 OrganizationId = "c8ad4589f26842e7a1aefbaefc979c9b",
-                InstanceId = "9e88c7f6b5894dbfb3bc09d20736705e",
+                InstanceId = INSTANCE_ID,
                 Id = Guid.NewGuid().ToId(),
                 CorrelationId = Constants.MessageCorrelationId,
                 DestinationPath = Constants.MessageDestination,
@@ -42,10 +48,10 @@ namespace LagoVista.Core.Rpc.Tests.Server
             };
 
             //rpc_request_c8ad4589f26842e7a1aefbaefc979c9b_9e88c7f6b5894dbfb3bc09d20736705e
-            var entityPath = $"{_destinationEntityPath}_{message.OrganizationId}_{message.InstanceId}"
+            var entityPath = $"{_destinationEntityPath}_{message.InstanceId}"
                 .Replace("__", "_")
                 .ToLower();
-            Assert.AreEqual("rpc_request_c8ad4589f26842e7a1aefbaefc979c9b_9e88c7f6b5894dbfb3bc09d20736705e", entityPath);
+            Assert.AreEqual($"rpc_request_{INSTANCE_ID}", entityPath);
 
             var client = new ServiceBusAdministrationClient(topicConnectionString);
             if (!await client.TopicExistsAsync(entityPath))
@@ -61,11 +67,13 @@ namespace LagoVista.Core.Rpc.Tests.Server
 
             var receiveCount = 0;
 
-            receiver.ProcessMessageAsync += (ProcessMessageEventArgs arg) =>
+            receiver.ProcessMessageAsync += async (ProcessMessageEventArgs arg) =>
             {
                 receiveCount += 1;
-                Console.WriteLine("Message Received");
-                return Task.CompletedTask;
+                Console.WriteLine($"Message Received  {arg.Message.Subject} ");
+
+                await arg.CompleteMessageAsync(arg.Message);
+           
                 
             };
 
@@ -88,7 +96,7 @@ namespace LagoVista.Core.Rpc.Tests.Server
                 Subject = message.DestinationPath,
             };
 
-            await sender.SendMessageAsync(messageOut);
+         //   await sender.SendMessageAsync(messageOut);
 
             while(receiveCount < 1)
             {
@@ -96,7 +104,23 @@ namespace LagoVista.Core.Rpc.Tests.Server
             }
         }
 
-        
+        [TestMethod]
+        public async Task ServerTests()
+        {
+            const string INSTANCE_ID = "24603e698fa04d0cb5e4b81515ae68cc";
+
+            var logger = new TestLogger();
+
+            var _requestBroker = new LagoVista.Core.Rpc.Server.RequestBroker();
+          
+            var coupler = new AsyncCoupler<IMessage>(logger, new TestUsageMetrics("rpc", "rpc", "rpc") { Version = "N/A" });
+            var server = new ServiceBusRequestServer(_requestBroker, logger);
+            await server.StartAsync(GetSettings(INSTANCE_ID));
+
+            await Task.Delay(5000);
+        }
+
+
 
 #endif
     }

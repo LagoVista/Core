@@ -60,14 +60,14 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
         {
-            _topicConstructorSettings = settings.RpcAdmin;
-            _subscriberSettings = settings.RpcClientReceiver;
+            _topicConstructorSettings = settings.RpcAdmin ?? throw new ArgumentNullException(nameof(settings.RpcAdmin));
+            _subscriberSettings = settings.RpcClientReceiver ?? throw new ArgumentNullException(nameof(settings.RpcClientReceiver));
 
             // Endpoint - AccountId
             // SharedAccessKeyName - UserName
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
-            var transmitterSettings = settings.RpcClientTransmitter;
+            var transmitterSettings = settings.RpcClientTransmitter ?? throw new ArgumentNullException(nameof(settings.RpcClientTransmitter));
             _transmitterConnectionSettings = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
             _serverTopicPrefix = transmitterSettings.ResourceName;
         }
