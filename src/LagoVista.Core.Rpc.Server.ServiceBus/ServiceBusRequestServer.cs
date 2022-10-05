@@ -21,7 +21,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
     {
         #region Fields        
         private AzureSasCredential _subscriberSASSettings;
-        private AzureSasCredential _transmitterSASSettings;
+
+        private string _transmitterConnectionString;
 
         private IConnectionSettings _subscriberSettings;
         private IConnectionSettings _transmitterSettings;
@@ -47,8 +48,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _subscriberSettings = connectionSettings.RpcServerReceiver;
             _transmitterSettings = connectionSettings.RpcServerTransmitter;
 
-            _transmitterSASSettings = new AzureSasCredential(_transmitterSettings.AccessKey);
             _subscriberSASSettings = new AzureSasCredential(_subscriberSettings.AccessKey);
+            _transmitterConnectionString = $"Endpoint=sb://{_transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_transmitterSettings.UserName};SharedAccessKey={_transmitterSettings.AccessKey};";
         }
 
         protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)
@@ -56,8 +57,9 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _subscriberSettings = connectionSettings.RpcServerReceiver;
             _transmitterSettings = connectionSettings.RpcServerTransmitter;
 
-            _transmitterSASSettings = new AzureSasCredential(_transmitterSettings.AccessKey);
             _subscriberSASSettings = new AzureSasCredential(_subscriberSettings.AccessKey);
+
+            _transmitterConnectionString = $"Endpoint=sb://{_transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_transmitterSettings.UserName};SharedAccessKey={_transmitterSettings.AccessKey};";
 
             Restart();
         }
@@ -85,8 +87,10 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             var topic = parts[0];
             var subscrption = parts[1];
 
+            var fqASBName = $"{_subscriberSettings.AccountId}.servicebus.windows.net";
+
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            _processorClient = new ServiceBusClient(_subscriberSettings.AccountId, _subscriberSASSettings, clientOptions);
+            _processorClient = new ServiceBusClient(fqASBName, _subscriberSASSettings, clientOptions);
             _processor = _processorClient.CreateProcessor(topic.ToLower(), subscrption.ToLower());
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
@@ -104,6 +108,9 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("[ServiceBusRequestServer__ProcessError] - " + arg.Exception.Message);
+            if(arg.Exception.InnerException != null)
+                Console.WriteLine("[ServiceBusRequestServer__ProcessError] - " + arg.Exception.InnerException.Message);
+
             Console.ResetColor();
 
             return Task.CompletedTask;
@@ -144,11 +151,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             //new RetryExponential(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(30), 10)
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            var senderClient = new ServiceBusClient(_transmitterSettings.AccountId, _transmitterSASSettings, clientOptions);
+            var senderClient = new ServiceBusClient(_transmitterConnectionString, clientOptions);
             var sender = senderClient.CreateSender(message.ReplyPath.ToLower());
-
-            var sasCredential = new AzureSasCredential(_subscriberSettings.AccessKey);
-
 
             try
             {

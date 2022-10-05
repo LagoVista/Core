@@ -89,17 +89,27 @@ namespace LagoVista.Core.Rpc.Server
             {
                 throw new KeyNotFoundException($"Handler not found for {request.DestinationPath}");
             }
+            else
+            {
+                Console.WriteLine($"[RequestBroker__InvokeAsync] - Found Handler {messageHandler.GetType().FullName} for {request.DestinationPath}");
+            }
 
             // 2. call handler and get response
             IResponse response = null;
             try
             {
                 response = await messageHandler.InvokeAsync(request);
+                Console.WriteLine($"[RequestBroker__InvokeAsync] - Execute Handler {messageHandler.GetType().FullName} for {request.DestinationPath}");
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"[RequestBroker__InvokeAsync] - !!!ERROR {request.DestinationPath}");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
                 //todo: ML - log exception
-                response = new Response(request, ex);
+                response = new Response(request, ex);                
             }
             return response;
         }

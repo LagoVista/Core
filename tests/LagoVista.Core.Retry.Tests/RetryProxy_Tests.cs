@@ -28,7 +28,7 @@ namespace LagoVista.Core.Retry.Tests
                     var b = await ac.FunctionAsync(x);
                     if (b == 2)
                     {
-                        Console.Write("");
+                        Console.WriteLine("B=2");
                     }
                 });
                 return y;

@@ -316,9 +316,12 @@ namespace LagoVista.Core.Rpc.Messages
             }
             else
             {
+
+                var exception = (Exception)value;
                 Success = false;
-                ReturnValue = null;
-                Exception = (Exception)value;
+                
+                ReturnValue = null;                
+                Exception = exception;
             }
 
             Initialize(request);

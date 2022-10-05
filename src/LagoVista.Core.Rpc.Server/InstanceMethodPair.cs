@@ -65,9 +65,16 @@ namespace LagoVista.Core.Rpc.Server
                         if (parameter.ParameterType == typeof(byte))
                             argValue = Convert.ToByte(argValue);
                     }
-                    else if (parameter.ParameterType == argType)
+                    else if (parameter.ParameterType != argType)
                     {
-                        throw new ArgumentException($"parameter type mismatch. param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("[InstanceMethodPair__GetArguments] Parameter Type Mismatch");
+                        Console.WriteLine($"\tMethod Type: {parameter.Name}");
+                        Console.WriteLine($"\tMethod Type: {parameter.ParameterType.FullName}");
+                        Console.WriteLine($"\tActual Type: {argType.FullName}");
+                        Console.ResetColor(); 
+
+                        throw new ArgumentException($"parameter type mismatch: param type: '{parameter.ParameterType.FullName}', arg type: '{argType.FullName}'.");
                     }
                 }
                 arguments[i] = argValue;
@@ -83,6 +90,8 @@ namespace LagoVista.Core.Rpc.Server
             }
 
             var arguments = GetArguments(request, _parameters);
+
+            Console.WriteLine($"[InstanceMethodPair__InvokeAsync] - {request.DestinationPath} - argument count {arguments.Length}");
 
             object invokeResult = null;
             if (_isAwaitable)
@@ -107,6 +116,8 @@ namespace LagoVista.Core.Rpc.Server
                     invokeResult = _methodInfo.Invoke(_instance, arguments);
                 }
             }
+
+            Console.WriteLine($"[InstanceMethodPair__InvokeAsync] - completed");
 
             return (IResponse)Activator.CreateInstance(typeof(Response), new object[] { request, invokeResult });
         }
