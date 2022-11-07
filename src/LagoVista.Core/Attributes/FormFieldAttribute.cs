@@ -37,6 +37,7 @@ namespace LagoVista.Core.Attributes
         EntityHeaderPicker,
         Byte,
         Secret,
+        Icon,
     }
 
     public enum NamespaceTypes
