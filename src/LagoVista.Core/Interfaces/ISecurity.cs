@@ -2,7 +2,6 @@
 using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using static LagoVista.Core.Models.AuthorizeResult;
 
@@ -19,5 +18,9 @@ namespace LagoVista.Core.Interfaces
         Task AuthorizeOrgAccessAsync(EntityHeader user, string orgId, Type entityType = null, Actions action = Actions.Any);
         Task AuthorizeOrgAccessAsync(string userId, string orgId, Type entityType = null, Actions action = Actions.Any);
         Task LogEntityActionAsync(String id, string entityType, string accessType, EntityHeader org, EntityHeader user);
+
+        Task<List<EntityHeader>> GetUserRolesAsync(string userId, string orgId);
+    
+        Task<bool> DoesUserHaveRoleAsync(string userId, string orgId, string roleName);
     }
 }
