@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Models;
 using System;
+using System.Collections.Generic;
 
 namespace LagoVista.Core.Interfaces
 {
@@ -32,5 +33,7 @@ namespace LagoVista.Core.Interfaces
         ImageDetails ProfileImageUrl { get; set; }
 
         string Email { get; set; }
+
+        List<EntityHeader> Roles { get; set; }
     }
 }

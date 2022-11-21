@@ -138,6 +138,7 @@ namespace LagoVista.Core.Models
         public bool EmailConfirmed { get; set; }
 
         public List<ExternalLogin> ExternalLogins { get; set; } = new List<ExternalLogin>();
+        public List<EntityHeader> Roles { get; set; } = new List<EntityHeader>();
 
         public EntityHeader ToEntityHeader()
         {
