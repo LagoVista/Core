@@ -36,6 +36,8 @@ namespace LagoVista.Core.Rpc.Client
         {
             if (message == null)  throw new ArgumentNullException(nameof(message));
 
+            Console.WriteLine($"[AbstractProxyClient__ReceiveAsync] - Correlation Id: {message.CorrelationId}");
+
             return await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
         }
 

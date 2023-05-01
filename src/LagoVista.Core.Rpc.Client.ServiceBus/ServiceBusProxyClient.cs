@@ -40,6 +40,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
 
             var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            Console.WriteLine($"Request Server Connection String {connstr}");
 
             var client = new ServiceBusAdministrationClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
@@ -83,13 +84,18 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SharedAccessKey - AccessKey
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
-            var receiverConnectionString = $"Endpoint=sb://{_subscriberSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
-            var sourceEntityPath = _subscriberSettings.ResourceName;
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+
+            var endPoint = $"sb://{_subscriberSettings.AccountId}.servicebus.windows.net";
+            var topicPath = _subscriberSettings.ResourceName;
             var subscriptionPath = _subscriberSettings.Uri;
 
+            var receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+          
             if (_topicConstructorSettings != null)
             {
-                await CreateTopicAsync(sourceEntityPath);
+                await CreateTopicAsync(topicPath);
             }
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
@@ -97,16 +103,25 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
             await CreateTopicAsync(_subscriberSettings.ResourceName);
 
-            _processor = _processorClient.CreateProcessor(_subscriberSettings.ResourceName, _subscriberSettings.Uri);
-            _processor.ProcessMessageAsync += _processor_ProcessMessageAsync; ;
-            _processor.ProcessErrorAsync += _processor_ProcessErrorAsync; ;
-            Console.WriteLine($"[ClientListenerStarting] {_subscriberSettings.ResourceName}  {_subscriberSettings.Uri}");
+            _processor = _processorClient.CreateProcessor(topicPath, subscriptionPath);
+            _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
+            _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
+
+            Console.WriteLine($"[ClientListenerStarting] EndPoint: {receiverConnectionString} Topic: {topicPath} Subscription: {subscriptionPath}");
             await _processor.StartProcessingAsync();
-            Console.WriteLine($"[ClientListenerStarted] {_subscriberSettings.ResourceName}  {_subscriberSettings.Uri}");
+            Console.WriteLine($"[ClientListenerStarted]  EndPoint: {receiverConnectionString} Topic: {topicPath} Subscription: {subscriptionPath}");
+
+            Console.ResetColor();
         }
 
         private Task _processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"ERROR PROCESSING MESSAGE: {arg.ErrorSource} - {arg.Exception.Message}");
+            Console.ResetColor();
+
+            _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception);
+
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
@@ -118,6 +133,10 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             try
             {
+                Console.WriteLine($"[ServiceBusPRoxyClient__ProcessMessageAsync]");
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
                 /* 
                  * it is possible that this may not be the client that asked for the RPC request
                  * but it could be the one that consumed the message.  If this is the case the 
@@ -125,7 +144,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                  * return it back to the pool to see if another client can handle it.
                  */
 
-                Console.WriteLine($"[ReceivedOnClient]");
+                Console.WriteLine($"[ServiceBusPRoxyClient__ProcessMessageAsync] {arg.Message.Subject}");
 
                 using (var compressedStream = new MemoryStream(arg.Message.Body.ToArray()))
                 using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
@@ -135,20 +154,26 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     if ((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful)
                     {
                         await arg.CompleteMessageAsync(arg.Message);
-                        Console.WriteLine($"[Success Processed]");
+                        Console.WriteLine($"[ServiceBusPRoxyClient__SuccessProcessed] {arg.Message.Subject}");
                     }
                     else
                     {
                         await arg.AbandonMessageAsync(arg.Message);
-                        Console.WriteLine($"[Failed Processed]");
+                        Console.WriteLine($"[ServiceBusPRoxyClient__DidNotProcess] {arg.Message.Subject}");
                     }
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[Dead Letter] {arg.Message} {ex.Message}");
                 await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
+                _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex);
                 throw;
+            }
+            finally
+            {
+                Console.ResetColor();
             }
         }
 

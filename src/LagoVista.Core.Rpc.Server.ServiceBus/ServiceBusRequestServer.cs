@@ -22,6 +22,7 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
         #region Fields        
         private AzureSasCredential _subscriberSASSettings;
 
+        private string _subscriberConnectionString;
         private string _transmitterConnectionString;
 
         private IConnectionSettings _subscriberSettings;
@@ -48,8 +49,20 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _subscriberSettings = connectionSettings.RpcServerReceiver;
             _transmitterSettings = connectionSettings.RpcServerTransmitter;
 
-            _subscriberSASSettings = new AzureSasCredential(_subscriberSettings.AccessKey);
+            if (_subscriberSettings.AccessKey.StartsWith("SharedAccessSignature"))
+            {
+                _subscriberSASSettings = new AzureSasCredential(_subscriberSettings.AccessKey);
+                _subscriberConnectionString = null;
+            }
+            else
+            {
+                _subscriberConnectionString = $"Endpoint=sb://{_subscriberSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+                _subscriberSASSettings = null;
+            }
+
             _transmitterConnectionString = $"Endpoint=sb://{_transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_transmitterSettings.UserName};SharedAccessKey={_transmitterSettings.AccessKey};";
+            Console.WriteLine($"Subscriber Settings : {_subscriberConnectionString}");
+            Console.WriteLine($"Transmitter Settings: {_transmitterConnectionString}");
         }
 
         protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)
@@ -87,10 +100,22 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             var topic = parts[0];
             var subscrption = parts[1];
 
-            var fqASBName = $"{_subscriberSettings.AccountId}.servicebus.windows.net";
+            
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            _processorClient = new ServiceBusClient(fqASBName, _subscriberSASSettings, clientOptions);
+
+            if (_subscriberSASSettings != null)
+            {
+                Console.Write("Using SubScriberSASSettings");
+                var fqASBName = $"{_subscriberSettings.AccountId}.servicebus.windows.net";
+                _processorClient = new ServiceBusClient(fqASBName, _subscriberSASSettings, clientOptions);
+            }
+            else
+            {
+                Console.Write("Using Connection String");
+                _processorClient = new ServiceBusClient(_subscriberConnectionString, clientOptions);
+            }
+
             _processor = _processorClient.CreateProcessor(topic.ToLower(), subscrption.ToLower());
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;

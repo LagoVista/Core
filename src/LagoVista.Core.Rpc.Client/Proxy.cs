@@ -46,9 +46,14 @@ namespace LagoVista.Core.Rpc.Client
                 throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
             }
 
-            if (string.IsNullOrEmpty(proxySettings.InstanceId))
+            if (string.IsNullOrEmpty(proxySettings.InstanceId) && String.IsNullOrEmpty(proxySettings.HostId))
             {
-                throw new ArgumentNullException(nameof(proxySettings.InstanceId));
+                throw new ArgumentNullException($"{nameof(proxySettings.InstanceId)} and {nameof(proxySettings.HostId)}");
+            }
+
+            if(!string.IsNullOrEmpty(proxySettings.InstanceId) && !String.IsNullOrEmpty(proxySettings.HostId))
+            {
+                throw new InvalidOperationException("Most not provide both InstanceId and HostId on proxy settings.");
             }
 
             if (string.IsNullOrEmpty(connectionSettings.RpcClientReceiver.ResourceName))
@@ -126,7 +131,9 @@ namespace LagoVista.Core.Rpc.Client
             }
 
             // setup and transmit the request
-            var request = new Request(targetMethod, args, _proxySettings.OrganizationId, _proxySettings.InstanceId, _replyPath);
+
+            var resourceId = String.IsNullOrEmpty(_proxySettings.InstanceId) ? _proxySettings.HostId : _proxySettings.InstanceId;
+            var request = new Request(targetMethod, args, _proxySettings.OrganizationId, resourceId, _replyPath);
             var responseTask = InvokeRemoteMethodAsync(request);
             
             // wait for response and handle exceptions
