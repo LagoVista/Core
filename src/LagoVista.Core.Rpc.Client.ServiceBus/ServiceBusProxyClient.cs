@@ -29,6 +29,9 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         private ServiceBusClient _processorClient;
         private ServiceBusProcessor _processor;
+        private string _receiverConnectionString;
+        private string _topicPath;
+        private string _subscriptionPath;
 
         #endregion
 
@@ -88,28 +91,28 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             Console.ForegroundColor = ConsoleColor.Yellow;
 
             var endPoint = $"sb://{_subscriberSettings.AccountId}.servicebus.windows.net";
-            var topicPath = _subscriberSettings.ResourceName;
-            var subscriptionPath = _subscriberSettings.Uri;
+            _topicPath = _subscriberSettings.ResourceName;
+            _subscriptionPath = _subscriberSettings.Uri;
 
-            var receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+            _receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
           
             if (_topicConstructorSettings != null)
             {
-                await CreateTopicAsync(topicPath);
+                await CreateTopicAsync(_topicPath);
             }
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            _processorClient = new ServiceBusClient(receiverConnectionString, clientOptions);
+            _processorClient = new ServiceBusClient(_receiverConnectionString, clientOptions);
 
             await CreateTopicAsync(_subscriberSettings.ResourceName);
 
-            _processor = _processorClient.CreateProcessor(topicPath, subscriptionPath);
+            _processor = _processorClient.CreateProcessor(_topicPath, _subscriptionPath);
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
 
-            Console.WriteLine($"[ClientListenerStarting] EndPoint: {receiverConnectionString} Topic: {topicPath} Subscription: {subscriptionPath}");
+            Console.WriteLine($"[ClientListenerStarting] EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
             await _processor.StartProcessingAsync();
-            Console.WriteLine($"[ClientListenerStarted]  EndPoint: {receiverConnectionString} Topic: {topicPath} Subscription: {subscriptionPath}");
+            Console.WriteLine($"[ClientListenerStarted]  EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
 
             Console.ResetColor();
         }
@@ -120,7 +123,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             Console.WriteLine($"ERROR PROCESSING MESSAGE: {arg.ErrorSource} - {arg.Exception.Message}");
             Console.ResetColor();
 
-            _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception);
+            _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription"));
 
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
@@ -168,7 +171,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[Dead Letter] {arg.Message} {ex.Message}");
                 await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
-                _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex);
+                _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription")) ;
                 throw;
             }
             finally
@@ -215,9 +218,9 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     return InvokeResult.Success;
                 }
             }
-            catch //(Exception ex)
+            catch(Exception ex)
             {
-                //todo: ML - log exception
+                _logger.AddException("[ServiceBusProxyClient__CustomTransmitMessageAsync]", ex, _transmitterConnectionSettings.ToKVP("txconnstr"), entityPath.ToKVP("entityPath"), message.ReplyPath.ToKVP("replyPath"));
                 throw;
             }
             finally
