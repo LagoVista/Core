@@ -69,9 +69,14 @@ namespace LagoVista.Core.Managers
             }
         }
 
-        protected Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, String actionName = null)
+        public bool IsForInitialization { get; set; } = false;
+
+        protected async Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, String actionName = null)
         {
-            return _security.AuthorizeAsync(ownedEntity, action, user, org, actionName);
+            if (IsForInitialization)
+                return;
+
+            await _security.AuthorizeAsync(ownedEntity, action, user, org, actionName);
         }
 
         protected Task<DependentObjectCheckResult> CheckForDepenenciesAsync(Object instance)
@@ -88,9 +93,9 @@ namespace LagoVista.Core.Managers
             }
         }
 
-        protected Task AuthorizeOrgAccessAsync(string userId, string orgId, Type entityType = null, Actions action = Actions.Any, object data = null)
+        protected async Task AuthorizeOrgAccessAsync(string userId, string orgId, Type entityType = null, Actions action = Actions.Any, object data = null)
         {
-            return _security.AuthorizeOrgAccessAsync(userId, orgId, entityType, action);
+            await _security.AuthorizeOrgAccessAsync(userId, orgId, entityType, action);
         }
 
 
