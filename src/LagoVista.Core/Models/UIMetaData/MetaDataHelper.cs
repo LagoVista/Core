@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -22,13 +23,18 @@ namespace LagoVista.Core.Models.UIMetaData
             {
                 var attr = type.GetCustomAttributes<DomainDescriptorAttribute>().FirstOrDefault();
 
-                foreach(var property in type.DeclaredProperties)
+                foreach (var property in type.DeclaredProperties)
                 {
-                    if(property.PropertyType == typeof(DomainDescription))
+                    if (property.PropertyType == typeof(DomainDescription))
                     {
                         var attrDomainDescription = property.GetCustomAttribute<DomainDescriptionAttribute>();
+                        if (attrDomainDescription == null)
+                            throw new NullReferenceException($"Could not find [DomainDescription] attribute on type {type.Name}.");
 
-                        var domainDescription = property.GetValue(null,null) as DomainDescription;
+                        var domainDescription = property.GetValue(null, null) as DomainDescription;
+                        if(domainDescription == null)
+                            throw new NullReferenceException($"Could not get property value [DomainDescription]  on type {type.Name}.");
+
                         domainDescription.Key = attrDomainDescription.Key;
                         _domains.Add(attrDomainDescription.Key, domainDescription);
                     }
@@ -49,7 +55,7 @@ namespace LagoVista.Core.Models.UIMetaData
             _assemblies.Add(assembly);
         }
 
-         public List<DomainDescription> Domains { get { return _domains.Values.ToList(); } }
+        public List<DomainDescription> Domains { get { return _domains.Values.ToList(); } }
 
         public List<EntityDescription> Entities { get { return _entities; } }
 
