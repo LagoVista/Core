@@ -41,6 +41,7 @@ namespace LagoVista.Core
 
         private const string JSON_DATE_FORMAT = "yyyy-MM-ddTHH\\:mm\\:ss.fffZ";
         private const string DATE_ONLY_FORMAT = "yyyy/MM/dd";
+        private const string TIME_ONLY_FORMAT = "HH\\:mm";
 
         public static bool IsEmpty(this string value)
         {
@@ -410,6 +411,25 @@ namespace LagoVista.Core
                 default:
                     return basis.Replace(@" ", string.Empty).Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             }
+        }
+
+        public static bool IsValidTime(this string time)
+        {
+            if (string.IsNullOrEmpty(time)) return false;
+            if (time.Length != 5) return false;
+
+            var regEx = new Regex(@"\d\d:\d\d");
+            if (!regEx.Match(time).Success) return false;
+
+            var part1 = time.Substring(0, 2);
+            var hours = Convert.ToInt32(part1);
+            if (hours < 0 || hours > 23) return false;
+
+            var part2 = time.Substring(3, 2);
+            var minutes = Convert.ToInt32(part2);
+            if (minutes < 0 || minutes > 59) return false;
+
+            return true;           
         }
 
         public static string GetCapitalLettersOnly(this string basis)

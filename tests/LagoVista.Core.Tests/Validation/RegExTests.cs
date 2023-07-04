@@ -1,15 +1,10 @@
 ﻿using LagoVista.Core.Tests.Resources.Models;
 using LagoVista.Core.Validation;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LagoVista.Core.Tests.Validation
 {
-
     [TestClass]
     public class RegExTests
     {
