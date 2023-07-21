@@ -38,6 +38,7 @@ namespace LagoVista.Core.Attributes
         Byte,
         Secret,
         Icon,
+        Color,
     }
 
     public enum NamespaceTypes
