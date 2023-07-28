@@ -39,6 +39,7 @@ namespace LagoVista.Core.Attributes
         Secret,
         Icon,
         Color,
+        ChildListInline
     }
 
     public enum NamespaceTypes
@@ -71,6 +72,7 @@ namespace LagoVista.Core.Attributes
         private string _pickerFor;
         private string _compareToMsgResource;
         private string _namespaceUniqueMessageResource;
+        private string _childListDisplayMember;
         private FieldTypes _fieldType;
         private string _pickerType;
         private NamespaceTypes _namespaceType;
@@ -88,6 +90,7 @@ namespace LagoVista.Core.Attributes
                                   String PickerFor = "",
                                   String RegExMessage = "",
                                   String NamespaceUniqueMessageResource = "",
+                                  String ChildListDisplayMember = "name",
                                   NamespaceTypes NamespaceType = NamespaceTypes.None,
                                   int MinLength = -1,
                                   int MaxLength = -1,
@@ -119,6 +122,7 @@ namespace LagoVista.Core.Attributes
             _namespaceUniqueMessageResource = NamespaceUniqueMessageResource;
             _namespaceType = NamespaceType;
             _enumType = EnumType;
+            _childListDisplayMember = ChildListDisplayMember;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -141,6 +145,7 @@ namespace LagoVista.Core.Attributes
         public int? MaxLength { get { return _maxLength; } }
         public NamespaceTypes NamespaceType { get { return _namespaceType; } }
         public Type EnumType { get { return _enumType; } }
+        public string ChildListDisplayMember { get { return _childListDisplayMember; } }
     }
 
     public class SelectListItem
