@@ -159,6 +159,27 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 //UIMetaData:MetaDataResources:BaseField1_WM
 
 		public static string BaseField1_WM { get { return GetResourceString("BaseField1_WM"); } }
+//UIMetaData:MetaDataResources:Child1
+
+		public static string Child1 { get { return GetResourceString("Child1"); } }
+//UIMetaData:MetaDataResources:Child2
+
+		public static string Child2 { get { return GetResourceString("Child2"); } }
+//UIMetaData:MetaDataResources:Child3
+
+		public static string Child3 { get { return GetResourceString("Child3"); } }
+//UIMetaData:MetaDataResources:ChildList1
+
+		public static string ChildList1 { get { return GetResourceString("ChildList1"); } }
+//UIMetaData:MetaDataResources:ChildList2
+
+		public static string ChildList2 { get { return GetResourceString("ChildList2"); } }
+//UIMetaData:MetaDataResources:Complex_Model
+
+		public static string Complex_Model { get { return GetResourceString("Complex_Model"); } }
+//UIMetaData:MetaDataResources:Complex_Model_Help
+
+		public static string Complex_Model_Help { get { return GetResourceString("Complex_Model_Help"); } }
 //UIMetaData:MetaDataResources:EntityHeader_Enum_Value1
 
 		public static string EntityHeader_Enum_Value1 { get { return GetResourceString("EntityHeader_Enum_Value1"); } }
@@ -258,6 +279,21 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 //UIMetaData:MetaDataResources:Model3_Title
 
 		public static string Model3_Title { get { return GetResourceString("Model3_Title"); } }
+//UIMetaData:MetaDataResources:SubChild1
+
+		public static string SubChild1 { get { return GetResourceString("SubChild1"); } }
+//UIMetaData:MetaDataResources:SubChild2
+
+		public static string SubChild2 { get { return GetResourceString("SubChild2"); } }
+//UIMetaData:MetaDataResources:SubChildList1
+
+		public static string SubChildList1 { get { return GetResourceString("SubChildList1"); } }
+//UIMetaData:MetaDataResources:SubChildList2
+
+		public static string SubChildList2 { get { return GetResourceString("SubChildList2"); } }
+//UIMetaData:MetaDataResources:SubChildList3
+
+		public static string SubChildList3 { get { return GetResourceString("SubChildList3"); } }
 
 		public static class Names
 		{
@@ -265,6 +301,13 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 			public const string BaseField1_Help = "BaseField1_Help";
 			public const string BaseField1_Requied = "BaseField1_Requied";
 			public const string BaseField1_WM = "BaseField1_WM";
+			public const string Child1 = "Child1";
+			public const string Child2 = "Child2";
+			public const string Child3 = "Child3";
+			public const string ChildList1 = "ChildList1";
+			public const string ChildList2 = "ChildList2";
+			public const string Complex_Model = "Complex_Model";
+			public const string Complex_Model_Help = "Complex_Model_Help";
 			public const string EntityHeader_Enum_Value1 = "EntityHeader_Enum_Value1";
 			public const string EntityHeader_Enum_Value2 = "EntityHeader_Enum_Value2";
 			public const string EntityHeader_Enum_Value3 = "EntityHeader_Enum_Value3";
@@ -298,6 +341,11 @@ namespace LagoVista.Core.Tests.Resources.UIMetaData
 			public const string Model3_Description = "Model3_Description";
 			public const string Model3_Help = "Model3_Help";
 			public const string Model3_Title = "Model3_Title";
+			public const string SubChild1 = "SubChild1";
+			public const string SubChild2 = "SubChild2";
+			public const string SubChildList1 = "SubChildList1";
+			public const string SubChildList2 = "SubChildList2";
+			public const string SubChildList3 = "SubChildList3";
 		}
 	}
 }

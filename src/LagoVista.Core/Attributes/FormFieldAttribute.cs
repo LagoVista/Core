@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using LagoVista.Core.Models.UIMetaData;
 
 namespace LagoVista.Core.Attributes
 {

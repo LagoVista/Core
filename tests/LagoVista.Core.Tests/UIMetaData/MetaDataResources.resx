@@ -129,6 +129,27 @@
   <data name="BaseField1_WM" xml:space="preserve">
     <value>WaterMark Field One</value>
   </data>
+  <data name="Child1" xml:space="preserve">
+    <value>Child 1</value>
+  </data>
+  <data name="Child2" xml:space="preserve">
+    <value>Child 2</value>
+  </data>
+  <data name="Child3" xml:space="preserve">
+    <value>Child3</value>
+  </data>
+  <data name="ChildList1" xml:space="preserve">
+    <value>Child List 1</value>
+  </data>
+  <data name="ChildList2" xml:space="preserve">
+    <value>Child List 2</value>
+  </data>
+  <data name="Complex_Model" xml:space="preserve">
+    <value>Complex Model</value>
+  </data>
+  <data name="Complex_Model_Help" xml:space="preserve">
+    <value>Help on Complex Model Help</value>
+  </data>
   <data name="EntityHeader_Enum_Value1" xml:space="preserve">
     <value>value1</value>
   </data>
@@ -227,5 +248,20 @@
   </data>
   <data name="Model3_Title" xml:space="preserve">
     <value>Model Three</value>
+  </data>
+  <data name="SubChild1" xml:space="preserve">
+    <value>SubChild 1</value>
+  </data>
+  <data name="SubChild2" xml:space="preserve">
+    <value>SubChild 2</value>
+  </data>
+  <data name="SubChildList1" xml:space="preserve">
+    <value>Sub Child List 1</value>
+  </data>
+  <data name="SubChildList2" xml:space="preserve">
+    <value>Sub Child List 2</value>
+  </data>
+  <data name="SubChildList3" xml:space="preserve">
+    <value>Sub Child List 3</value>
   </data>
 </root>

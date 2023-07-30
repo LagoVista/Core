@@ -134,9 +134,60 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
             field.IsUserEditable = attr.IsUserEditable;
+            field.IsEnabled = true;
+            field.IsVisible = true;
+
+
+            if (!String.IsNullOrEmpty(attr.WaterMark))
+            {
+                if (attr.ResourceType == null)
+                {
+                    throw new Exception($"Building Metadata - watermark is defined, but Resource Type is not defined on {name} {attr.WaterMark}");
+                }
+
+                var placeholderProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.WaterMark);
+                field.Watermark = placeholderProperty == null ? String.Empty : (string)placeholderProperty.GetValue(placeholderProperty.DeclaringType, null);
+            }
+
+            if (!String.IsNullOrEmpty(attr.HelpResource))
+            {
+                if (attr.ResourceType == null)
+                {
+                    throw new Exception($"Building Metaata - watermark is defined, but Resource Type is not defined on {name} {attr.HelpResource}");
+                }
+
+                var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
+                field.Help = helpProperty == null ? String.Empty : (string)helpProperty.GetValue(helpProperty.DeclaringType, null);
+            }
+
+
+            if (attr.FieldType == FieldTypes.ChildList || attr.FieldType == FieldTypes.ChildListInline)
+            {
+                var childListProperty = property.PropertyType;
+
+                var childType = childListProperty.GenericTypeArguments.FirstOrDefault();
+                if(childType != null && childType.GetTypeInfo().CustomAttributes.Any(eda => eda.AttributeType == typeof(EntityDescriptionAttribute)))
+                {
+                    
+                    field.FormFields = new Dictionary<string, FormField>();
+
+                    var childProperties = childType.GetRuntimeProperties();
+                    foreach (var childProperty in childProperties)
+                    {
+                        var fieldAttributes = childProperty.GetCustomAttributes<FormFieldAttribute>();
+                        if (fieldAttributes.Any())
+                        {
+                            var camelCaseName = childProperty.Name.Substring(0, 1).ToLower() + childProperty.Name.Substring(1);
+                            var childField = FormField.Create(camelCaseName, fieldAttributes.First(), childProperty);
+                            field.FormFields.Add(camelCaseName, childField);
+                        }
+                    }
+                    return field;
+                }
+            }
+
             field.MinLength = attr.MinLength;
             field.MaxLength = attr.MaxLength;
-            field.IsEnabled = true;
             field.IsMarkDown = attr.IsMarkDown;
 
             field.Options = new List<EnumDescription>();
@@ -185,29 +236,6 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
-            if (!String.IsNullOrEmpty(attr.WaterMark))
-            {
-                if (attr.ResourceType == null)
-                {
-                    throw new Exception($"Building Metadata - watermark is defined, but Resource Type is not defined on {name} {attr.WaterMark}");
-                }
-
-                var placeholderProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.WaterMark);
-                field.Watermark = placeholderProperty == null ? String.Empty : (string)placeholderProperty.GetValue(placeholderProperty.DeclaringType, null);
-            }
-
-            if (!String.IsNullOrEmpty(attr.HelpResource))
-            {
-                if (attr.ResourceType == null)
-                {
-                    throw new Exception($"Building Metaata - watermark is defined, but Resource Type is not defined on {name} {attr.HelpResource}");
-                }
-
-                var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.HelpResource);
-                field.Help = helpProperty == null ? String.Empty : (string)helpProperty.GetValue(helpProperty.DeclaringType, null);
-            }
-
-            field.IsVisible = true;
 
             return field;
         }
