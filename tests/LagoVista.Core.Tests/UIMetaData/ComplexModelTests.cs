@@ -36,8 +36,8 @@ namespace LagoVista.Core.Tests.UIMetaData
             var model = GetModel();
             var response = DetailResponse<ComplexModel>.Create(model);
 
-            Assert.IsNotNull(response.View[nameof(ComplexModel.ChildList1).ToCamelCase()].FormFields);
-            Assert.IsNotNull(response.View[nameof(ComplexModel.ChildList2).ToCamelCase()].FormFields);
+            Assert.IsNotNull(response.View[nameof(ComplexModel.ChildList1).ToCamelCase()].View);
+            Assert.IsNotNull(response.View[nameof(ComplexModel.ChildList2).ToCamelCase()].View);
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace LagoVista.Core.Tests.UIMetaData
         {
             var model = GetModel();
             var response = DetailResponse<ComplexModel>.Create(model);
-            var fields1 = response.View[nameof(ComplexModel.ChildList1).ToCamelCase()].FormFields;
+            var fields1 = response.View[nameof(ComplexModel.ChildList1).ToCamelCase()].View;
 
             Assert.IsTrue(fields1.Keys.Contains(nameof(Child1.Field1).ToCamelCase()));
             Assert.IsTrue(fields1.Keys.Contains(nameof(Child1.Field2).ToCamelCase()));
@@ -59,11 +59,11 @@ namespace LagoVista.Core.Tests.UIMetaData
         {
             var model = GetModel();
             var response = DetailResponse<ComplexModel>.Create(model);
-            var fields1 = response.View[nameof(ComplexModel.ChildList1).ToCamelCase()].FormFields;
+            var fields1 = response.View[nameof(ComplexModel.ChildList1).ToCamelCase()].View;
             var fieldsOnChildList = fields1[nameof(Child1.SubChildList1).ToCamelCase()];
-            Assert.IsTrue(fieldsOnChildList.FormFields.Keys.Contains(nameof(Child1.Field1).ToCamelCase()));
-            Assert.IsTrue(fieldsOnChildList.FormFields.Keys.Contains(nameof(Child1.Field2).ToCamelCase()));
-            Assert.IsTrue(fieldsOnChildList.FormFields.Keys.Contains(nameof(Child1.Field3).ToCamelCase()));
+            Assert.IsTrue(fieldsOnChildList.View.Keys.Contains(nameof(Child1.Field1).ToCamelCase()));
+            Assert.IsTrue(fieldsOnChildList.View.Keys.Contains(nameof(Child1.Field2).ToCamelCase()));
+            Assert.IsTrue(fieldsOnChildList.View.Keys.Contains(nameof(Child1.Field3).ToCamelCase()));
         }
 
         [TestMethod]

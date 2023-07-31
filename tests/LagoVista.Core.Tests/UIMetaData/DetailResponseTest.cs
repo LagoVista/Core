@@ -39,10 +39,10 @@ namespace LagoVista.Core.Tests.UIMetaData
 
             var response = DetailResponse<Model1>.Create(model1);
             var childForm = response.View[nameof(Model1.Field5).ToLower()];
-            Assert.IsNotNull(childForm.FormFields);
-            Assert.IsTrue(childForm.FormFields.Count > 0);
+            Assert.IsNotNull(childForm.View);
+            Assert.IsTrue(childForm.View.Count > 0);
 
-            foreach (var child in childForm.FormFields)
+            foreach (var child in childForm.View)
             {
                 Console.WriteLine(child.Key);
             }

@@ -1,11 +1,11 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.Commanding;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
@@ -48,13 +48,17 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsUserEditable { get; set; }
         public bool IsEnabled { get; set; }
         public String DataType { get; set; }
+        public bool? AllowAddChild { get; set; }
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
         public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
-        public IDictionary<string, FormField> FormFields { get; set; }
+        public IDictionary<string, FormField> View { get; set; }
+        public List<string> FormFields { get; set; }
+        public string ModelTitle { get; set; }
+        public string ModelHelp { get; set; }
 
         public static List<EnumDescription> GetEnumOptions<Type>()
         {
@@ -98,7 +102,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if (field.FieldType == FormField.FieldType_ChildView)
             {
-                field.FormFields = new Dictionary<string, FormField>();
+                field.View = new Dictionary<string, FormField>();
 
                 var childProperties = property.PropertyType.GetRuntimeProperties();
                 foreach (var childProperty in childProperties)
@@ -108,7 +112,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     {
                         var camelCaseName = childProperty.Name.Substring(0, 1).ToLower() + childProperty.Name.Substring(1);
                         var childField = FormField.Create(camelCaseName, fieldAttributes.First(), childProperty);
-                        field.FormFields.Add(camelCaseName, childField);
+                        field.View.Add(camelCaseName, childField);
                     }
                 }
                 return field;
@@ -166,10 +170,23 @@ namespace LagoVista.Core.Models.UIMetaData
                 var childListProperty = property.PropertyType;
 
                 var childType = childListProperty.GenericTypeArguments.FirstOrDefault();
-                if(childType != null && childType.GetTypeInfo().CustomAttributes.Any(eda => eda.AttributeType == typeof(EntityDescriptionAttribute)))
+                var entityDescription = childType.GetTypeInfo().CustomAttributes.FirstOrDefault(eda => eda.AttributeType == typeof(EntityDescriptionAttribute));
+
+                if (attr.FieldType == FieldTypes.ChildListInline)
+                    field.AllowAddChild = attr.AllowAddChild;
+
+                if (childType != null && entityDescription != null)
                 {
-                    
-                    field.FormFields = new Dictionary<string, FormField>();
+                    var childTypeAttr = childType.GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
+                    var entity = EntityDescription.Create(childType, childTypeAttr);
+                    field.ModelHelp = entity.UserHelp;
+                    field.ModelTitle = entity.Title;
+
+                    var childInstance = Activator.CreateInstance(childType) as IFormDescriptor;
+                    if (childInstance != null)
+                        field.FormFields = childInstance.GetFormFields().Select(fld=>$"{fld.Substring(0,1).ToLower()}{fld.Substring(1)}").ToList();
+
+                    field.View = new Dictionary<string, FormField>();
 
                     var childProperties = childType.GetRuntimeProperties();
                     foreach (var childProperty in childProperties)
@@ -179,7 +196,7 @@ namespace LagoVista.Core.Models.UIMetaData
                         {
                             var camelCaseName = childProperty.Name.Substring(0, 1).ToLower() + childProperty.Name.Substring(1);
                             var childField = FormField.Create(camelCaseName, fieldAttributes.First(), childProperty);
-                            field.FormFields.Add(camelCaseName, childField);
+                            field.View.Add(camelCaseName, childField);
                         }
                     }
                     return field;

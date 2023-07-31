@@ -9,14 +9,19 @@ namespace LagoVista.Core.Models.UIMetaData
 {
     public class DetailResponse<TModel> : InvokeResult where TModel : new()
     {
-        private DetailResponse() { }
+        private DetailResponse() 
+        { 
+        
+        }
 
-        public string Title { get; set; }
-        public string Help { get; set; }
+        public string ModelTitle { get; set; }
+        public string ModelHelp { get; set; }
 
         public IDictionary<string, FormField> View { get; set; }
 
         public List<string> FormFields { get; set; }
+
+        public bool IsEditing { get; set; }
 
         public TModel Model { get; set; }
 
@@ -24,6 +29,7 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             var response = new DetailResponse<TModel>();
             response.Model = model;
+            response.IsEditing = true;
             response.FormFields = new List<string>();
             var viewItems = new Dictionary<string, FormField>();
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
@@ -31,11 +37,11 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if(model is IFormDescriptor)
             {
-                response.FormFields = (model as IFormDescriptor).GetFormFields();
+                response.FormFields = (model as IFormDescriptor).GetFormFields().Select(fld => $"{fld.Substring(0, 1).ToLower()}{fld.Substring(1)}").ToList();
             }
 
-            response.Title = entity.Title;
-            response.Help = entity.UserHelp;
+            response.ModelTitle = entity.Title;
+            response.ModelHelp = entity.UserHelp;
        
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
@@ -45,10 +51,14 @@ namespace LagoVista.Core.Models.UIMetaData
                 {
                     var camelCaseName = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
                     var field = FormField.Create(camelCaseName, fieldAttributes.First(), property);
-                    var defaultValue = property.GetValue(model);
-                    if (defaultValue != null)
+
+                    if (!property.GetType().GenericTypeArguments.Any())
                     {
-                        field.DefaultValue = defaultValue.ToString();
+                        var defaultValue = property.GetValue(model);
+                        if (defaultValue != null)
+                        {
+                            field.DefaultValue = defaultValue.ToString();
+                        }
                     }
                     
                     viewItems.Add(camelCaseName, field);
@@ -60,7 +70,9 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public static DetailResponse<TModel> Create()
         {
-            return Create(new TModel());
+            var response = Create(new TModel());
+            response.IsEditing = false;
+            return response;
         }
     }
 }

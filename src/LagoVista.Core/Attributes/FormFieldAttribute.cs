@@ -69,6 +69,7 @@ namespace LagoVista.Core.Attributes
         private string _waterMark;
         private int? _minLength;
         private int? _maxLength;
+        private bool _allowAddChild;
         private string _compareTo;
         private string _pickerFor;
         private string _compareToMsgResource;
@@ -98,6 +99,7 @@ namespace LagoVista.Core.Attributes
                                   bool IsRequired = false,
                                   bool IsUserEditable = true,
                                   bool IsMarkDown = false,
+                                  bool AllowAddChild = true,
                                   FieldTypes FieldType = FieldTypes.Text,
                                   Type ResourceType = null,
                                   Type EnumType = null)
@@ -116,6 +118,7 @@ namespace LagoVista.Core.Attributes
             _pickerFor = PickerFor;
             _isMarkDown = IsMarkDown;
             _waterMark = WaterMark;
+            _allowAddChild = AllowAddChild;
             _minLength = MinLength < 0 ? (int?)null : MinLength;
             _maxLength = MaxLength < 0 ? (int?)null : MaxLength;
             _compareTo = CompareTo;
@@ -137,6 +140,7 @@ namespace LagoVista.Core.Attributes
         public bool IsRequired { get { return _isRequired; } }
         public bool IsMarkDown { get { return _isMarkDown; } }
         public bool IsUserEditable { get { return _isUserEditable; } }
+        public bool AllowAddChild { get { return _allowAddChild; } }
         public FieldTypes FieldType { get { return _fieldType; } }
         public Type ResourceType { get { return _resourceType; } }
         public string  WaterMark { get { return _waterMark; } }
