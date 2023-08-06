@@ -40,7 +40,9 @@ namespace LagoVista.Core.Attributes
         Secret,
         Icon,
         Color,
-        ChildListInline
+        ChildListInline,
+        FileUpload,
+        MediaResourceUpload
     }
 
     public enum NamespaceTypes

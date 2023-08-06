@@ -30,6 +30,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public const string FieldType_NameSpace = "NameSpace";
         public const string FieldType_Password = "Password";
         public const string FieldType_MultilineText = "MultiLineText";
+        public const string FieldType_FileUpload = "FileUpload";
+        public const string FieldType_MediaResourceUpload = "MediaResourceUpload";
 
         private FormField() { }
 
