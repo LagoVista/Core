@@ -31,7 +31,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
            
-            entityDescription.Name = entityType.Name;
+            entityDescription.Name = entityType.FullName;
 
             var titleProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.TitleResource);
             if (titleProperty != null)

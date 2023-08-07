@@ -16,6 +16,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public String Description { get; set; }
         public String Name { get; set; }
+        public string SourceAssembly { get; set; }
+
         public VersionInfo CurrentVersion { get; set; }
         public List<VersionInfo> VersionHistory { get; set; }
 

@@ -25,6 +25,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public TModel Model { get; set; }
 
+        public string FullClassName { get; set; }
+
         public static DetailResponse<TModel> Create(TModel model)
         {
             var response = new DetailResponse<TModel>();
@@ -42,6 +44,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
             response.ModelTitle = entity.Title;
             response.ModelHelp = entity.UserHelp;
+            response.FullClassName = model.GetType().FullName;
        
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)

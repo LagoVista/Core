@@ -36,6 +36,8 @@ namespace LagoVista.Core.Models.UIMetaData
                             throw new NullReferenceException($"Could not get property value [DomainDescription]  on type {type.Name}.");
 
                         domainDescription.Key = attrDomainDescription.Key;
+                        domainDescription.SourceAssembly = type.Assembly.FullName;
+
                         _domains.Add(attrDomainDescription.Key, domainDescription);
                     }
                 }
