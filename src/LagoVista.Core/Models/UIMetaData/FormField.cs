@@ -57,6 +57,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsMarkDown { get; set; }
         public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
+        public FormConditionals ConditionalFields { get; set; }
+
         public IDictionary<string, FormField> View { get; set; }
         public List<string> FormFields { get; set; }
         public string ModelTitle { get; set; }
@@ -187,6 +189,13 @@ namespace LagoVista.Core.Models.UIMetaData
                     var childInstance = Activator.CreateInstance(childType) as IFormDescriptor;
                     if (childInstance != null)
                         field.FormFields = childInstance.GetFormFields().Select(fld=>$"{fld.Substring(0,1).ToLower()}{fld.Substring(1)}").ToList();
+
+                    var fieldConditionalInstance = Activator.CreateInstance(childType) as IFormConditionalFields;
+                    if (fieldConditionalInstance is IFormConditionalFields)
+                    {
+                        var conditionalFields = (fieldConditionalInstance as IFormConditionalFields).GetConditionalFields();
+                        field.ConditionalFields = conditionalFields.ValuesAsCamelCase();
+                    }
 
                     field.View = new Dictionary<string, FormField>();
 

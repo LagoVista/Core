@@ -381,6 +381,11 @@ namespace LagoVista.Core
             return float.TryParse(basis.StringAndTrimValue(), NumberStyles.Any, ci, out check) ? (float?)check : null;
         }
 
+        public static string CamelCase(this string basis)
+        {
+            return basis.Substring(0, 1).ToLower() + basis.Substring(1);
+        }
+
         private static string StringAndTrimValue(this object value)
         {
             return value != null ? value.ToString().Trim() : string.Empty;

@@ -20,12 +20,14 @@ namespace LagoVista.Core.Models.UIMetaData
         public IDictionary<string, FormField> View { get; set; }
 
         public List<string> FormFields { get; set; }
+        public FormConditionals ConditionalFields { get; set; }
 
         public bool IsEditing { get; set; }
 
         public TModel Model { get; set; }
 
         public string FullClassName { get; set; }
+        public string AssemblyName { get; set; }
 
         public static DetailResponse<TModel> Create(TModel model)
         {
@@ -39,12 +41,19 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if(model is IFormDescriptor)
             {
-                response.FormFields = (model as IFormDescriptor).GetFormFields().Select(fld => $"{fld.Substring(0, 1).ToLower()}{fld.Substring(1)}").ToList();
+                response.FormFields = (model as IFormDescriptor).GetFormFields().Select(fld => fld.CamelCase()).ToList();
+            }
+
+            if (model is IFormConditionalFields)
+            {
+                var conditionalFields  = (model as IFormConditionalFields).GetConditionalFields();
+                response.ConditionalFields = conditionalFields.ValuesAsCamelCase();
             }
 
             response.ModelTitle = entity.Title;
             response.ModelHelp = entity.UserHelp;
             response.FullClassName = model.GetType().FullName;
+            response.AssemblyName = model.GetType().AssemblyQualifiedName;
        
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
