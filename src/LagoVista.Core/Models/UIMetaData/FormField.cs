@@ -9,6 +9,12 @@ using System.Reflection;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
+    public enum YearOptionsEnum
+    {
+
+        TwoThousand
+    }
+
     public class FormField
     {
         public const string FieldType_MarkDown = "MarkDown";
@@ -66,10 +72,28 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public static List<EnumDescription> GetEnumOptions<Type>()
         {
+            var options = new List<EnumDescription>();
+            if (typeof(Type) == typeof(YearOptionsEnum))
+            {
+                for (int idx = 2020; idx < DateTime.Now.Year + 3; ++idx)
+                {
+                    options.Add(new EnumDescription()
+                    {
+                        Id = idx.ToString(),
+                        Key = idx.ToString(),
+                        Label = idx.ToString(),
+                        Name = idx.ToString(),
+                        SortOrder = idx,
+                        Text = idx.ToString()
+                    });
+                }
+
+                return options;
+            }
+
             var enumType = typeof(Type);
 
             new List<EnumDescription>();
-            var options = new List<EnumDescription>();
             var values = Enum.GetValues(enumType);
             for (var idx = 0; idx < values.GetLength(0); ++idx)
             {
@@ -83,6 +107,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     options.Add(EnumDescription.Create(enumAttr, value, idx));
                 }
             }
+
             return options.OrderBy(opt => opt.SortOrder).ToList();
         }
 
@@ -188,7 +213,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
                     var childInstance = Activator.CreateInstance(childType) as IFormDescriptor;
                     if (childInstance != null)
-                        field.FormFields = childInstance.GetFormFields().Select(fld=>$"{fld.Substring(0,1).ToLower()}{fld.Substring(1)}").ToList();
+                        field.FormFields = childInstance.GetFormFields().Select(fld => $"{fld.Substring(0, 1).ToLower()}{fld.Substring(1)}").ToList();
 
                     var fieldConditionalInstance = Activator.CreateInstance(childType) as IFormConditionalFields;
                     if (fieldConditionalInstance is IFormConditionalFields)
@@ -222,17 +247,35 @@ namespace LagoVista.Core.Models.UIMetaData
             if (attr.EnumType != null)
             {
                 var options = new List<EnumDescription>();
-                var values = Enum.GetValues(attr.EnumType);
-                for (var idx = 0; idx < values.GetLength(0); ++idx)
+                if (attr.EnumType == typeof(YearOptionsEnum))
                 {
-                    var value = values.GetValue(idx).ToString();
-
-                    var enumMember = attr.EnumType.GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == value.ToString()).FirstOrDefault();
-                    var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
-
-                    if (enumAttr.IsActive)
+                    for (int idx = 2020; idx < DateTime.Now.Year + 3; ++idx)
                     {
-                        options.Add(EnumDescription.Create(enumAttr, value, idx));
+                        options.Add(new EnumDescription()
+                        {
+                            Id = idx.ToString(),
+                            Key = idx.ToString(),
+                            Label = idx.ToString(),
+                            Name = idx.ToString(),
+                            SortOrder = idx,
+                            Text = idx.ToString()
+                        });
+                    }
+                }
+                else
+                {
+                    var values = Enum.GetValues(attr.EnumType);
+                    for (var idx = 0; idx < values.GetLength(0); ++idx)
+                    {
+                        var value = values.GetValue(idx).ToString();
+
+                        var enumMember = attr.EnumType.GetTypeInfo().DeclaredMembers.Where(mbr => mbr.Name == value.ToString()).FirstOrDefault();
+                        var enumAttr = enumMember.GetCustomAttribute<EnumLabelAttribute>();
+
+                        if (enumAttr.IsActive)
+                        {
+                            options.Add(EnumDescription.Create(enumAttr, value, idx));
+                        }
                     }
                 }
 
