@@ -61,6 +61,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? MaxLength { get; set; }
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
+        public string SecureIdFieldName { get; set; }
         public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
         public FormConditionals ConditionalFields { get; set; }
@@ -117,6 +118,7 @@ namespace LagoVista.Core.Models.UIMetaData
             var field = new FormField();
             field.Name = name;
             field.FieldType = attr.FieldType.ToString();
+            field.SecureIdFieldName = attr.SecureIdFieldName;
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {

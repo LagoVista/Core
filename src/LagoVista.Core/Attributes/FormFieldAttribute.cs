@@ -77,6 +77,7 @@ namespace LagoVista.Core.Attributes
         private string _compareToMsgResource;
         private string _namespaceUniqueMessageResource;
         private string _childListDisplayMember;
+        private string _secureIdFieldName;
         private FieldTypes _fieldType;
         private string _pickerType;
         private NamespaceTypes _namespaceType;
@@ -95,6 +96,7 @@ namespace LagoVista.Core.Attributes
                                   String RegExMessage = "",
                                   String NamespaceUniqueMessageResource = "",
                                   String ChildListDisplayMember = "name",
+                                  String SecureIdFieldName = "",
                                   NamespaceTypes NamespaceType = NamespaceTypes.None,
                                   int MinLength = -1,
                                   int MaxLength = -1,
@@ -129,6 +131,7 @@ namespace LagoVista.Core.Attributes
             _namespaceType = NamespaceType;
             _enumType = EnumType;
             _childListDisplayMember = ChildListDisplayMember;
+            _secureIdFieldName = SecureIdFieldName;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -153,6 +156,7 @@ namespace LagoVista.Core.Attributes
         public NamespaceTypes NamespaceType { get { return _namespaceType; } }
         public Type EnumType { get { return _enumType; } }
         public string ChildListDisplayMember { get { return _childListDisplayMember; } }
+        public string SecureIdFieldName { get { return _secureIdFieldName; } }
     }
 
     public class SelectListItem
