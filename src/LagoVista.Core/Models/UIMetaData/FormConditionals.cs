@@ -13,6 +13,9 @@ namespace LagoVista.Core.Models.UIMetaData
             RequiredFields = new List<string>();
         }
 
+        public bool ForCreate { get; set; } = true;
+        public bool ForUpdate { get; set; } = true;
+
         public string Field { get; set; }
         public string Value { get; set; }
         public List<string> VisibleFields { get; set; }
