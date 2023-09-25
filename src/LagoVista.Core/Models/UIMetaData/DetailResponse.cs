@@ -24,6 +24,30 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public bool IsEditing { get; set; }
 
+        public string UpdateUrl { get; set; }
+
+        public string InsertUrl { get; set; }
+        public string FactoryUrl { get; set; }
+
+        public string GetUrl { get; set; }
+        public string DeleteUrl { get; set; }
+        public string GetListUrl { get; set; }
+
+        private string _saveUrl;
+        public string SaveUrl
+        {
+            get { return _saveUrl; }
+            set
+            {
+                _saveUrl = value;
+                if (string.IsNullOrEmpty((UpdateUrl)))
+                    UpdateUrl = value;
+
+                if(string.IsNullOrEmpty(InsertUrl))
+                    InsertUrl = value;
+            }
+        }
+
         public TModel Model { get; set; }
 
         public string FullClassName { get; set; }
@@ -54,7 +78,18 @@ namespace LagoVista.Core.Models.UIMetaData
             response.ModelHelp = entity.UserHelp;
             response.FullClassName = model.GetType().FullName;
             response.AssemblyName = model.GetType().AssemblyQualifiedName;
-       
+            if (!string.IsNullOrEmpty(entity.InsertUrl))
+                response.InsertUrl = entity.InsertUrl;
+
+            if (!string.IsNullOrEmpty(entity.UpdateUrl))
+                response.UpdateUrl = entity.UpdateUrl;
+
+            response.SaveUrl = entity.SaveUrl;
+            response.FactoryUrl = entity.FactoryUrl;
+            response.GetUrl = entity.GetUrl;
+            response.DeleteUrl = entity.DeleteUrl;
+            response.GetListUrl = entity.GetListUrl;
+
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
             {

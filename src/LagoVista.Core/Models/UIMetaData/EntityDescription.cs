@@ -14,6 +14,12 @@ namespace LagoVista.Core.Models.UIMetaData
             var entityDescription = new EntityDescription();
             entityDescription.Elements = new List<FormField>();
             entityDescription.ListColumns = new List<ListColumn>();
+            entityDescription.SaveUrl = attr.SaveUrl;
+            entityDescription.InsertUrl = attr.InsertUrl;
+            entityDescription.UpdateUrl = attr.UpdateUrl;
+            entityDescription.FactoryUrl = attr.FactoryUrl;
+            entityDescription.GetUrl = attr.GetUrl;
+            entityDescription.GetListUrl = attr.GetListUrl;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -71,6 +77,14 @@ namespace LagoVista.Core.Models.UIMetaData
         public DomainDescription Domain { get; set; }
         public String UserHelp { get; set; }
         public String Title { get; set; }
+
+        public string FactoryUrl { get; set; }
+        public string GetUrl { get; set; }
+        public string DeleteUrl { get; set; }
+        public string GetListUrl { get; set; }
+        public string UpdateUrl { get; set; }
+        public string SaveUrl { get; set; }
+        public string InsertUrl { get; set; }
 
         public List<FormField> Elements { get;  set; }
 
