@@ -37,6 +37,12 @@ namespace LagoVista.Core.Models.UIMetaData
         public string NextRowKey { get; set; }
         public bool HasMoreRecords { get; set; }
 
+        public string FactoryUrl { get; set; }
+
+        public string GetUrl { get; set; }
+        public string GetListUrl { get; set; }
+
+
         public static new ListResponse<TModel> FromError(string errorMessage, string errorCode = "")
         {
             var response = new ListResponse<TModel>();
@@ -63,6 +69,9 @@ namespace LagoVista.Core.Models.UIMetaData
             {
                 var titleProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.TitleResource);
                 response.Title = titleProperty != null ? titleProperty.GetValue(titleProperty.DeclaringType, null) as String : typeof(TModel).Name;
+                response.GetUrl = attr.GetUrl;
+                response.FactoryUrl = attr.FactoryUrl;
+                response.GetListUrl = attr.GetListUrl;
 
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
                 if (helpProperty != null)
