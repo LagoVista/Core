@@ -71,6 +71,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string ModelTitle { get; set; }
         public string ModelHelp { get; set; }
 
+        public string FactoryUrl { get; set; }
+
         public static List<EnumDescription> GetEnumOptions<Type>()
         {
             var options = new List<EnumDescription>();
@@ -212,6 +214,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     var entity = EntityDescription.Create(childType, childTypeAttr);
                     field.ModelHelp = entity.UserHelp;
                     field.ModelTitle = entity.Title;
+                    field.FactoryUrl = entity.FactoryUrl;
 
                     var childInstance = Activator.CreateInstance(childType) as IFormDescriptor;
                     if (childInstance != null)

@@ -19,6 +19,9 @@ namespace LagoVista.Core.Models.UIMetaData
         string NextPartitionKey { get; }
         string NextRowKey { get; }
         bool HasMoreRecords { get; }
+        string FactoryUrl { get; }
+        string GetUrl { get; }
+        string GetListUrl { get; }
     }
 
     public class ListResponse<TModel> : InvokeResult, IListResponse where TModel : class
@@ -38,7 +41,6 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool HasMoreRecords { get; set; }
 
         public string FactoryUrl { get; set; }
-
         public string GetUrl { get; set; }
         public string GetListUrl { get; set; }
 
@@ -72,6 +74,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 response.GetUrl = attr.GetUrl;
                 response.FactoryUrl = attr.FactoryUrl;
                 response.GetListUrl = attr.GetListUrl;
+                response.GetUrl = attr.GetUrl;
 
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
                 if (helpProperty != null)
@@ -127,6 +130,9 @@ namespace LagoVista.Core.Models.UIMetaData
 
                 Help = source.Help,
                 Title = source.Title,
+                FactoryUrl = source.FactoryUrl,
+                GetListUrl = source.GetListUrl,
+                GetUrl = source.GetUrl,
                 PageCount = source.PageCount,
                 PageIndex = source.PageIndex,
                 PageSize = source.PageSize,
