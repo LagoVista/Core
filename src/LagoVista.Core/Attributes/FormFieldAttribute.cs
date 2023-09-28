@@ -81,8 +81,10 @@ namespace LagoVista.Core.Attributes
         private FieldTypes _fieldType;
         private string _pickerType;
         private NamespaceTypes _namespaceType;
+        private string _uploadUrl;
+        private string _factoryUrl;
     
-        public FormFieldAttribute(String LabelResource = "", 
+        public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
                                   String ValidationRegEx = "",
                                   String ReqMessageResource = "",
@@ -106,7 +108,9 @@ namespace LagoVista.Core.Attributes
                                   bool AllowAddChild = true,
                                   FieldTypes FieldType = FieldTypes.Text,
                                   Type ResourceType = null,
-                                  Type EnumType = null)
+                                  Type EnumType = null,
+                                  string UploadUrl = null,
+                                  string FactoryUrl = null)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -132,6 +136,8 @@ namespace LagoVista.Core.Attributes
             _enumType = EnumType;
             _childListDisplayMember = ChildListDisplayMember;
             _secureIdFieldName = SecureIdFieldName;
+            _uploadUrl = UploadUrl;
+            _factoryUrl = FactoryUrl;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -157,6 +163,8 @@ namespace LagoVista.Core.Attributes
         public Type EnumType { get { return _enumType; } }
         public string ChildListDisplayMember { get { return _childListDisplayMember; } }
         public string SecureIdFieldName { get { return _secureIdFieldName; } }
+        public string UploadUrl { get { return _uploadUrl; } }
+        public string FactoryUrl { get { return _factoryUrl; } }
     }
 
     public class SelectListItem

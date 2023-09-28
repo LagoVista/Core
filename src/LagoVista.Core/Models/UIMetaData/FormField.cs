@@ -55,6 +55,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public String DefaultValue { get; set; }
         public bool IsUserEditable { get; set; }
         public bool IsEnabled { get; set; }
+        public string UploadUrl { get; set; }
         public String DataType { get; set; }
         public bool? AllowAddChild { get; set; }
         public int? MinLength { get; set; }
@@ -121,6 +122,8 @@ namespace LagoVista.Core.Models.UIMetaData
             field.Name = name;
             field.FieldType = attr.FieldType.ToString();
             field.SecureIdFieldName = attr.SecureIdFieldName;
+            field.UploadUrl = attr.UploadUrl;
+            field.FactoryUrl = attr.FactoryUrl;
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
