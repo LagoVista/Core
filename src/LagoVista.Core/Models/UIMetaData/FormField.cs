@@ -73,8 +73,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public string ModelHelp { get; set; }
 
         public string FactoryUrl { get; set; }
+		public string EntityHeaderUrl { get; set; }
 
-        public static List<EnumDescription> GetEnumOptions<Type>()
+		public static List<EnumDescription> GetEnumOptions<Type>()
         {
             var options = new List<EnumDescription>();
             if (typeof(Type) == typeof(YearOptionsEnum))
@@ -124,6 +125,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.SecureIdFieldName = attr.SecureIdFieldName;
             field.UploadUrl = attr.UploadUrl;
             field.FactoryUrl = attr.FactoryUrl;
+            field.EntityHeaderUrl = attr.EntityHeaderUrl;
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
