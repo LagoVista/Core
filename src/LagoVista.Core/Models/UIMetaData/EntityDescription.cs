@@ -20,6 +20,7 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.FactoryUrl = attr.FactoryUrl;
             entityDescription.GetUrl = attr.GetUrl;
             entityDescription.GetListUrl = attr.GetListUrl;
+            entityDescription.HelpUrl = attr.HelpUrl;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -85,6 +86,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string UpdateUrl { get; set; }
         public string SaveUrl { get; set; }
         public string InsertUrl { get; set; }
+        public string HelpUrl { get; set; }
 
         public List<FormField> Elements { get;  set; }
 

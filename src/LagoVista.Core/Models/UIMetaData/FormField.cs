@@ -62,10 +62,13 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? MaxLength { get; set; }
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
+        public string HelpUrl { get; set; }
         public string SecureIdFieldName { get; set; }
         public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
         public FormConditionals ConditionalFields { get; set; }
+
+        public string ChildListDisplayMember { get; set; }
 
         public IDictionary<string, FormField> View { get; set; }
         public List<string> FormFields { get; set; }
@@ -73,7 +76,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string ModelHelp { get; set; }
 
         public string FactoryUrl { get; set; }
-		public string EntityHeaderUrl { get; set; }
+		public string EntityHeaderPickerUrl { get; set; }
 
 		public static List<EnumDescription> GetEnumOptions<Type>()
         {
@@ -125,7 +128,9 @@ namespace LagoVista.Core.Models.UIMetaData
             field.SecureIdFieldName = attr.SecureIdFieldName;
             field.UploadUrl = attr.UploadUrl;
             field.FactoryUrl = attr.FactoryUrl;
-            field.EntityHeaderUrl = attr.EntityHeaderUrl;
+            field.EntityHeaderPickerUrl = attr.EntityHeaderUrl;
+            field.HelpUrl = attr.Helpurl;
+
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
@@ -203,14 +208,17 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
 
-            if (attr.FieldType == FieldTypes.ChildList || attr.FieldType == FieldTypes.ChildListInline)
+            if (attr.FieldType == FieldTypes.ChildList || attr.FieldType == FieldTypes.ChildListInline || attr.FieldType == FieldTypes.ChildListInlinePicker)
             {
                 var childListProperty = property.PropertyType;
 
                 var childType = childListProperty.GenericTypeArguments.FirstOrDefault();
                 var entityDescription = childType.GetTypeInfo().CustomAttributes.FirstOrDefault(eda => eda.AttributeType == typeof(EntityDescriptionAttribute));
 
-                if (attr.FieldType == FieldTypes.ChildListInline)
+                if(!String.IsNullOrEmpty(attr.ChildListDisplayMember))
+                    field.ChildListDisplayMember = attr.ChildListDisplayMember.CamelCase();
+
+                if (attr.FieldType == FieldTypes.ChildListInline || attr.FieldType == FieldTypes.ChildListInlinePicker)
                     field.AllowAddChild = attr.AllowAddChild;
 
                 if (childType != null && entityDescription != null)

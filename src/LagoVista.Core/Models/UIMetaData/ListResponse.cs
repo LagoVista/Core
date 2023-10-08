@@ -22,6 +22,7 @@ namespace LagoVista.Core.Models.UIMetaData
         string FactoryUrl { get; }
         string GetUrl { get; }
         string GetListUrl { get; }
+        string HelpUrl { get; set; }
     }
 
     public class ListResponse<TModel> : InvokeResult, IListResponse where TModel : class
@@ -44,6 +45,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string GetUrl { get; set; }
         public string GetListUrl { get; set; }
 
+        public string HelpUrl { get; set; }
 
         public static new ListResponse<TModel> FromError(string errorMessage, string errorCode = "")
         {
@@ -75,6 +77,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 response.FactoryUrl = attr.FactoryUrl;
                 response.GetListUrl = attr.GetListUrl;
                 response.GetUrl = attr.GetUrl;
+                response.HelpUrl= attr.HelpUrl;
 
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
                 if (helpProperty != null)

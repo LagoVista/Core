@@ -32,6 +32,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string GetUrl { get; set; }
         public string DeleteUrl { get; set; }
         public string GetListUrl { get; set; }
+        public string HelpUrl { get; set; }
 
         private string _saveUrl;
         public string SaveUrl
@@ -89,6 +90,7 @@ namespace LagoVista.Core.Models.UIMetaData
             response.GetUrl = entity.GetUrl;
             response.DeleteUrl = entity.DeleteUrl;
             response.GetListUrl = entity.GetListUrl;
+            response.HelpUrl = entity.HelpUrl;
 
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
