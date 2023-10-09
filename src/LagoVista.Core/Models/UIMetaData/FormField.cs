@@ -125,12 +125,13 @@ namespace LagoVista.Core.Models.UIMetaData
             var field = new FormField();
             field.Name = name;
             field.FieldType = attr.FieldType.ToString();
-            field.SecureIdFieldName = attr.SecureIdFieldName;
+            if(!String.IsNullOrEmpty(attr.SecureIdFieldName))
+                field.SecureIdFieldName = attr.SecureIdFieldName.CamelCase();
+
             field.UploadUrl = attr.UploadUrl;
             field.FactoryUrl = attr.FactoryUrl;
             field.EntityHeaderPickerUrl = attr.EntityHeaderUrl;
             field.HelpUrl = attr.Helpurl;
-
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
