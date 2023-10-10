@@ -16,6 +16,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool ForCreate { get; set; } = true;
         public bool ForUpdate { get; set; } = true;
 
+        public bool NotEquals { get; set; } = false;
         public string Field { get; set; }
         public string Value { get; set; }
         public List<string> VisibleFields { get; set; }
@@ -26,6 +27,7 @@ namespace LagoVista.Core.Models.UIMetaData
             var conditional = new FormConditional();
             conditional.Field = Field.CamelCase();
             conditional.Value = Value.CamelCase();
+            conditional.NotEquals = NotEquals;
             conditional.VisibleFields = VisibleFields.Select(fld => fld.CamelCase()).ToList();
             conditional.RequiredFields = RequiredFields.Select(fld => fld.CamelCase()).ToList();
 
