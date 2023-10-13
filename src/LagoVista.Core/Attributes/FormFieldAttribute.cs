@@ -43,7 +43,8 @@ namespace LagoVista.Core.Attributes
         ChildListInline,
         FileUpload,
         MediaResourceUpload,
-        ChildListInlinePicker
+        ChildListInlinePicker,
+        UserPicker,            
     }
 
     public enum NamespaceTypes
