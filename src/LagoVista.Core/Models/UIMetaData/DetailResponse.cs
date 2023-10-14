@@ -57,11 +57,11 @@ namespace LagoVista.Core.Models.UIMetaData
         public string FullClassName { get; set; }
         public string AssemblyName { get; set; }
 
-        public static DetailResponse<TModel> Create(TModel model)
+        public static DetailResponse<TModel> Create(TModel model, bool isEditing = true)
         {
             var response = new DetailResponse<TModel>();
             response.Model = model;
-            response.IsEditing = true;
+            response.IsEditing = isEditing;
             response.FormFields = new List<string>();
             var viewItems = new Dictionary<string, FormField>();
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
