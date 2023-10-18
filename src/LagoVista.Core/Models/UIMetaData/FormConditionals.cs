@@ -27,10 +27,12 @@ namespace LagoVista.Core.Models.UIMetaData
             var conditional = new FormConditional();
             conditional.Field = Field?.CamelCase();
             conditional.Value = Value?.CamelCase();
+            conditional.ForCreate = ForCreate;
+            conditional.ForUpdate = ForUpdate;
             conditional.NotEquals = NotEquals;
+
             conditional.VisibleFields = VisibleFields.Select(fld => fld.CamelCase()).ToList();
             conditional.RequiredFields = RequiredFields.Select(fld => fld.CamelCase()).ToList();
-
             return conditional;
         }
     }
