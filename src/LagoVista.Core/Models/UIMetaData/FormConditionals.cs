@@ -25,8 +25,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public FormConditional ValuesAsCamelCase()
         {
             var conditional = new FormConditional();
-            conditional.Field = Field.CamelCase();
-            conditional.Value = Value.CamelCase();
+            conditional.Field = Field?.CamelCase();
+            conditional.Value = Value?.CamelCase();
             conditional.NotEquals = NotEquals;
             conditional.VisibleFields = VisibleFields.Select(fld => fld.CamelCase()).ToList();
             conditional.RequiredFields = RequiredFields.Select(fld => fld.CamelCase()).ToList();
