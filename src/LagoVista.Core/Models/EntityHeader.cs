@@ -107,7 +107,7 @@ namespace LagoVista.Core.Models
                 return eh.Id == Id;
             }
 
-            return false;   
+            return false;
         }
 
         public override int GetHashCode()
@@ -205,6 +205,16 @@ namespace LagoVista.Core.Models
         private static bool HasInterface<TType, TInterface>()
         {
             return typeof(TType).GetTypeInfo().ImplementedInterfaces.Any(i => i == typeof(TInterface));
+        }
+
+        public static new EntityHeader<T> Create(string id, string key, string name)
+        {
+            return new EntityHeader<T>()
+            {
+                Id = id,
+                Key = key,
+                Text = name,                
+            };
         }
 
         /// <summary>
