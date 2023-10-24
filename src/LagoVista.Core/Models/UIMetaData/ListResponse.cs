@@ -20,6 +20,7 @@ namespace LagoVista.Core.Models.UIMetaData
         string NextRowKey { get; }
         bool HasMoreRecords { get; }
         string FactoryUrl { get; }
+        string DeleteUrl { get; }
         string GetUrl { get; }
         string GetListUrl { get; }
         string HelpUrl { get; set; }
@@ -45,6 +46,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string GetUrl { get; set; }
         public string GetListUrl { get; set; }
 
+        public string DeleteUrl { get; set; }
+
         public string HelpUrl { get; set; }
 
         public static new ListResponse<TModel> FromError(string errorMessage, string errorCode = "")
@@ -58,6 +61,17 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             var response = new ListResponse<TModel>();
             response.Errors.Concat(errMessages);
+            return response;
+        }
+
+        public static ListResponse<TModel> Create(IEnumerable<TModel> model, IListResponse original)
+        {
+            var response = Create(model);
+            response.HasMoreRecords = original.HasMoreRecords;
+            response.NextRowKey = original.NextRowKey;
+            response.PageSize = original.PageSize;
+            response.PageCount = original.PageCount;
+            response.PageIndex = original.PageIndex;
             return response;
         }
 
@@ -76,6 +90,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 response.GetUrl = attr.GetUrl;
                 response.FactoryUrl = attr.FactoryUrl;
                 response.GetListUrl = attr.GetListUrl;
+                response.DeleteUrl = attr.DeleteUrl;
                 response.GetUrl = attr.GetUrl;
                 response.HelpUrl= attr.HelpUrl;
 
@@ -135,6 +150,8 @@ namespace LagoVista.Core.Models.UIMetaData
                 Title = source.Title,
                 FactoryUrl = source.FactoryUrl,
                 GetListUrl = source.GetListUrl,
+                DeleteUrl = source.DeleteUrl,
+                HelpUrl = source.HelpUrl,
                 GetUrl = source.GetUrl,
                 PageCount = source.PageCount,
                 PageIndex = source.PageIndex,
