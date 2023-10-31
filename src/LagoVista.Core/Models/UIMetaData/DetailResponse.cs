@@ -21,9 +21,9 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public List<string> FormFields { get; set; }
         public List<string> FormFieldsCol2 { get; set; }
-        public List<string> FormFieldAdvanced { get; set; }
+        public List<string> FormFieldsAdvanced { get; set; }
 
-        public List<string> FormFieldSimple { get; set; }
+        public List<string> FormFieldsSimple { get; set; }
 
         public FormConditionals ConditionalFields { get; set; }
 
@@ -81,12 +81,12 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if (model is IFormDescriptorAdvanced)
             {
-                response.FormFieldAdvanced = (model as IFormDescriptorAdvanced).GetAdvancedFields().Select(fld => fld.CamelCase()).ToList();
+                response.FormFieldsAdvanced = (model as IFormDescriptorAdvanced).GetAdvancedFields().Select(fld => fld.CamelCase()).ToList();
             }
 
             if (model is IFormDescriptorSimple)
             {
-                response.FormFieldSimple = (model as IFormDescriptorSimple).GetSimpleFields().Select(fld => fld.CamelCase()).ToList();
+                response.FormFieldsSimple = (model as IFormDescriptorSimple).GetSimpleFields().Select(fld => fld.CamelCase()).ToList();
             }
 
             if (model is IFormConditionalFields)
