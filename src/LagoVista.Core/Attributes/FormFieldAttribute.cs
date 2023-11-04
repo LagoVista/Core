@@ -46,6 +46,7 @@ namespace LagoVista.Core.Attributes
         ChildListInlinePicker,
         UserPicker,   
         WebLink,
+        Action,
     }
 
     public enum NamespaceTypes
