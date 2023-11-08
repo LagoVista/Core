@@ -90,6 +90,7 @@ namespace LagoVista.Core.Attributes
         private string _factoryUrl;
         private string _entityHeaderPickerUrl;
         private string _helpUrl;
+        private string _scriptTemplateName;
 
 		public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -119,7 +120,8 @@ namespace LagoVista.Core.Attributes
                                   string UploadUrl = null,
                                   string FactoryUrl = null,
                                   string EntityHeaderPickerUrl = null,
-                                  string HelpUrl = null)
+                                  string HelpUrl = null,
+                                  string ScriptTemplateName = null)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -149,6 +151,7 @@ namespace LagoVista.Core.Attributes
             _factoryUrl = FactoryUrl;
             _entityHeaderPickerUrl = EntityHeaderPickerUrl;
             _helpUrl= HelpUrl;
+            _scriptTemplateName = ScriptTemplateName;
 
 		}
 
@@ -180,6 +183,8 @@ namespace LagoVista.Core.Attributes
 
 		public string EntityHeaderUrl { get { return _entityHeaderPickerUrl; } }
         public string Helpurl { get { return _helpUrl; } }
+
+        public string ScriptTemplateName { get { return _scriptTemplateName; } }
 	}
 
     public class SelectListItem

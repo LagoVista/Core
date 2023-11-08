@@ -63,6 +63,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
         public string HelpUrl { get; set; }
+        public string ScriptTemplateName { get; set; }
         public string SecureIdFieldName { get; set; }
         public RelayCommand Command { get; set; }
         public List<EnumDescription> Options { get; set; }
@@ -134,6 +135,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.FactoryUrl = attr.FactoryUrl;
             field.EntityHeaderPickerUrl = attr.EntityHeaderUrl;
             field.HelpUrl = attr.Helpurl;
+            field.ScriptTemplateName = attr.ScriptTemplateName;
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
