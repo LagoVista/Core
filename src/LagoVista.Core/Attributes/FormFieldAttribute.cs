@@ -47,7 +47,8 @@ namespace LagoVista.Core.Attributes
         UserPicker,   
         WebLink,
         Action,
-        ReadonlyLabel
+        ReadonlyLabel,
+        Duration
     }
 
     public enum NamespaceTypes
