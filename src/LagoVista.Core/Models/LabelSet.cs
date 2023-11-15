@@ -4,15 +4,17 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.Models
 {
-    public class LabelSet : INoSQLEntity, IIDEntity, IOwnedEntity, IAuditableEntity
+    public class LabelSet : INoSQLEntity, INamedEntity, IIDEntity, IOwnedEntity, IAuditableEntity
     {
         public LabelSet()
         {
             Labels = new List<Label>();
+            Name = "labelset";
         }
 
         [JsonProperty("id")]
         public string Id { get; set; }
+        public string Name { get; set; }
         public string CreationDate { get; set; }
         public string LastUpdatedDate { get; set; }
         public EntityHeader CreatedBy { get; set; }
