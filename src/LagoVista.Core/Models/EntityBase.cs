@@ -17,6 +17,7 @@ namespace LagoVista.Core.Models
         }
 
         [CloneOptions(false)]
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_IsPublic, ResourceType: typeof(LagoVistaCommonStrings), FieldType:FieldTypes.CheckBox, IsUserEditable: true)]
         public bool IsPublic { get; set; }
 
         [CloneOptions(false)]
@@ -32,7 +33,7 @@ namespace LagoVista.Core.Models
         public string EntityType { get; set; }
 
         [CloneOptions(false)]
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType:FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
         public string Name { get; set; }
 
         [CloneOptions(false)]
