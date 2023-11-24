@@ -7,25 +7,27 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Interfaces
 {
     /// <summary>
-    /// Note we are not qualifying these with an interface or generic.   This object really
-    /// doesn't know anything about who dependes on it, that's what this class is for.
+    /// Since we are using a document based structure we don't have foreign keys. we still need that functionality.
     /// 
-    /// The Implementation should implement a switch statement based on type that 
-    /// will eventually resolve the dependencies.
+    /// All foriegn keys are represented with an EntityHeader, this contains both the Id and Name field (in a Text property) of the 
+    /// primary 
     /// 
-    /// Since we can't count on a storage implementation we have to manage our 
-    /// own Foriegn Key concept, the implementation is really the "spec"
+    /// Service to provide function to simulate FKeys in a document based structure.  Will make sure
+    /// we don't delete any dependent objects as well as rename as applicable.  The relationships are setup
+    /// with FKeyProperty attribute on the property that would typically be an FKey.  The NuvIoT build tools will extract all the properties
+    /// and the DependencyManager project in AppServices provides implementation.
     /// 
-    /// There is absolutely a "code-smell" here and we may want to refactor
-    /// but right now this should work for V1.
+    /// If the objects are named properly this will work automatically w/o FKeyProperty attribute.  that is to say if your primary object is
+    /// [Planner]
+    /// And there is a dependent object that references this let's say the object name is "Module" and it has a property called [Planner] of 
+    /// type EntityHeader, the system will be smart enough to not let the delete happen as well as perform rename.
     /// 
-    /// KDW 4/24/2017
     /// 
     /// </summary>
     public interface IDependencyManager
     {
-        Task<DependentObjectCheckResult> CheckForDependenciesAsync(object instance);
+        Task<DependentObjectCheckResult> CheckForDependenciesAsync(IIDEntity instance);
 
-        Task RenameDependentObjectsAsync(object instance, string newName);
+        Task RenameDependentObjectsAsync(EntityHeader changedBy, string changedObjectId, string changedObjectType, string dependentObjectId, string dependentObjectType, string newName);
     }
 }

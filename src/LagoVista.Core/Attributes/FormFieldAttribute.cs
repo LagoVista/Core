@@ -48,7 +48,8 @@ namespace LagoVista.Core.Attributes
         WebLink,
         Action,
         ReadonlyLabel,
-        Duration
+        Duration,
+        MediaResources
     }
 
     public enum NamespaceTypes
@@ -92,7 +93,6 @@ namespace LagoVista.Core.Attributes
         private string _entityHeaderPickerUrl;
         private string _helpUrl;
         private string _scriptTemplateName;
-        private string _fkeyObjectName;
 
 		public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -123,8 +123,7 @@ namespace LagoVista.Core.Attributes
                                   string FactoryUrl = null,
                                   string EntityHeaderPickerUrl = null,
                                   string HelpUrl = null,
-                                  string ScriptTemplateName = null,
-                                  string FKeyObjectName = null)
+                                  string ScriptTemplateName = null)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -155,7 +154,6 @@ namespace LagoVista.Core.Attributes
             _entityHeaderPickerUrl = EntityHeaderPickerUrl;
             _helpUrl= HelpUrl;
             _scriptTemplateName = ScriptTemplateName;
-            _fkeyObjectName = FKeyObjectName;
 
 		}
 
@@ -189,7 +187,6 @@ namespace LagoVista.Core.Attributes
         public string Helpurl { get { return _helpUrl; } }
 
         public string ScriptTemplateName { get { return _scriptTemplateName; } }
-        public string FKeyObjectName { get { return _fkeyObjectName; } }
 	}
 
     public class SelectListItem

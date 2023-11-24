@@ -44,15 +44,9 @@ namespace LagoVista.Core.Tests.Models
         }
     }
 
-    public class AuditableModel : IAuditableEntity, IValidateable
+    public class AuditableModel : EntityBase, IValidateable
     {
-        public EntityHeader CreatedBy { get; set; }
 
-        public string CreationDate { get; set; }
-
-        public EntityHeader LastUpdatedBy { get; set; }
-
-        public string LastUpdatedDate { get; set; }
     }
 
     public enum EnumFortTesting

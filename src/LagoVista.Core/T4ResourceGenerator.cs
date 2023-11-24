@@ -1,4 +1,4 @@
-﻿/*9/10/2022 5:21:54 AM*/
+﻿/*11/23/2023 10:07:03 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -906,6 +906,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Address_UnitNumber_Help
 
 		public static string Address_UnitNumber_Help { get { return GetResourceString("Address_UnitNumber_Help"); } }
+//Resources:LagoVistaCommonStrings:Common_CreatedBy
+
+		public static string Common_CreatedBy { get { return GetResourceString("Common_CreatedBy"); } }
+//Resources:LagoVistaCommonStrings:Common_CreationDate
+
+		public static string Common_CreationDate { get { return GetResourceString("Common_CreationDate"); } }
 //Resources:LagoVistaCommonStrings:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
@@ -915,6 +921,18 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Key
 
 		public static string Common_Key { get { return GetResourceString("Common_Key"); } }
+//Resources:LagoVistaCommonStrings:Common_Key_Help
+
+		public static string Common_Key_Help { get { return GetResourceString("Common_Key_Help"); } }
+//Resources:LagoVistaCommonStrings:Common_Key_Validation
+
+		public static string Common_Key_Validation { get { return GetResourceString("Common_Key_Validation"); } }
+//Resources:LagoVistaCommonStrings:Common_LastUpdated
+
+		public static string Common_LastUpdated { get { return GetResourceString("Common_LastUpdated"); } }
+//Resources:LagoVistaCommonStrings:Common_LastUpdatedBy
+
+		public static string Common_LastUpdatedBy { get { return GetResourceString("Common_LastUpdatedBy"); } }
 //Resources:LagoVistaCommonStrings:Common_Loading
 
 		public static string Common_Loading { get { return GetResourceString("Common_Loading"); } }
@@ -978,9 +996,15 @@ namespace LagoVista.Core.Resources
 			public const string Address_Title = "Address_Title";
 			public const string Address_UnitNumber = "Address_UnitNumber";
 			public const string Address_UnitNumber_Help = "Address_UnitNumber_Help";
+			public const string Common_CreatedBy = "Common_CreatedBy";
+			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
+			public const string Common_Key_Help = "Common_Key_Help";
+			public const string Common_Key_Validation = "Common_Key_Validation";
+			public const string Common_LastUpdated = "Common_LastUpdated";
+			public const string Common_LastUpdatedBy = "Common_LastUpdatedBy";
 			public const string Common_Loading = "Common_Loading";
 			public const string Common_Name = "Common_Name";
 			public const string Common_No = "Common_No";

@@ -79,12 +79,12 @@ namespace LagoVista.Core.Managers
             await _security.AuthorizeAsync(ownedEntity, action, user, org, actionName);
         }
 
-        protected Task<DependentObjectCheckResult> CheckForDepenenciesAsync(Object instance)
+        protected Task<DependentObjectCheckResult> CheckForDepenenciesAsync(IIDEntity instance)
         {
             return _dependencyManager.CheckForDependenciesAsync(instance);
         }
 
-        protected async Task ConfirmNoDepenenciesAsync(Object instance)
+        protected async Task ConfirmNoDepenenciesAsync(IIDEntity instance)
         {
             var dependants = await _dependencyManager.CheckForDependenciesAsync(instance);
             if (dependants.IsInUse)
@@ -98,16 +98,6 @@ namespace LagoVista.Core.Managers
             await _security.AuthorizeOrgAccessAsync(userId, orgId, entityType, action);
         }
 
-
-        /// <summary>
-        /// To be called when an object is renamed, will go through any objects that rely on this object and rename the entity header column.
-        /// </summary>
-        /// <param name="newName"></param>
-        /// <returns></returns>
-        protected Task RenameDependentObjectsAsync(object instance, string newName)
-        {
-            return _dependencyManager.RenameDependentObjectsAsync(instance, newName);
-        }
 
         protected Task AuthorizeAsync(string userId, string orgId, string action, Object data = null)
         {
