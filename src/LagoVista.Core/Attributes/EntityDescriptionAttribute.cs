@@ -23,6 +23,7 @@ namespace LagoVista.Core.Attributes
         private string _getListUrl;
         private string _deleteUrl;
         private string _helpUrl;
+        private string _icon;
 
         public enum EntityTypes
         {
@@ -34,7 +35,7 @@ namespace LagoVista.Core.Attributes
         }
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null, 
-            string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null)
+            string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null)
         {
             _descriptionResource = DescriptionResource;
             _titleResource = TitleResource;
@@ -50,6 +51,7 @@ namespace LagoVista.Core.Attributes
             _getListUrl = GetListUrl;
             _deleteUrl = DeleteUrl;
             _helpUrl = HelpUrl;
+            _icon = Icon;
         }
 
         public String DescriptionResource { get { return _descriptionResource; } }
@@ -67,5 +69,6 @@ namespace LagoVista.Core.Attributes
         public string GetListUrl { get { return _getListUrl;  } }
         public string DeleteUrl { get { return _deleteUrl; } }
         public string HelpUrl { get { return _helpUrl; } }
+        public string Icon { get { return _icon; } }
     }
 }

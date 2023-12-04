@@ -21,6 +21,7 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.GetUrl = attr.GetUrl;
             entityDescription.GetListUrl = attr.GetListUrl;
             entityDescription.HelpUrl = attr.HelpUrl;
+            entityDescription.Icon = attr.Icon;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -78,6 +79,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public DomainDescription Domain { get; set; }
         public String UserHelp { get; set; }
         public String Title { get; set; }
+
+        public string Icon { get; set; }
 
         public string FactoryUrl { get; set; }
         public string GetUrl { get; set; }

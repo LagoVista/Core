@@ -27,6 +27,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public FormConditionals ConditionalFields { get; set; }
 
+        public string Icon { get; set; }
+
         public bool IsEditing { get; set; }
 
         public string UpdateUrl { get; set; }
@@ -96,6 +98,7 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
             response.ModelTitle = entity.Title;
+            response.Icon = entity.Icon;
             response.ModelHelp = entity.UserHelp;
             response.FullClassName = model.GetType().FullName;
             response.AssemblyName = model.GetType().AssemblyQualifiedName;
