@@ -1,6 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.Core.Interfaces
 {
@@ -22,5 +21,10 @@ namespace LagoVista.Core.Interfaces
     public interface IFormDescriptorSimple
     {
         List<string> GetSimpleFields();
+    }
+
+    public interface IFormAdditionalActions
+    {
+        List<FormAdditionalAction> GetAdditionalActions();
     }
 }

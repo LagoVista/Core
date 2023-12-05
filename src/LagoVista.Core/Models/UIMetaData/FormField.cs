@@ -63,6 +63,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
         public string HelpUrl { get; set; }
+        public bool InPlaceEditing { get; set; }
         public string ScriptTemplateName { get; set; }
         public string SecureIdFieldName { get; set; }
         public RelayCommand Command { get; set; }

@@ -26,6 +26,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldsSimple { get; set; }
 
         public FormConditionals ConditionalFields { get; set; }
+        public List<FormAdditionalAction> FormAdditionalActions { get; set; }
 
         public string Icon { get; set; }
 
@@ -89,6 +90,11 @@ namespace LagoVista.Core.Models.UIMetaData
             if (model is IFormDescriptorSimple)
             {
                 response.FormFieldsSimple = (model as IFormDescriptorSimple).GetSimpleFields().Select(fld => fld.CamelCase()).ToList();
+            }
+
+            if(model is IFormAdditionalActions)
+            {
+                response.FormAdditionalActions = (model as IFormAdditionalActions).GetAdditionalActions();
             }
 
             if (model is IFormConditionalFields)

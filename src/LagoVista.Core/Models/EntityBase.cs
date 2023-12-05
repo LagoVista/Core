@@ -66,7 +66,7 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         public EntityHeader LastUpdatedBy { get; set; }
 
-        public IEntityHeader ToEntityHeader()
+        public EntityHeader ToEntityHeader()
         {
             return EntityHeader.Create(Id, Key, Name);
         }

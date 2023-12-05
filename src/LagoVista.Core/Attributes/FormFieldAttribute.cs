@@ -94,6 +94,7 @@ namespace LagoVista.Core.Attributes
         private string _entityHeaderPickerUrl;
         private string _helpUrl;
         private string _scriptTemplateName;
+        private bool _inPlaceEditing;
 
 		public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -124,7 +125,8 @@ namespace LagoVista.Core.Attributes
                                   string FactoryUrl = null,
                                   string EntityHeaderPickerUrl = null,
                                   string HelpUrl = null,
-                                  string ScriptTemplateName = null)
+                                  string ScriptTemplateName = null,
+                                  bool InPlaceEditing = true)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -155,6 +157,7 @@ namespace LagoVista.Core.Attributes
             _entityHeaderPickerUrl = EntityHeaderPickerUrl;
             _helpUrl= HelpUrl;
             _scriptTemplateName = ScriptTemplateName;
+            _inPlaceEditing = InPlaceEditing;
 
 		}
 
@@ -188,6 +191,8 @@ namespace LagoVista.Core.Attributes
         public string Helpurl { get { return _helpUrl; } }
 
         public string ScriptTemplateName { get { return _scriptTemplateName; } }
+
+        public bool InPlaceEditing { get { return _inPlaceEditing; } }
 	}
 
     public class SelectListItem
