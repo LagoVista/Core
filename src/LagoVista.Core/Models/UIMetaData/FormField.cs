@@ -137,6 +137,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.EntityHeaderPickerUrl = attr.EntityHeaderUrl;
             field.HelpUrl = attr.Helpurl;
             field.ScriptTemplateName = attr.ScriptTemplateName;
+            field.InPlaceEditing = attr.InPlaceEditing;
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
