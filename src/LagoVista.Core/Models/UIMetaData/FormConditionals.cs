@@ -24,6 +24,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool CheckModel { get; set; } = false;
         public List<string> VisibleFields { get; set; }
         public List<string> RequiredFields { get; set; }
+        public List<string> ReadOnlyFields { get; set; }
 
         public FormConditional ValuesAsCamelCase()
         {
@@ -38,6 +39,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
             conditional.VisibleFields = VisibleFields.Select(fld => fld.CamelCase()).ToList();
             conditional.RequiredFields = RequiredFields.Select(fld => fld.CamelCase()).ToList();
+            conditional.ReadOnlyFields = ReadOnlyFields.Select(fld => fld.CamelCase()).ToList();
             return conditional;
         }
     }
