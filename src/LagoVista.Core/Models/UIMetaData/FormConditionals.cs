@@ -11,6 +11,7 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             VisibleFields = new List<string>();
             RequiredFields = new List<string>();
+            ReadOnlyFields = new List<string>();
         }
 
         public bool ForCreate { get; set; } = true;
