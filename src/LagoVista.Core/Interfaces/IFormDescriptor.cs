@@ -13,6 +13,16 @@ namespace LagoVista.Core.Interfaces
         List<string> GetFormFieldsCol2();
     }
 
+    public interface IFormDescriptorBottom
+    {
+        List<string> GetFormFieldsBottom();
+    }
+
+    public interface IFormDescriptorTabs
+    {
+        List<string> GetFormFieldsTabs();
+    }
+
     public interface IFormDescriptorAdvanced
     {
         List<string> GetAdvancedFields();
