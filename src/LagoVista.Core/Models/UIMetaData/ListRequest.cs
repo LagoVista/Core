@@ -14,5 +14,20 @@ namespace LagoVista.Core.Models.UIMetaData
         public string EndDate { get; set; }
         public string GroupBy { get; set; }
         public int GroupBySize { get; set; }
+        public string Url { get; set; }
+
+        public override string ToString()
+        {
+            return $@"[List Request]
+\tNext Parition Key: {NextPartitionKey}
+\tNext Row Key     : {NextRowKey}
+\tPage Index       : {PageIndex}
+\tPage Size        : {PageSize}
+\tStart Date       : {PageSize}
+\tEnd Date         : {PageSize}
+\tGroup By         : {PageSize}
+\tGroup By Size    : {PageSize}
+\tUrl              : {Url}";
+        }
     }
 }

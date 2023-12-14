@@ -14,6 +14,7 @@ namespace LagoVista.Core.Models.UIMetaData
         IEnumerable<ListColumn> Columns { get; }
 
         int PageSize { get; }
+        int RecordCount { get; }
         int PageIndex { get; }
         int PageCount { get; }
         string NextPartitionKey { get; }
@@ -35,6 +36,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public IEnumerable<TModel> Model { get; set; }
 
+        public int RecordCount { get; set; }
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
         public int PageCount { get; set; }
@@ -92,7 +94,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 response.GetListUrl = attr.GetListUrl;
                 response.DeleteUrl = attr.DeleteUrl;
                 response.GetUrl = attr.GetUrl;
-                response.HelpUrl= attr.HelpUrl;
+                response.HelpUrl = attr.HelpUrl;
 
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
                 if (helpProperty != null)
@@ -117,17 +119,33 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
             response.Columns = columns;
-            response.PageSize = model.Count();
-
+            response.RecordCount = model.Count();
             return response;
         }
         
         public static ListResponse<TModel> Create(ListRequest request, IEnumerable<TModel> model)
         {
             var response = ListResponse<TModel>.Create(model);
-            response.HasMoreRecords = request.PageSize == response.PageSize;
+            response.HasMoreRecords = request.PageSize == model.Count();
             response.PageIndex = request.PageIndex;
+            response.PageSize = request.PageSize;
+            response.GetListUrl = request.Url;
             return response;
+        }
+
+        public override string ToString()
+        {
+            return $@"[List Response]
+\tTitle            : {Title}
+\tGetList Url      : {GetListUrl}
+\tFactory Url      : {FactoryUrl}
+\tPage Count       : {PageCount}
+\tRecord Count     : {RecordCount}
+\tPage Index       : {PageIndex}
+\tPage Size        : {PageSize}
+\tNext parition key: {NextPartitionKey}
+\tNext row key     : {NextRowKey}
+\tHas More Records : {PageCount}";
         }
     }
 
@@ -156,6 +174,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 PageCount = source.PageCount,
                 PageIndex = source.PageIndex,
                 PageSize = source.PageSize,
+                RecordCount = source.RecordCount,
                 NextPartitionKey = source.NextPartitionKey,
                 NextRowKey = source.NextRowKey,
                 HasMoreRecords = source.HasMoreRecords,
