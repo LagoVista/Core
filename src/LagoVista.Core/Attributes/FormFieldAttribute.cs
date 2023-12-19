@@ -50,7 +50,8 @@ namespace LagoVista.Core.Attributes
         ReadonlyLabel,
         Duration,
         MediaResources,
-        ProductPicker
+        ProductPicker,
+        PaymentMethod
     }
 
     public enum NamespaceTypes
