@@ -17,6 +17,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string ModelTitle { get; set; }
         public string ModelHelp { get; set; }
 
+        public string ModelName { get; set; }
+
         public IDictionary<string, FormField> View { get; set; }
 
         public List<string> FormFields { get; set; }
@@ -124,6 +126,7 @@ namespace LagoVista.Core.Models.UIMetaData
             response.Icon = entity.Icon;
             response.ModelHelp = entity.UserHelp;
             response.FullClassName = model.GetType().FullName;
+            response.ModelName = model.GetType().Name;
             response.AssemblyName = model.GetType().AssemblyQualifiedName;
             if (!string.IsNullOrEmpty(entity.InsertUrl))
                 response.InsertUrl = entity.InsertUrl;

@@ -51,7 +51,7 @@ namespace LagoVista.Core.Attributes
         Duration,
         MediaResources,
         ProductPicker,
-        PaymentMethod
+        PaymentMethod,
     }
 
     public enum NamespaceTypes
@@ -111,7 +111,7 @@ namespace LagoVista.Core.Attributes
                                   String RegExMessage = "",
                                   String NamespaceUniqueMessageResource = "",
                                   String ChildListDisplayMember = "",
-                                  String SecureIdFieldName = "",
+                                  String SecureIdFieldName = "",    
                                   NamespaceTypes NamespaceType = NamespaceTypes.None,
                                   int MinLength = -1,
                                   int MaxLength = -1,
