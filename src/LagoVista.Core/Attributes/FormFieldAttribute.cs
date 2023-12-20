@@ -110,7 +110,7 @@ namespace LagoVista.Core.Attributes
                                   String PickerFor = "",
                                   String RegExMessage = "",
                                   String NamespaceUniqueMessageResource = "",
-                                  String ChildListDisplayMember = "name",
+                                  String ChildListDisplayMember = "",
                                   String SecureIdFieldName = "",
                                   NamespaceTypes NamespaceType = NamespaceTypes.None,
                                   int MinLength = -1,
