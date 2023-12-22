@@ -63,6 +63,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
         public string HelpUrl { get; set; }
+        public string PickerFor { get; set; }
+
         public bool InPlaceEditing { get; set; }
         public string ScriptTemplateName { get; set; }
         public string SecureIdFieldName { get; set; }
@@ -136,6 +138,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
             field.UploadUrl = attr.UploadUrl;
             field.FactoryUrl = attr.FactoryUrl;
+            field.PickerFor = attr.PickerFor;
             field.EntityHeaderPickerUrl = attr.EntityHeaderUrl;
             field.HelpUrl = attr.Helpurl;
             field.ScriptTemplateName = attr.ScriptTemplateName;

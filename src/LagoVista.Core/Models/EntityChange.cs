@@ -15,7 +15,7 @@ namespace LagoVista.Core.Models
     {
         public string Field { get; set; }
         public string OldValue { get; set; }
-        public string Newvalue { get; set; }
+        public string NewValue { get; set; }
         public string Notes { get; set; }
     }
 }

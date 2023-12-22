@@ -11,7 +11,8 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         string Title { get; }
         string Help { get; }
-        IEnumerable<ListColumn> Columns { get; }
+        List<ListColumn> Columns { get; }
+        List<string> ColumnFilters { get; }
 
         int PageSize { get; }
         int RecordCount { get; }
@@ -32,7 +33,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public string Title { get; set; }
         public string Help { get; set; }
 
-        public IEnumerable<ListColumn> Columns { get; set; }
+        public List<ListColumn> Columns { get; set; }
+
+        public List<string> ColumnFilters { get; set; }
 
         public IEnumerable<TModel> Model { get; set; }
 
