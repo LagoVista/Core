@@ -52,6 +52,7 @@ namespace LagoVista.Core.Attributes
         MediaResources,
         ProductPicker,
         PaymentMethod,
+        HtmlEditor
     }
 
     public enum NamespaceTypes
@@ -96,7 +97,7 @@ namespace LagoVista.Core.Attributes
         private string _helpUrl;
         private string _scriptTemplateName;
         private bool _inPlaceEditing;
-
+      
 		public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
                                   String ValidationRegEx = "",
