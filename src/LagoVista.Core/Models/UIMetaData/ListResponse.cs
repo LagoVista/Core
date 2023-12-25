@@ -14,6 +14,7 @@ namespace LagoVista.Core.Models.UIMetaData
         List<ListColumn> Columns { get; }
         List<string> ColumnFilters { get; }
 
+        string Icon { get; set; }
         int PageSize { get; }
         int RecordCount { get; }
         int PageIndex { get; }
@@ -43,6 +44,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
         public int PageCount { get; set; }
+        public string Icon { get; set; }
         public string NextPartitionKey { get; set; }
         public string NextRowKey { get; set; }
         public bool HasMoreRecords { get; set; }
@@ -98,6 +100,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 response.DeleteUrl = attr.DeleteUrl;
                 response.GetUrl = attr.GetUrl;
                 response.HelpUrl = attr.HelpUrl;
+                response.Icon = attr.Icon;
 
                 var helpProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.UserHelpResource);
                 if (helpProperty != null)
