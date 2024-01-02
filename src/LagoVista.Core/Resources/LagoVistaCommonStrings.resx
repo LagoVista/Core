@@ -187,7 +187,7 @@
     <value>The key is used to identify this item in scripts and must be unique with respect to it's parent. Once a key has been assigned, it can not be changed.</value>
   </data>
   <data name="Common_Key_Validation" xml:space="preserve">
-    <value>The key must use only letters and numbers, and must be lowercase and must be between 3 and 20 characters.</value>
+    <value>The key must use only letters and numbers, and must be lowercase and must be between 3 and 32 characters.</value>
   </data>
   <data name="Common_LastUpdated" xml:space="preserve">
     <value>Last Updated</value>
