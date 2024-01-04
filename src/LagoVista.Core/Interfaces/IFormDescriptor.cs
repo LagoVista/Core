@@ -38,6 +38,11 @@ namespace LagoVista.Core.Interfaces
         List<string> GetSimpleFields();
     }
 
+    public interface IFormDescriptorQuickCreate
+    {
+        List<string> GetQuickCreateFields();
+    }
+
     public interface IFormAdditionalActions
     {
         List<FormAdditionalAction> GetAdditionalActions();

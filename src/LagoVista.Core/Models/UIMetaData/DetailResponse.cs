@@ -66,7 +66,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string FullClassName { get; set; }
         public string AssemblyName { get; set; }
 
-        public static DetailResponse<TModel> Create(TModel model, bool isEditing = true)
+        public static DetailResponse<TModel> Create(TModel model, bool isEditing = true, bool quickCreate = false)
         {
             var response = new DetailResponse<TModel>();
             response.Model = model;
@@ -76,24 +76,26 @@ namespace LagoVista.Core.Models.UIMetaData
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
             var entity = EntityDescription.Create(typeof(TModel), attr);
 
-            if(model is IFormDescriptor)
+            if(quickCreate && model is IFormDescriptorQuickCreate)
+            {
+                response.FormFields = (model as IFormDescriptorQuickCreate).GetQuickCreateFields().Select(fld => fld.CamelCase()).ToList();
+            }
+            else if(model is IFormDescriptor)
             {
                 response.FormFields = (model as IFormDescriptor).GetFormFields().Select(fld => fld.CamelCase()).ToList();
-            }
+                if (model is IFormDescriptorCol2)
+                {
+                    response.FormFieldsCol2 = (model as IFormDescriptorCol2).GetFormFieldsCol2().Select(fld => fld.CamelCase()).ToList();
+                }
+                if (model is IFormDescriptorAdvanced)
+                {
+                    response.FormFieldsAdvanced = (model as IFormDescriptorAdvanced).GetAdvancedFields().Select(fld => fld.CamelCase()).ToList();
+                }
 
-            if (model is IFormDescriptorCol2)
-            {
-                response.FormFieldsCol2 = (model as IFormDescriptorCol2).GetFormFieldsCol2().Select(fld => fld.CamelCase()).ToList();
-            }
-
-            if (model is IFormDescriptorAdvanced)
-            {
-                response.FormFieldsAdvanced = (model as IFormDescriptorAdvanced).GetAdvancedFields().Select(fld => fld.CamelCase()).ToList();
-            }
-
-            if (model is IFormDescriptorAdvancedCol2)
-            {
-                response.FormFieldsAdvancedCol2 = (model as IFormDescriptorAdvancedCol2).GetAdvancedFieldsCol2().Select(fld => fld.CamelCase()).ToList();
+                if (model is IFormDescriptorAdvancedCol2)
+                {
+                    response.FormFieldsAdvancedCol2 = (model as IFormDescriptorAdvancedCol2).GetAdvancedFieldsCol2().Select(fld => fld.CamelCase()).ToList();
+                }
             }
 
             if (model is IFormDescriptorSimple)
@@ -166,9 +168,9 @@ namespace LagoVista.Core.Models.UIMetaData
             return response;
         }
 
-        public static DetailResponse<TModel> Create()
+        public static DetailResponse<TModel> Create(bool quickCreate = false)
         {
-            var response = Create(new TModel());
+            var response = Create(new TModel(), quickCreate: quickCreate);
             response.IsEditing = false;
             return response;
         }
