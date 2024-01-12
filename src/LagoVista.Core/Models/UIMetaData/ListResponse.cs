@@ -10,6 +10,7 @@ namespace LagoVista.Core.Models.UIMetaData
     public interface IListResponse
     {
         string Title { get; }
+        string ModelName { get; }
         string Help { get; }
         List<ListColumn> Columns { get; }
         List<string> ColumnFilters { get; }
@@ -32,6 +33,7 @@ namespace LagoVista.Core.Models.UIMetaData
     public class ListResponse<TModel> : InvokeResult, IListResponse where TModel : class
     {
         public string Title { get; set; }
+        public string ModelName { get; set; }
         public string Help { get; set; }
 
         public List<ListColumn> Columns { get; set; }
@@ -87,6 +89,7 @@ namespace LagoVista.Core.Models.UIMetaData
             var response = new ListResponse<TModel>();
             /* Make sure the enumeration is populated before sending to the client */
             response.Model = model.ToList();
+            response.ModelName = typeof(TModel).Name;
 
             var attr = typeof(TModel).GetTypeInfo().GetCustomAttribute<EntityDescriptionAttribute>();
 
