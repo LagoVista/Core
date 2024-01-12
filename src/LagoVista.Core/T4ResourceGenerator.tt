@@ -33,7 +33,8 @@ This template if free for redistribution in accordance with the same license.
    var serviceProvider = Host as IServiceProvider;
 
     if (serviceProvider != null) {
-		Dte = serviceProvider.GetService(typeof(SDTE)) as DTE;
+		//Dte = serviceProvider.GetService(typeof(SDTE)) as DTE;
+		Dte = (EnvDTE.DTE) serviceProvider.GetCOMService(typeof(EnvDTE.DTE));
     }
 
 	if (Dte == null) {
@@ -63,7 +64,7 @@ try{
 	var currentClass = "";
 	var thisIsFirstEntryInClass = true;
 	var names = new List<string>();
-	foreach(var entry in AllEntries)
+	foreach(var entry in AllEntries)	
 	{
 	    WriteLine("//" + entry.Path + ":" + entry.File+ ":" + entry.Name);
 
@@ -73,7 +74,7 @@ try{
 
 		bool namesapceIsChanging = newNamespace != currentNamespace;
 		bool classIsChanging = namesapceIsChanging || newClass != currentClass;
-		
+		 
 		//Close out current class if class is changing and there is a current class
 		if(classIsChanging && currentClass != "")
 		{

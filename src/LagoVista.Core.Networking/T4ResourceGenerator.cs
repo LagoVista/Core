@@ -1,4 +1,4 @@
-﻿/*10/21/2017 16:08:24*/
+﻿/*1/12/2024 2:24:46 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -63,6 +63,9 @@ namespace LagoVista.Core.Networking.Resources
 //Resources:NetworkingResources:MQTT_QOS2
 
 		public static string MQTT_QOS2 { get { return GetResourceString("MQTT_QOS2"); } }
+//Resources:NetworkingResources:Subscription_Description
+
+		public static string Subscription_Description { get { return GetResourceString("Subscription_Description"); } }
 //Resources:NetworkingResources:Subscription_QOS
 
 		public static string Subscription_QOS { get { return GetResourceString("Subscription_QOS"); } }
@@ -72,6 +75,9 @@ namespace LagoVista.Core.Networking.Resources
 //Resources:NetworkingResources:Subscription_QOS_Select
 
 		public static string Subscription_QOS_Select { get { return GetResourceString("Subscription_QOS_Select"); } }
+//Resources:NetworkingResources:Subscription_Title
+
+		public static string Subscription_Title { get { return GetResourceString("Subscription_Title"); } }
 //Resources:NetworkingResources:Subscription_Topic
 
 		public static string Subscription_Topic { get { return GetResourceString("Subscription_Topic"); } }
@@ -84,9 +90,11 @@ namespace LagoVista.Core.Networking.Resources
 			public const string MQTT_QOS0 = "MQTT_QOS0";
 			public const string MQTT_QOS1 = "MQTT_QOS1";
 			public const string MQTT_QOS2 = "MQTT_QOS2";
+			public const string Subscription_Description = "Subscription_Description";
 			public const string Subscription_QOS = "Subscription_QOS";
 			public const string Subscription_QOS_Help = "Subscription_QOS_Help";
 			public const string Subscription_QOS_Select = "Subscription_QOS_Select";
+			public const string Subscription_Title = "Subscription_Title";
 			public const string Subscription_Topic = "Subscription_Topic";
 			public const string Subscription_Topic_Help = "Subscription_Topic_Help";
 		}

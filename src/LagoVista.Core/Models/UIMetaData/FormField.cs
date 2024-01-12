@@ -127,7 +127,6 @@ namespace LagoVista.Core.Models.UIMetaData
             return options.OrderBy(opt => opt.SortOrder).ToList();
         }
 
-
         public static FormField Create(String name, FormFieldAttribute attr, PropertyInfo property)
         {
             var field = new FormField();
