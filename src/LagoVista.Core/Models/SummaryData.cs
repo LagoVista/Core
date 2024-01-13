@@ -12,6 +12,8 @@ namespace LagoVista.Core.Models
         [ListColumn(Visible: false)]
         public String Id { get; set; }
 
+        public string Icon { get; set; } = "icon-ae-document";
+   
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_IsPublic, ResourceType: typeof(LagoVistaCommonStrings))]
         public bool IsPublic { get; set; }
 
@@ -23,5 +25,6 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_Description, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Description { get; set; }
+
     }
 }
