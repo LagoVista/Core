@@ -11,13 +11,18 @@ namespace LagoVista.Core.Models.UIMetaData
         public String DomainKey { get; set; }
         public String ClassName { get; set; }
 
+        public String Icon { get; set; }
+        public String Description { get; set; }
+
         public static EntitySummary Create(EntityDescription desc)
         {
             return new EntitySummary()
             {
                 ClassName = desc.Name,
                 Name = desc.Title,
-                DomainKey = desc.DomainName
+                DomainKey = desc.DomainName,
+                Icon = desc.Icon,
+                Description = desc.Description,
             };
         }
     }
