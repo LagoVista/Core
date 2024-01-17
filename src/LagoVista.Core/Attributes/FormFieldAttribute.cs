@@ -97,8 +97,11 @@ namespace LagoVista.Core.Attributes
         private string _helpUrl;
         private string _scriptTemplateName;
         private bool _inPlaceEditing;
-      
-		public FormFieldAttribute(String LabelResource = "",
+        private bool _sortEnums;
+        private bool _addEnumSelect;
+
+
+        public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
                                   String ValidationRegEx = "",
                                   String ReqMessageResource = "",
@@ -112,7 +115,7 @@ namespace LagoVista.Core.Attributes
                                   String RegExMessage = "",
                                   String NamespaceUniqueMessageResource = "",
                                   String ChildListDisplayMember = "",
-                                  String SecureIdFieldName = "",    
+                                  String SecureIdFieldName = "",
                                   NamespaceTypes NamespaceType = NamespaceTypes.None,
                                   int MinLength = -1,
                                   int MaxLength = -1,
@@ -128,7 +131,9 @@ namespace LagoVista.Core.Attributes
                                   string EntityHeaderPickerUrl = null,
                                   string HelpUrl = null,
                                   string ScriptTemplateName = null,
-                                  bool InPlaceEditing = true)
+                                  bool InPlaceEditing = true,
+                                  bool SortEnums = false, 
+                                  bool AddEnumSelect = false)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -157,11 +162,12 @@ namespace LagoVista.Core.Attributes
             _uploadUrl = UploadUrl;
             _factoryUrl = FactoryUrl;
             _entityHeaderPickerUrl = EntityHeaderPickerUrl;
-            _helpUrl= HelpUrl;
+            _helpUrl = HelpUrl;
             _scriptTemplateName = ScriptTemplateName;
             _inPlaceEditing = InPlaceEditing;
-
-		}
+            _sortEnums = SortEnums;
+            _addEnumSelect = AddEnumSelect; 
+        }
 
         public String PickerFor { get { return _pickerFor; } }
         public String PickerType { get { return _pickerType; } }
@@ -181,6 +187,9 @@ namespace LagoVista.Core.Attributes
         public string CompareTo { get { return _compareTo; } }
         public string CompareToMsgResource { get { return _compareToMsgResource; } }
         public int? MinLength { get { return _minLength; } }
+
+        public bool AddEnumSelect { get { return _addEnumSelect; } }
+        public bool SortEnums { get { return _sortEnums; } }
         public int? MaxLength { get { return _maxLength; } }
         public NamespaceTypes NamespaceType { get { return _namespaceType; } }
         public Type EnumType { get { return _enumType; } }

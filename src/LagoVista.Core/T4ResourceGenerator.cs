@@ -1,4 +1,4 @@
-﻿/*1/12/2024 2:25:02 PM*/
+﻿/*1/16/2024 12:14:26 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -948,6 +948,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_PleaseWait
 
 		public static string Common_PleaseWait { get { return GetResourceString("Common_PleaseWait"); } }
+//Resources:LagoVistaCommonStrings:Common_Select
+
+		public static string Common_Select { get { return GetResourceString("Common_Select"); } }
 //Resources:LagoVistaCommonStrings:Common_Yes
 
 		public static string Common_Yes { get { return GetResourceString("Common_Yes"); } }
@@ -1010,6 +1013,7 @@ namespace LagoVista.Core.Resources
 			public const string Common_No = "Common_No";
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_PleaseWait = "Common_PleaseWait";
+			public const string Common_Select = "Common_Select";
 			public const string Common_Yes = "Common_Yes";
 			public const string Company_Description = "Company_Description";
 			public const string Company_Help = "Company_Help";

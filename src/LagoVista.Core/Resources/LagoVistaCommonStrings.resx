@@ -210,6 +210,9 @@
   <data name="Common_PleaseWait" xml:space="preserve">
     <value>Please Wait</value>
   </data>
+  <data name="Common_Select" xml:space="preserve">
+    <value>-select-</value>
+  </data>
   <data name="Common_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>

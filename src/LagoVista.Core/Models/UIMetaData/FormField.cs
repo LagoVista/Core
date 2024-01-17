@@ -328,7 +328,21 @@ namespace LagoVista.Core.Models.UIMetaData
                     }
                 }
 
-                field.Options = options.OrderBy(opt => opt.SortOrder).ToList();
+                if(attr.SortEnums)
+                    field.Options = options.OrderBy(opt => opt.Label).ToList();
+                else
+                    field.Options = options.OrderBy(opt => opt.SortOrder).ToList();
+
+                if (attr.AddEnumSelect)
+                    field.Options.Insert(0, new EnumDescription()
+                    {
+                        Id = "-1",
+                        Key = "-1",
+                        Text = LagoVistaCommonStrings.Common_Select,
+                        Name = "select",
+                        Label = LagoVistaCommonStrings.Common_Select
+                    });
+
             }
 
             if (attr.FieldType == FieldTypes.NameSpace)
