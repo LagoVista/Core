@@ -1,4 +1,4 @@
-﻿/*1/16/2024 12:14:26 PM*/
+﻿/*1/19/2024 5:22:35 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -972,6 +972,18 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Contact_Title
 
 		public static string Contact_Title { get { return GetResourceString("Contact_Title"); } }
+//Resources:LagoVistaCommonStrings:Discussion
+
+		public static string Discussion { get { return GetResourceString("Discussion"); } }
+//Resources:LagoVistaCommonStrings:Discussion_Help
+
+		public static string Discussion_Help { get { return GetResourceString("Discussion_Help"); } }
+//Resources:LagoVistaCommonStrings:Discussion_TimeStamp
+
+		public static string Discussion_TimeStamp { get { return GetResourceString("Discussion_TimeStamp"); } }
+//Resources:LagoVistaCommonStrings:Discussion_Title
+
+		public static string Discussion_Title { get { return GetResourceString("Discussion_Title"); } }
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
@@ -1021,6 +1033,10 @@ namespace LagoVista.Core.Resources
 			public const string Contact_Description = "Contact_Description";
 			public const string Contact_Help = "Contact_Help";
 			public const string Contact_Title = "Contact_Title";
+			public const string Discussion = "Discussion";
+			public const string Discussion_Help = "Discussion_Help";
+			public const string Discussion_TimeStamp = "Discussion_TimeStamp";
+			public const string Discussion_Title = "Discussion_Title";
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string NoConnection = "NoConnection";
 		}

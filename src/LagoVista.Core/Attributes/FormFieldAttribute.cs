@@ -52,7 +52,8 @@ namespace LagoVista.Core.Attributes
         MediaResources,
         ProductPicker,
         PaymentMethod,
-        HtmlEditor
+        HtmlEditor,
+        Discussion
     }
 
     public enum NamespaceTypes

@@ -234,6 +234,18 @@
   <data name="Contact_Title" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="Discussion" xml:space="preserve">
+    <value>Discussion</value>
+  </data>
+  <data name="Discussion_Help" xml:space="preserve">
+    <value>Notes or Discussions that can be added to objects.</value>
+  </data>
+  <data name="Discussion_TimeStamp" xml:space="preserve">
+    <value>Time Stamp</value>
+  </data>
+  <data name="Discussion_Title" xml:space="preserve">
+    <value>Discussion</value>
+  </data>
   <data name="ErrorMakingCall" xml:space="preserve">
     <value>Sorry, there was an error talking to the server, please try again later.</value>
   </data>

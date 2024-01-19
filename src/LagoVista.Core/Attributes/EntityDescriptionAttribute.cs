@@ -31,7 +31,8 @@ namespace LagoVista.Core.Attributes
             Dto,
             BusinessObject,
             ViewModel,
-            Summary
+            Summary,
+            Discussion
         }
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null, 
