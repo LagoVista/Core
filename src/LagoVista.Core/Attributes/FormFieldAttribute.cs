@@ -127,7 +127,7 @@ namespace LagoVista.Core.Attributes
                                   FieldTypes FieldType = FieldTypes.Text,
                                   Type ResourceType = null,
                                   Type EnumType = null,
-                                  string UploadUrl = null,
+                                  string UploadUrl = "/api/media/resource/upload",
                                   string FactoryUrl = null,
                                   string EntityHeaderPickerUrl = null,
                                   string HelpUrl = null,

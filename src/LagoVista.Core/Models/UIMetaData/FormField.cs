@@ -63,6 +63,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsVisible { get; set; }
         public bool IsMarkDown { get; set; }
         public string HelpUrl { get; set; }
+
         public string PickerFor { get; set; }
 
         public bool InPlaceEditing { get; set; }
