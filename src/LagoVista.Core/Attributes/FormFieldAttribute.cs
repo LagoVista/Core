@@ -100,6 +100,7 @@ namespace LagoVista.Core.Attributes
         private bool _inPlaceEditing;
         private bool _sortEnums;
         private bool _addEnumSelect;
+        private string _editorPath;
 
 
         public FormFieldAttribute(String LabelResource = "",
@@ -134,7 +135,8 @@ namespace LagoVista.Core.Attributes
                                   string ScriptTemplateName = null,
                                   bool InPlaceEditing = true,
                                   bool SortEnums = false, 
-                                  bool AddEnumSelect = false)
+                                  bool AddEnumSelect = false,
+                                  string EditorPath = "")
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -167,7 +169,8 @@ namespace LagoVista.Core.Attributes
             _scriptTemplateName = ScriptTemplateName;
             _inPlaceEditing = InPlaceEditing;
             _sortEnums = SortEnums;
-            _addEnumSelect = AddEnumSelect; 
+            _addEnumSelect = AddEnumSelect;
+            _editorPath = EditorPath;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -205,6 +208,8 @@ namespace LagoVista.Core.Attributes
         public string ScriptTemplateName { get { return _scriptTemplateName; } }
 
         public bool InPlaceEditing { get { return _inPlaceEditing; } }
+
+        public string EditorPath { get { return _editorPath; } }
 	}
 
     public class SelectListItem

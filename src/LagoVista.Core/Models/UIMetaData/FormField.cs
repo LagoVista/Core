@@ -87,6 +87,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string FactoryUrl { get; set; }
 		public string EntityHeaderPickerUrl { get; set; }
 
+        public string EditorPath { get; set; }
+
 		public static List<EnumDescription> GetEnumOptions<Type>()
         {
             var options = new List<EnumDescription>();
@@ -143,6 +145,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.HelpUrl = attr.Helpurl;
             field.ScriptTemplateName = attr.ScriptTemplateName;
             field.InPlaceEditing = attr.InPlaceEditing;
+            field.EditorPath = attr.EditorPath;
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
