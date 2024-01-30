@@ -28,7 +28,8 @@ namespace LagoVista.Core.Models
     /* The AppUser is used for managing identity for the system, we want something with basic user information that doesn't
      * do anything with security or identity...this is that object */
 
-    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description, EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
+    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
     public class UserInfo : IUserInfo
     {
      
@@ -103,6 +104,12 @@ namespace LagoVista.Core.Models
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Notes, FieldType: FieldTypes.ChildList, ResourceType: typeof(Resources.AuthenticationResources))]
         public List<EntityHeader<string>> Notes { get; set; }
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_SocialSecurityNumber, HelpResource:Resources.AuthenticationResources.Names.UserInfo_SocialSecurityNumber_Help, 
+          SecureIdFieldName:nameof(SsnSecretId), FieldType: FieldTypes.Password, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string Ssn { get; set; }
+
+        public string SsnSecretId { get; set; }
 
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]

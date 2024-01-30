@@ -279,4 +279,10 @@
   <data name="ExternalLogin_Twitter" xml:space="preserve">
     <value>Twitter</value>
   </data>
+  <data name="UserInfo_SocialSecurityNumber" xml:space="preserve">
+    <value>Social Security Number</value>
+  </data>
+  <data name="UserInfo_SocialSecurityNumber_Help" xml:space="preserve">
+    <value>Your social security number will be encrypted on the server and only accessible to payroll to be used for the completion of your tax forms.</value>
+  </data>
 </root>

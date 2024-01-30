@@ -98,15 +98,19 @@ namespace LagoVista.Core.Managers
             await _security.AuthorizeOrgAccessAsync(userId, orgId, entityType, action);
         }
 
+        protected Task AuthorizeFinanceAdminAsync(EntityHeader user, EntityHeader org, string action, Object data = null)
+        {
+            return _security.AuthorizeFinanceAdminAsync(user, org, action, data);
+        }
 
         protected Task AuthorizeAsync(string userId, string orgId, string action, Object data = null)
         {
             return _security.AuthorizeAsync(userId, orgId, action, data);
         }
 
-        protected Task AuthorizeAsync(EntityHeader userId, EntityHeader orgId, string action, Object data = null)
+        protected Task AuthorizeAsync(EntityHeader user, EntityHeader org, string action, Object data = null)
         {
-            return _security.AuthorizeAsync(userId, orgId, action, data);
+            return _security.AuthorizeAsync(user, org, action, data);
         }
 
         protected Task AuthorizeAsync(EntityHeader user, EntityHeader org, Type entityType, Actions action)

@@ -1,4 +1,4 @@
-﻿/*1/19/2024 5:22:35 AM*/
+﻿/*1/29/2024 5:45:55 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -204,6 +204,12 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_ShowWelcome
 
 		public static string UserInfo_ShowWelcome { get { return GetResourceString("UserInfo_ShowWelcome"); } }
+//Resources:AuthenticationResources:UserInfo_SocialSecurityNumber
+
+		public static string UserInfo_SocialSecurityNumber { get { return GetResourceString("UserInfo_SocialSecurityNumber"); } }
+//Resources:AuthenticationResources:UserInfo_SocialSecurityNumber_Help
+
+		public static string UserInfo_SocialSecurityNumber_Help { get { return GetResourceString("UserInfo_SocialSecurityNumber_Help"); } }
 //Resources:AuthenticationResources:UserInfo_StateProvince
 
 		public static string UserInfo_StateProvince { get { return GetResourceString("UserInfo_StateProvince"); } }
@@ -270,6 +276,8 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_PhoneNumber = "UserInfo_PhoneNumber";
 			public const string UserInfo_PostalCode = "UserInfo_PostalCode";
 			public const string UserInfo_ShowWelcome = "UserInfo_ShowWelcome";
+			public const string UserInfo_SocialSecurityNumber = "UserInfo_SocialSecurityNumber";
+			public const string UserInfo_SocialSecurityNumber_Help = "UserInfo_SocialSecurityNumber_Help";
 			public const string UserInfo_StateProvince = "UserInfo_StateProvince";
 			public const string UserInfo_TeamsAccountName = "UserInfo_TeamsAccountName";
 			public const string UserInfo_Title = "UserInfo_Title";

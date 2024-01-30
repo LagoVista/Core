@@ -80,6 +80,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldsCol2 { get; set; }
         public List<string> FormFieldAdvanced { get; set; }
         public List<string> FormFieldAdvancedCol2 { get; set; }
+        public List<FormAdditionalAction> FormAdditionalActions { get; set; }
 
         public string ModelTitle { get; set; }
         public string ModelHelp { get; set; }
@@ -266,6 +267,12 @@ namespace LagoVista.Core.Models.UIMetaData
                     if (childInstanceAdvancedCol2 != null)
                     {
                         field.FormFieldAdvancedCol2 = childInstanceAdvancedCol2.GetAdvancedFieldsCol2().Select(fld => $"{fld.Substring(0, 1).ToLower()}{fld.Substring(1)}").ToList();
+                    }
+
+                    var additionalActions = Activator.CreateInstance(childType) as IFormAdditionalActions;
+                    if (additionalActions != null)
+                    {
+                        field.FormAdditionalActions = additionalActions.GetAdditionalActions().ToList();
                     }
 
                     var fieldConditionalInstance = Activator.CreateInstance(childType) as IFormConditionalFields;
