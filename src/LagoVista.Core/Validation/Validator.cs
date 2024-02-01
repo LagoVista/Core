@@ -217,22 +217,29 @@ namespace LagoVista.Core.Validation
 
         private static void AddRequiredFieldMissingMessage(ValidationResult result, FormFieldAttribute attr, string propertyName, IValidateable entity)
         {
+            var context = entity.GetType().Name;
+            if (entity is INamedEntity namedEntity)
+            {
+                context += " - " + namedEntity.Name;
+            }
+
             if (!String.IsNullOrEmpty(attr.RequiredMessageResource) && attr.ResourceType != null)
             {
                 var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RequiredMessageResource);
                 var validationMessage = (string)validationProperty.GetValue(validationProperty.DeclaringType, null);
-                result.AddUserError(validationMessage, entity.GetType().Name);
+
+                result.AddUserError(validationMessage, context);
             }
             else
             {
                 var propertyLabel = GetLabel(attr);
                 if (String.IsNullOrEmpty(propertyLabel))
                 {
-                    result.AddSystemError(Resources.ValidationResource.Entity_Header_Null_System.Replace("[NAME]", propertyName), entity.GetType().Name);
+                    result.AddSystemError(Resources.ValidationResource.Entity_Header_Null_System.Replace("[NAME]", propertyName), context);
                 }
                 else
                 {
-                    result.AddUserError(Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel), entity.GetType().Name);
+                    result.AddUserError(Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel), context);
                 }
             }
 
@@ -241,13 +248,19 @@ namespace LagoVista.Core.Validation
 
         private static void ValidateEntityHeader(ValidationResult result, PropertyInfo prop, FormFieldAttribute attr, EntityHeader value, IValidateable entity)
         {
+            var context = prop.Name;
+            if (entity is INamedEntity namedEntity)
+            {
+                context += " - " + namedEntity.Name;
+            }
+
             if (value != null && String.IsNullOrEmpty(value.Id) && !String.IsNullOrEmpty(value.Text))
             {
-                result.AddSystemError(Resources.ValidationResource.Entity_Header_MissingId_System.Replace("[NAME]", prop.Name));
+                result.AddSystemError(Resources.ValidationResource.Entity_Header_MissingId_System.Replace("[NAME]", context));
             }
             else if (value != null && String.IsNullOrEmpty(value.Text) && !String.IsNullOrEmpty(value.Id))
             {
-                result.AddSystemError(Resources.ValidationResource.Entity_Header_MissingText_System.Replace("[NAME]", prop.Name));
+                result.AddSystemError(Resources.ValidationResource.Entity_Header_MissingText_System.Replace("[NAME]", context));
             }
             else if (attr.IsRequired)
             {
@@ -278,12 +291,18 @@ namespace LagoVista.Core.Validation
 
         private static void ValidateAuditInfo(ValidationResult result, IValidateable entity)
         {
+            var context = entity.GetType().Name;
+            if (entity is INamedEntity namedEntity)
+            {
+                context += " - " + namedEntity.Name;
+            }
+
             if (entity is IAuditableEntity)
             {
                 var auditableModel = entity as IAuditableEntity;
                 if (String.IsNullOrEmpty(auditableModel.CreationDate))
                 {
-                    result.AddSystemError(Resources.ValidationResource.CreationDateRequired, entity.GetType().Name);
+                    result.AddSystemError(Resources.ValidationResource.CreationDateRequired, context);
                 }
                 else if (!auditableModel.CreationDate.SuccessfulJSONDate())
                 {
@@ -293,14 +312,14 @@ namespace LagoVista.Core.Validation
                     }
                     else
                     {
-                        result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat + " " + auditableModel.CreationDate, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.CreationDateInvalidFormat + " " + auditableModel.CreationDate, context);
                     }
                 }
 
                 if (String.IsNullOrEmpty(auditableModel.LastUpdatedDate))
                 {
 
-                    result.AddSystemError(Resources.ValidationResource.LastUpdatedDateRequired, entity.GetType().Name);
+                    result.AddSystemError(Resources.ValidationResource.LastUpdatedDateRequired, context);
                 }
                 else if (!auditableModel.LastUpdatedDate.SuccessfulJSONDate())
                 {
@@ -310,49 +329,49 @@ namespace LagoVista.Core.Validation
                     }
                     else
                     {
-                        result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditableModel.LastUpdatedDate, context);
                     }
                 }
 
                 if (auditableModel.LastUpdatedBy == null)
                 {
-                    result.AddSystemError(Resources.ValidationResource.LastUpdatedByNotNull, entity.GetType().Name);
+                    result.AddSystemError(Resources.ValidationResource.LastUpdatedByNotNull, context);
                 }
                 else
                 {
                     if (String.IsNullOrEmpty(auditableModel.LastUpdatedBy.Id))
                     {
-                        result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdNotNullOrEmpty, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdNotNullOrEmpty, context);
                     }
                     else if (!auditableModel.LastUpdatedBy.Id.SuccessfulId())
                     {
-                        result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdInvalidFormat, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdInvalidFormat, context);
                     }
 
                     if (String.IsNullOrEmpty(auditableModel.LastUpdatedBy.Text))
                     {
-                        result.AddSystemError(Resources.ValidationResource.LastUpdatedByTextNotNullOrEmpty, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.LastUpdatedByTextNotNullOrEmpty, context);
                     }
                 }
 
                 if (auditableModel.CreatedBy == null)
                 {
-                    result.AddSystemError(Resources.ValidationResource.CreatedByNotNull, entity.GetType().Name);
+                    result.AddSystemError(Resources.ValidationResource.CreatedByNotNull, context);
                 }
                 else
                 {
                     if (String.IsNullOrEmpty(auditableModel.CreatedBy.Id))
                     {
-                        result.AddSystemError(Resources.ValidationResource.CreatedByIdNotNullOrEmpty, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.CreatedByIdNotNullOrEmpty, context);
                     }
                     else if (!auditableModel.CreatedBy.Id.SuccessfulId())
                     {
-                        result.AddSystemError(Resources.ValidationResource.CreatedByIdInvalidFormat, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.CreatedByIdInvalidFormat, context);
                     }
 
                     if (String.IsNullOrEmpty(auditableModel.CreatedBy.Text))
                     {
-                        result.AddSystemError(Resources.ValidationResource.CreatedByTextNotNullOrEmpty, entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.CreatedByTextNotNullOrEmpty, context);
                     }
                 }
             }
@@ -379,33 +398,37 @@ namespace LagoVista.Core.Validation
 
         private static void ValidateString(ValidationResult result, PropertyInfo propertyInfo, FormFieldAttribute attr, String value, IValidateable entity)
         {
+            var context = entity.GetType().Name;
+            if (entity is INamedEntity namedEntity)
+            {
+                context += " - " + namedEntity.Name;
+            }
+
             var propertyLabel = GetLabel(attr);
             if (String.IsNullOrEmpty(propertyLabel))
                 propertyLabel = propertyInfo.Name;
 
             if (String.IsNullOrEmpty(value) && attr.IsRequired)
             {
-                var validationMessage = String.Empty;
-
                 if (attr.FieldType == FieldTypes.Hidden)
                 {
-                    result.AddSystemError(Resources.ValidationResource.SystemMissingProperty.Replace("[PROPERTYNAME]", propertyInfo.Name), entity.GetType().Name);
+                    result.AddSystemError(Resources.ValidationResource.SystemMissingProperty.Replace("[PROPERTYNAME]", propertyInfo.Name), context);
                 }
                 else
                 {
                     if (!String.IsNullOrEmpty(attr.RequiredMessageResource) && attr.ResourceType != null)
                     {
                         var validationProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.RequiredMessageResource);
-                        result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null), entity.GetType().Name);
+                        result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null), context);
                     }
                     else if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
                     {
-                        validationMessage = Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel);
-                        result.AddUserError(validationMessage, entity.GetType().Name);
+                        var validationMessage = Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel);
+                        result.AddUserError(validationMessage, context);
                     }
                     else
                     {
-                        result.AddSystemError(Resources.ValidationResource.SystemMissingProperty.Replace("[PROPERTYNAME]", propertyInfo.Name), entity.GetType().Name);
+                        result.AddSystemError(Resources.ValidationResource.SystemMissingProperty.Replace("[PROPERTYNAME]", propertyInfo.Name), context);
                     }
                 }
             }
@@ -448,7 +471,7 @@ namespace LagoVista.Core.Validation
                             }
                             else
                             {
-                                result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null), entity.GetType().Name);
+                                result.AddUserError((string)validationProperty.GetValue(validationProperty.DeclaringType, null), context);
                             }
                         }
                     }
@@ -460,21 +483,21 @@ namespace LagoVista.Core.Validation
                 {
                     if (value.Length < attr.MinLength || value.Length > attr.MaxLength)
                     {
-                        result.AddUserError(Resources.ValidationResource.ValueLength_Between.Replace("[PROPERTY]", propertyLabel).Replace("[MIN]", attr.MinLength.ToString()).Replace("[MAX]", attr.MaxLength.ToString()), entity.GetType().Name);
+                        result.AddUserError(Resources.ValidationResource.ValueLength_Between.Replace("[PROPERTY]", propertyLabel).Replace("[MIN]", attr.MinLength.ToString()).Replace("[MAX]", attr.MaxLength.ToString()), context);
                     }
                 }
                 else if (attr.MaxLength.HasValue)
                 {
                     if (value.Length > attr.MaxLength)
                     {
-                        result.AddUserError(Resources.ValidationResource.ValueLength_TooLong.Replace("[PROPERTY]", propertyLabel).Replace("[MAX]", attr.MaxLength.ToString()), entity.GetType().Name);
+                        result.AddUserError(Resources.ValidationResource.ValueLength_TooLong.Replace("[PROPERTY]", propertyLabel).Replace("[MAX]", attr.MaxLength.ToString()), context);
                     }
                 }
                 else if (attr.MinLength.HasValue)
                 {
                     if (value.Length < attr.MinLength)
                     {
-                        result.AddUserError(Resources.ValidationResource.ValueLength_TooShort.Replace("[PROPERTY]", propertyLabel).Replace("[MIN]", attr.MinLength.ToString()), entity.GetType().Name);
+                        result.AddUserError(Resources.ValidationResource.ValueLength_TooShort.Replace("[PROPERTY]", propertyLabel).Replace("[MIN]", attr.MinLength.ToString()), context);
                     }
                 }
             }
