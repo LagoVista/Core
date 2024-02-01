@@ -11,6 +11,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public String DomainKey { get; set; }
         public String ClassName { get; set; }
 
+        public String ShortClassName { get; set; }
+
         public String Icon { get; set; }
         public String Description { get; set; }
 
