@@ -53,7 +53,8 @@ namespace LagoVista.Core.Attributes
         ProductPicker,
         PaymentMethod,
         HtmlEditor,
-        Discussion
+        Discussion,
+        Category
     }
 
     public enum NamespaceTypes
