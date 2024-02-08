@@ -131,6 +131,25 @@ namespace LagoVista.Core.Models.UIMetaData
             return options.OrderBy(opt => opt.SortOrder).ToList();
         }
 
+        public static List<EnumDescription> GetMonths()
+        {
+            var options = new List<EnumDescription>();
+            options.Add(EnumDescription.Create("-1", LagoVistaCommonStrings.Common_Month_Select));
+            options.Add(new EnumDescription() { Id = "1", Label = LagoVistaCommonStrings.Month_January, Name = LagoVistaCommonStrings.Month_January, Text = LagoVistaCommonStrings.Month_January, Key = "1", SortOrder = 1 });
+            options.Add(new EnumDescription() { Id = "2", Label = LagoVistaCommonStrings.Month_February, Name = LagoVistaCommonStrings.Month_February, Text = LagoVistaCommonStrings.Month_February, Key = "2", SortOrder = 2 });
+            options.Add(new EnumDescription() { Id = "3", Label = LagoVistaCommonStrings.Month_March, Name = LagoVistaCommonStrings.Month_March, Text = LagoVistaCommonStrings.Month_March, Key = "3", SortOrder = 3 });
+            options.Add(new EnumDescription() { Id = "4", Label = LagoVistaCommonStrings.Month_April, Name = LagoVistaCommonStrings.Month_April, Text = LagoVistaCommonStrings.Month_April, Key = "4", SortOrder = 4 });
+            options.Add(new EnumDescription() { Id = "5", Label = LagoVistaCommonStrings.Month_May, Name = LagoVistaCommonStrings.Month_May, Text = LagoVistaCommonStrings.Month_May, Key = "5", SortOrder = 5 });
+            options.Add(new EnumDescription() { Id = "6", Label = LagoVistaCommonStrings.Month_June, Name = LagoVistaCommonStrings.Month_June, Text = LagoVistaCommonStrings.Month_June, Key = "6", SortOrder = 6 });
+            options.Add(new EnumDescription() { Id = "7", Label = LagoVistaCommonStrings.Month_July, Name = LagoVistaCommonStrings.Month_July, Text = LagoVistaCommonStrings.Month_July, Key = "7", SortOrder = 7 });
+            options.Add(new EnumDescription() { Id = "8", Label = LagoVistaCommonStrings.Month_August, Name = LagoVistaCommonStrings.Month_August, Text = LagoVistaCommonStrings.Month_August, Key = "8", SortOrder = 8 });
+            options.Add(new EnumDescription() { Id = "9", Label = LagoVistaCommonStrings.Month_September, Name = LagoVistaCommonStrings.Month_September, Text = LagoVistaCommonStrings.Month_September, Key = "9", SortOrder = 9 });
+            options.Add(new EnumDescription() { Id = "10", Label = LagoVistaCommonStrings.Month_October, Name = LagoVistaCommonStrings.Month_October, Text = LagoVistaCommonStrings.Month_October, Key = "10", SortOrder = 10 });
+            options.Add(new EnumDescription() { Id = "11", Label = LagoVistaCommonStrings.Month_November, Name = LagoVistaCommonStrings.Month_November, Text = LagoVistaCommonStrings.Month_November, Key = "11", SortOrder = 11 });
+            options.Add(new EnumDescription() { Id = "12", Label = LagoVistaCommonStrings.Month_December, Name = LagoVistaCommonStrings.Month_December, Text = LagoVistaCommonStrings.Month_December, Key = "12", SortOrder = 12 });
+            return options;
+        }
+
         public static FormField Create(String name, FormFieldAttribute attr, PropertyInfo property)
         {
             var field = new FormField();
@@ -147,6 +166,8 @@ namespace LagoVista.Core.Models.UIMetaData
             field.ScriptTemplateName = attr.ScriptTemplateName;
             field.InPlaceEditing = attr.InPlaceEditing;
             field.EditorPath = attr.EditorPath;
+            field.Options = new List<EnumDescription>();
+
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
@@ -157,6 +178,36 @@ namespace LagoVista.Core.Models.UIMetaData
 
                 var labelProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelDisplayResource);
                 field.Label = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
+            }
+
+            if(attr.FieldType == FieldTypes.Year)
+            {
+                field.Options = new List<EnumDescription>();
+                field.FieldType = nameof(FieldTypes.Picker);
+                field.Watermark = LagoVistaCommonStrings.Common_Year_Select;
+                var currentYear = DateTime.Now.Year;
+                if (String.IsNullOrEmpty(field.Label))
+                {
+                    field.Label = LagoVistaCommonStrings.Common_Year;
+                }
+
+                field.Options.Add(EnumDescription.Create("-1", LagoVistaCommonStrings.Common_Year_Select));
+                for (var idx = 2015; idx < currentYear + 10; ++idx)
+                {
+                    field.Options.Add(new EnumDescription() { Id = idx.ToString(), Label = idx.ToString(), Key = idx.ToString(), Name = idx.ToString(), Text = idx.ToString(), SortOrder = idx });
+                }
+            }
+
+            if(attr.FieldType == FieldTypes.Month)
+            {
+                field.FieldType = nameof(FieldTypes.Picker);
+                field.Watermark = LagoVistaCommonStrings.Common_Month_Select;
+                if (String.IsNullOrEmpty(field.Label))
+                {
+                    field.Label = LagoVistaCommonStrings.Common_Month;
+                }
+
+                field.Options = GetMonths();
             }
 
             if (field.FieldType == FormField.FieldType_ChildView)
@@ -303,7 +354,6 @@ namespace LagoVista.Core.Models.UIMetaData
             field.MaxLength = attr.MaxLength;
             field.IsMarkDown = attr.IsMarkDown;
 
-            field.Options = new List<EnumDescription>();
             if (attr.EnumType != null)
             {
                 var options = new List<EnumDescription>();

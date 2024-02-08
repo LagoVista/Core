@@ -36,5 +36,29 @@ namespace LagoVista.Core.Models.UIMetaData
 
             return enumLabel;
         }
+
+        public static EnumDescription Create(string value, string name)
+        {
+            return new EnumDescription()
+            {
+                Id = value,
+                Name = name,
+                Label = name,
+                Text = name,
+                Key = value
+            };
+        }
+
+        public static EnumDescription Create(string value, string key, string name)
+        {
+            return new EnumDescription()
+            {
+                Id = value,
+                Name = name,
+                Text = name,
+                Label = name,
+                Key = key
+            };
+        }
     }
 }

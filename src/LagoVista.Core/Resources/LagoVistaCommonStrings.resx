@@ -198,6 +198,12 @@
   <data name="Common_Loading" xml:space="preserve">
     <value>Loading...</value>
   </data>
+  <data name="Common_Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="Common_Month_Select" xml:space="preserve">
+    <value>-select month-</value>
+  </data>
   <data name="Common_Name" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -212,6 +218,12 @@
   </data>
   <data name="Common_Select" xml:space="preserve">
     <value>-select-</value>
+  </data>
+  <data name="Common_Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="Common_Year_Select" xml:space="preserve">
+    <value>-select year-</value>
   </data>
   <data name="Common_Yes" xml:space="preserve">
     <value>Yes</value>
@@ -248,6 +260,42 @@
   </data>
   <data name="ErrorMakingCall" xml:space="preserve">
     <value>Sorry, there was an error talking to the server, please try again later.</value>
+  </data>
+  <data name="Month_April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="Month_August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Month_December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Month_February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Month_January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="Month_July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="Month_June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="Month_March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="Month_May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Month_November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="Month_October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Month_September" xml:space="preserve">
+    <value>September</value>
   </data>
   <data name="NoConnection" xml:space="preserve">
     <value>Sorry, you do not appear to have an internet connection, please try again later.</value>

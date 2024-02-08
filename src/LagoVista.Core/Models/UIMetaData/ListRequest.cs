@@ -6,6 +6,8 @@ namespace LagoVista.Core.Models.UIMetaData
 {
     public class ListRequest
     {
+        public const int MaxPageSize = 9999999;
+
         public string NextPartitionKey { get; set; }
         public string NextRowKey { get; set; }
         public int PageIndex { get; set; }
@@ -28,6 +30,24 @@ namespace LagoVista.Core.Models.UIMetaData
 \tGroup By         : {PageSize}
 \tGroup By Size    : {PageSize}
 \tUrl              : {Url}";
+        }
+
+        public static ListRequest CreateForAll()
+        {
+            return new ListRequest()
+            {
+                PageIndex = 1,
+                PageSize = MaxPageSize
+            };
+        }
+
+        public static ListRequest Create(int pageIndex = 1, int pageSize = ListRequest.MaxPageSize)
+        {
+            return new ListRequest()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
         }
     }
 }

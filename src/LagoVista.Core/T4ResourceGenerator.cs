@@ -1,4 +1,4 @@
-﻿/*1/29/2024 5:45:55 PM*/
+﻿/*2/8/2024 8:26:46 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -944,6 +944,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Loading
 
 		public static string Common_Loading { get { return GetResourceString("Common_Loading"); } }
+//Resources:LagoVistaCommonStrings:Common_Month
+
+		public static string Common_Month { get { return GetResourceString("Common_Month"); } }
+//Resources:LagoVistaCommonStrings:Common_Month_Select
+
+		public static string Common_Month_Select { get { return GetResourceString("Common_Month_Select"); } }
 //Resources:LagoVistaCommonStrings:Common_Name
 
 		public static string Common_Name { get { return GetResourceString("Common_Name"); } }
@@ -959,6 +965,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Select
 
 		public static string Common_Select { get { return GetResourceString("Common_Select"); } }
+//Resources:LagoVistaCommonStrings:Common_Year
+
+		public static string Common_Year { get { return GetResourceString("Common_Year"); } }
+//Resources:LagoVistaCommonStrings:Common_Year_Select
+
+		public static string Common_Year_Select { get { return GetResourceString("Common_Year_Select"); } }
 //Resources:LagoVistaCommonStrings:Common_Yes
 
 		public static string Common_Yes { get { return GetResourceString("Common_Yes"); } }
@@ -995,6 +1007,42 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
+//Resources:LagoVistaCommonStrings:Month_April
+
+		public static string Month_April { get { return GetResourceString("Month_April"); } }
+//Resources:LagoVistaCommonStrings:Month_August
+
+		public static string Month_August { get { return GetResourceString("Month_August"); } }
+//Resources:LagoVistaCommonStrings:Month_December
+
+		public static string Month_December { get { return GetResourceString("Month_December"); } }
+//Resources:LagoVistaCommonStrings:Month_February
+
+		public static string Month_February { get { return GetResourceString("Month_February"); } }
+//Resources:LagoVistaCommonStrings:Month_January
+
+		public static string Month_January { get { return GetResourceString("Month_January"); } }
+//Resources:LagoVistaCommonStrings:Month_July
+
+		public static string Month_July { get { return GetResourceString("Month_July"); } }
+//Resources:LagoVistaCommonStrings:Month_June
+
+		public static string Month_June { get { return GetResourceString("Month_June"); } }
+//Resources:LagoVistaCommonStrings:Month_March
+
+		public static string Month_March { get { return GetResourceString("Month_March"); } }
+//Resources:LagoVistaCommonStrings:Month_May
+
+		public static string Month_May { get { return GetResourceString("Month_May"); } }
+//Resources:LagoVistaCommonStrings:Month_November
+
+		public static string Month_November { get { return GetResourceString("Month_November"); } }
+//Resources:LagoVistaCommonStrings:Month_October
+
+		public static string Month_October { get { return GetResourceString("Month_October"); } }
+//Resources:LagoVistaCommonStrings:Month_September
+
+		public static string Month_September { get { return GetResourceString("Month_September"); } }
 //Resources:LagoVistaCommonStrings:NoConnection
 
 		public static string NoConnection { get { return GetResourceString("NoConnection"); } }
@@ -1029,11 +1077,15 @@ namespace LagoVista.Core.Resources
 			public const string Common_LastUpdated = "Common_LastUpdated";
 			public const string Common_LastUpdatedBy = "Common_LastUpdatedBy";
 			public const string Common_Loading = "Common_Loading";
+			public const string Common_Month = "Common_Month";
+			public const string Common_Month_Select = "Common_Month_Select";
 			public const string Common_Name = "Common_Name";
 			public const string Common_No = "Common_No";
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_PleaseWait = "Common_PleaseWait";
 			public const string Common_Select = "Common_Select";
+			public const string Common_Year = "Common_Year";
+			public const string Common_Year_Select = "Common_Year_Select";
 			public const string Common_Yes = "Common_Yes";
 			public const string Company_Description = "Company_Description";
 			public const string Company_Help = "Company_Help";
@@ -1046,6 +1098,18 @@ namespace LagoVista.Core.Resources
 			public const string Discussion_TimeStamp = "Discussion_TimeStamp";
 			public const string Discussion_Title = "Discussion_Title";
 			public const string ErrorMakingCall = "ErrorMakingCall";
+			public const string Month_April = "Month_April";
+			public const string Month_August = "Month_August";
+			public const string Month_December = "Month_December";
+			public const string Month_February = "Month_February";
+			public const string Month_January = "Month_January";
+			public const string Month_July = "Month_July";
+			public const string Month_June = "Month_June";
+			public const string Month_March = "Month_March";
+			public const string Month_May = "Month_May";
+			public const string Month_November = "Month_November";
+			public const string Month_October = "Month_October";
+			public const string Month_September = "Month_September";
 			public const string NoConnection = "NoConnection";
 		}
 	}
