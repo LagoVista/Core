@@ -445,7 +445,7 @@ namespace LagoVista.Core.Validation
                             throw new Exception($"Validating String - Reg Ex Validation has a resource text, but no resource type for field [{attr.LabelDisplayResource}]");
                         }
 
-                        result.AddUserError(ValidationResource.Common_Key_Validation, entity.GetType().Name);
+                        result.AddUserError(ValidationResource.Common_Key_Validation, context + " Value: " + value ?? "[EMPTY]");
                     }
                 }
 
