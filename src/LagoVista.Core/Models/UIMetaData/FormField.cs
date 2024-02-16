@@ -168,7 +168,6 @@ namespace LagoVista.Core.Models.UIMetaData
             field.EditorPath = attr.EditorPath;
             field.Options = new List<EnumDescription>();
 
-
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {
                 if (attr.ResourceType == null)
