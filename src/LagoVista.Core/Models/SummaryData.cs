@@ -27,4 +27,9 @@ namespace LagoVista.Core.Models
         public string Description { get; set; }
 
     }
+
+    public class CategorizedSummaryData: SummaryData, ICategorized
+    {
+        public EntityHeader Category { get; set; }
+    }
 }

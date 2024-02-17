@@ -24,6 +24,9 @@ namespace LagoVista.Core.Attributes
         private string _deleteUrl;
         private string _helpUrl;
         private string _icon;
+        private string _listUIUrl;
+        private string _editUIUrl;
+        private string _createUIUrl;
 
         public enum EntityTypes
         {
@@ -32,11 +35,13 @@ namespace LagoVista.Core.Attributes
             BusinessObject,
             ViewModel,
             Summary,
-            Discussion
+            Discussion,
+            CoreIoTModel
         }
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null, 
-            string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null)
+            string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null,
+            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null)
         {
             _descriptionResource = DescriptionResource;
             _titleResource = TitleResource;
@@ -53,6 +58,9 @@ namespace LagoVista.Core.Attributes
             _deleteUrl = DeleteUrl;
             _helpUrl = HelpUrl;
             _icon = Icon;
+            _listUIUrl = ListUIUrl;
+            _editUIUrl = EditUIUrl;
+            _createUIUrl = CreateUIUrl;
         }
 
         public String DescriptionResource { get { return _descriptionResource; } }
@@ -71,5 +79,9 @@ namespace LagoVista.Core.Attributes
         public string DeleteUrl { get { return _deleteUrl; } }
         public string HelpUrl { get { return _helpUrl; } }
         public string Icon { get { return _icon; } }
+
+        public string ListUIUrl { get { return _listUIUrl; } }
+        public string EditUIUrl { get { return _editUIUrl; } }
+        public string CreateUIUrl { get { return _createUIUrl; } }
     }
 }

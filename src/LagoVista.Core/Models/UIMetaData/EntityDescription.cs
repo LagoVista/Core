@@ -22,6 +22,9 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.GetListUrl = attr.GetListUrl;
             entityDescription.HelpUrl = attr.HelpUrl;
             entityDescription.Icon = attr.Icon;
+            entityDescription.ListUIUrl = attr.ListUIUrl;
+            entityDescription.EditUIUrl =  attr.EditUIUrl;
+            entityDescription.CreateUIUrl = attr.CreateUIUrl;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -101,5 +104,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<FormField> Elements { get;  set; }
 
         public List<ListColumn> ListColumns { get;  set; }
+
+        public string ListUIUrl { get; set; }
+        public string EditUIUrl { get; set; }
+        public string CreateUIUrl { get; set; }
     }
 }
