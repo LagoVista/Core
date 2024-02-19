@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LagoVista.Core.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
@@ -12,8 +13,12 @@ namespace LagoVista.Core.Interfaces
         bool EmailConfirmed { get; set; }        
         string PhoneNumber { get; set; }
         bool PhoneNumberConfirmed { get; set; }
-        IEntityHeader CurrentAccount { get; set; }
-        List<IEntityHeader> Accounts { get; set; }
-        IEntityHeader CurrentAccountRoles { get; }
+        ImageDetails ProfileImageUrl { get; set; }
+        IOrganizationSummary CurrentOrganization { get; set; }
+        List<ExternalLogin> ExternalLogins { get; set; }
+        List<EntityHeader> Organizations { get; set; }
+        List<EntityHeader> CurrentOrganizationRoles { get; set; }
+        Dictionary<string, string> Preferences { get; set; } 
+
     }
 }

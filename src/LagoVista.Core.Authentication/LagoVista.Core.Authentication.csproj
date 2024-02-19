@@ -40,4 +40,8 @@
       <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Rest\" />
+  </ItemGroup>
 </Project>

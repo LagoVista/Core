@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static LagoVista.Core.Attributes.EntityDescriptionAttribute;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
@@ -16,6 +17,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public String Icon { get; set; }
         public String Description { get; set; }
 
+        public EntityTypes EntityType { get; set; }
+
         public static EntitySummary Create(EntityDescription desc)
         {
             return new EntitySummary()
@@ -25,6 +28,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 DomainKey = desc.DomainName,
                 Icon = desc.Icon,
                 Description = desc.Description,
+                EntityType = desc.EntityType
             };
         }
     }
