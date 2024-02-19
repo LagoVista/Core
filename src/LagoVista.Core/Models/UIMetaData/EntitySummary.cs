@@ -14,10 +14,15 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public String ShortClassName { get; set; }
 
+        public string UiCreateUrl { get; set; }
+        public string UiGetListUrl { get; set; }
+        public string UiEditUrl { get; set; }
+
         public String Icon { get; set; }
         public String Description { get; set; }
 
         public EntityTypes EntityType { get; set; }
+
 
         public static EntitySummary Create(EntityDescription desc)
         {
@@ -28,7 +33,10 @@ namespace LagoVista.Core.Models.UIMetaData
                 DomainKey = desc.DomainName,
                 Icon = desc.Icon,
                 Description = desc.Description,
-                EntityType = desc.EntityType
+                EntityType = desc.EntityType,
+                UiEditUrl = desc.EditUIUrl,
+                UiCreateUrl = desc.CreateUIUrl,
+                UiGetListUrl = desc.ListUIUrl
             };
         }
     }
