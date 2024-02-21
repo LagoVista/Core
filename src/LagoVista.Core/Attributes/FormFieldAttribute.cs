@@ -98,6 +98,7 @@ namespace LagoVista.Core.Attributes
         private NamespaceTypes _namespaceType;
         private string _uploadUrl;
         private string _factoryUrl;
+        private string _getUrl;
         private string _entityHeaderPickerUrl;
         private string _helpUrl;
         private string _scriptTemplateName;
@@ -105,6 +106,7 @@ namespace LagoVista.Core.Attributes
         private bool _sortEnums;
         private bool _addEnumSelect;
         private string _editorPath;
+        private bool _isReferenceField;
 
 
         public FormFieldAttribute(String LabelResource = "",
@@ -134,13 +136,15 @@ namespace LagoVista.Core.Attributes
                                   Type EnumType = null,
                                   string UploadUrl = "/api/media/resource/upload",
                                   string FactoryUrl = null,
+                                  string GetUrl = null,
                                   string EntityHeaderPickerUrl = null,
                                   string HelpUrl = null,
                                   string ScriptTemplateName = null,
                                   bool InPlaceEditing = true,
                                   bool SortEnums = false, 
                                   bool AddEnumSelect = false,
-                                  string EditorPath = "")
+                                  string EditorPath = "",
+                                  bool IsReferenceField = false)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -175,6 +179,8 @@ namespace LagoVista.Core.Attributes
             _sortEnums = SortEnums;
             _addEnumSelect = AddEnumSelect;
             _editorPath = EditorPath;
+            _isReferenceField = IsReferenceField;
+            _getUrl = GetUrl;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -205,6 +211,9 @@ namespace LagoVista.Core.Attributes
         public string SecureIdFieldName { get { return _secureIdFieldName; } }
         public string UploadUrl { get { return _uploadUrl; } }
         public string FactoryUrl { get { return _factoryUrl; } }
+        public string GetUrl { get { return _getUrl; } }
+
+        public bool IsReferenceField { get { return _isReferenceField; } }
 
 		public string EntityHeaderUrl { get { return _entityHeaderPickerUrl; } }
         public string Helpurl { get { return _helpUrl; } }

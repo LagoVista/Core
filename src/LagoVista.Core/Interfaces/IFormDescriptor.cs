@@ -33,6 +33,12 @@ namespace LagoVista.Core.Interfaces
         List<string> GetAdvancedFieldsCol2();
     }
 
+    public interface IFormDescriptorInlineFields
+    {
+        List<string> GetInlineFields();
+    }
+
+
     public interface IFormDescriptorSimple
     {
         List<string> GetSimpleFields();

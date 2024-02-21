@@ -66,6 +66,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string PickerFor { get; set; }
 
+        public bool IsReferenceField { get; set; }
+
         public bool InPlaceEditing { get; set; }
         public string ScriptTemplateName { get; set; }
         public string SecureIdFieldName { get; set; }
@@ -86,6 +88,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string ModelHelp { get; set; }
 
         public string FactoryUrl { get; set; }
+        public string GetUrl { get; set; }
 		public string EntityHeaderPickerUrl { get; set; }
 
         public string EditorPath { get; set; }
@@ -160,6 +163,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
             field.UploadUrl = attr.UploadUrl;
             field.FactoryUrl = attr.FactoryUrl;
+            field.GetUrl = attr.GetUrl;
+            field.IsReferenceField = attr.IsReferenceField;
             field.PickerFor = attr.PickerFor;
             field.EntityHeaderPickerUrl = attr.EntityHeaderUrl;
             field.HelpUrl = attr.Helpurl;
@@ -294,6 +299,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     field.ModelHelp = entity.UserHelp;
                     field.ModelTitle = entity.Title;
                     field.FactoryUrl = entity.FactoryUrl;
+                    field.GetUrl = entity.GetUrl;
 
                     var childInstance = Activator.CreateInstance(childType) as IFormDescriptor;
                     if (childInstance != null)
