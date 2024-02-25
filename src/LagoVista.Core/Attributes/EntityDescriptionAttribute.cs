@@ -36,7 +36,9 @@ namespace LagoVista.Core.Attributes
             ViewModel,
             Summary,
             Discussion,
-            CoreIoTModel
+            CoreIoTModel,
+            OrganizationModel,
+            AdminModel,
         }
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null, 
