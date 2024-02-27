@@ -84,6 +84,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldAdvancedCol2 { get; set; }
         public List<FormAdditionalAction> FormAdditionalActions { get; set; }
 
+        public bool OpenByDefault { get; set; }
+
         public string ModelTitle { get; set; }
         public string ModelHelp { get; set; }
 
@@ -171,6 +173,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.ScriptTemplateName = attr.ScriptTemplateName;
             field.InPlaceEditing = attr.InPlaceEditing;
             field.EditorPath = attr.EditorPath;
+            field.OpenByDefault = attr.OpenByDefault;
             field.Options = new List<EnumDescription>();
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))

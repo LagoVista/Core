@@ -107,7 +107,7 @@ namespace LagoVista.Core.Attributes
         private bool _addEnumSelect;
         private string _editorPath;
         private bool _isReferenceField;
-
+        private bool _openByDefault;
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -144,7 +144,8 @@ namespace LagoVista.Core.Attributes
                                   bool SortEnums = false, 
                                   bool AddEnumSelect = false,
                                   string EditorPath = "",
-                                  bool IsReferenceField = false)
+                                  bool IsReferenceField = false, 
+                                  bool OpenByDefault = false)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -181,6 +182,7 @@ namespace LagoVista.Core.Attributes
             _editorPath = EditorPath;
             _isReferenceField = IsReferenceField;
             _getUrl = GetUrl;
+            _openByDefault = OpenByDefault;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -223,7 +225,9 @@ namespace LagoVista.Core.Attributes
         public bool InPlaceEditing { get { return _inPlaceEditing; } }
 
         public string EditorPath { get { return _editorPath; } }
-	}
+        public bool OpenByDefault { get { return _openByDefault; } }
+
+    }
 
     public class SelectListItem
     {

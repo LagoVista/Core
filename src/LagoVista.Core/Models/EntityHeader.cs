@@ -263,8 +263,10 @@ namespace LagoVista.Core.Models
                             var eh = new EntityHeader<T>
                             {
                                 Id = enumAttr.Key,
+                                Key = enumAttr.Key,
                                 Value = value
                             };
+
                             var labelProperty = enumAttr.ResourceType.GetTypeInfo().GetDeclaredProperty(enumAttr.LabelResource);
                             eh.Text = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
                             return eh;
@@ -274,6 +276,7 @@ namespace LagoVista.Core.Models
                             var eh = new EntityHeader<T>
                             {
                                 Id = value.ToString(),
+                                Key = value.ToString(),
                                 Text = value.ToString(),
                                 Value = value
                             };
