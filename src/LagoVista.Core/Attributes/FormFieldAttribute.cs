@@ -57,7 +57,9 @@ namespace LagoVista.Core.Attributes
         Category,
         Year,
         Month,
-        Money
+        Money,
+        SiteContentPicker,
+        ChildListSiteContentPicker
     }
 
     public enum NamespaceTypes
