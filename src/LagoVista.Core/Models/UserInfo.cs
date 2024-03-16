@@ -30,7 +30,7 @@ namespace LagoVista.Core.Models
 
     [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description,
         EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
-    public class UserInfo : IUserInfo
+    public class UserInfo : IUserInfo, ISummaryFactory
     {
      
         public String Id { get; set; }
@@ -178,17 +178,18 @@ namespace LagoVista.Core.Models
                 TeamsAccountName = TeamsAccountName,
             };
         }
+
+        ISummaryData ISummaryFactory.CreateSummary()
+        {
+            return CreateSummary();
+        }
     }
 
+    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description,        
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
 
-    public class UserInfoSummary
-    {
-        [ListColumn(Visible: false)]
-        public String Id { get; set; }
-        [ListColumn(Visible: false)]
-        public String Key { get; set; }
-
-        
+    public class UserInfoSummary : SummaryData
+    {        
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsSystemAdmin, ResourceType: typeof(AuthenticationResources))]
         public bool IsSystemAdmin { get; set; }
 
@@ -210,9 +211,6 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_UserName, ResourceType: typeof(AuthenticationResources))]
         public String UserName { get; set; }
-
-        [ListColumn(HeaderResource: AuthenticationResources.Names.Common_Name, ResourceType: typeof(AuthenticationResources))]
-        public String Name { get; set; }
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_Email, ResourceType: typeof(AuthenticationResources))]
         public String Email { get; set; }
