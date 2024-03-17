@@ -239,7 +239,7 @@ namespace LagoVista.Core.Validation
                 }
                 else
                 {
-                    result.AddUserError(Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel), context);
+                    result.AddUserError(Resources.ValidationResource.PropertyIsRequired.Replace(Tokens.PROPERTY_LABEL, propertyLabel), context);
                 }
             }
 
@@ -423,7 +423,7 @@ namespace LagoVista.Core.Validation
                     }
                     else if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
                     {
-                        var validationMessage = Resources.ValidationResource.PropertyIsRequired.Replace("[PROPERTYLABEL]", propertyLabel);
+                        var validationMessage = Resources.ValidationResource.PropertyIsRequired.Replace(Tokens.PROPERTY_LABEL, propertyLabel);
                         result.AddUserError(validationMessage, context);
                     }
                     else
