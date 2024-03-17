@@ -29,7 +29,7 @@ namespace LagoVista.Core.Models
      * do anything with security or identity...this is that object */
 
     [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description,
-        EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources), Icon: "icon-pz-user-profile-1")]
     public class UserInfo : IUserInfo, ISummaryFactory
     {
      
@@ -185,8 +185,8 @@ namespace LagoVista.Core.Models
         }
     }
 
-    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description,        
-        EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources))]
+    [EntityDescription(AuthDomain.AuthenticationDomain, AuthenticationResources.Names.UserInfo_ObjectTitle, AuthenticationResources.Names.UserInfo_Help, AuthenticationResources.Names.UserInfo_Description,
+        EntityDescriptionAttribute.EntityTypes.Dto, typeof(AuthenticationResources), Icon: "icon-pz-user-profile-1")]
 
     public class UserInfoSummary : SummaryData
     {        
