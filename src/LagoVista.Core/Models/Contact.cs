@@ -1,5 +1,7 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Resources;
+using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,8 +22,12 @@ namespace LagoVista.Core.Models
             CompanyId = company.Id;
             FirstName = contact.FirstName;
             LastName = contact.LastName;
-            Email = contact.Email.Trim();
-            Phone = contact.Phone.Replace("(", String.Empty).Replace(")", String.Empty).Replace(" ", String.Empty).Replace("-", String.Empty).Replace("+", String.Empty);
+
+            if (!String.IsNullOrEmpty(contact.Email))
+                Email = contact.Email.ToLower().Trim();
+
+            if(!String.IsNullOrEmpty(contact.Phone))
+                Phone = contact.Phone.Replace("(", String.Empty).Replace(")", String.Empty).Replace(" ", String.Empty).Replace("-", String.Empty).Replace("+", String.Empty);
 
             PartitionKey = company.OwnerOrganization.Id;
             
@@ -46,7 +52,7 @@ namespace LagoVista.Core.Models
 
     [EntityDescription(Domains.CoreDomainName, LagoVistaCommonStrings.Names.Company_Title, LagoVistaCommonStrings.Names.Company_Help,
                       LagoVistaCommonStrings.Names.Company_Help, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(LagoVistaCommonStrings))]
-    public class Company : EntityBase
+    public class Company : EntityBase, IValidateable
     {
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Description { get; set; }
@@ -82,7 +88,7 @@ namespace LagoVista.Core.Models
 
     [EntityDescription(Domains.CoreDomainName, LagoVistaCommonStrings.Names.Contact_Title, LagoVistaCommonStrings.Names.Contact_Help, LagoVistaCommonStrings.Names.Contact_Description,
                   EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(LagoVistaCommonStrings))]
-    public class Contact
+    public class Contact : IIDEntity, IValidateable
     {
         public Contact()
         {
