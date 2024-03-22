@@ -1,4 +1,4 @@
-﻿/*2/8/2024 8:26:46 AM*/
+﻿/*3/21/2024 1:11:40 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -980,18 +980,60 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Company_Help
 
 		public static string Company_Help { get { return GetResourceString("Company_Help"); } }
+//Resources:LagoVistaCommonStrings:Company_Industry
+
+		public static string Company_Industry { get { return GetResourceString("Company_Industry"); } }
 //Resources:LagoVistaCommonStrings:Company_Title
 
 		public static string Company_Title { get { return GetResourceString("Company_Title"); } }
 //Resources:LagoVistaCommonStrings:Contact_Description
 
 		public static string Contact_Description { get { return GetResourceString("Contact_Description"); } }
+//Resources:LagoVistaCommonStrings:Contact_Email
+
+		public static string Contact_Email { get { return GetResourceString("Contact_Email"); } }
+//Resources:LagoVistaCommonStrings:Contact_FirstName
+
+		public static string Contact_FirstName { get { return GetResourceString("Contact_FirstName"); } }
 //Resources:LagoVistaCommonStrings:Contact_Help
 
 		public static string Contact_Help { get { return GetResourceString("Contact_Help"); } }
+//Resources:LagoVistaCommonStrings:Contact_LastName
+
+		public static string Contact_LastName { get { return GetResourceString("Contact_LastName"); } }
+//Resources:LagoVistaCommonStrings:Contact_LinkedInPage
+
+		public static string Contact_LinkedInPage { get { return GetResourceString("Contact_LinkedInPage"); } }
+//Resources:LagoVistaCommonStrings:Contact_Notes
+
+		public static string Contact_Notes { get { return GetResourceString("Contact_Notes"); } }
+//Resources:LagoVistaCommonStrings:Contact_Phone
+
+		public static string Contact_Phone { get { return GetResourceString("Contact_Phone"); } }
 //Resources:LagoVistaCommonStrings:Contact_Title
 
 		public static string Contact_Title { get { return GetResourceString("Contact_Title"); } }
+//Resources:LagoVistaCommonStrings:Customer_Address1
+
+		public static string Customer_Address1 { get { return GetResourceString("Customer_Address1"); } }
+//Resources:LagoVistaCommonStrings:Customer_Address2
+
+		public static string Customer_Address2 { get { return GetResourceString("Customer_Address2"); } }
+//Resources:LagoVistaCommonStrings:Customer_City
+
+		public static string Customer_City { get { return GetResourceString("Customer_City"); } }
+//Resources:LagoVistaCommonStrings:Customer_Notes
+
+		public static string Customer_Notes { get { return GetResourceString("Customer_Notes"); } }
+//Resources:LagoVistaCommonStrings:Customer_State
+
+		public static string Customer_State { get { return GetResourceString("Customer_State"); } }
+//Resources:LagoVistaCommonStrings:Customer_WebSite
+
+		public static string Customer_WebSite { get { return GetResourceString("Customer_WebSite"); } }
+//Resources:LagoVistaCommonStrings:Customer_ZipCode
+
+		public static string Customer_ZipCode { get { return GetResourceString("Customer_ZipCode"); } }
 //Resources:LagoVistaCommonStrings:Discussion
 
 		public static string Discussion { get { return GetResourceString("Discussion"); } }
@@ -1089,10 +1131,24 @@ namespace LagoVista.Core.Resources
 			public const string Common_Yes = "Common_Yes";
 			public const string Company_Description = "Company_Description";
 			public const string Company_Help = "Company_Help";
+			public const string Company_Industry = "Company_Industry";
 			public const string Company_Title = "Company_Title";
 			public const string Contact_Description = "Contact_Description";
+			public const string Contact_Email = "Contact_Email";
+			public const string Contact_FirstName = "Contact_FirstName";
 			public const string Contact_Help = "Contact_Help";
+			public const string Contact_LastName = "Contact_LastName";
+			public const string Contact_LinkedInPage = "Contact_LinkedInPage";
+			public const string Contact_Notes = "Contact_Notes";
+			public const string Contact_Phone = "Contact_Phone";
 			public const string Contact_Title = "Contact_Title";
+			public const string Customer_Address1 = "Customer_Address1";
+			public const string Customer_Address2 = "Customer_Address2";
+			public const string Customer_City = "Customer_City";
+			public const string Customer_Notes = "Customer_Notes";
+			public const string Customer_State = "Customer_State";
+			public const string Customer_WebSite = "Customer_WebSite";
+			public const string Customer_ZipCode = "Customer_ZipCode";
 			public const string Discussion = "Discussion";
 			public const string Discussion_Help = "Discussion_Help";
 			public const string Discussion_TimeStamp = "Discussion_TimeStamp";

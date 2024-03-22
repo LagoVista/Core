@@ -234,17 +234,59 @@
   <data name="Company_Help" xml:space="preserve">
     <value>Stores company information</value>
   </data>
+  <data name="Company_Industry" xml:space="preserve">
+    <value>Industry</value>
+  </data>
   <data name="Company_Title" xml:space="preserve">
     <value>Company</value>
   </data>
   <data name="Contact_Description" xml:space="preserve">
-    <value>Stores contact information</value>
+    <value>A contact is a person that is not a NuvIoT user (at least initially) where we need communicate with them.</value>
+  </data>
+  <data name="Contact_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Contact_FirstName" xml:space="preserve">
+    <value>First Name</value>
   </data>
   <data name="Contact_Help" xml:space="preserve">
-    <value>Stores contact information</value>
+    <value>A contact is a person that is not a NuvIoT user (at least initially) where we need communicate with them.</value>
+  </data>
+  <data name="Contact_LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="Contact_LinkedInPage" xml:space="preserve">
+    <value>Linked In Page</value>
+  </data>
+  <data name="Contact_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Contact_Phone" xml:space="preserve">
+    <value>Phone</value>
   </data>
   <data name="Contact_Title" xml:space="preserve">
     <value>Contact</value>
+  </data>
+  <data name="Customer_Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Customer_Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Customer_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="Customer_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Customer_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Customer_WebSite" xml:space="preserve">
+    <value>Web Site</value>
+  </data>
+  <data name="Customer_ZipCode" xml:space="preserve">
+    <value>Postal Code</value>
   </data>
   <data name="Discussion" xml:space="preserve">
     <value>Discussion</value>
