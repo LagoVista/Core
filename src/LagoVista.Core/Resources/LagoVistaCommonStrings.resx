@@ -265,7 +265,7 @@
     <value>Phone</value>
   </data>
   <data name="Contact_Title" xml:space="preserve">
-    <value>Contact</value>
+    <value>Title</value>
   </data>
   <data name="Customer_Address1" xml:space="preserve">
     <value>Address 1</value>
