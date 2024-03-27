@@ -24,6 +24,8 @@ namespace LagoVista.Core.Attributes
         private string _listUIUrl;
         private string _editUIUrl;
         private string _createUIUrl;
+        private int? _col1WidthPct;
+        private int? _col2WidthPct;
 
         public enum EntityTypes
         {
@@ -40,7 +42,7 @@ namespace LagoVista.Core.Attributes
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null, 
             string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null,
-            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null)
+            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null, int Col1WidthPercent = -1, int Col2WidthPercent = -1)
         {
             _descriptionResource = DescriptionResource;
             _titleResource = TitleResource;
@@ -60,7 +62,12 @@ namespace LagoVista.Core.Attributes
             _listUIUrl = ListUIUrl;
             _editUIUrl = EditUIUrl;
             _createUIUrl = CreateUIUrl;
+            _col1WidthPct = Col1WidthPercent == -1 ? null : (int?)Col1WidthPercent;
+            _col2WidthPct = Col2WidthPercent == -1 ? null : (int?)Col2WidthPercent;
         }
+
+        public int? Col1WidthPercent { get { return _col1WidthPct; } }
+        public int? Col2WidthPercent { get { return _col2WidthPct; } }
 
         public String DescriptionResource { get { return _descriptionResource; } }
         public String Domain { get { return _domain; } }

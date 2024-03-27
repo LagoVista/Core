@@ -25,6 +25,8 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.ListUIUrl = attr.ListUIUrl;
             entityDescription.EditUIUrl =  attr.EditUIUrl;
             entityDescription.CreateUIUrl = attr.CreateUIUrl;
+            entityDescription.Col1WidthPercent = attr.Col1WidthPercent;
+            entityDescription.Col2WidthPercent = attr.Col2WidthPercent;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -89,6 +91,10 @@ namespace LagoVista.Core.Models.UIMetaData
         public DomainDescription Domain { get; set; }
         public String UserHelp { get; set; }
         public String Title { get; set; }
+
+        public int? Col1WidthPercent { get; set; }
+        public int? Col2WidthPercent { get; set; }
+
 
         public string Icon { get; set; }
 
