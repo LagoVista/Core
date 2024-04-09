@@ -34,6 +34,12 @@ namespace LagoVista.Core.Models
             DateAdded = DateTime.UtcNow.ToJSONString();
         }
 
+
+        public ContactDTO()
+        {
+
+        }
+
         public string DateAdded { get; set; }
 
         public string OwnerOrganizationId { get; set; }
