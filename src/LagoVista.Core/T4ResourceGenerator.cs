@@ -1,4 +1,4 @@
-﻿/*3/21/2024 1:11:40 PM*/
+﻿/*4/11/2024 1:33:15 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -983,6 +983,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Company_Industry
 
 		public static string Company_Industry { get { return GetResourceString("Company_Industry"); } }
+//Resources:LagoVistaCommonStrings:Company_IndustryNiche
+
+		public static string Company_IndustryNiche { get { return GetResourceString("Company_IndustryNiche"); } }
 //Resources:LagoVistaCommonStrings:Company_Title
 
 		public static string Company_Title { get { return GetResourceString("Company_Title"); } }
@@ -1132,6 +1135,7 @@ namespace LagoVista.Core.Resources
 			public const string Company_Description = "Company_Description";
 			public const string Company_Help = "Company_Help";
 			public const string Company_Industry = "Company_Industry";
+			public const string Company_IndustryNiche = "Company_IndustryNiche";
 			public const string Company_Title = "Company_Title";
 			public const string Contact_Description = "Contact_Description";
 			public const string Contact_Email = "Contact_Email";

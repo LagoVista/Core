@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Resources;
 using System;
 using System.Reflection;
 
@@ -15,6 +16,19 @@ namespace LagoVista.Core.Models.UIMetaData
         public string Id { get; set; }
 
         public string Text { get; set; }
+
+
+        public static EnumDescription CreateSelect()
+        {
+            return new EnumDescription()
+            {
+                Id = "-1",
+                Key = "-1",
+                Text = LagoVistaCommonStrings.Common_Select,
+                Name = LagoVistaCommonStrings.Common_Select,
+                Label = LagoVistaCommonStrings.Common_Select,                 
+            };
+        }
 
         public static EnumDescription Create(EnumLabelAttribute attr, String name, int value)
         {

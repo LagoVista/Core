@@ -67,6 +67,10 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Company_Industry, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, FieldType: FieldTypes.Picker,SortEnums: true, AddEnumSelect: true)]
         public EntityHeader Industry { get; set; }
 
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Company_IndustryNiche, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, FieldType: FieldTypes.Picker, SortEnums: true, AddEnumSelect: true)]
+        public EntityHeader IndustryNiche { get; set; }
+
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Customer_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, IsUserEditable: true)]
         public string Address1 { get; set; }
 

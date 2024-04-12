@@ -237,6 +237,9 @@
   <data name="Company_Industry" xml:space="preserve">
     <value>Industry</value>
   </data>
+  <data name="Company_IndustryNiche" xml:space="preserve">
+    <value>Industry Niche</value>
+  </data>
   <data name="Company_Title" xml:space="preserve">
     <value>Company</value>
   </data>
