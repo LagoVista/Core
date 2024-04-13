@@ -111,6 +111,7 @@ namespace LagoVista.Core.Attributes
         private string _editorPath;
         private bool _isReferenceField;
         private bool _openByDefault;
+        private bool _isFileUploadImage;
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -148,7 +149,8 @@ namespace LagoVista.Core.Attributes
                                   bool AddEnumSelect = false,
                                   string EditorPath = "",
                                   bool IsReferenceField = false, 
-                                  bool OpenByDefault = false)
+                                  bool OpenByDefault = false,
+                                  bool IsFileUplaodImage = true)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -186,6 +188,7 @@ namespace LagoVista.Core.Attributes
             _isReferenceField = IsReferenceField;
             _getUrl = GetUrl;
             _openByDefault = OpenByDefault;
+            _isFileUploadImage = IsFileUplaodImage;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -230,6 +233,7 @@ namespace LagoVista.Core.Attributes
         public string EditorPath { get { return _editorPath; } }
         public bool OpenByDefault { get { return _openByDefault; } }
 
+        public bool IsFileUplaodImage { get { return _isFileUploadImage; } }
     }
 
     public class SelectListItem

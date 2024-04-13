@@ -54,6 +54,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public String Display { get; set; }
         public String DefaultValue { get; set; }
         public bool IsUserEditable { get; set; }
+        public bool IsFileUploadImage { get; set; }
         public bool IsEnabled { get; set; }
         public string UploadUrl { get; set; }
         public String DataType { get; set; }
@@ -61,6 +62,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
         public bool IsVisible { get; set; }
+
         public bool IsMarkDown { get; set; }
         public string HelpUrl { get; set; }
 
@@ -172,6 +174,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.HelpUrl = attr.Helpurl;
             field.ScriptTemplateName = attr.ScriptTemplateName;
             field.InPlaceEditing = attr.InPlaceEditing;
+            field.IsFileUploadImage = attr.IsFileUplaodImage;
             field.EditorPath = attr.EditorPath;
             field.OpenByDefault = attr.OpenByDefault;
             field.Options = new List<EnumDescription>();
