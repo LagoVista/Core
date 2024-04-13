@@ -174,7 +174,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.HelpUrl = attr.Helpurl;
             field.ScriptTemplateName = attr.ScriptTemplateName;
             field.InPlaceEditing = attr.InPlaceEditing;
-            field.IsFileUploadImage = attr.IsFileUplaodImage;
+            field.IsFileUploadImage = attr.IsFileUploadImage;
             field.EditorPath = attr.EditorPath;
             field.OpenByDefault = attr.OpenByDefault;
             field.Options = new List<EnumDescription>();

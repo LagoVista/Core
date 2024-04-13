@@ -150,7 +150,7 @@ namespace LagoVista.Core.Attributes
                                   string EditorPath = "",
                                   bool IsReferenceField = false, 
                                   bool OpenByDefault = false,
-                                  bool IsFileUplaodImage = true)
+                                  bool IsFileUploadImage = true)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -188,7 +188,7 @@ namespace LagoVista.Core.Attributes
             _isReferenceField = IsReferenceField;
             _getUrl = GetUrl;
             _openByDefault = OpenByDefault;
-            _isFileUploadImage = IsFileUplaodImage;
+            _isFileUploadImage = IsFileUploadImage;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -233,7 +233,7 @@ namespace LagoVista.Core.Attributes
         public string EditorPath { get { return _editorPath; } }
         public bool OpenByDefault { get { return _openByDefault; } }
 
-        public bool IsFileUplaodImage { get { return _isFileUploadImage; } }
+        public bool IsFileUploadImage { get { return _isFileUploadImage; } }
     }
 
     public class SelectListItem
