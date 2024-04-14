@@ -150,7 +150,8 @@ namespace LagoVista.Core.Attributes
                                   string EditorPath = "",
                                   bool IsReferenceField = false, 
                                   bool OpenByDefault = false,
-                                  bool IsFileUploadImage = true)
+                                  bool IsFileUploadImage = true,
+                                  string AiChatPrompt = "")
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -189,6 +190,7 @@ namespace LagoVista.Core.Attributes
             _getUrl = GetUrl;
             _openByDefault = OpenByDefault;
             _isFileUploadImage = IsFileUploadImage;
+            this.AiChatPrompt = AiChatPrompt;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -229,6 +231,8 @@ namespace LagoVista.Core.Attributes
         public string ScriptTemplateName { get { return _scriptTemplateName; } }
 
         public bool InPlaceEditing { get { return _inPlaceEditing; } }
+
+        public string AiChatPrompt { get; }
 
         public string EditorPath { get { return _editorPath; } }
         public bool OpenByDefault { get { return _openByDefault; } }
