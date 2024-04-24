@@ -32,6 +32,11 @@ namespace LagoVista.Core.Rpc.Tests.Server.Utils
             return new TimedEvent(area, description);
         }
 
+        public void Trace(string message)
+        {
+            
+        }
+
         public void TrackEvent(string message, Dictionary<string, string> parameters)
         {
             

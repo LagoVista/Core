@@ -135,6 +135,7 @@ namespace LagoVista.Core.Managers
 
         protected Task LogEntityActionAsync(String id, string entityType, string accessType, EntityHeader org, EntityHeader user)
         {
+            _logger.AddCustomEvent(LogLevel.Message, $"[{entityType}__{accessType}]", $"{entityType} Entity Access", entityType.ToKVP("entityType"), accessType.ToKVP("accessType"), org.Id.ToKVP("orgId"), org.Text.ToKVP("orgName"), user.Id.ToKVP("userId"), user.Text.ToKVP("userName")); 
             return _security.LogEntityActionAsync(id, entityType, accessType, org, user);
         }
 
