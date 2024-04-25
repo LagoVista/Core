@@ -1,4 +1,4 @@
-﻿/*4/11/2024 1:33:15 PM*/
+﻿/*4/25/2024 10:46:03 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -144,6 +144,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:UserInfo_Email
 
 		public static string UserInfo_Email { get { return GetResourceString("UserInfo_Email"); } }
+//Resources:AuthenticationResources:UserInfo_EmailSignature
+
+		public static string UserInfo_EmailSignature { get { return GetResourceString("UserInfo_EmailSignature"); } }
 //Resources:AuthenticationResources:UserInfo_FirstName
 
 		public static string UserInfo_FirstName { get { return GetResourceString("UserInfo_FirstName"); } }
@@ -256,6 +259,7 @@ namespace LagoVista.Core.Resources
 			public const string UserInfo_DateCreated = "UserInfo_DateCreated";
 			public const string UserInfo_Description = "UserInfo_Description";
 			public const string UserInfo_Email = "UserInfo_Email";
+			public const string UserInfo_EmailSignature = "UserInfo_EmailSignature";
 			public const string UserInfo_FirstName = "UserInfo_FirstName";
 			public const string UserInfo_Help = "UserInfo_Help";
 			public const string UserInfo_IsAccountDisabled = "UserInfo_IsAccountDisabled";

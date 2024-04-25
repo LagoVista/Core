@@ -144,6 +144,9 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_IsEmailConfirmed, IsUserEditable: false, FieldType: FieldTypes.CheckBox, ResourceType: typeof(Resources.AuthenticationResources))]
         public bool EmailConfirmed { get; set; }
 
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_EmailSignature, IsRequired: false, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(Resources.AuthenticationResources))]
+        public string EmailSignature { get; set; }
+
         public List<ExternalLogin> ExternalLogins { get; set; } = new List<ExternalLogin>();
         public List<EntityHeader> Roles { get; set; } = new List<EntityHeader>();
 
