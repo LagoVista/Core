@@ -135,8 +135,23 @@ namespace LagoVista.Core.Managers
 
         protected Task LogEntityActionAsync(String id, string entityType, string accessType, EntityHeader org, EntityHeader user)
         {
-            _logger.AddCustomEvent(LogLevel.Message, $"[{entityType}__{accessType}]", $"{entityType} Entity Access", entityType.ToKVP("entityType"), accessType.ToKVP("accessType"), org.Id.ToKVP("orgId"), org.Text.ToKVP("orgName"), user.Id.ToKVP("userId"), user.Text.ToKVP("userName")); 
-            return _security.LogEntityActionAsync(id, entityType, accessType, org, user);
+            var kvps = new List<KeyValuePair<string, string>>();
+            kvps.Add(entityType.ToKVP("entityType"));
+            kvps.Add(accessType.ToKVP("accessType"));
+            if(org != null)
+            {
+                kvps.Add(org.Id.ToKVP("orgId"));
+                kvps.Add(org.Text.ToKVP("orgName"));
+            }
+
+            if(user != null)
+            {
+                user.Id.ToKVP("userId");
+                user.Text.ToKVP("userName");
+            }
+
+            _logger.AddCustomEvent(LogLevel.Message, $"[{entityType}__{accessType}]", $"{entityType} Entity Access", kvps.ToArray()); 
+              return _security.LogEntityActionAsync(id, entityType, accessType, org, user);
         }
 
         protected void ValidateAuthParams(EntityHeader org, EntityHeader user)
