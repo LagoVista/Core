@@ -18,6 +18,14 @@ namespace LagoVista.Core.Validation
             ResultId = Guid.NewGuid().ToId();
         }
 
+        public string ErrorMessage
+        {
+            get
+            {
+                return Errors.Count == 0 ? "No Error" : Errors.First().Message;
+            }
+        }
+
         public bool Successful { get { return Errors.Count == 0; } }
         public List<ErrorMessage> Warnings { get; private set; }
         public List<ErrorMessage> Errors { get; private set; }
