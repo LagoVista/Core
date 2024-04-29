@@ -1,4 +1,4 @@
-﻿/*4/25/2024 10:46:03 AM*/
+﻿/*4/28/2024 2:37:44 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -117,6 +117,9 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:ExternalLogin_Microsoft
 
 		public static string ExternalLogin_Microsoft { get { return GetResourceString("ExternalLogin_Microsoft"); } }
+//Resources:AuthenticationResources:ExternalLogin_SLTesting
+
+		public static string ExternalLogin_SLTesting { get { return GetResourceString("ExternalLogin_SLTesting"); } }
 //Resources:AuthenticationResources:ExternalLogin_Twitter
 
 		public static string ExternalLogin_Twitter { get { return GetResourceString("ExternalLogin_Twitter"); } }
@@ -250,6 +253,7 @@ namespace LagoVista.Core.Resources
 			public const string ExternalLogin_Google = "ExternalLogin_Google";
 			public const string ExternalLogin_LinkedIn = "ExternalLogin_LinkedIn";
 			public const string ExternalLogin_Microsoft = "ExternalLogin_Microsoft";
+			public const string ExternalLogin_SLTesting = "ExternalLogin_SLTesting";
 			public const string ExternalLogin_Twitter = "ExternalLogin_Twitter";
 			public const string UserInfo_Address1 = "UserInfo_Address1";
 			public const string UserInfo_Address2 = "UserInfo_Address2";

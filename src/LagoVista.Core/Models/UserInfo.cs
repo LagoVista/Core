@@ -23,6 +23,8 @@ namespace LagoVista.Core.Models
         Twitter,
         [EnumLabel(ExternalLogin.ExternalLogin_Facebook, AuthenticationResources.Names.ExternalLogin_Facebook, ResourceType: typeof(AuthenticationResources))]
         Facebook,
+        [EnumLabel(ExternalLogin.ExternalLogin_SLTesting, AuthenticationResources.Names.ExternalLogin_SLTesting, ResourceType: typeof(AuthenticationResources))]
+        SLTesting,
     }
 
     /* The AppUser is used for managing identity for the system, we want something with basic user information that doesn't
@@ -241,6 +243,7 @@ namespace LagoVista.Core.Models
         public const string ExternalLogin_LinkedIn = "linkedin";
         public const string ExternalLogin_Facebook = "facebook";
         public const string ExternalLogin_Twitter = "twitter";
+        public const string ExternalLogin_SLTesting = "sltesting";
 
         public EntityHeader<ExternalLoginTypes> Provider { get; set; }
         public string Id { get; set; }

@@ -288,4 +288,7 @@
   <data name="UserInfo_EmailSignature" xml:space="preserve">
     <value>Email Signature</value>
   </data>
+  <data name="ExternalLogin_SLTesting" xml:space="preserve">
+    <value>Software Logistics Testing</value>
+  </data>
 </root>
