@@ -8,10 +8,19 @@ namespace LagoVista.Core.Validation
     {
         public T Result { get; set; }
 
+        public string RedirectURL { get; set; }
+
         public static InvokeResult<T> Create(T result)
         {
             return new InvokeResult<T>() { Result = result };
         }
+
+
+        public static InvokeResult<T> Create(T result, string url)
+        {
+            return new InvokeResult<T>() { Result = result, RedirectURL = url };
+        }
+
 
         /// <summary>
         /// Create an empty result that can either be populated at a later time
@@ -104,7 +113,12 @@ namespace LagoVista.Core.Validation
 
     public class InvokeResult : ValidationResult
     {
+        public string RedirectURL { get; set; }
+
         public static InvokeResult Success => new InvokeResult();
+
+        public static InvokeResult SuccessRedirect(string url) => new InvokeResult() { RedirectURL = url};
+
 
         public static InvokeResult FromError(string err, string errorCode = "")
         {
