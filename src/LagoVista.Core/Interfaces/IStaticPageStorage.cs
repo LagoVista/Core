@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Interfaces
 {
     public interface IStaticPageStorage
-    {
-        Task<InvokeResult<string>> StorePageAsync(string htmlContent);
-        Task<InvokeResult<string>> GetPageAsync(string pageId);
+    {   
+        Task<InvokeResult<string>> StorePageAsync(string orgId, string folder, string htmlContent);
+        Task<InvokeResult<string>> GetPageAsync(string orgId, string folder, string pageId);
     }
 }
