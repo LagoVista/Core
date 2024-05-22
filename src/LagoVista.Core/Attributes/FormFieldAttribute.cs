@@ -60,7 +60,9 @@ namespace LagoVista.Core.Attributes
         Money,
         SiteContentPicker,
         ChildListSiteContentPicker,
-        Surveys
+        Surveys,
+        DevicePicker,
+        OrgLocationPicker
     }
 
     public enum NamespaceTypes
