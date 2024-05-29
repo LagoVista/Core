@@ -108,6 +108,8 @@ namespace LagoVista.Core.Validation
             }
             return kvps.ToArray();
         }
+
+        public List<ResultTiming> Timings { get; set; } = new List<ResultTiming>();
     }
 
 
@@ -200,5 +202,13 @@ namespace LagoVista.Core.Validation
 
             return bldr.ToString();
         }
+
+        public List<ResultTiming> Timings { get; set; } = new List<ResultTiming>();
+    }
+
+    public class ResultTiming
+    {
+        public string Key { get; set; }
+        public double Ms { get; set; }
     }
 }
