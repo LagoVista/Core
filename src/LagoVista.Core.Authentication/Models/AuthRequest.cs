@@ -50,6 +50,8 @@ namespace LagoVista.Core.Authentication.Models
         public string OrgName { get; set; }
         public string InstanceId { get; set; }
         public string InstanceAuthKey { get; set; }
+
+        public string InviteId { get; set; }
     }
 }
                                                                                                                                                                                                                                                                                                                                                                 
