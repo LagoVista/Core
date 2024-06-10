@@ -55,6 +55,8 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: Resources.AuthenticationResources.Names.Common_LastUpdatedBy, ResourceType: typeof(AuthenticationResources), IsRequired: true, IsUserEditable: false)]
         public EntityHeader LastUpdatedBy { get; set; }
 
+        public string LastLogin { get; set; }
+
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_FirstName, IsRequired: true, ResourceType: typeof(Resources.AuthenticationResources))]
         public string FirstName { get; set; }
 
@@ -181,6 +183,7 @@ namespace LagoVista.Core.Models
                 EmailConfirmed = EmailConfirmed,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 TeamsAccountName = TeamsAccountName,
+                LastLogin = LastLogin
             };
         }
 
@@ -233,6 +236,8 @@ namespace LagoVista.Core.Models
         public bool EmailConfirmed { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsPhoneConfirmed, ResourceType: typeof(AuthenticationResources))]
         public bool PhoneNumberConfirmed { get; set; }
+
+        public string LastLogin { get; set; }
     }
 
     public class ExternalLogin
