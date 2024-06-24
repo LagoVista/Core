@@ -8,12 +8,12 @@
         double? Latitude { get; }
         double? Longitude { get; }
 
-        double? AccuraceyMeters { get; }
+        double? AccuracyMeters { get; }
         double? Hdop { get; }
         double? Vdop { get; }
 
         bool HasLocation { get; }
 
-        int NumberSatellites { get; }
+        int? NumberSatellites { get; }
     }
 }

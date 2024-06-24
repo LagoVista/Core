@@ -17,6 +17,7 @@ namespace LagoVista.Core.Models.Geo
     {
         public GeoLocation()
         {
+            LastUpdated = DateTime.UtcNow.ToJSONString();
         }
 
         public GeoLocation(double latitude, double longitude)
@@ -44,7 +45,7 @@ namespace LagoVista.Core.Models.Geo
 
         public GeoLocation(double latitude, double longitude, double? altitude, double? heading, double? hdop, double? vdop, double? accuracyM) : this(latitude, longitude, altitude, heading, hdop, vdop)
         {
-            AccuraceyMeters = accuracyM;
+            AccuracyMeters = accuracyM;
         }
 
         public GeoLocation(double latitude, double longitude, int numberSatellites, double? altitude, double? heading, double? hdop, double? vdop, double? accuracyM) : this(latitude, longitude, altitude, heading, hdop, vdop, accuracyM)
@@ -57,7 +58,7 @@ namespace LagoVista.Core.Models.Geo
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
 
-        public double? AccuraceyMeters { get; set; }
+        public double? AccuracyMeters { get; set; }
 
         public double? Hdop { get; set; }
 
@@ -67,7 +68,7 @@ namespace LagoVista.Core.Models.Geo
 
         public double? Heading { get; set; }
 
-        public int NumberSatellites { get; set; }
+        public int? NumberSatellites { get; set; }
 
         /// <summary>
         /// Get distance between two points
