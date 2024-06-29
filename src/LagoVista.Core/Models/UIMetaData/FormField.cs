@@ -99,6 +99,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string EditorPath { get; set; }
 
+        public List<ReplaceableTag> Tags { get; set; }
+
 		public static List<EnumDescription> GetEnumOptions<Type>()
         {
             var options = new List<EnumDescription>();
@@ -181,6 +183,25 @@ namespace LagoVista.Core.Models.UIMetaData
             field.OpenByDefault = attr.OpenByDefault;
             field.AiChatPrompt = attr.AiChatPrompt;
             field.Options = new List<EnumDescription>();
+            if(!String.IsNullOrEmpty(attr.Tags))
+            {
+                field.Tags = new List<ReplaceableTag>();
+                var parts = attr.Tags.Split(';');
+                foreach(var tag in parts)
+                {
+                    var tagInfoParts = tag.Split('-');
+                    if (tagInfoParts.Length != 2)
+                        throw new Exception($"On field {field.Name} replacement tags should be formatted like Title 1-tag1;Title 2-tag2 - {attr.Tags}");
+
+                    field.Tags.Add(new ReplaceableTag()
+                    {
+                        Title = tagInfoParts[0],
+                        Tag = tagInfoParts[1]
+                    });
+
+                }
+            }
+            
 
             if (!String.IsNullOrEmpty(attr.LabelDisplayResource))
             {

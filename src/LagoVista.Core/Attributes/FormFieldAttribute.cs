@@ -114,6 +114,7 @@ namespace LagoVista.Core.Attributes
         private bool _isReferenceField;
         private bool _openByDefault;
         private bool _isFileUploadImage;
+        private string _tags;
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -153,6 +154,7 @@ namespace LagoVista.Core.Attributes
                                   bool IsReferenceField = false, 
                                   bool OpenByDefault = false,
                                   bool IsFileUploadImage = true,
+                                  string ReplaceableTags = null,
                                   string AiChatPrompt = "")
         {
             _labelDisplayResource = LabelResource;
@@ -193,6 +195,7 @@ namespace LagoVista.Core.Attributes
             _openByDefault = OpenByDefault;
             _isFileUploadImage = IsFileUploadImage;
             this.AiChatPrompt = AiChatPrompt;
+            _tags = ReplaceableTags;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -240,11 +243,18 @@ namespace LagoVista.Core.Attributes
         public bool OpenByDefault { get { return _openByDefault; } }
 
         public bool IsFileUploadImage { get { return _isFileUploadImage; } }
+        public string Tags { get { return _tags; } }
     }
 
     public class SelectListItem
     {
         public String Key { get; set; }
         public String Value { get; set; }
+    }
+
+    public class ReplaceableTag
+    {
+        public string Tag { get; set; }
+        public string Title { get; set; }
     }
 }
