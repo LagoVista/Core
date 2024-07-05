@@ -62,7 +62,8 @@ namespace LagoVista.Core.Attributes
         ChildListSiteContentPicker,
         Surveys,
         DevicePicker,
-        OrgLocationPicker
+        OrgLocationPicker,
+        Schedule
     }
 
     public enum NamespaceTypes

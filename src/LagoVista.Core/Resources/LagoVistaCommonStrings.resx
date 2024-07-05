@@ -345,4 +345,100 @@
   <data name="NoConnection" xml:space="preserve">
     <value>Sorry, you do not appear to have an internet connection, please try again later.</value>
   </data>
+  <data name="Schedule_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Schedule_Biweekly" xml:space="preserve">
+    <value>Bi-Weekly</value>
+  </data>
+  <data name="Schedule_Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="Schedule_DayOfWeek" xml:space="preserve">
+    <value>Day of Week</value>
+  </data>
+  <data name="Schedule_Description" xml:space="preserve">
+    <value>Schedule is a description of when an event should occur.</value>
+  </data>
+  <data name="Schedule_EndsOn" xml:space="preserve">
+    <value>Ends On</value>
+  </data>
+  <data name="Schedule_FirstWeek" xml:space="preserve">
+    <value>First Week</value>
+  </data>
+  <data name="Schedule_FourthWeek" xml:space="preserve">
+    <value>Fourth Week</value>
+  </data>
+  <data name="Schedule_Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="Schedule_Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Schedule_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="Schedule_Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="Schedule_ScheduleType" xml:space="preserve">
+    <value>Schedule Type</value>
+  </data>
+  <data name="Schedule_ScheduleType_Biweekly" xml:space="preserve">
+    <value>Biweekly</value>
+  </data>
+  <data name="Schedule_ScheduleType_Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="Schedule_ScheduleType_FirstDayOfMonth" xml:space="preserve">
+    <value>First day of month</value>
+  </data>
+  <data name="Schedule_ScheduleType_LastDayOfMonth" xml:space="preserve">
+    <value>Last day of month</value>
+  </data>
+  <data name="Schedule_ScheduleType_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="Schedule_ScheduleType_Select" xml:space="preserve">
+    <value>-select schedule type-</value>
+  </data>
+  <data name="Schedule_ScheduleType_Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="Schedule_SecondWeek" xml:space="preserve">
+    <value>Second Week</value>
+  </data>
+  <data name="Schedule_SelectWeek" xml:space="preserve">
+    <value>-select week-</value>
+  </data>
+  <data name="Schedule_StartsOn" xml:space="preserve">
+    <value>Starts On</value>
+  </data>
+  <data name="Schedule_StartTime" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="Schedule_Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Schedule_ThirdWeek" xml:space="preserve">
+    <value>Third Week</value>
+  </data>
+  <data name="Schedule_Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Schedule_Title" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Schedule_Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Schedule_Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="Schedule_Week" xml:space="preserve">
+    <value>Week</value>
+  </data>
+  <data name="Schedule_Weekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
 </root>

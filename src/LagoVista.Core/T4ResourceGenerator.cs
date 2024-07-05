@@ -1,4 +1,4 @@
-﻿/*4/28/2024 2:37:44 PM*/
+﻿/*7/5/2024 1:20:43 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1099,6 +1099,102 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:NoConnection
 
 		public static string NoConnection { get { return GetResourceString("NoConnection"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Active
+
+		public static string Schedule_Active { get { return GetResourceString("Schedule_Active"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Biweekly
+
+		public static string Schedule_Biweekly { get { return GetResourceString("Schedule_Biweekly"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Daily
+
+		public static string Schedule_Daily { get { return GetResourceString("Schedule_Daily"); } }
+//Resources:LagoVistaCommonStrings:Schedule_DayOfWeek
+
+		public static string Schedule_DayOfWeek { get { return GetResourceString("Schedule_DayOfWeek"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Description
+
+		public static string Schedule_Description { get { return GetResourceString("Schedule_Description"); } }
+//Resources:LagoVistaCommonStrings:Schedule_EndsOn
+
+		public static string Schedule_EndsOn { get { return GetResourceString("Schedule_EndsOn"); } }
+//Resources:LagoVistaCommonStrings:Schedule_FirstWeek
+
+		public static string Schedule_FirstWeek { get { return GetResourceString("Schedule_FirstWeek"); } }
+//Resources:LagoVistaCommonStrings:Schedule_FourthWeek
+
+		public static string Schedule_FourthWeek { get { return GetResourceString("Schedule_FourthWeek"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Friday
+
+		public static string Schedule_Friday { get { return GetResourceString("Schedule_Friday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Monday
+
+		public static string Schedule_Monday { get { return GetResourceString("Schedule_Monday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Monthly
+
+		public static string Schedule_Monthly { get { return GetResourceString("Schedule_Monthly"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Saturday
+
+		public static string Schedule_Saturday { get { return GetResourceString("Schedule_Saturday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType
+
+		public static string Schedule_ScheduleType { get { return GetResourceString("Schedule_ScheduleType"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_Biweekly
+
+		public static string Schedule_ScheduleType_Biweekly { get { return GetResourceString("Schedule_ScheduleType_Biweekly"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_Daily
+
+		public static string Schedule_ScheduleType_Daily { get { return GetResourceString("Schedule_ScheduleType_Daily"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_FirstDayOfMonth
+
+		public static string Schedule_ScheduleType_FirstDayOfMonth { get { return GetResourceString("Schedule_ScheduleType_FirstDayOfMonth"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_LastDayOfMonth
+
+		public static string Schedule_ScheduleType_LastDayOfMonth { get { return GetResourceString("Schedule_ScheduleType_LastDayOfMonth"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_Monthly
+
+		public static string Schedule_ScheduleType_Monthly { get { return GetResourceString("Schedule_ScheduleType_Monthly"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_Select
+
+		public static string Schedule_ScheduleType_Select { get { return GetResourceString("Schedule_ScheduleType_Select"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ScheduleType_Weekly
+
+		public static string Schedule_ScheduleType_Weekly { get { return GetResourceString("Schedule_ScheduleType_Weekly"); } }
+//Resources:LagoVistaCommonStrings:Schedule_SecondWeek
+
+		public static string Schedule_SecondWeek { get { return GetResourceString("Schedule_SecondWeek"); } }
+//Resources:LagoVistaCommonStrings:Schedule_SelectWeek
+
+		public static string Schedule_SelectWeek { get { return GetResourceString("Schedule_SelectWeek"); } }
+//Resources:LagoVistaCommonStrings:Schedule_StartsOn
+
+		public static string Schedule_StartsOn { get { return GetResourceString("Schedule_StartsOn"); } }
+//Resources:LagoVistaCommonStrings:Schedule_StartTime
+
+		public static string Schedule_StartTime { get { return GetResourceString("Schedule_StartTime"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Sunday
+
+		public static string Schedule_Sunday { get { return GetResourceString("Schedule_Sunday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_ThirdWeek
+
+		public static string Schedule_ThirdWeek { get { return GetResourceString("Schedule_ThirdWeek"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Thursday
+
+		public static string Schedule_Thursday { get { return GetResourceString("Schedule_Thursday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Title
+
+		public static string Schedule_Title { get { return GetResourceString("Schedule_Title"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Tuesday
+
+		public static string Schedule_Tuesday { get { return GetResourceString("Schedule_Tuesday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Wednesday
+
+		public static string Schedule_Wednesday { get { return GetResourceString("Schedule_Wednesday"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Week
+
+		public static string Schedule_Week { get { return GetResourceString("Schedule_Week"); } }
+//Resources:LagoVistaCommonStrings:Schedule_Weekly
+
+		public static string Schedule_Weekly { get { return GetResourceString("Schedule_Weekly"); } }
 //Resources:ValidationResource:Common_Key_Help
 
 		public static class Names
@@ -1179,6 +1275,38 @@ namespace LagoVista.Core.Resources
 			public const string Month_October = "Month_October";
 			public const string Month_September = "Month_September";
 			public const string NoConnection = "NoConnection";
+			public const string Schedule_Active = "Schedule_Active";
+			public const string Schedule_Biweekly = "Schedule_Biweekly";
+			public const string Schedule_Daily = "Schedule_Daily";
+			public const string Schedule_DayOfWeek = "Schedule_DayOfWeek";
+			public const string Schedule_Description = "Schedule_Description";
+			public const string Schedule_EndsOn = "Schedule_EndsOn";
+			public const string Schedule_FirstWeek = "Schedule_FirstWeek";
+			public const string Schedule_FourthWeek = "Schedule_FourthWeek";
+			public const string Schedule_Friday = "Schedule_Friday";
+			public const string Schedule_Monday = "Schedule_Monday";
+			public const string Schedule_Monthly = "Schedule_Monthly";
+			public const string Schedule_Saturday = "Schedule_Saturday";
+			public const string Schedule_ScheduleType = "Schedule_ScheduleType";
+			public const string Schedule_ScheduleType_Biweekly = "Schedule_ScheduleType_Biweekly";
+			public const string Schedule_ScheduleType_Daily = "Schedule_ScheduleType_Daily";
+			public const string Schedule_ScheduleType_FirstDayOfMonth = "Schedule_ScheduleType_FirstDayOfMonth";
+			public const string Schedule_ScheduleType_LastDayOfMonth = "Schedule_ScheduleType_LastDayOfMonth";
+			public const string Schedule_ScheduleType_Monthly = "Schedule_ScheduleType_Monthly";
+			public const string Schedule_ScheduleType_Select = "Schedule_ScheduleType_Select";
+			public const string Schedule_ScheduleType_Weekly = "Schedule_ScheduleType_Weekly";
+			public const string Schedule_SecondWeek = "Schedule_SecondWeek";
+			public const string Schedule_SelectWeek = "Schedule_SelectWeek";
+			public const string Schedule_StartsOn = "Schedule_StartsOn";
+			public const string Schedule_StartTime = "Schedule_StartTime";
+			public const string Schedule_Sunday = "Schedule_Sunday";
+			public const string Schedule_ThirdWeek = "Schedule_ThirdWeek";
+			public const string Schedule_Thursday = "Schedule_Thursday";
+			public const string Schedule_Title = "Schedule_Title";
+			public const string Schedule_Tuesday = "Schedule_Tuesday";
+			public const string Schedule_Wednesday = "Schedule_Wednesday";
+			public const string Schedule_Week = "Schedule_Week";
+			public const string Schedule_Weekly = "Schedule_Weekly";
 		}
 	}
 	public class ValidationResource

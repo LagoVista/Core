@@ -330,6 +330,16 @@ namespace LagoVista.Core
             if (String.IsNullOrEmpty(value))
                 return null;
 
+            if(value.Length == 4)
+            {
+                var hours = int.Parse(value.Substring(0, 2));
+                var minutes = int.Parse(value.Substring(2, 2));
+                var timeSpan = TimeSpan.Zero;
+                timeSpan = timeSpan.Add(TimeSpan.FromMinutes(minutes));
+                timeSpan = timeSpan.Add(TimeSpan.FromHours(hours));
+                return timeSpan;
+            }
+
             var valueParts = value.Split(':');
             if (valueParts.Length != 3)
                 return null;
