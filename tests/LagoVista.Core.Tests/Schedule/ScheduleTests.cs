@@ -66,7 +66,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Daily, dayOfWeek: WeekDays.Friday, startTime: "1330");
             var refDate = GetReferenceDate(hours: 12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 5, 13, 30);
         }
@@ -76,7 +76,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Daily, dayOfWeek: WeekDays.Friday, startTime: "0900");
             var refDate = GetReferenceDate(hours: 12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 6, 09, 00);
         }
@@ -87,7 +87,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Biweekly, dayOfWeek: WeekDays.Monday, startTime: "1330");
             var refDate = GetReferenceDate();
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 8, 13, 30);
         }
@@ -97,7 +97,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Biweekly, dayOfWeek: WeekDays.Friday, startTime: "1330");
             var refDate = GetReferenceDate(day:1);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 5, 13, 30);
         }
@@ -107,7 +107,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Biweekly, dayOfWeek: WeekDays.Friday, startTime: "1330");
             var refDate = GetReferenceDate(day: 5, hours: 12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 5, 13, 30);
         }
@@ -117,7 +117,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Biweekly, dayOfWeek: WeekDays.Friday, startTime: "0900");
             var refDate = GetReferenceDate(day: 5, hours: 12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 12, 09, 00);
         }
@@ -128,7 +128,7 @@ namespace LagoVista.Core.Tests.Schedule
             var schedule = CreateSchedule(ScheduleTypes.Weekly, startTime: "1330");
             schedule.Monday = true;
             var refDate = GetReferenceDate();
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 8, 13, 30);
         }
@@ -139,7 +139,7 @@ namespace LagoVista.Core.Tests.Schedule
             var schedule = CreateSchedule(ScheduleTypes.Weekly, startTime: "0915");
             schedule.Friday = true;
             var refDate = GetReferenceDate(hours: 12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 12, 09, 15);
         }
@@ -150,7 +150,7 @@ namespace LagoVista.Core.Tests.Schedule
             var schedule = CreateSchedule(ScheduleTypes.Weekly, startTime: "1330");
             schedule.Friday = true;
             var refDate = GetReferenceDate(hours:12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 5, 13, 30);
         }
@@ -161,7 +161,7 @@ namespace LagoVista.Core.Tests.Schedule
             var schedule = CreateSchedule(ScheduleTypes.Weekly, startTime: "1330");
             schedule.Friday = true;
             var refDate = GetReferenceDate(day:8);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 12, 13, 30);
         }
@@ -170,7 +170,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_First_Day_Of_Month()
         {
             var schedule = CreateSchedule(ScheduleTypes.FirstDayOfMonth, startTime:"1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate());
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate());
             Console.WriteLine(response);
             Validate(response, 2024, 08, 1, 13, 30);
         }
@@ -179,7 +179,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_First_Day_Of_Month_OnFirst_BeforeSchedule()
         {
             var schedule = CreateSchedule(ScheduleTypes.FirstDayOfMonth, startTime: "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate(day: 1, hours: 12));
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate(day: 1, hours: 12));
             Console.WriteLine(response);
             Validate(response, 2024, 07, 1, 13, 30);
         }
@@ -189,7 +189,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_First_Day_Of_Month_OnFirst_AfterSchedule()
         {
             var schedule = CreateSchedule(ScheduleTypes.FirstDayOfMonth, startTime: "0915");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate(day:1, hours:12));
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate(day:1, hours:12));
             Console.WriteLine(response);
             Validate(response, 2024, 08, 1, 09, 15);
         }
@@ -199,7 +199,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_Last_Day_Of_Month()
         {
             var schedule = CreateSchedule(ScheduleTypes.LaststDayOfMonth, startTime: "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate());
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate());
             Console.WriteLine(response);
             Validate(response, 2024, 07, 31, 13, 30);
         }
@@ -208,7 +208,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_Last_Day_Of_Month_OnLast_BeforeSchedule()
         {
             var schedule = CreateSchedule(ScheduleTypes.LaststDayOfMonth, startTime: "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate(day: 31, hours: 12));
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate(day: 31, hours: 12));
             Console.WriteLine(response);
             Validate(response, 2024, 07, 31, 13, 30);
         }
@@ -218,7 +218,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_Last_Day_Of_Month_OnLast_AfterSchedule()
         {
             var schedule = CreateSchedule(ScheduleTypes.LaststDayOfMonth, startTime: "0915");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate(day: 31, hours: 12));
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate(day: 31, hours: 12));
             Console.WriteLine(response);
             Validate(response, 2024, 08, 31, 09, 15);
         }
@@ -228,7 +228,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_ThirdThursday_On_First_Friday_This_Month()
         {
             var schedule = CreateSchedule(ScheduleTypes.Monthly, WeekNumbers.ThirdWeek, WeekDays.Thursday, "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate());
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate());
             Console.WriteLine(response);
             Validate(response, 2024, 07, 18, 13, 30);
         }
@@ -238,7 +238,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Monthly, WeekNumbers.FirstWeek, WeekDays.Friday, "0930");
             var refDate = GetReferenceDate(hours:12);            
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 08, 2, 9, 30);
         }
@@ -248,7 +248,7 @@ namespace LagoVista.Core.Tests.Schedule
         {
             var schedule = CreateSchedule(ScheduleTypes.Monthly, WeekNumbers.FirstWeek, WeekDays.Friday, "1330");
             var refDate = GetReferenceDate(hours: 12);
-            var response = _scheduleMgr.GetNextSchedule(schedule, refDate);
+            var response = _scheduleMgr.GetInitialSchedule(schedule, refDate);
             Console.WriteLine(response);
             Validate(response, 2024, 07, 5, 13, 30);
         }
@@ -258,7 +258,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_First_Monday_On_First_Friday_Schedule_Next_Month()
         {
             var schedule = CreateSchedule(ScheduleTypes.Monthly, WeekNumbers.FirstWeek, WeekDays.Monday, "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate());
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate());
             Console.WriteLine(response);
             Validate(response, 2024, 8, 5, 13, 30);
         }
@@ -267,7 +267,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_First_Sunday_On_First_Friday_Schedule_Next_Month()
         {
             var schedule = CreateSchedule(ScheduleTypes.Monthly, WeekNumbers.FirstWeek, WeekDays.Sunday, "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate());
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate());
             Console.WriteLine(response);
             Validate(response, 2024, 8, 4, 13, 30);
         }
@@ -276,7 +276,7 @@ namespace LagoVista.Core.Tests.Schedule
         public void Schedule_First_Saturday_On_First_Friday_Schedule_This_Month()
         {
             var schedule = CreateSchedule(ScheduleTypes.Monthly, WeekNumbers.FirstWeek, WeekDays.Saturday, "1330");
-            var response = _scheduleMgr.GetNextSchedule(schedule, GetReferenceDate());
+            var response = _scheduleMgr.GetInitialSchedule(schedule, GetReferenceDate());
             Console.WriteLine(response);
             Validate(response, 2024, 7, 6, 13, 30);
         }

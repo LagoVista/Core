@@ -178,7 +178,7 @@ namespace LagoVista.Core.Managers
             return dateTime.Add(scheduleTime.Value);
         }
 
-        public DateTime GetNextSchedule(Schedule schedule, DateTime? now = null)
+        public DateTime GetInitialSchedule(Schedule schedule, DateTime? now = null)
         {
             if (now == null)
                 now = DateTime.UtcNow;
