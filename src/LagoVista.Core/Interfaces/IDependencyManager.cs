@@ -28,6 +28,7 @@ namespace LagoVista.Core.Interfaces
     {
         Task<DependentObjectCheckResult> CheckForDependenciesAsync(IIDEntity instance);
 
+        Task RenameObjectAsync(EntityHeader changedBy, string changedObjectId, string changedObjectType, string newName);
         Task RenameDependentObjectsAsync(EntityHeader changedBy, string changedObjectId, string changedObjectType, string dependentObjectId, string dependentObjectType, string newName);
     }
 }
