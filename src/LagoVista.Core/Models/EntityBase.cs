@@ -8,12 +8,14 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity
+    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity
     {
 
         public EntityBase()
         {
             Id = Guid.NewGuid().ToId();
+            Revision = 1;
+            RevisionTimeStamp = DateTime.UtcNow.ToJSONString();
         }
 
         [CloneOptions(false)]
@@ -34,12 +36,12 @@ namespace LagoVista.Core.Models
 
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType:FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, 
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
-        public string Key { get; set; }
+        public virtual string Key { get; set; }
 
         [CloneOptions(false)]
         public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();
@@ -65,6 +67,8 @@ namespace LagoVista.Core.Models
         public EntityHeader CreatedBy { get; set; }
         [CloneOptions(false)]
         public EntityHeader LastUpdatedBy { get; set; }
+        public int Revision { get; set; }
+        public string RevisionTimeStamp { get; set; }
 
         public EntityHeader ToEntityHeader()
         {
