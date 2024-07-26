@@ -41,7 +41,7 @@ namespace LagoVista.Core.Attributes
         }
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null, 
-            string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null,
+            string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null, bool Cloneable = false,
             string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null, int Col1WidthPercent = -1, int Col2WidthPercent = -1)
         {
             _descriptionResource = DescriptionResource;
@@ -64,6 +64,7 @@ namespace LagoVista.Core.Attributes
             _createUIUrl = CreateUIUrl;
             _col1WidthPct = Col1WidthPercent == -1 ? null : (int?)Col1WidthPercent;
             _col2WidthPct = Col2WidthPercent == -1 ? null : (int?)Col2WidthPercent;
+            this.Cloneable = Cloneable;
         }
 
         public int? Col1WidthPercent { get { return _col1WidthPct; } }
@@ -85,6 +86,8 @@ namespace LagoVista.Core.Attributes
         public string DeleteUrl { get { return _deleteUrl; } }
         public string HelpUrl { get { return _helpUrl; } }
         public string Icon { get { return _icon; } }
+
+        public bool Cloneable { get; private set; }
 
         public string ListUIUrl { get { return _listUIUrl; } }
         public string EditUIUrl { get { return _editUIUrl; } }

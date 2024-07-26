@@ -79,6 +79,7 @@ namespace LagoVista.Core.Models.UIMetaData
             
 
             entityDescription.EntityType = attr.EntityType;
+            entityDescription.Cloneable = attr.Cloneable;
 
             return entityDescription;
         }
@@ -106,6 +107,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string SaveUrl { get; set; }
         public string InsertUrl { get; set; }
         public string HelpUrl { get; set; }
+
+        public bool Cloneable { get; set; }
 
         public List<FormField> Elements { get;  set; }
 

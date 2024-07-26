@@ -12,6 +12,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public String DomainKey { get; set; }
         public String ClassName { get; set; }
 
+        public bool Cloneable { get; set; }
         public String ShortClassName { get; set; }
 
         public string UiCreateUrl { get; set; }
@@ -36,7 +37,8 @@ namespace LagoVista.Core.Models.UIMetaData
                 EntityType = desc.EntityType,
                 UiEditUrl = desc.EditUIUrl,
                 UiCreateUrl = desc.CreateUIUrl,
-                UiGetListUrl = desc.ListUIUrl
+                UiGetListUrl = desc.ListUIUrl,
+                Cloneable = desc.Cloneable,
             };
         }
     }

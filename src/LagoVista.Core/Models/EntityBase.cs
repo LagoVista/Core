@@ -67,6 +67,11 @@ namespace LagoVista.Core.Models
         public EntityHeader CreatedBy { get; set; }
         [CloneOptions(false)]
         public EntityHeader LastUpdatedBy { get; set; }
+
+        public EntityHeader CloneFromId { get; set; }
+        public EntityHeader ClonedFromOrg { get; set; }
+        public EntityHeader ClonedRevision { get; set; }
+
         public int Revision { get; set; }
         public string RevisionTimeStamp { get; set; }
 
