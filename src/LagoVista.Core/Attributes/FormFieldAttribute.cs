@@ -64,7 +64,8 @@ namespace LagoVista.Core.Attributes
         DevicePicker,
         OrgLocationPicker,
         Schedule,
-        ProductPickerList
+        ProductPickerList,
+        Custom
     }
 
     public enum NamespaceTypes
@@ -117,6 +118,7 @@ namespace LagoVista.Core.Attributes
         private bool _openByDefault;
         private bool _isFileUploadImage;
         private string _tags;
+        private string _customFieldType;
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -157,6 +159,7 @@ namespace LagoVista.Core.Attributes
                                   bool OpenByDefault = false,
                                   bool IsFileUploadImage = true,
                                   string ReplaceableTags = null,
+                                  string CustomFieldType = null,
                                   string AiChatPrompt = "")
         {
             _labelDisplayResource = LabelResource;
@@ -198,6 +201,7 @@ namespace LagoVista.Core.Attributes
             _isFileUploadImage = IsFileUploadImage;
             this.AiChatPrompt = AiChatPrompt;
             _tags = ReplaceableTags;
+            _customFieldType = CustomFieldType;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -212,6 +216,8 @@ namespace LagoVista.Core.Attributes
         public bool IsMarkDown { get { return _isMarkDown; } }
         public bool IsUserEditable { get { return _isUserEditable; } }
         public bool AllowAddChild { get { return _allowAddChild; } }
+
+        public string CustomFieldType { get { return _customFieldType; } }
         public FieldTypes FieldType { get { return _fieldType; } }
         public Type ResourceType { get { return _resourceType; } }
         public string  WaterMark { get { return _waterMark; } }

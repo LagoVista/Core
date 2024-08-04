@@ -64,6 +64,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool IsVisible { get; set; }
 
         public bool IsMarkDown { get; set; }
+        public string CustomFieldType { get; set; }
         public string HelpUrl { get; set; }
 
         public string PickerFor { get; set; }
@@ -213,6 +214,8 @@ namespace LagoVista.Core.Models.UIMetaData
                 var labelProperty = attr.ResourceType.GetTypeInfo().GetDeclaredProperty(attr.LabelDisplayResource);
                 field.Label = (string)labelProperty.GetValue(labelProperty.DeclaringType, null);
             }
+
+            field.CustomFieldType = attr.CustomFieldType;
 
             if(attr.FieldType == FieldTypes.Year)
             {
