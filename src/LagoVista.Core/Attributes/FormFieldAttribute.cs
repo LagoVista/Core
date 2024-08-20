@@ -65,7 +65,8 @@ namespace LagoVista.Core.Attributes
         OrgLocationPicker,
         Schedule,
         ProductPickerList,
-        Custom
+        Custom,
+        ImageSize,
     }
 
     public enum NamespaceTypes
@@ -119,6 +120,7 @@ namespace LagoVista.Core.Attributes
         private bool _isFileUploadImage;
         private string _tags;
         private string _customFieldType;
+        private string _imageSize;
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -160,7 +162,8 @@ namespace LagoVista.Core.Attributes
                                   bool IsFileUploadImage = true,
                                   string ReplaceableTags = null,
                                   string CustomFieldType = null,
-                                  string AiChatPrompt = "")
+                                  string AiChatPrompt = "",
+                                  string ImageSize = "1024x1024")
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -202,6 +205,7 @@ namespace LagoVista.Core.Attributes
             this.AiChatPrompt = AiChatPrompt;
             _tags = ReplaceableTags;
             _customFieldType = CustomFieldType;
+            _imageSize = ImageSize;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -246,6 +250,8 @@ namespace LagoVista.Core.Attributes
         public bool InPlaceEditing { get { return _inPlaceEditing; } }
 
         public string AiChatPrompt { get; }
+
+        public string ImageSize { get { return _imageSize; } }
 
         public string EditorPath { get { return _editorPath; } }
         public bool OpenByDefault { get { return _openByDefault; } }

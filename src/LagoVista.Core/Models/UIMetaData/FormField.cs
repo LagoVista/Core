@@ -97,6 +97,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string EntityHeaderPickerUrl { get; set; }
 
         public string AiChatPrompt { get; set; }
+        public string ImageSize { get; set; }
 
         public string EditorPath { get; set; }
 
@@ -183,6 +184,8 @@ namespace LagoVista.Core.Models.UIMetaData
             field.EditorPath = attr.EditorPath;
             field.OpenByDefault = attr.OpenByDefault;
             field.AiChatPrompt = attr.AiChatPrompt;
+            field.ImageSize = attr.ImageSize;
+
             field.Options = new List<EnumDescription>();
             if(!String.IsNullOrEmpty(attr.Tags))
             {
