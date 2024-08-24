@@ -11,7 +11,7 @@ namespace LagoVista.Core.Interfaces
         string Text { get; set; }
         string Name { get; set; }
         string Namespace { get; set; }
-        string Logo { get; set; }
+        EntityHeader Logo { get; set; }
         string Icon { get; set; }
         string TagLine { get; set; }
         string DefaultTheme { get; set; }
