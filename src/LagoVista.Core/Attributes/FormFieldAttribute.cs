@@ -66,7 +66,6 @@ namespace LagoVista.Core.Attributes
         Schedule,
         ProductPickerList,
         Custom,
-        ImageSize,
     }
 
     public enum NamespaceTypes
@@ -120,7 +119,8 @@ namespace LagoVista.Core.Attributes
         private bool _isFileUploadImage;
         private string _tags;
         private string _customFieldType;
-        private string _imageSize;
+        private string _generatedImageSize;
+        private string _displayImageSize;
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -163,7 +163,8 @@ namespace LagoVista.Core.Attributes
                                   string ReplaceableTags = null,
                                   string CustomFieldType = null,
                                   string AiChatPrompt = "",
-                                  string ImageSize = "1024x1024")
+                                  string GeneratedImageSize = "1024x1024",
+                                  string DisplayImageSize = "")
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -205,7 +206,8 @@ namespace LagoVista.Core.Attributes
             this.AiChatPrompt = AiChatPrompt;
             _tags = ReplaceableTags;
             _customFieldType = CustomFieldType;
-            _imageSize = ImageSize;
+            _generatedImageSize = GeneratedImageSize;
+            _displayImageSize = DisplayImageSize;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -251,7 +253,8 @@ namespace LagoVista.Core.Attributes
 
         public string AiChatPrompt { get; }
 
-        public string ImageSize { get { return _imageSize; } }
+        public string GeneratedImageSize { get { return _generatedImageSize; } }
+        public string DisplayImageSize { get { return _displayImageSize; } }
 
         public string EditorPath { get { return _editorPath; } }
         public bool OpenByDefault { get { return _openByDefault; } }
