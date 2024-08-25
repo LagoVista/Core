@@ -42,7 +42,7 @@ namespace LagoVista.Core.Attributes
         Color,
         ChildListInline,
         FileUpload,
-        MediaResourceUpload,
+        MediaResourceUploadObsolete,
         ChildListInlinePicker,
         UserPicker,   
         WebLink,
