@@ -27,6 +27,8 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.CreateUIUrl = attr.CreateUIUrl;
             entityDescription.Col1WidthPercent = attr.Col1WidthPercent;
             entityDescription.Col2WidthPercent = attr.Col2WidthPercent;
+            entityDescription.CanExport = attr.CanExport;
+            entityDescription.CanImport = attr.CanImport;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -96,6 +98,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? Col1WidthPercent { get; set; }
         public int? Col2WidthPercent { get; set; }
 
+
+        public bool CanImport { get; set; }
+        public bool CanExport { get; set; }
 
         public string Icon { get; set; }
 
