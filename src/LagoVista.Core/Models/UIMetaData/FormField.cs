@@ -102,6 +102,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string EditorPath { get; set; }
 
+        public string SharedContentKey { get; set; }
+
         public List<ReplaceableTag> Tags { get; set; }
 
 		public static List<EnumDescription> GetEnumOptions<Type>()
@@ -187,6 +189,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.AiChatPrompt = attr.AiChatPrompt;
             field.GeneratedImageSize = attr.GeneratedImageSize;
             field.DisplayImageSize = attr.DisplayImageSize;
+            field.SharedContentKey = attr.SharedContentKey;
 
             field.Options = new List<EnumDescription>();
             if(!String.IsNullOrEmpty(attr.Tags))
