@@ -65,7 +65,8 @@ namespace LagoVista.Core.Attributes
         Schedule,
         ProductPickerList,
         Custom,
-        Percent
+        Percent,
+        SecureCertificate
     }
 
     public enum NamespaceTypes
