@@ -166,7 +166,8 @@ namespace LagoVista.Core.Attributes
                                   string AiChatPrompt = "",
                                   string GeneratedImageSize = "1024x1024",
                                   string DisplayImageSize = "",
-                                  string SharedContentKey = "")
+                                  string SharedContentKey = "",
+                                  bool PrivateFileUpload = false)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -211,6 +212,7 @@ namespace LagoVista.Core.Attributes
             _generatedImageSize = GeneratedImageSize;
             _displayImageSize = DisplayImageSize;
             this.SharedContentKey = SharedContentKey;
+            this.PrivateFileUpload = PrivateFileUpload;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -266,6 +268,7 @@ namespace LagoVista.Core.Attributes
         public string Tags { get { return _tags; } }
 
         public string SharedContentKey { get; private set; }
+        public bool PrivateFileUpload { get; set; }
     }
 
     public class SelectListItem
