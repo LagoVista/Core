@@ -105,6 +105,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string SharedContentKey { get; set; }
         public bool PrivateFileUpload { get; set; }
 
+        public int Rows { get; set; }
+
         public List<ReplaceableTag> Tags { get; set; }
 
 		public static List<EnumDescription> GetEnumOptions<Type>()
@@ -192,6 +194,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.DisplayImageSize = attr.DisplayImageSize;
             field.SharedContentKey = attr.SharedContentKey;
             field.PrivateFileUpload = attr.PrivateFileUpload;
+            field.Rows = attr.Rows;
 
             field.Options = new List<EnumDescription>();
             if(!String.IsNullOrEmpty(attr.Tags))

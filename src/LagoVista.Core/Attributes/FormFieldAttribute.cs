@@ -121,7 +121,7 @@ namespace LagoVista.Core.Attributes
         private string _tags;
         private string _customFieldType;
         private string _generatedImageSize;
-        private string _displayImageSize;
+        private string _displayImageSize;       
 
         public FormFieldAttribute(String LabelResource = "",
                                   String ColHeaderResource = "",
@@ -167,7 +167,8 @@ namespace LagoVista.Core.Attributes
                                   string GeneratedImageSize = "1024x1024",
                                   string DisplayImageSize = "",
                                   string SharedContentKey = "",
-                                  bool PrivateFileUpload = false)
+                                  bool PrivateFileUpload = false,
+                                  int Rows = 6)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -213,6 +214,7 @@ namespace LagoVista.Core.Attributes
             _displayImageSize = DisplayImageSize;
             this.SharedContentKey = SharedContentKey;
             this.PrivateFileUpload = PrivateFileUpload;
+            this.Rows = Rows;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -269,6 +271,7 @@ namespace LagoVista.Core.Attributes
 
         public string SharedContentKey { get; private set; }
         public bool PrivateFileUpload { get; set; }
+        public int Rows { get; set; }
     }
 
     public class SelectListItem
