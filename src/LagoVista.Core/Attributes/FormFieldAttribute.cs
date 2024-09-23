@@ -168,7 +168,8 @@ namespace LagoVista.Core.Attributes
                                   string DisplayImageSize = "",
                                   string SharedContentKey = "",
                                   bool PrivateFileUpload = false,
-                                  int Rows = 6)
+                                  int Rows = 6,
+                                  bool ImageUpload = true)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -272,6 +273,7 @@ namespace LagoVista.Core.Attributes
         public string SharedContentKey { get; private set; }
         public bool PrivateFileUpload { get; set; }
         public int Rows { get; set; }
+        public bool ImageUpload { get; set; }
     }
 
     public class SelectListItem

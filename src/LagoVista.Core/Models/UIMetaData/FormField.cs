@@ -106,6 +106,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool PrivateFileUpload { get; set; }
 
         public int Rows { get; set; }
+        public bool ImageUpload { get; set; }
 
         public List<ReplaceableTag> Tags { get; set; }
 
@@ -195,6 +196,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.SharedContentKey = attr.SharedContentKey;
             field.PrivateFileUpload = attr.PrivateFileUpload;
             field.Rows = attr.Rows;
+            field.ImageUpload = attr.ImageUpload;
 
             field.Options = new List<EnumDescription>();
             if(!String.IsNullOrEmpty(attr.Tags))
