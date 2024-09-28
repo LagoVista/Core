@@ -216,6 +216,7 @@ namespace LagoVista.Core.Attributes
             this.SharedContentKey = SharedContentKey;
             this.PrivateFileUpload = PrivateFileUpload;
             this.Rows = Rows;
+            this.ImageUpload = ImageUpload;
         }
 
         public String PickerFor { get { return _pickerFor; } }
