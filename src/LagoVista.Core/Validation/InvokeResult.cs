@@ -15,6 +15,11 @@ namespace LagoVista.Core.Validation
             return new InvokeResult<T>() { Result = result };
         }
 
+        public static InvokeResult<T> Create(T result, List<ResultTiming> timings)
+        {
+            return new InvokeResult<T>() { Result = result, Timings = timings };
+        }
+
 
         public static InvokeResult<T> Create(T result, string url)
         {
