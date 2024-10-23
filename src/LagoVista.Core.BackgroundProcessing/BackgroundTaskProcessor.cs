@@ -1,6 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 using Microsoft.Extensions.Hosting;
-fs
+
 namespace LagoVista.Core.BackgroundProcessing
 {
     class BackgroundTaskProcessor : BackgroundService
@@ -14,7 +14,6 @@ namespace LagoVista.Core.BackgroundProcessing
             _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
