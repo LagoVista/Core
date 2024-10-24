@@ -7,6 +7,8 @@ namespace LagoVista.Core.BackgroundProcessing
     {
         private readonly Channel<Func<CancellationToken, Task>> _queue;
 
+        private string Id = Guid.NewGuid().ToString();
+
         public BackgroundTaskQueue(int capacity)
         {
             var options = new BoundedChannelOptions(capacity)
@@ -15,6 +17,8 @@ namespace LagoVista.Core.BackgroundProcessing
             };
 
             _queue = Channel.CreateBounded<Func<CancellationToken, Task>>(options);
+
+            Console.WriteLine($"[BackgroundTaskQueue__Constructor] Capacity {capacity}  ID: {Id}");
         }
 
         public async Task QueueBackgroundWorkItemAsync(Func<CancellationToken, Task> workItem)
@@ -34,7 +38,18 @@ namespace LagoVista.Core.BackgroundProcessing
                 throw new ArgumentNullException(nameof(workItem));
             }
 
-            return _queue.Writer.TryWrite(workItem);
+            //Task.Run(async () =>
+            //{
+            //    await _queue.Writer.WriteAsync(workItem);
+            //    Console.WriteLine($"[Queue]  queued item {Id}");
+            //});
+
+            var addQueueResult = _queue.Writer.TryWrite(workItem);
+            if (!addQueueResult)
+            {
+                Console.WriteLine("Could not queue background task");
+            }
+            return addQueueResult;
         }
 
         public async Task<Func<CancellationToken, Task>> DequeueAsync(CancellationToken cancellationToken)
