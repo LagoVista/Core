@@ -80,6 +80,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string ChildListDisplayMember { get; set; }
 
+        public string[] ChildListDisplayMembers { get; set; }
+
         public IDictionary<string, FormField> View { get; set; }
         public List<string> FormFields { get; set; }
         public List<string> FormFieldsCol2 { get; set; }
@@ -336,6 +338,12 @@ namespace LagoVista.Core.Models.UIMetaData
 
                 if(!String.IsNullOrEmpty(attr.ChildListDisplayMember))
                     field.ChildListDisplayMember = attr.ChildListDisplayMember.CamelCase();
+
+                if (!string.IsNullOrEmpty(attr.ChildListDisplayMembers))
+                {
+                    var members = attr.ChildListDisplayMembers.Split(',');
+                    field.ChildListDisplayMembers = members.Select(cldm => cldm.CamelCase()).ToArray();
+                }
 
                 if (attr.FieldType == FieldTypes.ChildListInline || attr.FieldType == FieldTypes.ChildListInlinePicker)
                     field.AllowAddChild = attr.AllowAddChild;

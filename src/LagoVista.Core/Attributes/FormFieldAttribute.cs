@@ -169,7 +169,8 @@ namespace LagoVista.Core.Attributes
                                   string SharedContentKey = "",
                                   bool PrivateFileUpload = false,
                                   int Rows = 6,
-                                  bool ImageUpload = true)
+                                  bool ImageUpload = true,
+                                  string ChildListDisplayMembers = "")
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -217,6 +218,7 @@ namespace LagoVista.Core.Attributes
             this.PrivateFileUpload = PrivateFileUpload;
             this.Rows = Rows;
             this.ImageUpload = ImageUpload;
+            this.ChildListDisplayMembers = ChildListDisplayMembers;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -274,6 +276,8 @@ namespace LagoVista.Core.Attributes
         public string SharedContentKey { get; private set; }
         public bool PrivateFileUpload { get; set; }
         public int Rows { get; set; }
+
+        public string ChildListDisplayMembers { get; private set; }
         public bool ImageUpload { get; set; }
     }
 
