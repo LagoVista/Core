@@ -87,7 +87,21 @@ namespace LagoVista.Core.Models.UIMetaData
             return response;
         }
 
-        public static ListResponse<TModel> Create(IEnumerable<TModel> model, TimingBuilder bldr = null)
+        public static ListResponse<TModel> Create(IEnumerable<TModel> model, ListRequest request)
+        {
+            var response = Create(model, listRequest: request);
+            response.PageIndex = request.PageIndex;
+            response.PageSize = request.PageSize;
+            response.HasMoreRecords = model.Count() == response.PageSize;
+            return response;
+        }
+
+        public static ListResponse<TModel> Create(IEnumerable<TModel> model, TimingBuilder bldr)
+        {
+            return Create(model, listRequest:null, bldr);
+        }
+
+        public static ListResponse<TModel> Create(IEnumerable<TModel> model, ListRequest listRequest = null, TimingBuilder bldr = null)
         {
             var response = new ListResponse<TModel>();
             /* Make sure the enumeration is populated before sending to the client */
