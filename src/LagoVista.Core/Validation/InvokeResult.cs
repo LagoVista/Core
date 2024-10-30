@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LagoVista.Core.Validation
@@ -18,6 +19,11 @@ namespace LagoVista.Core.Validation
         public static InvokeResult<T> Create(T result, List<ResultTiming> timings)
         {
             return new InvokeResult<T>() { Result = result, Timings = timings };
+        }
+
+        public static InvokeResult<T> Create(T result, TimingBuilder bldr)
+        {
+            return new InvokeResult<T>() { Result = result, Timings = bldr.ResultTimings };
         }
 
 
@@ -127,9 +133,12 @@ namespace LagoVista.Core.Validation
         public static InvokeResult SuccessRedirect(string url) => new InvokeResult() { RedirectURL = url};
 
 
-        public static InvokeResult FromError(string err, string errorCode = "")
+        public static InvokeResult FromError(string err, string errorCode = "", List<ResultTiming> timings = null)
         {
             var result = new InvokeResult();
+            if(timings != null)
+                result.Timings.AddRange(timings);
+
             result.Errors.Add(new ErrorMessage(errorCode, err));
             return result;
         }
@@ -145,7 +154,7 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
-        public static InvokeResult FromException(string tag, Exception ex)
+        public static InvokeResult FromException(string tag, Exception ex, List<ResultTiming> timings = null)
         {
             var result = new InvokeResult();
             result.Errors.Add(new ErrorMessage()
@@ -154,6 +163,9 @@ namespace LagoVista.Core.Validation
                 Message = ex.Message,
                 Details = ex.StackTrace
             });
+
+            if (timings != null)
+                result.Timings.AddRange(timings);
 
             if (ex.InnerException != null)
             {
@@ -215,5 +227,26 @@ namespace LagoVista.Core.Validation
     {
         public string Key { get; set; }
         public double Ms { get; set; }
+    }
+
+    public class TimingBuilder
+    {
+        Stopwatch _sw;
+
+        public List<ResultTiming> ResultTimings { get; private set; } = new List<ResultTiming>();
+
+        public static TimingBuilder StartNew()
+        {
+            return new TimingBuilder()
+            {
+                _sw = Stopwatch.StartNew()
+            };
+        }
+
+        public void CompleteAndRestart(string message)
+        {
+            ResultTimings.Add(new ResultTiming() { Key = message, Ms = _sw.Elapsed.TotalMilliseconds });
+            _sw.Restart();
+        }
     }
 }

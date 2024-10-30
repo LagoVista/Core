@@ -73,7 +73,7 @@ namespace LagoVista.Core.Models.UIMetaData
             return response;
         }
 
-        public static ListResponse<TModel> Create(IEnumerable<TModel> model, IListResponse original)
+        public static ListResponse<TModel> Create(IEnumerable<TModel> model, IListResponse original, TimingBuilder bldr = null)
         {
             var response = Create(model);
             response.HasMoreRecords = original.HasMoreRecords;
@@ -81,10 +81,13 @@ namespace LagoVista.Core.Models.UIMetaData
             response.PageSize = original.PageSize;
             response.PageCount = original.PageCount;
             response.PageIndex = original.PageIndex;
+            if (bldr != null)
+                response.Timings.AddRange(bldr.ResultTimings);
+
             return response;
         }
 
-        public static ListResponse<TModel> Create(IEnumerable<TModel> model)
+        public static ListResponse<TModel> Create(IEnumerable<TModel> model, TimingBuilder bldr = null)
         {
             var response = new ListResponse<TModel>();
             /* Make sure the enumeration is populated before sending to the client */
@@ -127,18 +130,25 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
+            if (bldr != null)
+                response.Timings.AddRange(bldr.ResultTimings);
+
             response.Columns = columns;
             response.RecordCount = model.Count();
             return response;
         }
         
-        public static ListResponse<TModel> Create(ListRequest request, IEnumerable<TModel> model)
+        public static ListResponse<TModel> Create(ListRequest request, IEnumerable<TModel> model, TimingBuilder bldr = null)
         {
             var response = ListResponse<TModel>.Create(model);
             response.HasMoreRecords = request.PageSize == model.Count();
             response.PageIndex = request.PageIndex;
             response.PageSize = request.PageSize;
             response.GetListUrl = request.Url;
+
+            if (bldr != null)
+                response.Timings.AddRange(bldr.ResultTimings);
+
             return response;
         }
 
