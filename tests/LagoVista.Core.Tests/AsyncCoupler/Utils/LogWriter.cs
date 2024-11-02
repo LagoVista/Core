@@ -32,7 +32,7 @@ namespace LagoVista.Core.AsyncCoupler.Utils.Tests
             return new TimedEvent(area, description);
         }
 
-        public void Trace(string message)
+        public void Trace(string message, params KeyValuePair<string, string>[] args)
         {
         
         }

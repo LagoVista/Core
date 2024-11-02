@@ -42,7 +42,7 @@ namespace LagoVista.Core.PlatformSupport
 
         void TrackMetric(string kind, string name, MetricType metricType, int count, params KeyValuePair<string, string>[] args);
 
-        void Trace(string message);
+        void Trace(string message, params KeyValuePair<string, string>[] args);
     }
 
     public class TimedEvent
