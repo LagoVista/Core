@@ -79,6 +79,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public FormConditionals ConditionalFields { get; set; }
 
         public string ChildListDisplayMember { get; set; }
+        public string CustomCategoryType { get; set; }
 
         public string[] ChildListDisplayMembers { get; set; }
 
@@ -301,6 +302,7 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
+            field.CustomCategoryType = attr.CustomerCategoryType;
             field.IsUserEditable = attr.IsUserEditable;
             field.IsEnabled = true;
             field.IsVisible = true;
