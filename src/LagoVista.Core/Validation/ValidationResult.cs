@@ -27,8 +27,8 @@ namespace LagoVista.Core.Validation
         }
 
         public bool Successful { get { return Errors.Count == 0; } }
-        public List<ErrorMessage> Warnings { get; private set; }
-        public List<ErrorMessage> Errors { get; private set; }
+        public List<ErrorMessage> Warnings { get; protected set; }
+        public List<ErrorMessage> Errors { get; protected set; }
 
         public void AddUserError(String error, string context = null)
         {
@@ -52,11 +52,11 @@ namespace LagoVista.Core.Validation
         public void Concat(ValidationResult result)
         {
             Errors.AddRange(result.Errors);
-            Warnings.AddRange(result.Warnings);
+            Warnings.AddRange(result.Warnings);            
         }
 
 
-        public InvokeResult ToInvokeResult()
+        public virtual InvokeResult ToInvokeResult()
         {
             return new InvokeResult()
             {

@@ -121,6 +121,16 @@ namespace LagoVista.Core.Validation
         }
 
         public List<ResultTiming> Timings { get; set; } = new List<ResultTiming>();
+
+        public override InvokeResult ToInvokeResult()
+        {
+            var invokeResult = new InvokeResult();
+            invokeResult.Errors.AddRange(this.Errors);
+            invokeResult.Warnings.AddRange(this.Warnings);
+            invokeResult.Timings.AddRange(this.Timings);
+
+            return invokeResult;            
+        }
     }
 
 
