@@ -114,7 +114,7 @@ namespace LagoVista.Core.Models
         public string Ssn { get; set; }
 
         public string SsnSecretId { get; set; }
-
+        public EntityHeader PrimaryOrganization { get; set; }
 
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Address1, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
         public string Address1 { get; set; }
@@ -229,7 +229,9 @@ namespace LagoVista.Core.Models
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_TeamsAccountName, ResourceType: typeof(AuthenticationResources))]
         public string TeamsAccountName { get; set; }
 
-
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_CurrentOrganization, ResourceType: typeof(AuthenticationResources))]
+        public EntityHeader CurrentOrganization { get; set; }
+        
         [ListColumn(Visible: false)]
         public ImageDetails ProfileImageUrl { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsEmailConfirmed, ResourceType: typeof(AuthenticationResources))]

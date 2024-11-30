@@ -291,4 +291,7 @@
   <data name="ExternalLogin_SLTesting" xml:space="preserve">
     <value>Software Logistics Testing</value>
   </data>
+  <data name="UserInfo_CurrentOrganization" xml:space="preserve">
+    <value>Current Organization</value>
+  </data>
 </root>
