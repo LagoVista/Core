@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using LagoVista.Core.Validation;
 using LagoVista.Core.Interfaces;
+using System;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
@@ -152,22 +153,36 @@ namespace LagoVista.Core.Models.UIMetaData
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
             {
-                var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
-                if (fieldAttributes.Any())
+                var pass = "Start > ";
+                try
                 {
-                    var camelCaseName = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
-                    var field = FormField.Create(camelCaseName, fieldAttributes.First(), property);
-
-                    if (!property.GetType().GenericTypeArguments.Any())
+                    var fieldAttributes = property.GetCustomAttributes<FormFieldAttribute>();
+                    if (fieldAttributes.Any())
                     {
-                        var defaultValue = property.GetValue(model);
-                        if (defaultValue != null)
+                        pass += "1,";
+                        var camelCaseName = property.Name.Substring(0, 1).ToLower() + property.Name.Substring(1);
+                        pass += "2,";
+                        var field = FormField.Create(camelCaseName, fieldAttributes.First(), property);
+                        pass += "3,";
+
+                        if (!property.GetType().GenericTypeArguments.Any())
                         {
-                            field.DefaultValue = defaultValue.ToString();
+                            pass += "3.5,";
+                            var defaultValue = property.GetValue(model);
+                            if (defaultValue != null)
+                            {
+                                field.DefaultValue = defaultValue.ToString();
+                            }
                         }
+                        pass += "4,";
+
+                        viewItems.Add(camelCaseName, field);
                     }
-                    
-                    viewItems.Add(camelCaseName, field);
+                }
+
+                catch(Exception ex)
+                {
+                    throw new Exception($"Exception processing: {property.Name} - {ex.Message} {pass} ", ex);
                 }
             }
             response.View = viewItems;
