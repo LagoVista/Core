@@ -44,12 +44,12 @@ namespace LagoVista.Core.Models
         {
             if (String.IsNullOrEmpty(id))
             {
-                throw new InvalidDataException("Id is required for creating an entity header.");
+                throw new InvalidDataException("[ToEntityHeader]", "Id is required for creating an entity header.");
             }
 
             if (String.IsNullOrEmpty(text))
             {
-                throw new InvalidDataException("Text is required for creating an entity header.");
+                throw new InvalidDataException("[ToEntityHeader]", $"Text is required for creating an entity header, id={id}");
             }
 
             return new EntityHeader()
@@ -63,17 +63,17 @@ namespace LagoVista.Core.Models
         {
             if (String.IsNullOrEmpty(id))
             {
-                throw new InvalidDataException("Id is required for creating an entity header.");
+                throw new InvalidDataException("[ToEntityHeader]", "Id is required for creating an entity header.");
             }
 
             if (String.IsNullOrEmpty(text))
             {
-                throw new InvalidDataException("Text is required for creating an entity header.");
+                throw new InvalidDataException("[ToEntityHeader]", $"Text is required for creating an entity header, id=${id}");
             }
 
             if (String.IsNullOrEmpty(key))
             {
-                throw new InvalidDataException("Key is required for creating an entity header.");
+                throw new InvalidDataException("[ToEntityHeader]", $"Key is required for creating an entity header, id={id}, Text={text}.");
             }
 
             return new EntityHeader()
