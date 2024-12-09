@@ -63,13 +63,13 @@ namespace LagoVista.Core.Utils
         {
             if (Sessions.TryRemove(correlationId, out var requestAwaiter))
             {
-                Logger.AddCustomEvent(LogLevel.Message, $"[AsyncCoupler__CompleteAsync]", "Found and removed", correlationId.ToKVP("correlationId"));
+                Logger.AddCustomEvent(LogLevel.Message, $"[AsyncCoupler__CompleteAsync]", "[AsyncCoupler__CompleteAsync] - Found and removed", correlationId.ToKVP("correlationId"));
                 requestAwaiter.CompletionSource.SetResult(item);
                 return Task.FromResult(InvokeResult.Success);
             }
             else
             {
-                Logger.AddCustomEvent(LogLevel.Warning, $"[AsyncCoupler__CompleteAsync]", "Not Found", correlationId.ToKVP("correlationId"));
+                Logger.AddCustomEvent(LogLevel.Warning, $"[AsyncCoupler__CompleteAsync]", "[AsyncCoupler__CompleteAsync] - Not Found", correlationId.ToKVP("correlationId"));
                 return Task.FromResult(InvokeResult.FromErrors(new ErrorMessage($"Correlation id not found: {correlationId}.") { Details = $"CorrelationId={correlationId}" }));
             }
         }
