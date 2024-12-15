@@ -122,6 +122,7 @@ namespace LagoVista.PDFServices
         private double? _tempYMaxHeight = null;
 
         private bool _showPageNumbers = true;
+        
         public bool ShowPageNumbers
         {
             get => _showPageNumbers;
@@ -657,7 +658,7 @@ namespace LagoVista.PDFServices
                         
                         break;
                     case XLineAlignment.Far:
-                        top += height - ((img.PointHeight * scalingFactor) + 5);
+                        top += height - ((img.PointHeight * scalingFactor));
                         break;
                 }
 
@@ -670,7 +671,7 @@ namespace LagoVista.PDFServices
                         left += 5 * scalingFactor;
                         break;
                     case XStringAlignment.Far:
-                        left += width - ((img.PointWidth * scalingFactor) + 5);
+                        left += width - ((img.PointWidth * scalingFactor));
                         break;
 
                 }
@@ -746,7 +747,7 @@ namespace LagoVista.PDFServices
 
             var starCols = _colWidths.Where(col => col.WidthType == WidthTypes.Star);
             var usedWidth = _colWidths.Where(col => col.WidthType == WidthTypes.Points).Sum(cl => (cl.RequestedWidth + ColumnRightMargin));
-            var reamining = (_currentPage.Width - (Margin.Left + Margin.Right)) - usedWidth;
+            var reamining = (_currentPage.Width - (Margin.Left + Margin.Right)) - (usedWidth + ((_colWidths.Length - 1) * ColumnRightMargin));
             if (starCols.Count() > 0)
             {
                 var starWidth = Convert.ToDouble(reamining / starCols.Count());
@@ -757,8 +758,13 @@ namespace LagoVista.PDFServices
             }
         }
 
-        public void StartRow()
+        public void StartRow(int rowIndex = 0)
         {
+            if (rowIndex > 0 && !RowHeight.HasValue)
+                throw new ArgumentNullException("To skip rows, you must populate RowHeight");
+
+            CurrentY += (RowHeight.Value + RowBottomMargin) * rowIndex;
+
             _tempYMaxHeight = 0;
         }
 
