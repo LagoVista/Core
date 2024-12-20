@@ -225,7 +225,7 @@ namespace LagoVista.PDFServices
 
         public PDFGenerator()
         {
-            _pdfDocument = new PdfDocument();
+            _pdfDocument = new PdfDocument();         
             PageNumbersOnTitlePage = true;
             HasTItlePage = false;
 
@@ -297,10 +297,16 @@ namespace LagoVista.PDFServices
             NewPage();
         }
 
-        public void StartDocument(bool addLogo = true, bool addNda = true)
+        public void StartDocument(bool addLogo = true, bool addNda = true, double? width = null, double? height = null)
         {
             _addLogo = addLogo;
             _currentPage = _pdfDocument.AddPage();
+            if(width.HasValue && height.HasValue)
+            {
+                _currentPage.Width = XUnit.FromInch(width.Value);
+                _currentPage.Height = XUnit.FromInch(height.Value);
+            }
+
             _pages.Add(_currentPage);
             _graphics = XGraphics.FromPdfPage(_currentPage);
             _textFormatter = new LGVTextServices(_graphics);
@@ -341,8 +347,23 @@ namespace LagoVista.PDFServices
                 AddLogo(100, 100);
         }
 
+
+        public void AddText(double left, double top, string text, Style style = Style.Body, int color = 0x000000)
+        {
+            var xColor = XColor.FromArgb(color);           
+            var brush = new XSolidBrush(xColor);
+            var labelFont = ResolveFont(style);
+            var size = _graphics.MeasureString(text, labelFont);
+            _graphics.DrawString(text, labelFont, brush, new XRect(XUnit.FromInch(left), XUnit.FromInch(top), size.Width, 0), XStringFormats.TopLeft);
+        }
+
         public void AddLabelValue(String label, string value, XSolidBrush brush = null, bool horizontalAlign = false, double? labelWidth = null)
         {
+            if(value == null)
+            {
+                throw new ArgumentNullException($"Value for Label: [{label}] is null.");
+            }
+
             if (_renderMode == RenderMode.Table)
             {
                 throw new Exception("Current render mode is table");
@@ -680,6 +701,16 @@ namespace LagoVista.PDFServices
             }
         }
 
+        public void AddImage(double left, double top, double width, double height, MemoryStream ms)
+        {
+            using (var img = XImage.FromStream(() => ms))
+            {
+                var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)XUnit.FromInch(width) / (float)img.PixelWidth : (float)XUnit.FromInch(height) / (float)img.PixelHeight;
+                _graphics.DrawImage(img, XUnit.FromInch(left), XUnit.FromInch(top), img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+            }
+        }
+
+
         public void AddColText(Style style, int colIdx, String text, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
         {
             if (_renderMode == RenderMode.Paragraph)
@@ -754,16 +785,26 @@ namespace LagoVista.PDFServices
                 foreach (var starCol in starCols)
                 {
                     starCol.AppliedWidth = starWidth;
-                }
+                } 
             }
+        }
+
+        public void DrawHorizontalLine(int color, int thickness = 1, int? width = null)
+        {
+            var pen = new XPen(XColor.FromArgb(color), thickness);
+
+            var lineWidth = width.HasValue ? width.Value : _currentPage.Width - (Margin.Left + Margin.Right);
+
+            _graphics.DrawLine(pen, Margin.Left, CurrentY, _currentPage.Width - Margin.Right, CurrentY);
+            CurrentY += 5;
         }
 
         public void StartRow(int rowIndex = 0)
         {
             if (rowIndex > 0 && !RowHeight.HasValue)
                 throw new ArgumentNullException("To skip rows, you must populate RowHeight");
-
-            CurrentY += (RowHeight.Value + RowBottomMargin) * rowIndex;
+            else if(RowHeight > 0)
+                CurrentY += (RowHeight.Value + RowBottomMargin) * rowIndex;
 
             _tempYMaxHeight = 0;
         }
@@ -828,7 +869,7 @@ namespace LagoVista.PDFServices
                 _graphics = null;
             }
 
-            if(renderPageNumbers)
+            if(renderPageNumbers && ShowPageNumbers)
                 RenderPageNumbers();
 
             _pdfDocument.Save(fileName);
@@ -842,8 +883,9 @@ namespace LagoVista.PDFServices
                 _graphics = null;
             }
 
-            if(renderPageNumbers)
+            if(renderPageNumbers && ShowPageNumbers)
                 RenderPageNumbers();
+
             _pdfDocument.Save(fileName);
         }
 
