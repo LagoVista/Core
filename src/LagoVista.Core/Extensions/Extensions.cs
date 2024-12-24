@@ -94,6 +94,42 @@ namespace LagoVista.Core
                 return false;
             }
         }
+        
+        public static string ToNuvIoTKey(this string value)
+        {
+            var regEx = new Regex("([0-9a-zA-Z]+)");
+            var match = regEx.Match(value);
+
+            var key = String.Empty;
+
+            if (!match.Success)
+            {
+                return Guid.NewGuid().ToId();
+            }
+
+            while (match.Success)
+            {
+                key += match.Groups[1].Value.ToLower();
+                match = match.NextMatch();
+            }
+
+            switch (key[0])
+            {
+                case '0': key = "z" + key; break;
+                case '1': key = "o" + key; break;
+                case '2': key = "t" + key; break;
+                case '3': key = "th" + key; break;
+                case '4': key = "f" + key; break;
+                case '5': key = "fi" + key; break;
+                case '6': key = "si" + key; break;
+                case '7': key = "se" + key; break;
+                case '8': key = "e" + key; break;
+                case '9': key = "n" + key; break;
+            }
+
+            return key;
+        }
+
 
         private static string NormalizeFormatString(String value)
         {
