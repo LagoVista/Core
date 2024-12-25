@@ -67,7 +67,10 @@ namespace LagoVista.Core.Attributes
         Custom,
         Percent,
         SecureCertificate,
-        CustomerPicker
+        CustomerPicker,
+        Point2D,
+        Point3D,
+        Point2DSize
     }
 
     public enum NamespaceTypes
