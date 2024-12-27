@@ -74,5 +74,15 @@ namespace LagoVista.Core.Models.UIMetaData
                 Key = key
             };
         }
+
+        public EntityHeader ToEntityHeader()
+        {
+            return new EntityHeader()
+            {
+               Id = Id,
+               Key = Key,
+               Text = Text,
+            };
+        }
     }
 }
