@@ -37,7 +37,16 @@ using LagoVista.Core.Resources;
 
 namespace LagoVista.Core.ViewModels
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged, IDataErrorInfo
+    public interface IViewModel : INotifyPropertyChanged
+    {
+        Task InitAsync();
+        bool IsBusy { get; set; }
+        Task ReloadedAsync();
+        Task IsClosingAsync();
+        String BusyMessage { get; set; }
+    }
+
+    public abstract class ViewModelBase : IViewModel, IDataErrorInfo
     {
         #region INotifyPropertyChanged Member
 

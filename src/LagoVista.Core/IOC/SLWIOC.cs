@@ -23,10 +23,12 @@ namespace LagoVista.Core.IOC
         {            
             var newType = CreateForType<TType>();
             _registeredInstances.Add(typeof(TInterface), newType);
+            Debug.WriteLine($"Added singlton instance for interface {typeof(TInterface).Name} of type {typeof(TType).Name}");
         }
 
         public static void RegisterSingleton<TInterface>(object instance)
         {
+            Debug.WriteLine($"Added singleton instance for interface {typeof(TInterface).Name} of type {instance.GetType().Name}");
             _registeredInstances.Add(typeof(TInterface), instance);
         }
 
@@ -55,8 +57,7 @@ namespace LagoVista.Core.IOC
         {
             if (!_registeredTypes.ContainsKey(typeof(TNewInstance)))
             {
-                Debug.WriteLine($"SLWIOC => Could not Create New Instance for Type {typeof(TNewInstance).Name}");
-                throw new Exception($"SLWIOC => Could not Create New Instance for Type {typeof(TNewInstance).Name}");
+                throw new Exception($"Could not find registered type for: {typeof(TNewInstance).Name} ");
             }
 
             var type = _registeredTypes[typeof(TNewInstance)];
@@ -71,7 +72,7 @@ namespace LagoVista.Core.IOC
             }
             catch(Exception ex)
             {
-                throw new Exception($"Could not create instance of type {typeof(TNewInstance)}", ex);
+                throw new Exception($"Could not create instance of type {typeof(TNewInstance)} - {ex.Message}", ex);
             }
 
             return newObject as TNewInstance;
@@ -95,7 +96,7 @@ namespace LagoVista.Core.IOC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not create instance of type {typeof(TClassType)}", ex);
+                throw new Exception($"Could not create instance of type {typeof(TClassType)} - {ex.Message}", ex);
             }
 
             return newObject as TClassType;
@@ -107,8 +108,7 @@ namespace LagoVista.Core.IOC
             {
                 if (!_registeredTypes.ContainsKey(newInstanceType))
                 {
-                    Debug.WriteLine($"SLWIOC => Could not Create New Instance for Type {newInstanceType.Name}");
-                    throw new Exception($"SLWIOC => Could not Create New Instance for Type {newInstanceType.Name}");
+                    throw new Exception($"Could not create new instance for type {newInstanceType.Name}, registered type does not include this instance type.");
                 }
 
                 newInstanceType = _registeredTypes[newInstanceType];
@@ -125,7 +125,7 @@ namespace LagoVista.Core.IOC
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not create instance of type {newInstanceType.FullName}", ex);
+                throw new Exception($"Could not create instance of type {newInstanceType.FullName} - {ex.Message}", ex);
             }
 
             return newObject;
@@ -166,6 +166,8 @@ namespace LagoVista.Core.IOC
 
             foreach (var parameterInfo in primaryConstructor.GetParameters())
             {
+                Debug.WriteLine($"Attempt to resolve: {parameterInfo.ParameterType.Name}");
+                
                 /* First try to get it from a singleton */
                 if (!TryResolve(parameterInfo.ParameterType, out object parameterValue))
                 {
