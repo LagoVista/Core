@@ -1537,6 +1537,11 @@ namespace LagoVista.Core.Models.Drawing
             return new Point3D<double>(X, Y, Z);
         }
 
+        public Point2D<double> ToPoint2D()
+        {
+            return new Point2D<double>(X, Y);
+        }
+
         public Vector3 RollComponents(int turns)
         {
             Vector3 roll = new Vector3();

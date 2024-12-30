@@ -22,5 +22,269 @@ namespace LagoVista.Core.Models.Drawing
         public T X { get; set; }
         public T Y { get; set; }
         public T Z { get; set; }
+
+        public static Point3D<T> operator +(Point3D<T> a, Point2D<T> b)
+        {
+            if (typeof(T) == typeof(Int32))
+            {
+                var ia = a as Point3D<Int32>;
+                var ib = a as Point2D<Int32>;
+
+                return new Point3D<Int32>()
+                {
+                    X = ia.X + ib.X,
+                    Y = ia.Y + ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(Int64))
+            {
+                var ia = a as Point3D<Int64>;
+                var ib = a as Point2D<Int64>;
+
+                return new Point3D<Int64>()
+                {
+                    X = ia.X + ib.X,
+                    Y = ia.Y + ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(UInt32))
+            {
+                var ia = a as Point3D<UInt32>;
+                var ib = a as Point2D<UInt32>;
+
+                return new Point3D<UInt32>()
+                {
+                    X = ia.X + ib.X,
+                    Y = ia.Y + ib.Y,
+                    Z = ia.Z
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(UInt64))
+            {
+                var ia = a as Point3D<UInt64>;
+                var ib = a as Point2D<UInt64>;
+
+                return new Point3D<UInt64>()
+                {
+                    X = ia.X + ib.X,
+                    Y = ia.Y + ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(Int16))
+            {
+                var ia = a as Point3D<Int16>;
+                var ib = a as Point2D<Int16>;
+
+                return new Point3D<Int16>()
+                {
+                    X = (Int16)(ia.X + ib.X),
+                    Y = (Int16)(ia.Y + ib.Y),
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(UInt16))
+            {
+                var ia = a as Point3D<UInt16>;
+                var ib = a as Point2D<UInt16>;
+
+                return new Point3D<UInt16>()
+                {
+                    X = (UInt16)(ia.X + ib.X),
+                    Y = (UInt16)(ia.Y + ib.Y),
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var ia = a as Point3D<double>;
+                var ib = a as Point2D<double>;
+
+                return new Point3D<double>()
+                {
+                    X = ia.X + ib.X,
+                    Y = ia.Y + ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                var ia = a as Point3D<decimal>;
+                var ib = a as Point2D<decimal>;
+
+                return new Point3D<decimal>()
+                {
+                    X = ia.X + ib.X,
+                    Y = ia.Y + ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            throw new InvalidOperationException($"Can not add types {typeof(T).Name}");
+        }
+
+        public static Point3D<T> operator -(Point3D<T> a, Point2D<T> b)
+        {
+            if (typeof(T) == typeof(Int32))
+            {
+                var ia = a as Point3D<Int32>;
+                var ib = a as Point2D<Int32>;
+
+                return new Point3D<Int32>()
+                {
+                    X = ia.X - ib.X,
+                    Y = ia.Y - ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(Int64))
+            {
+                var ia = a as Point3D<Int64>;
+                var ib = a as Point2D<Int64>;
+
+                return new Point3D<Int64>()
+                {
+                    X = ia.X - ib.X,
+                    Y = ia.Y - ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(UInt32))
+            {
+                var ia = a as Point3D<UInt32>;
+                var ib = a as Point2D<UInt32>;
+
+                return new Point3D<UInt32>()
+                {
+                    X = ia.X - ib.X,
+                    Y = ia.Y - ib.Y,
+                    Z = ia.Z
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(UInt64))
+            {
+                var ia = a as Point3D<UInt64>;
+                var ib = a as Point2D<UInt64>;
+
+                return new Point3D<UInt64>()
+                {
+                    X = ia.X - ib.X,
+                    Y = ia.Y - ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(Int16))
+            {
+                var ia = a as Point3D<Int16>;
+                var ib = a as Point2D<Int16>;
+
+                return new Point3D<Int16>()
+                {
+                    X = (Int16)(ia.X - ib.X),
+                    Y = (Int16)(ia.Y - ib.Y),
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(UInt16))
+            {
+                var ia = a as Point3D<UInt16>;
+                var ib = a as Point2D<UInt16>;
+
+                return new Point3D<UInt16>()
+                {
+                    X = (UInt16)(ia.X - ib.X),
+                    Y = (UInt16)(ia.Y - ib.Y),
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var ia = a as Point3D<double>;
+                var ib = a as Point2D<double>;
+
+                return new Point3D<double>()
+                {
+                    X = ia.X - ib.X,
+                    Y = ia.Y - ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                var ia = a as Point3D<decimal>;
+                var ib = a as Point2D<decimal>;
+
+                return new Point3D<decimal>()
+                {
+                    X = ia.X - ib.X,
+                    Y = ia.Y - ib.Y,
+                    Z = ia.Z
+
+                } as Point3D<T>;
+            }
+
+            throw new InvalidOperationException($"Can not add types {typeof(T).Name}");
+        }
+
+        public Point2D<T> ToPoint2D()
+        {
+            return new Point2D<T>()
+            {
+                X = X,
+                Y = Y,
+            };
+        }
+
+        public Point3D<T> Round(int positions)
+        {
+            if (typeof(T) == typeof(double))
+            {
+                var ia = this as Point3D<double>;
+                ia.X = Math.Round(ia.X, positions);
+                ia.Y = Math.Round(ia.Y, positions);
+                ia.Z = Math.Round(ia.Z, positions);
+                return ia as Point3D<T>;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                var ia = this as Point3D<decimal>;
+                ia.X = Math.Round(ia.X, positions);
+                ia.Y = Math.Round(ia.Y, positions);
+                ia.Z = Math.Round(ia.Z, positions);
+                return ia as Point3D<T>;
+            }
+
+            throw new Exception("Round not supported on non double/decimal type.");
+        }
     }
 }
