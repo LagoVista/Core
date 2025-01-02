@@ -98,7 +98,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string FactoryUrl { get; set; }
         public string GetUrl { get; set; }
         public string EntityHeaderPickerUrl { get; set; }
-
+       
         public string AiChatPrompt { get; set; }
         public string GeneratedImageSize { get; set; }
         public string DisplayImageSize { get; set; }
@@ -302,7 +302,9 @@ namespace LagoVista.Core.Models.UIMetaData
                 }
             }
 
-            field.CustomCategoryType = attr.CustomerCategoryType;
+            if(!String.IsNullOrEmpty(attr.CustomCategoryType))
+                field.CustomCategoryType = attr.CustomCategoryType;
+  
             field.IsUserEditable = attr.IsUserEditable;
             field.IsEnabled = true;
             field.IsVisible = true;

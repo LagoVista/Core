@@ -175,7 +175,7 @@ namespace LagoVista.Core.Attributes
                                   int Rows = 6,
                                   bool ImageUpload = true,
                                   string ChildListDisplayMembers = "",
-                                  string CustomCategoryType = "")
+                                  string CustomCategoryType = null)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -224,7 +224,7 @@ namespace LagoVista.Core.Attributes
             this.Rows = Rows;
             this.ImageUpload = ImageUpload;
             this.ChildListDisplayMembers = ChildListDisplayMembers;
-            this.CustomerCategoryType = CustomerCategoryType;
+            this.CustomCategoryType = CustomCategoryType;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -284,7 +284,7 @@ namespace LagoVista.Core.Attributes
         public int Rows { get; set; }
 
         public string ChildListDisplayMembers { get; private set; }
-        public string CustomerCategoryType { get; }
+        public string CustomCategoryType { get; }
         public bool ImageUpload { get; set; }
     }
 
