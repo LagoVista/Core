@@ -271,7 +271,60 @@ namespace LagoVista.Core.Models.Drawing
 
             throw new InvalidOperationException($"Can not subtract types {typeof(T).Name}");
         }
-        
+
+        public bool IsOrigin()
+        {
+            if (typeof(T) == typeof(Int32))
+            {
+                var p1 = this as Point2D<Int32>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(Int64))
+            {
+                var p1 = this as Point2D<Int64>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(UInt32))
+            {
+                var p1 = this as Point2D<UInt32>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(UInt64))
+            {
+                var p1 = this as Point2D<UInt64>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(Int16))
+            {
+                var p1 = this as Point2D<Int16>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(UInt16))
+            {
+                var p1 = this as Point2D<UInt16>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var p1 = this as Point2D<double>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                var p1 = this as Point2D<decimal>;
+                return p1.X == 0 && p1.Y == 0;
+            }
+
+            return false;
+        }
+
         public Point2D<T> AddToX(T val)
         {
             var pt = new Point2D<T>() { X = val};
