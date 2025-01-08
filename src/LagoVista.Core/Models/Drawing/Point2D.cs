@@ -274,7 +274,7 @@ namespace LagoVista.Core.Models.Drawing
         
         public Point2D<T> AddToX(T val)
         {
-            var pt = new Point2D<T>() { X = val, Y = this.Y };
+            var pt = new Point2D<T>() { X = val};
             var sum = pt + this;
             this.X = sum.X;
             this.Y = sum.Y;
@@ -283,7 +283,7 @@ namespace LagoVista.Core.Models.Drawing
 
         public Point2D<T> AddToY(T val)
         {
-            var pt = new Point2D<T>() { Y = val, X = this.X};
+            var pt = new Point2D<T>() { Y = val};
             var sum = pt + this;
             this.X = sum.X;
             this.Y = sum.Y;
@@ -292,8 +292,8 @@ namespace LagoVista.Core.Models.Drawing
 
         public Point2D<T> SubtractFromX(T val)
         {
-            var pt = new Point2D<T>() { X = val, Y = this.Y };
-            var sum = pt - this;
+            var pt = new Point2D<T>() { X = val};
+            var sum = this - pt;
             this.X = sum.X;
             this.Y = sum.Y;
             return this;
@@ -301,8 +301,8 @@ namespace LagoVista.Core.Models.Drawing
 
         public Point2D<T> SubtractFromY(T val)
         {
-            var pt = new Point2D<T>() { Y = val, X = this.X };
-            var sum = pt - this;
+            var pt = new Point2D<T>() { Y = val };
+            var sum = this - pt;
             this.X = sum.X;
             this.Y = sum.Y;
             return this;
