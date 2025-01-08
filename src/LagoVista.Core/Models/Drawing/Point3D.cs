@@ -23,6 +23,59 @@ namespace LagoVista.Core.Models.Drawing
         public T Y { get; set; }
         public T Z { get; set; }
 
+        public bool IsOrigin()
+        {
+            if (typeof(T) == typeof(Int32))
+            {
+                var p1 = this as Point3D<Int32>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(Int64))
+            {
+                var p1 = this as Point3D<Int64>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(UInt32))
+            {
+                var p1 = this as Point3D<UInt32>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(UInt64))
+            {
+                var p1 = this as Point3D<UInt64>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(Int16))
+            {
+                var p1 = this as Point3D<Int16>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(UInt16))
+            {
+                var p1 = this as Point3D<UInt16>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                var p1 = this as Point3D<double>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                var p1 = this as Point3D<decimal>;
+                return p1.X == 0 && p1.Y == 0 && p1.Z == 0;
+            }
+
+            return false;
+        }
+
         public static Point3D<T> operator +(Point3D<T> a, Point2D<T> b)
         {
             if (typeof(T) == typeof(Int32))
