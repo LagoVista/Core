@@ -121,7 +121,7 @@
     <value>The key is used to identify this item in scripts and must be unique with respect to it's parent. One a key has been assigned, it can not be changed.</value>
   </data>
   <data name="Common_Key_Validation" xml:space="preserve">
-    <value>The key must use only letters and numbers, and must be lowercase and be a minimum of 3 characters and no more then 32 characters</value>
+    <value>The key must use only letters and numbers, and must be lowercase and be a minimum of 3 characters and no more than 32 characters</value>
   </data>
   <data name="Concurrency_Error" xml:space="preserve">
     <value>Concurrency Error</value>

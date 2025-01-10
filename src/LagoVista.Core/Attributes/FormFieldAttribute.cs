@@ -70,7 +70,9 @@ namespace LagoVista.Core.Attributes
         CustomerPicker,
         Point2D,
         Point3D,
-        Point2DSize
+        Point2DSize,
+        Point3DSize,
+           
     }
 
     public enum NamespaceTypes
