@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core</id>
-    <version>3.0.1963.1145</version>
+    <version>3.0.2797.0808</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,9 +10,9 @@
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <icon>LagoVistaIcon.png</icon>
     <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
-    <copyright>Copyright Software Logistics - 2022</copyright>
+    <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
-    <releaseNotes>Build Date: 10/1/2022 3:45:22 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 1/12/2025 1:08:22 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard1.2">

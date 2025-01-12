@@ -9,6 +9,7 @@ namespace LagoVista.Core.Interfaces
         Task QueueBackgroundWorkItemAsync(Func<CancellationToken, Task> workItem);
         bool TryQueueBackgroundWorkItem(Func<CancellationToken, Task> workItem);
 
+
         Task<Func<CancellationToken, Task>> DequeueAsync(CancellationToken cancellationToken);
     }
 }

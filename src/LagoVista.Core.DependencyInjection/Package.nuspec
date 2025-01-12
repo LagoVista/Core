@@ -2,29 +2,29 @@
 <package>
   <metadata>
     <id>LagoVista.Core.DependencyInjection</id>
-    <version>3.0.1963.1257</version>
+    <version>3.0.2797.0808</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Provides an implementation for IServicesCollection in LagoVista.Core.Interfaces which is a .NET Standard Library 1.2.  This allows .NET Standard Library that are below 2.0 to use IServiceCollection and register types for use in ASP.NET Core 2.0 projects </description>
-    <copyright>Copyright Software Logistics - 2022</copyright>
+    <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 1/12/2025 1:08:22 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="Microsoft.Extensions.DependencyInjection" version="6.0.0" />
-        <dependency id="Microsoft.NET.Test.Sdk" version="17.3.1" />
+        <dependency id="Microsoft.NET.Test.Sdk" version="17.3.2" />
         <dependency id="Moq" version="4.18.2" />
         <dependency id="MSTest.TestAdapter" version="2.2.10" />
         <dependency id="MSTest.TestFramework" version="2.2.10" />
         <dependency id="Newtonsoft.Json" version="13.0.1" />
-        <dependency id="LagoVista.Core" version="3.0.1963.1257" />
+        <dependency id="LagoVista.Core" version="3.0.2797.0808" />
       </group>
     </dependencies>
-    <releaseNotes>Build Date: 10/1/2022 4:57:03 PM UTC</releaseNotes>
-    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
