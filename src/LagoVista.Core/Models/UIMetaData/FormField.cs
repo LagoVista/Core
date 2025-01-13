@@ -111,6 +111,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public int Rows { get; set; }
         public bool ImageUpload { get; set; }
 
+        public bool CanAddRows { get; set; }
+
         public List<ReplaceableTag> Tags { get; set; }
 
 		public static List<EnumDescription> GetEnumOptions<Type>()
@@ -200,6 +202,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.PrivateFileUpload = attr.PrivateFileUpload;
             field.Rows = attr.Rows;
             field.ImageUpload = attr.ImageUpload;
+            field.CanAddRows = attr.CanAddRows;
 
             field.Options = new List<EnumDescription>();
             if(!String.IsNullOrEmpty(attr.Tags))
