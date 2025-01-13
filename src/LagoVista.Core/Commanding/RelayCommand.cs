@@ -122,7 +122,12 @@ namespace LagoVista.Core.Commanding
         public static RelayCommand<TParam> Create(Action<TParam> action, TParam parameter, Func<TParam, bool> canExecute)
         {
             return new RelayCommand<TParam>() { _parameter = parameter, _cmdAction = action, _canExecuteParam = canExecute };
-        }        
+        }
+
+        public static RelayCommand<TParam> Create(Action<TParam> action, Func<TParam, bool> canExecute)
+        {
+            return new RelayCommand<TParam>() { _cmdAction = action, _canExecuteParam = canExecute };
+        }
 
         public void RaiseCanExecuteChanged()
         {
