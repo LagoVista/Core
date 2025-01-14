@@ -4,6 +4,8 @@ using LagoVista.Core.Resources;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace LagoVista.Core.Models
@@ -32,11 +34,17 @@ namespace LagoVista.Core.Models
         [JsonProperty("id")]
         public string Id { get; set; }
         public string DatabaseName { get; set; }
-        public string EntityType { get; set; }
+        public string EntityType { get; set; }  
 
+
+        private string _name;
         [CloneOptions(false)]
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType:FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
-        public virtual string Name { get; set; }
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
+        public virtual string Name
+        {
+            get => _name;
+            set => Set(ref _name, value);   
+        }       
 
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, 
@@ -78,6 +86,41 @@ namespace LagoVista.Core.Models
         public EntityHeader ToEntityHeader()
         {
             return EntityHeader.Create(Id, Key, Name);
+        }
+
+        private Dictionary<string, object> _originalValues = new Dictionary<string, object>();
+
+        public void SetOriginalValues()
+        {
+            var properties = this.GetType().GetRuntimeProperties();
+            foreach(var property in properties) 
+            {
+                _originalValues.Add(property.Name, property.GetValue(this));
+            }
+        }
+
+        public Dictionary<string, object>  GetChanges()
+        {
+            var properties = this.GetType().GetRuntimeProperties();
+            var latestChanges = new Dictionary<string, object>();
+
+            // Save the current value of the properties to our dictionary.
+            foreach (PropertyInfo property in properties)
+            {
+                latestChanges.Add(property.Name, property.GetValue(this));
+            }
+
+            PropertyInfo[] tempProperties = this.GetType().GetRuntimeProperties().ToArray();
+
+            // Filter properties by only getting what has changed
+            properties = tempProperties.Where(p => !Equals(p.GetValue(this, null), this._originalValues[p.Name])).ToArray();
+
+            foreach (PropertyInfo property in properties)
+            {
+                latestChanges.Add(property.Name, property.GetValue(this));
+            }
+
+            return latestChanges;
         }
     }
 }

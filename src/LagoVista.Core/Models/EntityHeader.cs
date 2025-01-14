@@ -5,22 +5,51 @@ using System.Linq;
 using LagoVista.Core.Exceptions;
 using LagoVista.Core.Attributes;
 using System.Text;
+using System.ComponentModel;
 
 namespace LagoVista.Core.Models
 {
-    public class EntityHeader : IEntityHeader
+    public class EntityHeader : IEntityHeader, INotifyPropertyChanged
     {
 
         private String _id;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public virtual String Id
         {
             get { return _id; }
             set { _id = value; }
         }
-        public String Text { get; set; }
 
-        public string Key { get; set; }
+        private string _text;
+        public String Text 
+        {
+            get => _text;
+            set
+            {
+                if (_text != value)
+                {
+                    _text = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Text)));
+                }
+            }
+        }
+
+
+        private string _key;
+        public String Key
+        {
+            get => _key;
+            set
+            {
+                if (_key != value)
+                {
+                    _key = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Key)));
+                }
+            }
+        }
 
         public override string ToString()
         {
