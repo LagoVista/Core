@@ -361,6 +361,11 @@ namespace LagoVista.Core.Models.Drawing
             return this;
         }
 
+        public Point2D<T> Clone()
+        {
+            return new Point2D<T>(this.X, this.Y);
+        }
+
         public Point2D<T> Round(int positions)
         {
             if (typeof(T) == typeof(double))

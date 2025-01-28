@@ -359,6 +359,11 @@ namespace LagoVista.Core.Models.Drawing
             };
         }
 
+        public Point3D<T> Clone()
+        {
+            return new Point3D<T>(this.X, this.Y, this.Z);
+        }
+
         public Point3D<T> Round(int positions)
         {
             if (typeof(T) == typeof(double))

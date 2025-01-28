@@ -31,5 +31,10 @@ namespace LagoVista.Core.Models.Drawing
         {
             return $"{Width}, {Height}";
         }
+
+        public Size2D Clone()
+        {
+            return new Size2D(Width, Height);
+        }
     }
 }
