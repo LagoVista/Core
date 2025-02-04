@@ -507,6 +507,9 @@ namespace LagoVista.PDFServices
 
         public void AddLine(String text, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
         {
+            if (String.IsNullOrEmpty(text))
+                return;
+
             if (_renderMode == RenderMode.Table)
             {
                 throw new Exception("Current render mode is table");
