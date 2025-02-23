@@ -22,6 +22,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public double TimeBucketSize { get; set; } 
         public string TimeBucket { get; set; }
 
+        public bool ShowDeleted { get; set; }
+
         public override string ToString()
         {
             return $@"[List Request]

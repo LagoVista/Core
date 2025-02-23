@@ -208,7 +208,7 @@
     <value>Name</value>
   </data>
   <data name="Common_No" xml:space="preserve">
-    <value />
+    <value>No</value>
   </data>
   <data name="Common_Notes" xml:space="preserve">
     <value>Notes</value>
@@ -305,6 +305,9 @@
   </data>
   <data name="ErrorMakingCall" xml:space="preserve">
     <value>Sorry, there was an error talking to the server, please try again later.</value>
+  </data>
+  <data name="ListResponse_Deleted" xml:space="preserve">
+    <value />
   </data>
   <data name="Month_April" xml:space="preserve">
     <value>April</value>

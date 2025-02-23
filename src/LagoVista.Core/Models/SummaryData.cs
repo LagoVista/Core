@@ -26,6 +26,8 @@ namespace LagoVista.Core.Models
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_Description, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Description { get; set; }
 
+        [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Deleted, ResourceType: typeof(LagoVistaCommonStrings))]
+        public bool IsDeleted { get; set; }
     }
 
     public class CategorizedSummaryData: SummaryData, ICategorized

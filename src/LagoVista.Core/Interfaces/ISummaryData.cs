@@ -8,6 +8,7 @@ namespace LagoVista.Core.Interfaces
     {
         bool IsPublic { get; }
         string Description { get; }
+        bool IsDeleted { get; }
     }
 
 }
