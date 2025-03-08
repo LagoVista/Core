@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +22,7 @@ namespace LagoVista.Core.PlatformSupport
         Task<String> PromptForStringAsync(String label, String defaultvalue = null, string help = "", bool isRequired = false);
         Task<int?> PromptForIntAsync(String label, int? defaultvalue = null, string help = "", bool isRequired = false);
         Task<double?> PromptForDoubleAsync(String label, double? defaultvalue = null, string help = "", bool isRequired = false);
+
+        Task<bool> ShowModalAsync<TModalWindow, TViewModel>(TViewModel viewModal) where TModalWindow : IModalWindow where TViewModel : IViewModel;
     }
 }
