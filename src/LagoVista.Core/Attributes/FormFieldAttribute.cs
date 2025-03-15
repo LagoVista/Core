@@ -72,6 +72,7 @@ namespace LagoVista.Core.Attributes
         Point3D,
         Point2DSize,
         Point3DSize,
+        Point2DArray,
            
     }
 
