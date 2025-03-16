@@ -134,7 +134,7 @@ namespace LagoVista.Core.Models
         public EntityHeader CreatedBy { get; set; }
         public EntityHeader LastUpdatedBy { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
         public EntityHeader DeletedBy { get; set; }
         public String DeletionDate { get; set; }
 

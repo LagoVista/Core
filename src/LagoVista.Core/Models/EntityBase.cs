@@ -54,7 +54,7 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();
         [CloneOptions(false)]
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
         [CloneOptions(false)]
         public EntityHeader DeletedBy { get; set; }
         [CloneOptions(false)]

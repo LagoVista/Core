@@ -15,7 +15,7 @@ namespace LagoVista.Core.Interfaces
         EntityHeader CreatedBy { get; set; }
         EntityHeader LastUpdatedBy { get; set; }
 
-        bool IsDeleted { get; set; }
+        bool? IsDeleted { get; set; }
         EntityHeader DeletedBy { get; set; }
         String DeletionDate { get; set; }
     }
