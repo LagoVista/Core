@@ -19,6 +19,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public int GroupBySize { get; set; }
         public string Url { get; set; }
 
+        public string CategoryKey { get; set; }
+
         public double TimeBucketSize { get; set; } 
         public string TimeBucket { get; set; }
 

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable
+    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized
     {
 
         public EntityBase()
@@ -50,6 +50,9 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, 
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
         public virtual string Key { get; set; }
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: LagoVistaCommonStrings.Names.Common_Category_Select, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, IsUserEditable: true)]
+        public EntityHeader Category { get; set; }
 
         [CloneOptions(false)]
         public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();

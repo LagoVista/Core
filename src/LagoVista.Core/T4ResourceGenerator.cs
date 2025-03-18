@@ -1,4 +1,4 @@
-﻿/*3/18/2025 2:10:26 PM*/
+﻿/*3/18/2025 4:05:31 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -926,6 +926,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Address_UnitNumber_Help
 
 		public static string Address_UnitNumber_Help { get { return GetResourceString("Address_UnitNumber_Help"); } }
+//Resources:LagoVistaCommonStrings:Common_Category
+
+		public static string Common_Category { get { return GetResourceString("Common_Category"); } }
+//Resources:LagoVistaCommonStrings:Common_Category_Select
+
+		public static string Common_Category_Select { get { return GetResourceString("Common_Category_Select"); } }
 //Resources:LagoVistaCommonStrings:Common_CreatedBy
 
 		public static string Common_CreatedBy { get { return GetResourceString("Common_CreatedBy"); } }
@@ -1226,6 +1232,8 @@ namespace LagoVista.Core.Resources
 			public const string Address_Title = "Address_Title";
 			public const string Address_UnitNumber = "Address_UnitNumber";
 			public const string Address_UnitNumber_Help = "Address_UnitNumber_Help";
+			public const string Common_Category = "Common_Category";
+			public const string Common_Category_Select = "Common_Category_Select";
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";

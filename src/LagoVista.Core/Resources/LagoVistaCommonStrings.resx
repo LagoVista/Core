@@ -168,6 +168,12 @@
   <data name="Address_UnitNumber_Help" xml:space="preserve">
     <value>Unit number can be appartment number, suite or other </value>
   </data>
+  <data name="Common_Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Common_Category_Select" xml:space="preserve">
+    <value>-select category-</value>
+  </data>
   <data name="Common_CreatedBy" xml:space="preserve">
     <value>Created By</value>
   </data>

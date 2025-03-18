@@ -32,7 +32,6 @@ namespace LagoVista.Core.Models
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Category, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Category { get; set; }
         public string CategoryId { get; set; }
-
         public string CategoryKey { get; set; }
     }
 }
