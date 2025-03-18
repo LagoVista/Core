@@ -306,8 +306,11 @@
   <data name="ErrorMakingCall" xml:space="preserve">
     <value>Sorry, there was an error talking to the server, please try again later.</value>
   </data>
+  <data name="ListResponse_Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
   <data name="ListResponse_Deleted" xml:space="preserve">
-    <value />
+    <value>Is Deleted</value>
   </data>
   <data name="Month_April" xml:space="preserve">
     <value>April</value>

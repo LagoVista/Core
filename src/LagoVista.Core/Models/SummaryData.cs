@@ -28,10 +28,11 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Deleted, ResourceType: typeof(LagoVistaCommonStrings))]
         public bool IsDeleted { get; set; }
-    }
 
-    public class CategorizedSummaryData: SummaryData, ICategorized
-    {
-        public EntityHeader Category { get; set; }
+        [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Category, ResourceType: typeof(LagoVistaCommonStrings))]
+        public string Category { get; set; }
+        public string CategoryId { get; set; }
+
+        public string CategoryKey { get; set; }
     }
 }
