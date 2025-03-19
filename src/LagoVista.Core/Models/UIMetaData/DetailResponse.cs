@@ -30,6 +30,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldsSimple { get; set; }
         public List<string> FormFieldsBottom { get; set; }
         public List<string> FormFieldsTabs { get; set; }
+        public List<string> FormMobileFields { get; set; }
 
         public FormConditionals ConditionalFields { get; set; }
         public List<FormAdditionalAction> FormAdditionalActions { get; set; }
@@ -118,6 +119,11 @@ namespace LagoVista.Core.Models.UIMetaData
             if (model is IFormDescriptorTabs)
             {
                 response.FormFieldsTabs = (model as IFormDescriptorTabs).GetFormFieldsTabs().Select(fld => fld.CamelCase()).ToList();
+            }
+
+            if (model is IFormMobileFields)
+            {
+                response.FormMobileFields = (model as IFormMobileFields).GetMobileFields().Select(fld => fld.CamelCase()).ToList();
             }
 
             if (model is IFormAdditionalActions)

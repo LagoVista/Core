@@ -38,6 +38,10 @@ namespace LagoVista.Core.Interfaces
         List<string> GetInlineFields();
     }
 
+    public interface IFormMobileFields
+    {
+        List<string> GetMobileFields();
+    }
 
     public interface IFormDescriptorSimple
     {
