@@ -1,4 +1,4 @@
-﻿/*3/18/2025 4:05:31 PM*/
+﻿/*3/27/2025 1:15:17 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -953,6 +953,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Key_Validation
 
 		public static string Common_Key_Validation { get { return GetResourceString("Common_Key_Validation"); } }
+//Resources:LagoVistaCommonStrings:Common_Language
+
+		public static string Common_Language { get { return GetResourceString("Common_Language"); } }
+//Resources:LagoVistaCommonStrings:Common_Language_Select
+
+		public static string Common_Language_Select { get { return GetResourceString("Common_Language_Select"); } }
 //Resources:LagoVistaCommonStrings:Common_LastUpdated
 
 		public static string Common_LastUpdated { get { return GetResourceString("Common_LastUpdated"); } }
@@ -1241,6 +1247,8 @@ namespace LagoVista.Core.Resources
 			public const string Common_Key = "Common_Key";
 			public const string Common_Key_Help = "Common_Key_Help";
 			public const string Common_Key_Validation = "Common_Key_Validation";
+			public const string Common_Language = "Common_Language";
+			public const string Common_Language_Select = "Common_Language_Select";
 			public const string Common_LastUpdated = "Common_LastUpdated";
 			public const string Common_LastUpdatedBy = "Common_LastUpdatedBy";
 			public const string Common_Loading = "Common_Loading";

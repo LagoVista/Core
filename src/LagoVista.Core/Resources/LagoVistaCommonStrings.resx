@@ -195,6 +195,12 @@
   <data name="Common_Key_Validation" xml:space="preserve">
     <value>The key must use only letters and numbers, and must be lowercase and must be between 3 and 32 characters.</value>
   </data>
+  <data name="Common_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Common_Language_Select" xml:space="preserve">
+    <value>-select language-</value>
+  </data>
   <data name="Common_LastUpdated" xml:space="preserve">
     <value>Last Updated</value>
   </data>
