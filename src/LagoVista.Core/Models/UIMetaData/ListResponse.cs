@@ -39,7 +39,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<ListColumn> Columns { get; set; }
 
         public List<string> ColumnFilters { get; set; }
-
+        public List<EnumDescription> Categories { get; set; }
         public IEnumerable<TModel> Model { get; set; }
 
         public int RecordCount { get; set; }

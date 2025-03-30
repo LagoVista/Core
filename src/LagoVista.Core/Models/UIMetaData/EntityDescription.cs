@@ -42,7 +42,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     }
                     catch(Exception ex)
                     {
-                        throw new Exception($"Could not create form field for field: {property.Name} - {ex.Message}");
+                        throw new Exception($"Could not create form field for field: {entityType.FullName}/{property.Name} - {ex.Message}");
                     }
                  }
 
