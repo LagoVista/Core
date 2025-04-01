@@ -38,7 +38,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string Icon { get; set; }
 
         public bool IsEditing { get; set; }
-
+        public bool IsReadOnly { get; set; }
         public string UpdateUrl { get; set; }
 
         public string InsertUrl { get; set; }
