@@ -13,6 +13,8 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult<TAsyncResult>> WaitOnAsync<TAsyncResult>(Func<Task> function, string correlationId, TimeSpan timeout);
 
         IUsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion);
+
+        string InstanceId { get; }
     }
 
     public interface IAsyncCoupler<TAsyncResult>
@@ -24,5 +26,7 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult<TAsyncResult>> WaitOnAsync(Func<Task> function, string correlationId, TimeSpan timeout);
 
         IUsageMetrics GetAndResetReadMetrics(DateTime dateStamp, string hostVersion);
+
+        string InstanceId { get;  }
     }
 }

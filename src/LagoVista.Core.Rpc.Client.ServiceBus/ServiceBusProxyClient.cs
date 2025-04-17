@@ -22,6 +22,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         #region Fields
         private IConnectionSettings _topicConstructorSettings;
         private IConnectionSettings _subscriberSettings;
+        private IAsyncCoupler<IMessage> _asyncCoupler;
         private string _transmitterConnectionSettings;
         private string _serverTopicPrefix;
         private ServiceBusClient _senderClient;
@@ -32,6 +33,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private string _receiverConnectionString;
         private string _topicPath;
         private string _subscriptionPath;
+        private readonly ILogger _logger;
 
         #endregion
 
@@ -60,6 +62,8 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             ILogger logger) :
             base(asyncCoupler, logger)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
         }
 
         protected override void ConfigureSettings(ITransceiverConnectionSettings settings)
@@ -136,8 +140,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             try
             {
-                Console.WriteLine($"[ServiceBusPRoxyClient__ProcessMessageAsync]");
-
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 /* 
@@ -147,7 +149,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                  * return it back to the pool to see if another client can handle it.
                  */
 
-                Console.WriteLine($"[ServiceBusPRoxyClient__ProcessMessageAsync] {arg.Message.Subject}");
+                _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[ServiceBusPRoxyClient__ProcessMessageAsync] cid: {arg.Message.CorrelationId} aid: {_asyncCoupler.InstanceId}, subject: {arg.Message.Subject}", _asyncCoupler.InstanceId.ToKVP("aid"));
 
                 using (var compressedStream = new MemoryStream(arg.Message.Body.ToArray()))
                 using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
@@ -157,12 +159,12 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     if ((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful)
                     {
                         await arg.CompleteMessageAsync(arg.Message);
-                        Console.WriteLine($"[ServiceBusPRoxyClient__SuccessProcessed] {arg.Message.Subject}");
+                        _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[ServiceBusPRoxyClient__SuccessProcessed] cid: {arg.Message.CorrelationId} aid: {_asyncCoupler.InstanceId}, subject: {arg.Message.Subject}", _asyncCoupler.InstanceId.ToKVP("aid"));
                     }
                     else
                     {
                         await arg.AbandonMessageAsync(arg.Message);
-                        Console.WriteLine($"[ServiceBusPRoxyClient__DidNotProcess] {arg.Message.Subject}");
+                        _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[ServiceBusPRoxyClient__DidNotProcess] cid: {arg.Message.CorrelationId} aid: {_asyncCoupler.InstanceId}, subject: {arg.Message.Subject}", _asyncCoupler.InstanceId.ToKVP("aid"));
                     }
                 }
             }

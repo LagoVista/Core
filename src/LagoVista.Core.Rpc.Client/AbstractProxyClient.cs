@@ -36,7 +36,7 @@ namespace LagoVista.Core.Rpc.Client
         {
             if (message == null)  throw new ArgumentNullException(nameof(message));
 
-            Console.WriteLine($"[AbstractProxyClient__ReceiveAsync] - Correlation Id: {message.CorrelationId}");
+            _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[AbstractProxyClient__ReceiveAsync] - cid: {message.CorrelationId} aid: {_asyncCoupler.InstanceId}", _asyncCoupler.InstanceId.ToKVP("aid"));
 
             return await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
         }

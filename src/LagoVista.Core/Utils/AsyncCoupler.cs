@@ -28,6 +28,8 @@ namespace LagoVista.Core.Utils
 
     public class AsyncCoupler : IAsyncCoupler
     {
+        public string InstanceId { get; } = Guid.NewGuid().ToId().ToString();
+
         protected ILogger Logger { get; }
         protected IUsageMetrics UsageMetrics { get; private set; }
         protected ConcurrentDictionary<string, AsyncRequest<object>> Sessions { get; } = new ConcurrentDictionary<string, AsyncRequest<object>>();
@@ -63,13 +65,13 @@ namespace LagoVista.Core.Utils
         {
             if (Sessions.TryRemove(correlationId, out var requestAwaiter))
             {
-                Logger.AddCustomEvent(LogLevel.Message, $"[AsyncCoupler__CompleteAsync]", "[AsyncCoupler__CompleteAsync] - Found and removed", correlationId.ToKVP("correlationId"));
+                Logger.AddCustomEvent(LogLevel.Message, $"[AsyncCoupler__CompleteAsync]", $"[AsyncCoupler__CompleteAsync] - cid:{correlationId}, aid:{InstanceId}, Found and removed", InstanceId.ToKVP("aid"));
                 requestAwaiter.CompletionSource.SetResult(item);
                 return Task.FromResult(InvokeResult.Success);
             }
             else
             {
-                Logger.AddCustomEvent(LogLevel.Warning, $"[AsyncCoupler__CompleteAsync]", "[AsyncCoupler__CompleteAsync] - Not Found", correlationId.ToKVP("correlationId"));
+                Logger.AddCustomEvent(LogLevel.Warning, $"[AsyncCoupler__CompleteAsync]", $"[AsyncCoupler__CompleteAsync] - cid:{correlationId}, aid:{InstanceId}, Not Found", InstanceId.ToKVP("aid"));
                 return Task.FromResult(InvokeResult.FromErrors(new ErrorMessage($"Correlation id not found: {correlationId}.") { Details = $"CorrelationId={correlationId}" }));
             }
         }
