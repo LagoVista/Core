@@ -18,15 +18,15 @@ namespace LagoVista.Core.Models.UIMetaData
         public string Text { get; set; }
 
 
-        public static EnumDescription CreateSelect()
+        public static EnumDescription CreateSelect(String selectText = null)
         {
             return new EnumDescription()
             {
                 Id = "-1",
                 Key = "-1",
-                Text = LagoVistaCommonStrings.Common_Select,
-                Name = LagoVistaCommonStrings.Common_Select,
-                Label = LagoVistaCommonStrings.Common_Select,                 
+                Text = selectText ?? LagoVistaCommonStrings.Common_Select,
+                Name = selectText ?? LagoVistaCommonStrings.Common_Select,
+                Label = selectText ?? LagoVistaCommonStrings.Common_Select,                 
             };
         }
 
