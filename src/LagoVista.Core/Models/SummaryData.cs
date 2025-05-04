@@ -27,11 +27,24 @@ namespace LagoVista.Core.Models
         public string Description { get; set; }
 
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Deleted, ResourceType: typeof(LagoVistaCommonStrings))]
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
 
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Category, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Category { get; set; }
         public string CategoryId { get; set; }
         public string CategoryKey { get; set; }
+
+        public void Populate(EntityBase entity)
+        {
+            Id = entity.Id;
+            Category = entity.Category?.Text;
+            CategoryId = entity.Category?.Id;
+            CategoryKey = entity.Category?.Key;
+            IsPublic = entity.IsPublic;
+            IsDeleted = entity.IsDeleted;
+            Name = entity.Name;
+            Key = entity.Key;
+         }
     }
+
 }
