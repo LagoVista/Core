@@ -16,7 +16,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public bool ForCreate { get; set; } = true;
         public bool ForUpdate { get; set; } = true;
-
+        public bool NotSet { get; set; } = false;
         public bool NotEquals { get; set; } = false;
         public string Field { get; set; }
         public string Value { get; set; }
