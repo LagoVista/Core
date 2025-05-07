@@ -459,4 +459,7 @@
   <data name="Schedule_Weekly" xml:space="preserve">
     <value>Weekly</value>
   </data>
+  <data name="ValidationCheck_Errors" xml:space="preserve">
+    <value>The submitted form contains validation errors, please correct.</value>
+  </data>
 </root>
