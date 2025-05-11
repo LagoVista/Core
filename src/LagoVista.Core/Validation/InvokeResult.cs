@@ -9,6 +9,8 @@ namespace LagoVista.Core.Validation
     {
         public T Result { get; set; }
 
+        public string ContentType { get; set; } = "application/json";
+
         public string RedirectURL { get; set; }
 
         public static InvokeResult<T> Create(T result)

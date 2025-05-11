@@ -17,6 +17,10 @@ namespace LagoVista.Core.Exceptions
 
         public AuthorizeResult AuthorizationResponse { get; private set; }
 
+        public bool OrgMismatch { get; set; } = false;
+
+        public EntityHeader CurrentOrg { get; set; }
+        public EntityHeader EntityOrg { get; set; }
         public String Reason { get; private set; }
     }
 
