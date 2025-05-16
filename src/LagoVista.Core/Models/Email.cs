@@ -12,7 +12,9 @@ namespace LagoVista.Core.Models
         public string Content { get; set; }
 
         public string TrackingLink { get; set; }
-     }
+     
+        public EntityHeader Template { get; set; }
+    }
 
     public class EmailAddress
     {
