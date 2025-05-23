@@ -54,6 +54,7 @@ namespace LagoVista.Core.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public bool DoNotContact { get; set; }
+        public bool DoNotEmail { get; set; }
     }
 
     [EntityDescription(Domains.CoreDomainName, LagoVistaCommonStrings.Names.Company_Title, LagoVistaCommonStrings.Names.Company_Help,
