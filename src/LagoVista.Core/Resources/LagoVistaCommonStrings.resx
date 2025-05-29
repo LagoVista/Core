@@ -231,6 +231,9 @@
   <data name="Common_Select" xml:space="preserve">
     <value>-select-</value>
   </data>
+  <data name="Common_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
   <data name="Common_Year" xml:space="preserve">
     <value>Year</value>
   </data>

@@ -1,4 +1,4 @@
-﻿/*3/27/2025 1:15:17 PM*/
+﻿/*5/28/2025 1:43:15 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -989,6 +989,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Select
 
 		public static string Common_Select { get { return GetResourceString("Common_Select"); } }
+//Resources:LagoVistaCommonStrings:Common_Summary
+
+		public static string Common_Summary { get { return GetResourceString("Common_Summary"); } }
 //Resources:LagoVistaCommonStrings:Common_Year
 
 		public static string Common_Year { get { return GetResourceString("Common_Year"); } }
@@ -1217,6 +1220,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Schedule_Weekly
 
 		public static string Schedule_Weekly { get { return GetResourceString("Schedule_Weekly"); } }
+//Resources:LagoVistaCommonStrings:ValidationCheck_Errors
+
+		public static string ValidationCheck_Errors { get { return GetResourceString("ValidationCheck_Errors"); } }
 //Resources:ValidationResource:Common_Key_Help
 
 		public static class Names
@@ -1259,6 +1265,7 @@ namespace LagoVista.Core.Resources
 			public const string Common_Notes = "Common_Notes";
 			public const string Common_PleaseWait = "Common_PleaseWait";
 			public const string Common_Select = "Common_Select";
+			public const string Common_Summary = "Common_Summary";
 			public const string Common_Year = "Common_Year";
 			public const string Common_Year_Select = "Common_Year_Select";
 			public const string Common_Yes = "Common_Yes";
@@ -1335,6 +1342,7 @@ namespace LagoVista.Core.Resources
 			public const string Schedule_Wednesday = "Schedule_Wednesday";
 			public const string Schedule_Week = "Schedule_Week";
 			public const string Schedule_Weekly = "Schedule_Weekly";
+			public const string ValidationCheck_Errors = "ValidationCheck_Errors";
 		}
 	}
 	public class ValidationResource
