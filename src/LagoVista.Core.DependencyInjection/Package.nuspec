@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.DependencyInjection</id>
-    <version>3.0.2797.0808</version>
+    <version>3.0.2942.1434</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 1/12/2025 1:08:22 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 6/6/2025 6:34:40 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
@@ -22,7 +22,7 @@
         <dependency id="MSTest.TestAdapter" version="2.2.10" />
         <dependency id="MSTest.TestFramework" version="2.2.10" />
         <dependency id="Newtonsoft.Json" version="13.0.1" />
-        <dependency id="LagoVista.Core" version="3.0.2797.0808" />
+        <dependency id="LagoVista.Core" version="3.0.2942.1434" />
       </group>
     </dependencies>
   </metadata>

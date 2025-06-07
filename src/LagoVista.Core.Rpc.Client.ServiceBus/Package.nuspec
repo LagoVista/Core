@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc.Client.ServiceBus</id>
-    <version>3.0.2797.0808</version>
+    <version>3.0.2942.1434</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,14 +12,14 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT RPC Client ServiceBus</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 1/12/2025 1:08:22 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 6/6/2025 6:34:40 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="Azure.Messaging.ServiceBus" version="7.10.0" />
-        <dependency id="LagoVista.Core.Rpc.Client" version="3.0.2797.0808" />
-        <dependency id="LagoVista.Core.Rpc" version="3.0.2797.0808" />
-        <dependency id="LagoVista.Core" version="3.0.2797.0808" />
+        <dependency id="LagoVista.Core.Rpc.Client" version="3.0.2942.1434" />
+        <dependency id="LagoVista.Core.Rpc" version="3.0.2942.1434" />
+        <dependency id="LagoVista.Core" version="3.0.2942.1434" />
       </group>
     </dependencies>
   </metadata>

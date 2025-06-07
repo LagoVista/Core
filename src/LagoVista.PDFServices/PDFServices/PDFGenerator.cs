@@ -9,6 +9,7 @@ using PdfSharpCore.Fonts;
 using System.Reflection;
 using SixLabors.Fonts;
 using static System.Net.Mime.MediaTypeNames;
+using TheArtOfDev.HtmlRenderer.PdfSharp;
 
 namespace LagoVista.PDFServices
 {
@@ -828,6 +829,11 @@ namespace LagoVista.PDFServices
         public void AddWhiteSpace(double y)
         {
             CurrentY += y;
+        }
+        
+        public void AddHtml(string html)
+        {
+            //PdfGenerator.GeneratePdf()
         }
 
         private void RenderPageNumbers()
