@@ -113,6 +113,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public bool CanAddRows { get; set; }
 
+        public string[] TagsCSVURls { get; set; }
         public List<ReplaceableTag> Tags { get; set; }
 
 		public static List<EnumDescription> GetEnumOptions<Type>()
@@ -203,6 +204,10 @@ namespace LagoVista.Core.Models.UIMetaData
             field.Rows = attr.Rows;
             field.ImageUpload = attr.ImageUpload;
             field.CanAddRows = attr.CanAddRows;
+            if(!String.IsNullOrEmpty(attr.TagsCSVURls))
+                field.TagsCSVURls = attr.TagsCSVURls.Split(',');
+            else
+                field.TagsCSVURls = new string[] { };
 
             field.Options = new List<EnumDescription>();
             if(!String.IsNullOrEmpty(attr.Tags))

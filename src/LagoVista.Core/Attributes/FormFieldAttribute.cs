@@ -75,7 +75,6 @@ namespace LagoVista.Core.Attributes
         Point2DArray,
         Signature,
         MultiLineTextAreaFixedFont
-           
     }
 
     public enum NamespaceTypes
@@ -181,7 +180,8 @@ namespace LagoVista.Core.Attributes
                                   bool ImageUpload = true,
                                   string ChildListDisplayMembers = "",
                                   string CustomCategoryType = null,
-                                  bool CanAddRows = true)
+                                  bool CanAddRows = true,
+                                  string TagsCSVURls = "")
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -232,6 +232,7 @@ namespace LagoVista.Core.Attributes
             this.ChildListDisplayMembers = ChildListDisplayMembers;
             this.CustomCategoryType = CustomCategoryType;
             this.CanAddRows = CanAddRows;
+            this.TagsCSVURls = TagsCSVURls;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -295,6 +296,7 @@ namespace LagoVista.Core.Attributes
         public string ChildListDisplayMembers { get; private set; }
         public string CustomCategoryType { get; }
         public bool ImageUpload { get; set; }
+        public string TagsCSVURls { get; }
     }
 
     public class SelectListItem
