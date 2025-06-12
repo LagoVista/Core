@@ -12,6 +12,8 @@
 
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
+using SixLabors.Fonts;
+using System;
 using System.Drawing;
 using System.IO;
 using TheArtOfDev.HtmlRenderer.Adapters;
@@ -44,6 +46,9 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp.Adapters
             AddFontFamilyMapping("monospace", "Courier New");
             AddFontFamilyMapping("Helvetica", "Arial");
 
+            
+            //
+            //
             // var families = new InstalledFontCollection();
 
             //foreach (var family in families.Families)

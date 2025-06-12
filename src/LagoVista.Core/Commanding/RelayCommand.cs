@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.IOC;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -15,32 +16,39 @@ namespace LagoVista.Core.Commanding
         readonly Action<object> _executeParam;
         readonly Func<object, bool> _canExecuteParam;
         readonly Func<bool> _canExecute;
-
+        readonly Timer _timer;
 
         public RelayCommand(Action execute)
         {
             _execute = execute;
+            _timer = new Timer((state) => DebounceTimedout(), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public RelayCommand(Action<object> execute)
         {
             _executeParam = execute;
+            _timer = new Timer((state) => DebounceTimedout(), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
         {
             _executeParam = execute;
             _canExecuteParam = canExecute;
+            _timer = new Timer((state) => DebounceTimedout(), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public RelayCommand(Action execute, Func<bool> canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
+            _timer = new Timer((state) => DebounceTimedout(), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public virtual bool CanExecute(object parameter)
         {
+            if (_debounceHigh)
+                return false;
+
             if (_canExecute != null)
             {
                 return _canExecute();
@@ -53,6 +61,15 @@ namespace LagoVista.Core.Commanding
 
             return Enabled;
         }
+
+        public bool _debounceHigh = false;
+
+        private void DebounceTimedout()
+        {
+            _debounceHigh = false;
+        }
+
+        public TimeSpan DebouncePeriod { get; set; } = TimeSpan.FromMilliseconds(250);
 
         private bool _enabled = true;
         public bool Enabled
@@ -73,8 +90,16 @@ namespace LagoVista.Core.Commanding
             if (CanExecuteChanged != null) CanExecuteChanged(this, EventArgs.Empty);
         }
 
+
+
         public void Execute(object parameter)
         {
+            if (DebounceEnabled)
+            {
+                RaiseCanExecuteChanged();
+                _timer.Change((int)DebouncePeriod.TotalMilliseconds, Timeout.Infinite);
+            }
+
             if (_executeParam != null && (_canExecuteParam == null || _canExecuteParam(parameter == null ? _parameter : parameter)))
             {
                 _executeParam(parameter == null ? _parameter : parameter);
@@ -84,6 +109,8 @@ namespace LagoVista.Core.Commanding
                 _execute();
             }
         }
+
+        public bool DebounceEnabled { get; set; } = true;
 
         public static RelayCommand Create(Action<object> action)
         {
@@ -98,7 +125,7 @@ namespace LagoVista.Core.Commanding
         public static RelayCommand Create(Action action)
         {
             return new RelayCommand(action);
-        }        
+        }
     }
 
     public class RelayCommand<TParam> : ICommand
