@@ -16,12 +16,16 @@ namespace LagoVista.Core.Models
             OwnerOrganization = company.OwnerOrganization.Text;
             OwnerOrganizationId = company.OwnerOrganization.Id;
 
-            Industry = company.Industry.Text;
-            Industry = company.Industry.Id;
+            Industry = company.Industry?.Text;
+            Industry = company.Industry?.Id;
+            IndustryNiche = company.IndustryNiche?.Text;
+            IndustryNicheId = company.IndustryNiche?.Id;
             Company = company.Name;
             CompanyId = company.Id;
             FirstName = contact.FirstName;
             LastName = contact.LastName;
+            Persona = contact.Persona?.Text;
+            PersonaId = contact.Persona?.Id;
 
             if (!String.IsNullOrEmpty(contact.Email))
                 Email = contact.Email.ToLower().Trim();
@@ -49,6 +53,11 @@ namespace LagoVista.Core.Models
         public string LastName { get; set; }
         public string Industry { get; set; }
         public string IndustryId { get; set; }
+        public string IndustryNiche { get; set; }
+        public string IndustryNicheId { get; set; }
+        public string Persona { get; set; }
+        public string PersonaId { get; set; }
+
         public string Company { get; set; }
         public string CompanyId { get; set; }
         public string Email { get; set; }
@@ -134,6 +143,8 @@ namespace LagoVista.Core.Models
         public string LastUpdatedDate { get; set; }
         public EntityHeader CreatedBy { get; set; }
         public EntityHeader LastUpdatedBy { get; set; }
+
+        public EntityHeader Persona { get; set; }
 
         public bool? IsDeleted { get; set; }
         public EntityHeader DeletedBy { get; set; }
