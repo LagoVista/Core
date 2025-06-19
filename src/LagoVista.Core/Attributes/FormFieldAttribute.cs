@@ -75,7 +75,8 @@ namespace LagoVista.Core.Attributes
         Point2DArray,
         Signature,
         MultiLineTextAreaFixedFont,
-        RawHtml
+        RawHtml,
+        Currency
     }
 
     public enum NamespaceTypes
