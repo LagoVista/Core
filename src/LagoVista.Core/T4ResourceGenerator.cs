@@ -1,4 +1,4 @@
-﻿/*5/28/2025 1:43:15 PM*/
+﻿/*7/1/2025 11:12:41 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1019,6 +1019,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Contact_Description
 
 		public static string Contact_Description { get { return GetResourceString("Contact_Description"); } }
+//Resources:LagoVistaCommonStrings:Contact_DoNotContact
+
+		public static string Contact_DoNotContact { get { return GetResourceString("Contact_DoNotContact"); } }
 //Resources:LagoVistaCommonStrings:Contact_Email
 
 		public static string Contact_Email { get { return GetResourceString("Contact_Email"); } }
@@ -1037,6 +1040,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Contact_Notes
 
 		public static string Contact_Notes { get { return GetResourceString("Contact_Notes"); } }
+//Resources:LagoVistaCommonStrings:Contact_Persona
+
+		public static string Contact_Persona { get { return GetResourceString("Contact_Persona"); } }
+//Resources:LagoVistaCommonStrings:Contact_Persona_Select
+
+		public static string Contact_Persona_Select { get { return GetResourceString("Contact_Persona_Select"); } }
 //Resources:LagoVistaCommonStrings:Contact_Phone
 
 		public static string Contact_Phone { get { return GetResourceString("Contact_Phone"); } }
@@ -1275,12 +1284,15 @@ namespace LagoVista.Core.Resources
 			public const string Company_IndustryNiche = "Company_IndustryNiche";
 			public const string Company_Title = "Company_Title";
 			public const string Contact_Description = "Contact_Description";
+			public const string Contact_DoNotContact = "Contact_DoNotContact";
 			public const string Contact_Email = "Contact_Email";
 			public const string Contact_FirstName = "Contact_FirstName";
 			public const string Contact_Help = "Contact_Help";
 			public const string Contact_LastName = "Contact_LastName";
 			public const string Contact_LinkedInPage = "Contact_LinkedInPage";
 			public const string Contact_Notes = "Contact_Notes";
+			public const string Contact_Persona = "Contact_Persona";
+			public const string Contact_Persona_Select = "Contact_Persona_Select";
 			public const string Contact_Phone = "Contact_Phone";
 			public const string Contact_Title = "Contact_Title";
 			public const string Customer_Address1 = "Customer_Address1";

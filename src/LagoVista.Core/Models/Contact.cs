@@ -144,12 +144,14 @@ namespace LagoVista.Core.Models
         public EntityHeader CreatedBy { get; set; }
         public EntityHeader LastUpdatedBy { get; set; }
 
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Contact_Persona, WaterMark:LagoVistaCommonStrings.Names.Contact_Persona_Select,  ResourceType: typeof(LagoVistaCommonStrings), EntityHeaderPickerUrl: "/api/personas", EditorPath: "/business/customers/persona/{id}", IsRequired: false, FieldType: FieldTypes.EntityHeaderPicker)]
         public EntityHeader Persona { get; set; }
 
         public bool? IsDeleted { get; set; }
         public EntityHeader DeletedBy { get; set; }
         public String DeletionDate { get; set; }
 
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Contact_DoNotContact, ResourceType: typeof(LagoVistaCommonStrings), FieldType: FieldTypes.CheckBox)]
         public bool DoNotContact { get; set; }
         public string DoNotContactReason { get; set; }
         public string DoNotContactSetDate { get; set; }

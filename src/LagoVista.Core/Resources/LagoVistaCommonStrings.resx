@@ -261,6 +261,9 @@
   <data name="Contact_Description" xml:space="preserve">
     <value>A contact is a person that is not a NuvIoT user (at least initially) where we need communicate with them.</value>
   </data>
+  <data name="Contact_DoNotContact" xml:space="preserve">
+    <value>Do not contact</value>
+  </data>
   <data name="Contact_Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -278,6 +281,12 @@
   </data>
   <data name="Contact_Notes" xml:space="preserve">
     <value>Notes</value>
+  </data>
+  <data name="Contact_Persona" xml:space="preserve">
+    <value>Persona</value>
+  </data>
+  <data name="Contact_Persona_Select" xml:space="preserve">
+    <value>-select persona-</value>
   </data>
   <data name="Contact_Phone" xml:space="preserve">
     <value>Phone</value>
