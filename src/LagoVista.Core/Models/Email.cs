@@ -5,6 +5,7 @@ namespace LagoVista.Core.Models
     public class Email
     {
         public List<EmailAddress> To { get; set; }
+        public List<EmailAddress> Cc { get; set; }
         public EmailAddress From {get; set;}
         public EmailAddress ReplyTo { get; set; }
 
