@@ -10,6 +10,14 @@ using System.Reflection;
 using SixLabors.Fonts;
 using static System.Net.Mime.MediaTypeNames;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
+using PdfSharpCore.Pdf.IO;
+using LagoVista.PDFServices.PDFServices;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using PdfSharpCore.Drawing.Layout;
+using Svg;
+using System.Xml;
+using System.Drawing.Imaging;
 
 namespace LagoVista.PDFServices
 {
@@ -205,6 +213,7 @@ namespace LagoVista.PDFServices
                     _pageIndex++;
 
                     _currentPage = _pdfDocument.AddPage();
+                    _outline = _pdfDocument.Outlines.Add($"Page {_pageIndex}", _currentPage, true, PdfOutlineStyle.Bold, XColors.Red);
                     _pages.Add(_currentPage);
                     _graphics.Dispose();
 
@@ -302,11 +311,14 @@ namespace LagoVista.PDFServices
         {
             _addLogo = addLogo;
             _currentPage = _pdfDocument.AddPage();
-            if(width.HasValue && height.HasValue)
+
+            if (width.HasValue && height.HasValue)
             {
                 _currentPage.Width = XUnit.FromInch(width.Value);
                 _currentPage.Height = XUnit.FromInch(height.Value);
             }
+
+            _outline = _pdfDocument.Outlines.Add("Root", _currentPage, true, PdfOutlineStyle.Bold, XColors.Red);
 
             _pages.Add(_currentPage);
             _graphics = XGraphics.FromPdfPage(_currentPage);
@@ -336,6 +348,7 @@ namespace LagoVista.PDFServices
             _pageIndex++;
             _currentY = Margin.Top;
             _currentPage = _pdfDocument.AddPage();
+
             _pages.Add(_currentPage);
             _graphics.Dispose();
 
@@ -531,6 +544,128 @@ namespace LagoVista.PDFServices
             CurrentY += height;
         }
 
+        PdfOutline _outline;
+
+        public void Open(Stream stream)
+        {
+            _pdfDocument = PdfReader.Open(stream);
+            _currentPage = _pdfDocument.Pages[0];
+            _outline = _pdfDocument.Outlines.FirstOrDefault();
+            _graphics = XGraphics.FromPdfPage(_currentPage);
+            _textFormatter = new LGVTextServices(_graphics);
+
+            if (_outline == null)
+                _outline = _pdfDocument.Outlines.Add("Root", _currentPage, true, PdfOutlineStyle.Bold, XColors.Red);
+        }
+
+        public void AddBlock(int page, double x, double y, string blockName, string text)
+        {
+            _currentPage = _pdfDocument.Pages[page];
+            
+            _pageIndex = page;
+            _currentY = Margin.Top;
+            _pages.Add(_currentPage);
+            if(_graphics != null)
+                _graphics.Dispose();
+
+            _graphics = XGraphics.FromPdfPage(_currentPage);
+
+            var font = ResolveFont(Style.Body);
+            var brush = XBrushes.Black;
+            _textFormatter.DrawString(text, font, brush, new XRect(XUnit.FromInch(x), XUnit.FromInch(y), 50, 50));
+
+            _outline.Outlines.Add( new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = XUnit.FromInch(x), Top = XUnit.FromInch(y) });
+        }
+
+        public void AddInitialsBlock(string blockName)
+        {            
+            _outline.Outlines.Add(new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = 10, Top = CurrentY});
+        }
+
+        public void AddSignatureBlock(string blockName)
+        {
+            _outline.Outlines.Add(new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = Margin.Left, Top = CurrentY });
+        }
+
+        public void AddSignature(string blockName, string signatureSvg)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(signatureSvg);
+
+            var dvgDoc = SvgDocument.Open(doc);
+            using (var bmp = dvgDoc.Draw())
+            using(var ms = new MemoryStream())
+            {
+                bmp.Save(ms, ImageFormat.Png);
+                ms.Seek(0, SeekOrigin.Begin);
+                var index = _outline.Outlines.FirstOrDefault(ot => ot.Title == blockName);
+
+                using (var graphics = XGraphics.FromPdfPage(index.DestinationPage))
+                {
+                    var textFormatter = new LGVTextServices(graphics);
+                    var font = ResolveFont(Style.Body);
+                    var brush = XBrushes.Black;
+                    using (var img = XImage.FromStream(() => ms))
+                    {
+                        var maxWidth = XUnit.FromInch(0.6);
+                        var maxHeight = 70;
+                        var scalingFactor = (float)maxHeight / (float)img.PixelHeight;
+                        graphics.DrawImage(img, index.Left, index.Top, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                    }
+                }
+            }
+        }
+
+        public void AddInitials(string blockName, string initialsSvg)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(initialsSvg);
+
+            var dvgDoc = SvgDocument.Open(doc);
+            using (var bmp = dvgDoc.Draw())
+            using (var ms = new MemoryStream())
+            {
+             
+                bmp.Save(ms, ImageFormat.Png);
+                ms.Seek(0, SeekOrigin.Begin);
+                var index = _outline.Outlines.FirstOrDefault(ot => ot.Title == blockName);
+
+                using (var graphics = XGraphics.FromPdfPage(index.DestinationPage))
+                {
+                    var textFormatter = new LGVTextServices(graphics);
+                    var font = ResolveFont(Style.Body);
+                    var brush = XBrushes.Black;
+                    using (var img = XImage.FromStream(() => ms))
+                    {
+                        var maxWidth = XUnit.FromInch(0.6);
+                        var maxHeight = XUnit.FromInch(0.6);
+                        var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
+
+                        graphics.DrawImage(img, index.Left, index.Top, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                    }
+                }
+            }
+        }
+
+
+        public void AddSvg(int page, double x, double y, Stream stream)
+        {
+            _currentPage = _pdfDocument.Pages[page];
+            _pageIndex = page;
+
+            _pageIndex++;
+            _currentY = Margin.Top;
+            _pages.Add(_currentPage);
+            if (_graphics != null)
+                _graphics.Dispose();
+
+
+            _graphics = XGraphics.FromPdfPage(_currentPage);
+            _textFormatter = new LGVTextServices(_graphics);
+            var font = ResolveFont(Style.Body);
+            var brush = XBrushes.Black;
+          //  _textFormatter.DrawString(text, font, brush, new XRect(XUnit.FromInch(x), XUnit.FromInch(y), 50, 50));
+        }
 
         public void AddParagraph(String text, string label, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)
         {
