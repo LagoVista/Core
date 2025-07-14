@@ -10,6 +10,8 @@ using PdfSharpCore.Pdf.IO;
 using Svg;
 using System.Xml;
 using System.Drawing.Imaging;
+using System.Drawing;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LagoVista.PDFServices
 {
@@ -565,18 +567,47 @@ namespace LagoVista.PDFServices
             var font = ResolveFont(Style.Body);
             var brush = XBrushes.Black;
             _textFormatter.DrawString(text, font, brush, new XRect(XUnit.FromInch(x), XUnit.FromInch(y), 50, 50));
-
+    
             _outline.Outlines.Add( new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = XUnit.FromInch(x), Top = XUnit.FromInch(y) });
         }
 
-        public void AddInitialsBlock(string blockName)
-        {            
-            _outline.Outlines.Add(new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = 10, Top = CurrentY});
+        public void AddInitialsBlock(string blockName, string name)
+        {
+            _outline.Outlines.Add(new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = 10, Top = CurrentY });
+            var font = ResolveFont(Style.Small, XFontStyle.Regular);
+            _textFormatter.DrawString(name, font, XBrushes.Black, new XRect(10, CurrentY + 20, XUnit.FromInch(0.5), 20));
+            _graphics.DrawLine(XPens.DarkGray, 10, CurrentY + 20, 10 + XUnit.FromInch(0.5), _currentY + 20);
         }
 
-        public void AddSignatureBlock(string blockName)
+        public void AddSignatureBlock(string blockName, string name, double? leftMargin = null, double? height = null, double? width = null, Style? style = null, bool dontAdvanceHeight = false)
         {
-            _outline.Outlines.Add(new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = Margin.Left, Top = CurrentY });
+            if(leftMargin == null) 
+                leftMargin = Margin.Left;
+            else
+                leftMargin = XUnit.FromInch(leftMargin.Value);
+
+            if (height == null)
+                height = XUnit.FromInch(0.75);
+
+            if (width == null)
+                width = XUnit.FromInch(3);
+
+            var nameHeight = XUnit.FromInch(0.15);
+
+            if (!style.HasValue)
+                style = Style.H4;
+
+            CurrentY += height.Value;
+
+            _outline.Outlines.Add(new PdfOutline() { DestinationPage = _currentPage, Title = blockName, Left = leftMargin.Value, Top = CurrentY - nameHeight });
+            var font = ResolveFont(style.Value, XFontStyle.Regular);
+            
+            _textFormatter.DrawString(name, font, XBrushes.Black, new XRect(leftMargin.Value, CurrentY, XUnit.FromInch(width.Value), nameHeight));
+            _graphics.DrawLine(XPens.DarkGray, leftMargin.Value, CurrentY, leftMargin.Value + width.Value, CurrentY);
+            CurrentY += nameHeight;
+
+            if(dontAdvanceHeight)
+                CurrentY -= (height.Value + nameHeight);
         }
 
         public void AddSignature(string blockName, string signatureSvg)
@@ -602,7 +633,7 @@ namespace LagoVista.PDFServices
                         var maxWidth = XUnit.FromInch(0.6);
                         var maxHeight = 70;
                         var scalingFactor = (float)maxHeight / (float)img.PixelHeight;
-                        graphics.DrawImage(img, index.Left, index.Top, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                        graphics.DrawImage(img, index.Left, index.Top - XUnit.FromInch(0.75), img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
                     }
                 }
             }
@@ -616,8 +647,7 @@ namespace LagoVista.PDFServices
             var dvgDoc = SvgDocument.Open(doc);
             using (var bmp = dvgDoc.Draw())
             using (var ms = new MemoryStream())
-            {
-             
+            {             
                 bmp.Save(ms, ImageFormat.Png);
                 ms.Seek(0, SeekOrigin.Begin);
                 var index = _outline.Outlines.FirstOrDefault(ot => ot.Title == blockName);
@@ -637,26 +667,6 @@ namespace LagoVista.PDFServices
                     }
                 }
             }
-        }
-
-
-        public void AddSvg(int page, double x, double y, Stream stream)
-        {
-            _currentPage = _pdfDocument.Pages[page];
-            _pageIndex = page;
-
-            _pageIndex++;
-            _currentY = Margin.Top;
-            _pages.Add(_currentPage);
-            if (_graphics != null)
-                _graphics.Dispose();
-
-
-            _graphics = XGraphics.FromPdfPage(_currentPage);
-            _textFormatter = new LGVTextServices(_graphics);
-            var font = ResolveFont(Style.Body);
-            var brush = XBrushes.Black;
-          //  _textFormatter.DrawString(text, font, brush, new XRect(XUnit.FromInch(x), XUnit.FromInch(y), 50, 50));
         }
 
         public void AddParagraph(String text, string label, double? width = null, XSolidBrush brush = null, XStringFormat align = null, XFontStyle fontStyle = XFontStyle.Regular)

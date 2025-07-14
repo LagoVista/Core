@@ -63,26 +63,23 @@ namespace LagoVista.Core.Tests.PDF
             generator.AddParagraph(GenerateText(50, 1), "Notes 1");
             generator.AddParagraph(GenerateText(100, 1), "Notes 2");
 
-            generator.AddInitialsBlock("init1.1");
+            generator.AddInitialsBlock("init1.1", "Frederick Fredrickson");
             generator.AddParagraph(GenerateText(100, 2), "Notes 3");
             generator.AddParagraph(GenerateText(100, 3), "Notes 4");
-            generator.AddInitialsBlock("init1.2");
+            generator.AddInitialsBlock("init1.2", "Daniel Janulewicz");
             generator.AddParagraph(GenerateText(100, 2), "Notes 5");
             generator.AddParagraph(GenerateText(100, 2), "Notes 6");
             generator.AddParagraph(GenerateText(100, 2), "Notes 7");
-            generator.AddInitialsBlock("init1.3");
+            generator.AddInitialsBlock("init1.3", "Frederick Fredrickson");
             generator.AddParagraph(GenerateText(100, 1), "Notes 8");
             generator.AddParagraph(GenerateText(100, 3), "Notes 4");
 
             generator.AddParagraph(GenerateText(100, 1), "And all good");
 
-            generator.AddSignatureBlock("sigature1.1");
-            generator.AddWhiteSpace(50);
-            generator.AddHeader(Style.H4, "Kevin D. Wolf");
+            generator.AddSignatureBlock("sigature1.1", "Kevin D. Wolf", dontAdvanceHeight:true);
+            generator.AddSignatureBlock("sigature2.1", "Homer Simpson", 4);
             generator.AddHeader(Style.H6, DateTime.Today.ToShortDateString());
 
-
-            
             using (var stream = new System.IO.MemoryStream())
             {
                 generator.Write(stream);
@@ -140,6 +137,7 @@ namespace LagoVista.Core.Tests.PDF
             generator.AddInitials("init1.2", initials_svg);
             generator.AddInitials("init1.3", initials_svg);
             generator.AddSignature("sigature1.1", signature_svg);
+            generator.AddSignature("sigature2.1", signature_svg);
 
             using (var stream = new System.IO.MemoryStream())
             {
