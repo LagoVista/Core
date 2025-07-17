@@ -20,6 +20,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string ModelName { get; set; }
 
+        public bool HasDiscussions { get; set; }
+
         public IDictionary<string, FormField> View { get; set; }
 
         public List<string> FormFields { get; set; }
@@ -148,6 +150,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
             if (!string.IsNullOrEmpty(entity.UpdateUrl))
                 response.UpdateUrl = entity.UpdateUrl;
+
+            response.HasDiscussions = entity is IDiscussableEntity;
 
             response.SaveUrl = entity.SaveUrl;
             response.FactoryUrl = entity.FactoryUrl;

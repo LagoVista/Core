@@ -1,4 +1,4 @@
-﻿/*7/1/2025 11:12:41 AM*/
+﻿/*7/17/2025 4:18:35 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -941,6 +941,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
+//Resources:LagoVistaCommonStrings:Common_Image
+
+		public static string Common_Image { get { return GetResourceString("Common_Image"); } }
 //Resources:LagoVistaCommonStrings:Common_IsPublic
 
 		public static string Common_IsPublic { get { return GetResourceString("Common_IsPublic"); } }
@@ -983,6 +986,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Notes
 
 		public static string Common_Notes { get { return GetResourceString("Common_Notes"); } }
+//Resources:LagoVistaCommonStrings:Common_Open
+
+		public static string Common_Open { get { return GetResourceString("Common_Open"); } }
 //Resources:LagoVistaCommonStrings:Common_PleaseWait
 
 		public static string Common_PleaseWait { get { return GetResourceString("Common_PleaseWait"); } }
@@ -992,6 +998,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Summary
 
 		public static string Common_Summary { get { return GetResourceString("Common_Summary"); } }
+//Resources:LagoVistaCommonStrings:Common_ThumbnailImage
+
+		public static string Common_ThumbnailImage { get { return GetResourceString("Common_ThumbnailImage"); } }
 //Resources:LagoVistaCommonStrings:Common_Year
 
 		public static string Common_Year { get { return GetResourceString("Common_Year"); } }
@@ -1258,6 +1267,7 @@ namespace LagoVista.Core.Resources
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
+			public const string Common_Image = "Common_Image";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
 			public const string Common_Key_Help = "Common_Key_Help";
@@ -1272,9 +1282,11 @@ namespace LagoVista.Core.Resources
 			public const string Common_Name = "Common_Name";
 			public const string Common_No = "Common_No";
 			public const string Common_Notes = "Common_Notes";
+			public const string Common_Open = "Common_Open";
 			public const string Common_PleaseWait = "Common_PleaseWait";
 			public const string Common_Select = "Common_Select";
 			public const string Common_Summary = "Common_Summary";
+			public const string Common_ThumbnailImage = "Common_ThumbnailImage";
 			public const string Common_Year = "Common_Year";
 			public const string Common_Year_Select = "Common_Year_Select";
 			public const string Common_Yes = "Common_Yes";

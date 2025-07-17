@@ -17,6 +17,9 @@ namespace LagoVista.Core.Models
             Timestamp = DateTime.UtcNow.ToJSONString();
         }
 
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Open,  FieldType: FieldTypes.CheckBox, ResourceType: typeof(LagoVistaCommonStrings))]
+        public bool Open { get; set; } = true;
+
         public string Id { get; set; }
         public EntityHeader User { get; set; }
 
@@ -29,6 +32,7 @@ namespace LagoVista.Core.Models
         {
             return new List<string>()
             {
+                nameof(Open),
                 nameof(Note)
             };
         }

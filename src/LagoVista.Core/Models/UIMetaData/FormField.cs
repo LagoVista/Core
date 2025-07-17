@@ -113,6 +113,8 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public bool CanAddRows { get; set; }
 
+        public string ThumbnailField { get; set; }
+
         public string[] TagsCSVURls { get; set; }
         public List<ReplaceableTag> Tags { get; set; }
 
@@ -203,6 +205,9 @@ namespace LagoVista.Core.Models.UIMetaData
             field.PrivateFileUpload = attr.PrivateFileUpload;
             field.Rows = attr.Rows;
             field.ImageUpload = attr.ImageUpload;
+            if(!String.IsNullOrEmpty(attr.ThumbnailField))
+                field.ThumbnailField = attr.ThumbnailField.CamelCase();
+
             field.CanAddRows = attr.CanAddRows;
             if(!String.IsNullOrEmpty(attr.TagsCSVURls))
                 field.TagsCSVURls = attr.TagsCSVURls.Split(',');

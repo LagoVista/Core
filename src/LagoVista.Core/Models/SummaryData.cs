@@ -2,8 +2,7 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Resources;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace LagoVista.Core.Models
 {
@@ -34,6 +33,9 @@ namespace LagoVista.Core.Models
         public string CategoryId { get; set; }
         public string CategoryKey { get; set; }
 
+        public int? DiscussionsTotal { get; set; }
+        public int? DiscussionsOpen { get; set; }
+
         public void Populate(EntityBase entity)
         {
             Id = entity.Id;
@@ -44,7 +46,14 @@ namespace LagoVista.Core.Models
             IsDeleted = entity.IsDeleted;
             Name = entity.Name;
             Key = entity.Key;
-         }
+
+            var discussableEntity = entity as IDiscussableEntity;
+            if (discussableEntity != null)
+            {
+                DiscussionsTotal = discussableEntity.Discussions.Count;
+                DiscussionsOpen = discussableEntity.Discussions.Where(dsc=>dsc.Open).Count();
+            }
+        }
     }
 
 }
