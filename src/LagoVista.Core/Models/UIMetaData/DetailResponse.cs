@@ -151,7 +151,7 @@ namespace LagoVista.Core.Models.UIMetaData
             if (!string.IsNullOrEmpty(entity.UpdateUrl))
                 response.UpdateUrl = entity.UpdateUrl;
 
-            response.HasDiscussions = entity is IDiscussableEntity;
+            response.HasDiscussions = model is IDiscussableEntity;
 
             response.SaveUrl = entity.SaveUrl;
             response.FactoryUrl = entity.FactoryUrl;

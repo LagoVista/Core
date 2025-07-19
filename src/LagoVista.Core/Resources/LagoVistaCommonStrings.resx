@@ -330,6 +330,9 @@
   <data name="Discussion_Help" xml:space="preserve">
     <value>Notes or Discussions that can be added to objects.</value>
   </data>
+  <data name="Discussion_Response" xml:space="preserve">
+    <value>Response</value>
+  </data>
   <data name="Discussion_TimeStamp" xml:space="preserve">
     <value>Time Stamp</value>
   </data>

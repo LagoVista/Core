@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Tests.Resources.UIMetaData;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Tests.UIMetaData
 {
     [EntityDescription(Domains.MetaData1, MetaDataResources.Names.Model3_Title, MetaDataResources.Names.Model3_Help, MetaDataResources.Names.Model3_Description, EntityDescriptionAttribute.EntityTypes.BusinessObject, typeof(MetaDataResources))]
-    public class Model1 : BaseModel1
+    public class Model1 : BaseModel1, IDiscussableEntity
     {
         public enum EnumValues
         {
@@ -37,5 +38,7 @@ namespace LagoVista.Core.Tests.UIMetaData
 
         [FormField(LabelResource: MetaDataResources.Names.Field5_Label, FieldType: FieldTypes.ChildView, ResourceType: typeof(MetaDataResources))]
         public Model2 Field5 { get; set; }
+
+        public List<Discussion> Discussions { get; set; }
     }
 }

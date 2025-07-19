@@ -32,6 +32,14 @@ namespace LagoVista.Core.Tests.UIMetaData
         }
 
         [TestMethod]
+        public void ShouldBeDiscussableEntity()
+        {
+            var model1 = new Model1();
+            var response = DetailResponse<Model1>.Create(model1);
+            Assert.IsTrue(response.HasDiscussions);
+        }
+
+        [TestMethod]
         public void DetailResponse_Get_Child_View()
         {
             var model1 = new Model1();

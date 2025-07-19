@@ -28,12 +28,18 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion, IsRequired: true, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Note { get; set; }
 
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion_Response, IsRequired: false, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
+        public string Response { get; set; }
+
+
         public List<string> GetFormFields()
         {
             return new List<string>()
             {
                 nameof(Open),
-                nameof(Note)
+                nameof(Note),
+                nameof(Response)
             };
         }
     }
