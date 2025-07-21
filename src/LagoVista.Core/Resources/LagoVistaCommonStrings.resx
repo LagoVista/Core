@@ -327,11 +327,17 @@
   <data name="Discussion" xml:space="preserve">
     <value>Discussion</value>
   </data>
+  <data name="DiscussionResponse_Title" xml:space="preserve">
+    <value>Response</value>
+  </data>
   <data name="Discussion_Help" xml:space="preserve">
     <value>Notes or Discussions that can be added to objects.</value>
   </data>
-  <data name="Discussion_Response" xml:space="preserve">
-    <value>Response</value>
+  <data name="Discussion_Responses" xml:space="preserve">
+    <value>Responses</value>
+  </data>
+  <data name="DiscussionResponse_Help" xml:space="preserve">
+    <value>A discussion has a starting point, this is a response to a discussion</value>
   </data>
   <data name="Discussion_TimeStamp" xml:space="preserve">
     <value>Time Stamp</value>

@@ -28,10 +28,8 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion, IsRequired: true, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Note { get; set; }
 
-
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion_Response, IsRequired: false, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
-        public string Response { get; set; }
-
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion_Responses, IsRequired: false, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
+        public List<DiscussionResponse> Responses { get; set; } = new List<DiscussionResponse>();
 
         public List<string> GetFormFields()
         {
@@ -39,8 +37,27 @@ namespace LagoVista.Core.Models
             {
                 nameof(Open),
                 nameof(Note),
-                nameof(Response)
+                nameof(Responses)
             };
         }
+    }
+
+    [EntityDescription(LGVCommonDomain.CommonDomain, Resources.LagoVistaCommonStrings.Names.DiscussionResponse_Title, Resources.LagoVistaCommonStrings.Names.DiscussionResponse_Help,
+        LagoVistaCommonStrings.Names.DiscussionResponse_Help, EntityDescriptionAttribute.EntityTypes.Discussion, typeof(LagoVistaCommonStrings), Icon: "icon-ae-chatting-2",
+        FactoryUrl: "/api/discussion/response/factory")]
+    public class DiscussionResponse
+    {
+        public DiscussionResponse()
+        {
+            Id = Guid.NewGuid().ToId();
+            Timestamp = DateTime.UtcNow.ToJSONString();
+        }
+        public string Id { get; set; }
+        public EntityHeader User { get; set; }
+        public string Timestamp { get; set; }
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion, IsRequired: true, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
+        public string Note { get; set; }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿/*7/18/2025 7:59:11 AM*/
+﻿/*7/21/2025 4:04:20 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1088,15 +1088,21 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Discussion_Help
 
 		public static string Discussion_Help { get { return GetResourceString("Discussion_Help"); } }
-//Resources:LagoVistaCommonStrings:Discussion_Response
+//Resources:LagoVistaCommonStrings:Discussion_Responses
 
-		public static string Discussion_Response { get { return GetResourceString("Discussion_Response"); } }
+		public static string Discussion_Responses { get { return GetResourceString("Discussion_Responses"); } }
 //Resources:LagoVistaCommonStrings:Discussion_TimeStamp
 
 		public static string Discussion_TimeStamp { get { return GetResourceString("Discussion_TimeStamp"); } }
 //Resources:LagoVistaCommonStrings:Discussion_Title
 
 		public static string Discussion_Title { get { return GetResourceString("Discussion_Title"); } }
+//Resources:LagoVistaCommonStrings:DiscussionResponse_Help
+
+		public static string DiscussionResponse_Help { get { return GetResourceString("DiscussionResponse_Help"); } }
+//Resources:LagoVistaCommonStrings:DiscussionResponse_Title
+
+		public static string DiscussionResponse_Title { get { return GetResourceString("DiscussionResponse_Title"); } }
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
@@ -1319,9 +1325,11 @@ namespace LagoVista.Core.Resources
 			public const string Customer_ZipCode = "Customer_ZipCode";
 			public const string Discussion = "Discussion";
 			public const string Discussion_Help = "Discussion_Help";
-			public const string Discussion_Response = "Discussion_Response";
+			public const string Discussion_Responses = "Discussion_Responses";
 			public const string Discussion_TimeStamp = "Discussion_TimeStamp";
 			public const string Discussion_Title = "Discussion_Title";
+			public const string DiscussionResponse_Help = "DiscussionResponse_Help";
+			public const string DiscussionResponse_Title = "DiscussionResponse_Title";
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string ListResponse_Category = "ListResponse_Category";
 			public const string ListResponse_Deleted = "ListResponse_Deleted";
