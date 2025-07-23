@@ -183,7 +183,8 @@ namespace LagoVista.Core.Models
                 EmailConfirmed = EmailConfirmed,
                 PhoneNumberConfirmed = PhoneNumberConfirmed,
                 TeamsAccountName = TeamsAccountName,
-                LastLogin = LastLogin
+                LastLogin = LastLogin,
+                Title = Title,
             };
         }
 
@@ -238,6 +239,9 @@ namespace LagoVista.Core.Models
         public bool EmailConfirmed { get; set; }
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_IsPhoneConfirmed, ResourceType: typeof(AuthenticationResources))]
         public bool PhoneNumberConfirmed { get; set; }
+
+        [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_Title, ResourceType: typeof(AuthenticationResources))]
+        public string Title { get; set; }
 
         public string LastLogin { get; set; }
     }
