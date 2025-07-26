@@ -12,4 +12,9 @@ namespace LagoVista.Core.Interfaces
 
         Task<Func<CancellationToken, Task>> DequeueAsync(CancellationToken cancellationToken);
     }
+
+    public static class BackgroundServiceTaskQueueProvider
+    {
+        public static IBackgroundServiceTaskQueue Instance { get; set; }
+    }
 }
