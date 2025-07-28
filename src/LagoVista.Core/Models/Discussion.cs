@@ -28,8 +28,15 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion, IsRequired: true, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Note { get; set; }
 
+        /// <summary>
+        /// We take a hash of the note, if it changed at all we resend the notification.
+        /// </summary>
+        public string NoteHash { get; set; }
+
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion_Responses, IsRequired: false, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
         public List<DiscussionResponse> Responses { get; set; } = new List<DiscussionResponse>();
+
+        public bool Handled { get; set; }
 
         public List<string> GetFormFields()
         {
@@ -56,8 +63,12 @@ namespace LagoVista.Core.Models
         public EntityHeader User { get; set; }
         public string Timestamp { get; set; }
 
+        public bool Handled { get; set; }
+
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion, IsRequired: true, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Note { get; set; }
+
+        public string NoteHash { get; set; }
 
     }
 }

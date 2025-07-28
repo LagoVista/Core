@@ -5,8 +5,13 @@ using System.Text;
 
 namespace LagoVista.Core.Interfaces
 {
-    public interface IDiscussableEntity
+    public interface IDiscussable
     {
-        List<Discussion> Discussions { get; } 
+        List<Discussion> Discussions { get; }
+    }
+
+    public interface IDiscussableEntity : IIDEntity, IDiscussable, INamedEntity, IOwnedEntity, IAuditableEntity
+    {
     }
 }
+     

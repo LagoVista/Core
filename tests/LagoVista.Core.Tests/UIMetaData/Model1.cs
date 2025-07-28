@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Tests.UIMetaData
 {
     [EntityDescription(Domains.MetaData1, MetaDataResources.Names.Model3_Title, MetaDataResources.Names.Model3_Help, MetaDataResources.Names.Model3_Description, EntityDescriptionAttribute.EntityTypes.BusinessObject, typeof(MetaDataResources))]
-    public class Model1 : BaseModel1, IDiscussableEntity
+    public class Model1 : EntityBase, IDiscussableEntity
     {
         public enum EnumValues
         {
