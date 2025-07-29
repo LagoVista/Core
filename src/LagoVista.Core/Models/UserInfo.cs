@@ -126,8 +126,13 @@ namespace LagoVista.Core.Models
         public string State { get; set; }
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_Country, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
         public string Country { get; set; }
+        
         [FormField(LabelResource: Resources.AuthenticationResources.Names.UserInfo_PostalCode, FieldType: FieldTypes.Text, ResourceType: typeof(Resources.AuthenticationResources))]
         public string PostalCode { get; set; }
+
+
+        [FormField(LabelResource: Resources.AuthenticationResources.Names.Common_TimeZone, FieldType: FieldTypes.Picker, WaterMark:AuthenticationResources.Names.Common_TimeZone_Select, ResourceType: typeof(Resources.AuthenticationResources))]
+        public EntityHeader TimeZone { get; set; }
 
         public bool TermsAndConditionsAccepted { get; set; }
         public string TermsAndConditionsAcceptedIPAddress { get; set; }
@@ -185,6 +190,7 @@ namespace LagoVista.Core.Models
                 TeamsAccountName = TeamsAccountName,
                 LastLogin = LastLogin,
                 Title = Title,
+                TimeZone = TimeZone,
             };
         }
 
@@ -244,6 +250,8 @@ namespace LagoVista.Core.Models
         public string Title { get; set; }
 
         public string LastLogin { get; set; }
+
+        public EntityHeader TimeZone { get; set; }
     }
 
     public class ExternalLogin

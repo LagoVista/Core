@@ -1,4 +1,4 @@
-﻿/*7/21/2025 4:04:20 PM*/
+﻿/*7/29/2025 1:23:26 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -102,6 +102,12 @@ namespace LagoVista.Core.Resources
 //Resources:AuthenticationResources:Common_Status
 
 		public static string Common_Status { get { return GetResourceString("Common_Status"); } }
+//Resources:AuthenticationResources:Common_TimeZone
+
+		public static string Common_TimeZone { get { return GetResourceString("Common_TimeZone"); } }
+//Resources:AuthenticationResources:Common_TimeZone_Select
+
+		public static string Common_TimeZone_Select { get { return GetResourceString("Common_TimeZone_Select"); } }
 //Resources:AuthenticationResources:ExternalLogin_Facebook
 
 		public static string ExternalLogin_Facebook { get { return GetResourceString("ExternalLogin_Facebook"); } }
@@ -251,6 +257,8 @@ namespace LagoVista.Core.Resources
 			public const string Common_PhoneNumber = "Common_PhoneNumber";
 			public const string Common_Role = "Common_Role";
 			public const string Common_Status = "Common_Status";
+			public const string Common_TimeZone = "Common_TimeZone";
+			public const string Common_TimeZone_Select = "Common_TimeZone_Select";
 			public const string ExternalLogin_Facebook = "ExternalLogin_Facebook";
 			public const string ExternalLogin_GitHub = "ExternalLogin_GitHub";
 			public const string ExternalLogin_Google = "ExternalLogin_Google";

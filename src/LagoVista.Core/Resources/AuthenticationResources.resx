@@ -294,4 +294,10 @@
   <data name="UserInfo_CurrentOrganization" xml:space="preserve">
     <value>Current Organization</value>
   </data>
+  <data name="Common_TimeZone" xml:space="preserve">
+    <value>Time Zone</value>
+  </data>
+  <data name="Common_TimeZone_Select" xml:space="preserve">
+    <value>-select time zone-</value>
+  </data>
 </root>
