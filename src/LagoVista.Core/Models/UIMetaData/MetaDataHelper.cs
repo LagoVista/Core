@@ -49,6 +49,9 @@ namespace LagoVista.Core.Models.UIMetaData
                 if (attr != null)
                 {
                     var entityDescription = EntityDescription.Create(type.AsType(), attr);
+                    if (!_domains.ContainsKey(entityDescription.DomainName))
+                        throw new NullReferenceException($"Could not find {entityDescription.DomainName} domain from {type.FullName}");
+
                     entityDescription.Domain = _domains[entityDescription.DomainName];
                   
                     _entities.Add(entityDescription);

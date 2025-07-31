@@ -6,9 +6,6 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.Models
 {
-    [EntityDescription(LGVCommonDomain.CommonDomain, Resources.LagoVistaCommonStrings.Names.Discussion_Title, Resources.LagoVistaCommonStrings.Names.Discussion_Help,
-            LagoVistaCommonStrings.Names.Discussion_Help, EntityDescriptionAttribute.EntityTypes.Discussion, typeof(LagoVistaCommonStrings), Icon: "icon-ae-chatting-2",
-            FactoryUrl: "/api/discussion/factory")]
     public class Discussion : IFormDescriptor
     {
         public Discussion()

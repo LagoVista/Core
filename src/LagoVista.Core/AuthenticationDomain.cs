@@ -38,7 +38,7 @@ namespace LagoVista.Core
     [DomainDescriptor]
     public class LGVCommonDomain
     {
-        public const string CommonDomain = "AuthenticationDomain";
+        public const string CommonDomain = "CommonDomain";
 
         [DomainDescription(CommonDomain)]
         public static DomainDescription UserDomainDescription

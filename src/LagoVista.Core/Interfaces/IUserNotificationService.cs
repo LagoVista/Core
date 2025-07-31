@@ -16,6 +16,7 @@ namespace LagoVista.Core.Interfaces
 
     public interface IUserNotificationService
     {
+        Task QueueDiscussionNotificationAsync(string userId, EntityBase entity, Discussion discussion);
         Task QueueDiscussionNotificationAsync(string userId, IDiscussableEntity entity, Discussion discussion);
         Task QueueDiscussionNotificationAsync(string userId, IDiscussableEntity entity, Discussion discussion, DiscussionResponse response);
         Task QueueTeamsNotification(string webHookUrl, string cardContent);  
