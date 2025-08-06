@@ -146,6 +146,7 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
             {
                 using (var container = new HtmlContainer())
                 {
+                 
                     if (stylesheetLoad != null)
                         container.StylesheetLoad += stylesheetLoad;
                     if (imageLoad != null)
@@ -153,18 +154,27 @@ namespace TheArtOfDev.HtmlRenderer.PdfSharp
 
                     container.Location = new XPoint(config.MarginLeft, config.MarginTop);
                     container.MaxSize = new XSize(pageSize.Width, 0);
+              
                     container.SetHtml(html, cssData);
+
+
                     container.PageSize = pageSize;
                     container.MarginBottom = config.MarginBottom;
                     container.MarginLeft = config.MarginLeft;
                     container.MarginRight = config.MarginRight;
                     container.MarginTop = config.MarginTop;
 
+                    Console.WriteLine("html here=>" + html.Substring(0, 100));
                     // layout the HTML with the page width restriction to know how many pages are required
+                    Console.WriteLine("Container Actual Size: " + container.ActualSize.Height + " " + pageSize);
                     using (var measure = XGraphics.CreateMeasureContext(pageSize, XGraphicsUnit.Point, XPageDirection.Downwards))
                     {
                         container.PerformLayout(measure);
                     }
+                    Console.WriteLine("Container Actual Size: " + container.ActualSize.Height + " " + pageSize);
+
+
+
 
                     // while there is un-rendered HTML, create another PDF page and render with proper offset for the next page
                     double scrollOffset = 0;

@@ -14,6 +14,8 @@ namespace LagoVista.PDFServices
 
         public byte[] GetFont(string faceName)
         {
+            Console.WriteLine("GETTING FONT -> " + faceName);
+
             using (var ms = new MemoryStream())
             {
 
@@ -32,7 +34,30 @@ namespace LagoVista.PDFServices
 
         public FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
         {
+
+            Console.WriteLine("Resolve Type Face -> " + familyName);
+
             if (familyName.Equals("Roboto", StringComparison.CurrentCultureIgnoreCase))
+            {
+                if (isBold && isItalic)
+                {
+                    return new FontResolverInfo("Roboto-BoldItalic.ttf");
+                }
+                else if (isBold)
+                {
+                    return new FontResolverInfo("Roboto-Bold.ttf");
+                }
+                else if (isItalic)
+                {
+                    return new FontResolverInfo("Roboto-Italic.ttf");
+                }
+                else
+                {
+                    return new FontResolverInfo("Roboto-Regular.ttf");
+                }
+            }
+
+            if (familyName.Equals("Segoe UI", StringComparison.CurrentCultureIgnoreCase))
             {
                 if (isBold && isItalic)
                 {

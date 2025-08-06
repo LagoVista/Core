@@ -110,9 +110,16 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
         /// <returns>cached font instance</returns>
         public RFont GetCachedFont(string family, double size, RFontStyle style)
         {
+            Console.WriteLine("Try Get Font - " + family);
+
             var font = TryGetFont(family, size, style);
+
+            Console.WriteLine("GOT IT!- " + family);
+
             if (font == null)
             {
+                Console.WriteLine("FONT WAS NULL!- " + family);
+
                 if (!_existingFontFamilies.ContainsKey(family))
                 {
                     string mappedFamily;
@@ -148,6 +155,8 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
             RFont font = null;
             if (_fontsCache.ContainsKey(family))
             {
+                Console.WriteLine("CONTAINS TRY GET F => " + family);
+
                 var a = _fontsCache[family];
                 if (a.ContainsKey(size))
                 {
@@ -164,6 +173,8 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
             }
             else
             {
+                Console.WriteLine("DOES NOT KEY => " + family);
+
                 _fontsCache[family] = new Dictionary<double, Dictionary<RFontStyle, RFont>>();
                 _fontsCache[family][size] = new Dictionary<RFontStyle, RFont>();
             }
@@ -178,12 +189,19 @@ namespace TheArtOfDev.HtmlRenderer.Core.Handlers
             RFontFamily fontFamily;
             try
             {
+                foreach(var font in _existingFontFamilies)
+                {
+                    Console.WriteLine("EXISTING FONT: " + font.Value.Name + " " + font.Key);
+                }
+
                 return _existingFontFamilies.TryGetValue(family, out fontFamily)
                     ? _adapter.CreateFont(fontFamily, size, style)
                     : _adapter.CreateFont(family, size, style);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("NOPE DID NOT FIND FONT!" + family + " " + ex.Message);
+
                 // handle possibility of no requested style exists for the font, use regular then
                 return _existingFontFamilies.TryGetValue(family, out fontFamily)
                     ? _adapter.CreateFont(fontFamily, size, RFontStyle.Regular)

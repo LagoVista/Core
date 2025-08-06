@@ -647,6 +647,8 @@ namespace TheArtOfDev.HtmlRenderer.Core
                     _actualSize = RSize.Empty;
                     _root.PerformLayout(g);
                 }
+                Console.WriteLine("[ROOT WAS NOT NULL] ----------------------- ");
+
 
                 if (!_loadComplete)
                 {
@@ -655,6 +657,11 @@ namespace TheArtOfDev.HtmlRenderer.Core
                     if (handler != null)
                         handler(this, EventArgs.Empty);
                 }
+            }
+            else
+            {
+                Console.WriteLine("[ROOT WAS NULL] -----------------------");
+
             }
         }
 
@@ -915,14 +922,10 @@ namespace TheArtOfDev.HtmlRenderer.Core
         /// <param name="exception">optional: the exception that occured</param>
         internal void ReportError(HtmlRenderErrorType type, string message, Exception exception = null)
         {
-            try
-            {
-                EventHandler<HtmlRenderErrorEventArgs> handler = RenderError;
-                if (handler != null)
-                    handler(this, new HtmlRenderErrorEventArgs(type, message, exception));
-            }
-            catch
-            { }
+            EventHandler<HtmlRenderErrorEventArgs> handler = RenderError;
+            if (handler != null)
+                handler(this, new HtmlRenderErrorEventArgs(type, message, exception));
+            throw new Exception($"Html render error: {type} {message} Exception: {exception?.Message}", exception);
         }
 
         /// <summary>

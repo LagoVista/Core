@@ -154,6 +154,24 @@ namespace LagoVista.Core.Managers
               return _security.LogEntityActionAsync(id, entityType, accessType, org, user);
         }
 
+        protected void AddAuditHistory(EntityBase entity, string fieldName, string oldvalue, string newValue, EntityHeader changedBy = null, string changedDate = null)
+        {
+            entity.AuditHistory.Add(new EntityChangeSet()
+            {
+                ChangeDate = changedDate ?? entity.LastUpdatedDate,
+                ChangedBy = changedBy ?? entity.ToEntityHeader(),
+                Changes = new List<EntityChange>()
+                {
+                    new EntityChange()
+                    {
+                        Field = fieldName,
+                        OldValue = oldvalue,
+                        NewValue = newValue
+                    }
+                }
+            });
+        }
+
         protected void ValidateAuthParams(EntityHeader org, EntityHeader user)
         {
             if(EntityHeader.IsNullOrEmpty(org))
