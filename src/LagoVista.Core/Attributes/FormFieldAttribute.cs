@@ -185,7 +185,9 @@ namespace LagoVista.Core.Attributes
                                   string CustomCategoryType = null,
                                   bool CanAddRows = true,
                                   string TagsCSVURls = "",
-                                  string ThumbnailField = "")
+                                  string ThumbnailField = "",
+                                  string ParentRowName = "",
+                                  int ParentRowIndex = -1)
         {
             _labelDisplayResource = LabelResource;
             _columnHeaderDisplayResource = ColHeaderResource;
@@ -238,6 +240,8 @@ namespace LagoVista.Core.Attributes
             this.CanAddRows = CanAddRows;
             this.TagsCSVURls = TagsCSVURls;
             this.ThumbnailField = ThumbnailField;
+            this.ParentRowName = ParentRowName;
+            this.ParentRowIndex = ParentRowIndex;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -303,6 +307,8 @@ namespace LagoVista.Core.Attributes
         public bool ImageUpload { get; set; }
         public string ThumbnailField { get; set; }
         public string TagsCSVURls { get; }
+        public string ParentRowName { get; }
+        public int ParentRowIndex { get; set; }
     }
 
     public class SelectListItem

@@ -112,7 +112,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public bool ImageUpload { get; set; }
 
         public bool CanAddRows { get; set; }
+        public string ParentRowName { get; set; }
 
+        public int ParentRowIndex { get; set; }
         public string ThumbnailField { get; set; }
 
         public string[] TagsCSVURls { get; set; }
@@ -203,6 +205,8 @@ namespace LagoVista.Core.Models.UIMetaData
             field.DisplayImageSize = attr.DisplayImageSize;
             field.SharedContentKey = attr.SharedContentKey;
             field.PrivateFileUpload = attr.PrivateFileUpload;
+            field.ParentRowName = attr.ParentRowName;
+            field.ParentRowIndex = attr.ParentRowIndex;
             field.Rows = attr.Rows;
             field.ImageUpload = attr.ImageUpload;
             if(!String.IsNullOrEmpty(attr.ThumbnailField))
