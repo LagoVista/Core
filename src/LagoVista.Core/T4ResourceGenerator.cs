@@ -1,4 +1,4 @@
-﻿/*7/29/2025 1:23:26 PM*/
+﻿/*8/24/2025 2:06:55 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1096,6 +1096,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Discussion_Help
 
 		public static string Discussion_Help { get { return GetResourceString("Discussion_Help"); } }
+//Resources:LagoVistaCommonStrings:Discussion_NotifyTeam
+
+		public static string Discussion_NotifyTeam { get { return GetResourceString("Discussion_NotifyTeam"); } }
 //Resources:LagoVistaCommonStrings:Discussion_Responses
 
 		public static string Discussion_Responses { get { return GetResourceString("Discussion_Responses"); } }
@@ -1333,6 +1336,7 @@ namespace LagoVista.Core.Resources
 			public const string Customer_ZipCode = "Customer_ZipCode";
 			public const string Discussion = "Discussion";
 			public const string Discussion_Help = "Discussion_Help";
+			public const string Discussion_NotifyTeam = "Discussion_NotifyTeam";
 			public const string Discussion_Responses = "Discussion_Responses";
 			public const string Discussion_TimeStamp = "Discussion_TimeStamp";
 			public const string Discussion_Title = "Discussion_Title";

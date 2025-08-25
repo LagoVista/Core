@@ -492,4 +492,7 @@
   <data name="ValidationCheck_Errors" xml:space="preserve">
     <value>The submitted form contains validation errors, please correct.</value>
   </data>
+  <data name="Discussion_NotifyTeam" xml:space="preserve">
+    <value>Notify Team</value>
+  </data>
 </root>
