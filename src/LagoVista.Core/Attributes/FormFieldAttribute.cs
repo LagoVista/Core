@@ -77,7 +77,8 @@ namespace LagoVista.Core.Attributes
         MultiLineTextAreaFixedFont,
         RawHtml,
         Currency,
-        ContactPicker
+        ContactPicker,
+        FontAwesomeIconPicker
     }
 
     public enum NamespaceTypes
