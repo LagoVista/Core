@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,5 +18,7 @@ namespace LagoVista.Core.Interfaces
         Task DeleteAsync<TEntity>(string id, IEntityHeader org) where TEntity : class, IIDEntity, INoSQLEntity, IKeyedEntity, IOwnedEntity;
         Task UpsertDocumentAsync<TEntity>(TEntity obj) where TEntity : class, IIDEntity, INoSQLEntity, IKeyedEntity, IOwnedEntity;
         void SetConnection(IConnectionSettings connectionSettings);
+        Task<RatedEntity> AddRatingAsync(string id, int rating, EntityHeader org, EntityHeader user);
+        Task<InvokeResult> SetCategoryAsync(string id, EntityHeader category, EntityHeader org, EntityHeader user);
     }
 }

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized
+    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity
     {
 
         public EntityBase()
@@ -83,8 +83,16 @@ namespace LagoVista.Core.Models
         public EntityHeader ClonedFromOrg { get; set; }
         public EntityHeader ClonedRevision { get; set; }
 
+
         public int Revision { get; set; }
         public string RevisionTimeStamp { get; set; }
+
+
+        public double Stars { get; set; }
+        public int RatingsCount { get; set; }
+
+        public List<EntityRating> Ratings { get; set; } = new List<EntityRating>();
+
 
         public EntityHeader ToEntityHeader()
         {

@@ -36,6 +36,9 @@ namespace LagoVista.Core.Models
         public int? DiscussionsTotal { get; set; }
         public int? DiscussionsOpen { get; set; }
 
+        public double Stars { get; set; }
+        public int RatingsCount { get; set; }
+
         public void Populate(EntityBase entity)
         {
             Id = entity.Id;
@@ -46,7 +49,8 @@ namespace LagoVista.Core.Models
             IsDeleted = entity.IsDeleted;
             Name = entity.Name;
             Key = entity.Key;
-
+            Stars = entity.Stars;
+            RatingsCount = entity.RatingsCount;
             var discussableEntity = entity as IDiscussableEntity;
             if (discussableEntity != null)
             {
