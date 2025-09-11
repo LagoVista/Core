@@ -495,4 +495,13 @@
   <data name="Discussion_NotifyTeam" xml:space="preserve">
     <value>Notify Team</value>
   </data>
+  <data name="Category_Title" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Category_Description" xml:space="preserve">
+    <value>Categories are built objects use to organizes entties within a certain entity type.</value>
+  </data>
+  <data name="Common_Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
 </root>

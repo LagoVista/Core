@@ -1,4 +1,4 @@
-﻿/*8/24/2025 2:06:55 PM*/
+﻿/*9/11/2025 10:52:59 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -934,6 +934,12 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Address_UnitNumber_Help
 
 		public static string Address_UnitNumber_Help { get { return GetResourceString("Address_UnitNumber_Help"); } }
+//Resources:LagoVistaCommonStrings:Category_Description
+
+		public static string Category_Description { get { return GetResourceString("Category_Description"); } }
+//Resources:LagoVistaCommonStrings:Category_Title
+
+		public static string Category_Title { get { return GetResourceString("Category_Title"); } }
 //Resources:LagoVistaCommonStrings:Common_Category
 
 		public static string Common_Category { get { return GetResourceString("Common_Category"); } }
@@ -949,6 +955,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Description
 
 		public static string Common_Description { get { return GetResourceString("Common_Description"); } }
+//Resources:LagoVistaCommonStrings:Common_Icon
+
+		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
 //Resources:LagoVistaCommonStrings:Common_Image
 
 		public static string Common_Image { get { return GetResourceString("Common_Image"); } }
@@ -1282,11 +1291,14 @@ namespace LagoVista.Core.Resources
 			public const string Address_Title = "Address_Title";
 			public const string Address_UnitNumber = "Address_UnitNumber";
 			public const string Address_UnitNumber_Help = "Address_UnitNumber_Help";
+			public const string Category_Description = "Category_Description";
+			public const string Category_Title = "Category_Title";
 			public const string Common_Category = "Common_Category";
 			public const string Common_Category_Select = "Common_Category_Select";
 			public const string Common_CreatedBy = "Common_CreatedBy";
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
+			public const string Common_Icon = "Common_Icon";
 			public const string Common_Image = "Common_Image";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
