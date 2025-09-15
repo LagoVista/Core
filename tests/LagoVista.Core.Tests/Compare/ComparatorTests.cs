@@ -18,92 +18,106 @@ namespace LagoVista.Core.Tests.Compare
         private const int NULLABLE_ORIGINAL = 100;
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_TypeMismatch_Exception()
         {
-            var objA = new Models.ComparatorModelSimple();
-            var objC = new Models.ComparatorModelModerate();
-            
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var objA = new Models.ComparatorModelSimple();
+                var objC = new Models.ComparatorModelModerate();
 
-            var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Comparator.Compare(objA, objC, user);
+                var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
+
+                Comparator.Compare(objA, objC, user);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_MissingUser_Exception()
         {
-            Models.ComparatorModelModerate objA = null;
-            Models.ComparatorModelModerate objB = null;
-            EntityHeader user = null;
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                Models.ComparatorModelModerate objA = null;
+                Models.ComparatorModelModerate objB = null;
+                EntityHeader user = null;
 
-            Comparator.Compare(objA, objB, user);
+                Comparator.Compare(objA, objB, user);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_EmptyUser_Exception()
         {
-            Models.ComparatorModelModerate objA = null;
-            Models.ComparatorModelModerate objB = null;
-            var user = new EntityHeader() { Id = Guid.NewGuid().ToId() };
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                Models.ComparatorModelModerate objA = null;
+                Models.ComparatorModelModerate objB = null;
+                var user = new EntityHeader() { Id = Guid.NewGuid().ToId() };
 
-            Comparator.Compare(objA, objB, user);
+                Comparator.Compare(objA, objB, user);
+            });
         }
 
 
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_BothNull_Exception()
         {
-            Models.ComparatorModelModerate objA = null;
-            Models.ComparatorModelModerate objB = null;
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                Models.ComparatorModelModerate objA = null;
+                Models.ComparatorModelModerate objB = null;
 
-            var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
+                var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Comparator.Compare(objA, objB, user);
+                Comparator.Compare(objA, objB, user);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_FirstNull_Exception()
         {
-            Models.ComparatorModelModerate objA = null;
-            var objB = new Models.ComparatorModelSimple();
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                Models.ComparatorModelModerate objA = null;
+                var objB = new Models.ComparatorModelSimple();
 
-            var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
+                var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Comparator.Compare(objA, objB, user);
+                Comparator.Compare(objA, objB, user);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_SecondNull_Exception()
         {
-            var objA = new Models.ComparatorModelSimple();
-            Models.ComparatorModelModerate objB = null;
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var objA = new Models.ComparatorModelSimple();
+                Models.ComparatorModelModerate objB = null;
 
-            var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
+                var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Comparator.Compare(objA, objB, user);
+                Comparator.Compare(objA, objB, user);
+            });
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SimpleCompare_IDMisMatch_Exception()
         {
-            var objA = new Models.ComparatorModelSimple();
-            var objB = new Models.ComparatorModelModerate();
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var objA = new Models.ComparatorModelSimple();
+                var objB = new Models.ComparatorModelModerate();
 
-            objA.Id = Guid.NewGuid().ToId();
-            objB.Id = Guid.NewGuid().ToId();
+                objA.Id = Guid.NewGuid().ToId();
+                objB.Id = Guid.NewGuid().ToId();
 
-            var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
+                var user = EntityHeader.Create(Guid.NewGuid().ToId(), "SOME_USER");
 
-            Comparator.Compare(objA, objB, user);
+                Comparator.Compare(objA, objB, user);
+            });
         }
 
         [TestMethod]

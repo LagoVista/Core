@@ -1,17 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.18.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.10.4" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.10.4" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
   </ItemGroup>
 
@@ -22,7 +17,7 @@
     <ProjectReference Include="..\..\src\LagoVista.Core.Rpc.Server.ServiceBus\LagoVista.Core.Rpc.Server.ServiceBus.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.Rpc.Server\LagoVista.Core.Rpc.Server.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.Rpc\LagoVista.Core.Rpc.csproj" />
-    <ProjectReference Include="..\..\src\LagoVista.Core\LagoVista.Core.csproj" />
+    <ProjectReference Include="..\LagoVista.Core.TestBase\LagoVista.Core.TestBase.csproj" />
   </ItemGroup>
 
 </Project>

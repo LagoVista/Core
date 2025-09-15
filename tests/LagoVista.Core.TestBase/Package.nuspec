@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>LagoVista.Core.TestBase</id>
+    <version>3.0.3043.1901</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.nuviot.com</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <icon>LagoVistaIcon.png</icon>
+    <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
+    <copyright>Copyright Software Logistics - 2025</copyright>
+    <tags>HomeAutomation IoT LagoVista</tags>
+    <releaseNotes>Build Date: 9/15/2025 11:01:50 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="net9.0">
+        <dependency id="Moq" version="4.18.2" />
+        <dependency id="Microsoft.NET.Test.Sdk" version="17.14.1" />
+        <dependency id="MSTest.TestAdapter" version="3.10.4" />
+        <dependency id="MSTest.TestFramework" version="3.10.4" />
+        <dependency id="NLipsum" version="1.1.0" />
+        <dependency id="NUnit" version="4.4.0" />
+        <dependency id="NUnit3TestAdapter" version="5.1.0" />
+        <dependency id="coverlet.collector" version="6.0.4" />
+        <dependency id="LagoVista.Core" version="3.0.3043.1901" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\net9.0\LagoVista.Core.TestBase.dll" target="lib\net9.0\LagoVista.Core.TestBase.dll" />
+    <file src="bin\release\net9.0\LagoVista.Core.TestBase.pdb" target="lib\net9.0\LagoVista.Core.TestBase.pdb" />
+  </files>
+</package>
