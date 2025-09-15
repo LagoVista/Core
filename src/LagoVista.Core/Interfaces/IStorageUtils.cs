@@ -19,6 +19,7 @@ namespace LagoVista.Core.Interfaces
         Task UpsertDocumentAsync<TEntity>(TEntity obj) where TEntity : class, IIDEntity, INoSQLEntity, IKeyedEntity, IOwnedEntity;
         void SetConnection(IConnectionSettings connectionSettings);
         Task<RatedEntity> AddRatingAsync(string id, int rating, EntityHeader org, EntityHeader user);
+        Task<RatedEntity> ClearRatingAsync(string id, EntityHeader org, EntityHeader user);
         Task<InvokeResult> SetCategoryAsync(string id, EntityHeader category, EntityHeader org, EntityHeader user);
     }
 }

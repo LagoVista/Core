@@ -4,6 +4,15 @@ using System.Text;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
+    public enum OrderByTypes
+    {
+        Name,
+        Rating,
+        CreationDate,
+        LastUpdateDate,
+    }
+
+
     public class ListRequest
     {
         public const int MaxPageSize = 9999999;
@@ -26,6 +35,9 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public bool ShowDeleted { get; set; }
 
+        public OrderByTypes? OrderBy { get; set; }
+        public OrderByTypes? OrderByDesc { get; set; }
+         
         public override string ToString()
         {
             return $@"[List Request]

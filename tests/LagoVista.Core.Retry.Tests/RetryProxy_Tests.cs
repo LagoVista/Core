@@ -95,39 +95,43 @@ namespace LagoVista.Core.Retry.Tests
 
         #region null params test
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Create_InstanceNull()
         {
-            var instance = new RetryProxySubject();
-            var options = new RetryOptions(5, TimeSpan.FromSeconds(5));
-            var canRetryTester = new CanRetryProxySubjectException();
-            try
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var retryProxy = RetryProxy.Create<IRetryProxySubject>(null, options, canRetryTester);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Assert.AreEqual(nameof(instance), ex.ParamName);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var options = new RetryOptions(5, TimeSpan.FromSeconds(5));
+                var canRetryTester = new CanRetryProxySubjectException();
+                try
+                {
+                    var retryProxy = RetryProxy.Create<IRetryProxySubject>(null, options, canRetryTester);
+                }
+                catch (ArgumentNullException ex)
+                {
+                    Assert.AreEqual(nameof(instance), ex.ParamName);
+                    throw;
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Create_OptionsNull()
         {
-            var instance = new RetryProxySubject();
-            var options = new RetryOptions(5, TimeSpan.FromSeconds(5));
-            var canRetryTester = new CanRetryProxySubjectException();
-            try
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
             {
-                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, null, canRetryTester);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Assert.AreEqual(nameof(options), ex.ParamName);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var options = new RetryOptions(5, TimeSpan.FromSeconds(5));
+                var canRetryTester = new CanRetryProxySubjectException();
+                try
+                {
+                    var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, null, canRetryTester);
+                }
+                catch (ArgumentNullException ex)
+                {
+                    Assert.AreEqual(nameof(options), ex.ParamName);
+                    throw;
+                }
+            });
         }
         #endregion
 
@@ -157,92 +161,100 @@ namespace LagoVista.Core.Retry.Tests
 
         #region invoke failure synchronous
         [TestMethod]
-        [ExpectedException(typeof(RetryNotAllowedException))]
         public void InvokeFailure_RetryForbidden()
         {
-            var instance = new RetryProxySubject();
-            var retryTest = new CanNotRetryProxySubjectException();
-            var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(5));
-            var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
-            try
+            Assert.ThrowsExactly<RetryNotAllowedException>(() =>
             {
-                var result = retryProxy.Fail();
-            }
-            catch (RetryException ex)
-            {
-                Assert.IsTrue(ex.InnerException is ProxySubjectTestException);
-                Assert.AreEqual(1, ex.Attempts);
-                Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var retryTest = new CanNotRetryProxySubjectException();
+                var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(5));
+                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
+                try
+                {
+                    var result = retryProxy.Fail();
+                }
+                catch (RetryException ex)
+                {
+                    Assert.IsTrue(ex.InnerException is ProxySubjectTestException);
+                    Assert.AreEqual(1, ex.Attempts);
+                    Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
+                    throw;
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void InvokeFailure_MaxAttemptsExceeded()
         {
-            var instance = new RetryProxySubject();
-            var retryTest = new CanRetryProxySubjectException();
-            var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(60));
-            var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
-            try
+            Assert.ThrowsExactly<ExceededMaxAttemptsException>(() =>
             {
-                var result = retryProxy.Fail();
-            }
-            catch (RetryException ex)
-            {
-                Assert.IsTrue(ex.Exceptions.Count > 0);
-                Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
-                Assert.AreEqual(5, ex.Attempts);
-                Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var retryTest = new CanRetryProxySubjectException();
+                var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(60));
+                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
+                    try
+                    {
+                        var result = retryProxy.Fail();
+                    }
+                    catch (RetryException ex)
+                    {
+                        Assert.IsTrue(ex.Exceptions.Count > 0);
+                        Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
+                        Assert.AreEqual(5, ex.Attempts);
+                        Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
+                        throw;
+                    }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxWaitTimeException))]
         public void InvokeFailure_TimeoutExceeded()
         {
-            var instance = new RetryProxySubject();
-            var retryTest = new CanRetryProxySubjectException();
-            var retryOptions = new RetryOptions(int.MaxValue, TimeSpan.FromSeconds(1));
-            var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
-            try
+            Assert.ThrowsExactly<ExceededMaxWaitTimeException>(() =>
             {
-                var result = retryProxy.Fail();
-            }
-            catch (RetryException ex)
-            {
-                Assert.IsTrue(ex.Exceptions.Count > 0);
-                Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
-                Assert.IsTrue(ex.Duration >= TimeSpan.FromSeconds(1));
-                Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var retryTest = new CanRetryProxySubjectException();
+                var retryOptions = new RetryOptions(int.MaxValue, TimeSpan.FromSeconds(1));
+                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
+                try
+                {
+                    var result = retryProxy.Fail();
+                }
+                catch (RetryException ex)
+                {
+                    Assert.IsTrue(ex.Exceptions.Count > 0);
+                    Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
+                    Assert.IsTrue(ex.Duration >= TimeSpan.FromSeconds(1));
+                    Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
+                    throw;
+                }
+            });
         }
         #endregion
 
         #region invoke failure async
         [TestMethod]
-        [ExpectedException(typeof(RetryNotAllowedException))]
         public async Task InvokeFailure_RetryForbiddenAsync()
         {
-            var instance = new RetryProxySubject();
-            var retryTest = new CanNotRetryProxySubjectException();
-            var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(5));
-            var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
-            //Assert.ThrowsException<RetryNotAllowedException>()
-            try
+            await Assert.ThrowsExactlyAsync<RetryNotAllowedException>(async () =>
             {
-                var result = await retryProxy.FailAsync();
-            }
-            catch (RetryException ex)
-            {
-                Assert.IsTrue(ex.InnerException is ProxySubjectTestException);
-                Assert.AreEqual(1, ex.Attempts);
-                Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
-                throw;
-            }
+
+                var instance = new RetryProxySubject();
+                var retryTest = new CanNotRetryProxySubjectException();
+                var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(5));
+                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
+                try
+                {
+                    var result = await retryProxy.FailAsync();
+                }
+                catch (RetryException ex)
+                {
+                    Assert.IsTrue(ex.InnerException is ProxySubjectTestException);
+                    Assert.AreEqual(1, ex.Attempts);
+                    Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
+                    throw;
+                }
+            });
         }
 
         [TestMethod]

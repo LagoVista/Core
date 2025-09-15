@@ -33,7 +33,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private string _receiverConnectionString;
         private string _topicPath;
         private string _subscriptionPath;
-        private readonly ILogger _logger;
 
         #endregion
 
@@ -62,7 +61,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             ILogger logger) :
             base(asyncCoupler, logger)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
         }
 

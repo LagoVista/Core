@@ -59,7 +59,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string HelpUrl { get; set; }
 
-        public static new ListResponse<TModel> FromError(string errorMessage, string errorCode = "")
+        public static ListResponse<TModel> FromError(string errorMessage, string errorCode = "")
         {
             var response = new ListResponse<TModel>();
             response.Errors.Add(new ErrorMessage(errorCode, errorMessage));

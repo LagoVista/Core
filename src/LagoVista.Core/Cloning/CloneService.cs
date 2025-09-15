@@ -49,7 +49,7 @@ namespace LagoVista.Core.Cloning
                 var attr = prop.GetCustomAttributes(typeof(CloneOptionsAttribute), true).OfType<CloneOptionsAttribute>().FirstOrDefault();
                 if (attr == null || attr.AutoClone)
                 {
-                    if (!prop.GetType().GetTypeInfo().ImplementedInterfaces.Contains(typeof(ICloneable)))
+                    if (!prop.GetType().GetTypeInfo().ImplementedInterfaces.Contains(typeof(Interfaces.ICloneable)))
                     {
                         var value = prop.GetValue(source);
                         prop.SetValue(dest, value);

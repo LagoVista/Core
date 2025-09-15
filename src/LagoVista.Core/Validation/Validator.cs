@@ -437,7 +437,7 @@ namespace LagoVista.Core.Validation
             {
                 if (attr.FieldType == FieldTypes.Key)
                 {
-                    var reEx = new Regex("^[a-z0-9]{3,33}$");
+                    var reEx = new Regex("^[a-z0-9]{3,128}$");
                     if (!reEx.Match(value).Success)
                     {
                         if (attr.ResourceType == null)
