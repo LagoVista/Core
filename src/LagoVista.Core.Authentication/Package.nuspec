@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Authentication</id>
-    <version>3.0.2942.1434</version>
+    <version>3.0.3043.1717</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,19 +12,18 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 6/6/2025 6:34:40 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 9/15/2025 9:17:04 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <group targetFramework="netstandard1.2">
-        <dependency id="Newtonsoft.Json" version="13.0.1" />
-        <dependency id="LagoVista.Core" version="3.0.2942.1434" />
-        <dependency id="LagoVista.Core.Networking" version="3.0.2942.1434" />
+      <group targetFramework="netstandard2.0">
+        <dependency id="LagoVista.Core" version="3.0.3043.1717" />
+        <dependency id="LagoVista.Core.Networking" version="3.0.3043.1717" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard1.2\LagoVista.Core.Authentication.dll" target="lib\netstandard1.2\LagoVista.Core.Authentication.dll" />
-    <file src="bin\release\netstandard1.2\LagoVista.Core.Authentication.pdb" target="lib\netstandard1.2\LagoVista.Core.Authentication.pdb" />
+    <file src="bin\release\netstandard2.0\LagoVista.Core.Authentication.dll" target="lib\netstandard2.0\LagoVista.Core.Authentication.dll" />
+    <file src="bin\release\netstandard2.0\LagoVista.Core.Authentication.pdb" target="lib\netstandard2.0\LagoVista.Core.Authentication.pdb" />
   </files>
 </package>
