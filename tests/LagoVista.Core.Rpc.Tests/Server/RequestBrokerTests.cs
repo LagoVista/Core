@@ -24,19 +24,23 @@ namespace LagoVista.Core.Rpc.Tests.Server
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void RequestBroker_RegisterSubject_FailureDueToNonInterfaceInstance()
         {
-            var broker = new RequestBroker();
-            broker.AddService(new ProxySubject());
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var broker = new RequestBroker();
+                broker.AddService(new ProxySubject());
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RequestBroker_RegisterSubject_FailureDueToNullInstance()
         {
-            var broker = new RequestBroker();
-            broker.AddService((IProxySubject)null);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var broker = new RequestBroker();
+                broker.AddService((IProxySubject)null);
+            });
         }
 
         [TestMethod]

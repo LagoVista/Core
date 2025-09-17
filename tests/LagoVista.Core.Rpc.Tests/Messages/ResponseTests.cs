@@ -70,11 +70,13 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Response_Constructor_IRequest_NullArgument()
         {
-            IRequest request = null;
-            var response = new Response(request, _responseValue);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                IRequest request = null;
+                var response = new Response(request, _responseValue);
+            });
         }
 
         //[TestMethod]

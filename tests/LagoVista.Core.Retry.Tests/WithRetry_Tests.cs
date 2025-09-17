@@ -74,15 +74,15 @@ namespace LagoVista.Core.Retry.Tests
 
             var fr1 = WithRetry.Invoke(() => ac.Function(1));
 
-            Assert.ThrowsException<NotSupportedException>(() => { var fr = WithRetry.Invoke(async () => await ac.FunctionAsync(1)); });
+            Assert.ThrowsExactly<NotSupportedException>(() => { var fr = WithRetry.Invoke(async () => await ac.FunctionAsync(1)); });
 
-            await Assert.ThrowsExceptionAsync<NotSupportedException>(async () => { var fr = await WithRetry.Invoke(async () => await ac.FunctionAsync(1)); });
+            await Assert.ThrowsExactlyAsync<NotSupportedException>(async () => { var fr = await WithRetry.Invoke(async () => await ac.FunctionAsync(1)); });
 
-            Assert.ThrowsException<ExceededMaxAttemptsException>(() => { var fr = WithRetry.Invoke(() => ac.Exception(1)); });
+            Assert.ThrowsExactly<ExceededMaxAttemptsException>(() => { var fr = WithRetry.Invoke(() => ac.Exception(1)); });
 
             WithRetry.SetDefaultOptions(new RetryOptions(100000, TimeSpan.FromMilliseconds(10)));
 
-            Assert.ThrowsException<ExceededMaxWaitTimeException>(() => { var fr = WithRetry.Invoke(() => ac.Exception(1)); });
+            Assert.ThrowsExactly<ExceededMaxWaitTimeException>(() => { var fr = WithRetry.Invoke(() => ac.Exception(1)); });
         }
 
         [TestMethod]
@@ -93,11 +93,11 @@ namespace LagoVista.Core.Retry.Tests
 
             var fr2 = await WithRetry.InvokeAsync(async () => await ac.FunctionAsync(1));
 
-            await Assert.ThrowsExceptionAsync<ExceededMaxAttemptsException>(async () => { var fr = await WithRetry.InvokeAsync(() => ac.ExceptionAsync(1)); });
+            await Assert.ThrowsExactlyAsync<ExceededMaxAttemptsException>(async () => { var fr = await WithRetry.InvokeAsync(() => ac.ExceptionAsync(1)); });
 
             WithRetry.SetDefaultOptions(new RetryOptions(100000, TimeSpan.FromMilliseconds(10)));
 
-            await Assert.ThrowsExceptionAsync<ExceededMaxWaitTimeException>(async () => { var fr = await WithRetry.InvokeAsync(() => ac.ExceptionAsync(1)); });
+            await Assert.ThrowsExactlyAsync<ExceededMaxWaitTimeException>(async () => { var fr = await WithRetry.InvokeAsync(() => ac.ExceptionAsync(1)); });
         }
     }
 }

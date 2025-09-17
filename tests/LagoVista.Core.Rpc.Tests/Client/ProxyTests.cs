@@ -76,29 +76,33 @@ namespace LagoVista.Core.Rpc.Tests.Client
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public void Proxy_EchoAsync_MethodNotSupported()
         {
-            var echoResult = _proxySubect.SkipMe();
+            Assert.ThrowsExactly<NotSupportedException>(() =>
+            {
+                var echoResult = _proxySubect.SkipMe();
+            }); 
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public void Proxy_PassStringParams_PassingArrayOfArgs_ResultIsCorrectValue()
         {
-            var array = new string[] { ProxySubject.EchoValueConst };
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
+            Assert.ThrowsExactly<NotSupportedException>(() =>
+            {
+                var array = new string[] { ProxySubject.EchoValueConst };
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
 
-            var logger = new Mock<ILogger>();
-            var client = new SimulatedTransceiver(
-                Constants.AsyncCoupler,
-                logger.Object,
-                json);
-            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
-            var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+                var logger = new Mock<ILogger>();
+                var client = new SimulatedTransceiver(
+                    Constants.AsyncCoupler,
+                    logger.Object,
+                    json);
+                var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+                var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
 
-            var echoResult = proxySubject.PassStringParams(array);
-            Assert.AreEqual(json, echoResult);
+                var echoResult = proxySubject.PassStringParams(array);
+                Assert.AreEqual(json, echoResult);
+            });
         }
 
         [TestMethod]
@@ -136,28 +140,30 @@ namespace LagoVista.Core.Rpc.Tests.Client
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public void Proxy_PassStringParams_PassingSingleArgIntoParamsMethod_ResultIsCorrectValue2()
         {
-            var array = new string[] { ProxySubject.EchoValueConst };
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
+            Assert.ThrowsExactly<NotSupportedException>(() =>
+            {
+                var array = new string[] { ProxySubject.EchoValueConst };
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(array);
 
-            var logger = new Mock<ILogger>();
-            var client = new SimulatedTransceiver(
-                Constants.AsyncCoupler,
-                logger.Object,
-                json);
-            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
-            var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
+                var logger = new Mock<ILogger>();
+                var client = new SimulatedTransceiver(
+                    Constants.AsyncCoupler,
+                    logger.Object,
+                    json);
+                var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client, Constants.AsyncCoupler, logger.Object);
+                var proxySubject = proxyFactory.Create<IProxySubject>(Constants.ProxySettings);
 
-            var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
-            Assert.AreEqual(json, methodResult);
+                var methodResult = proxySubject.PassStringParams(ProxySubject.EchoValueConst);
+                Assert.AreEqual(json, methodResult);
 
-            // shows that the result of json serialization is the same as passing an array or a single arg
-            // just confirmation that the test code was written correctly
-            //var subject = new ProxySubject();
-            //var json1 = subject.PassStringParams(ProxySubject.EchoValueConst);
-            //var json2 = subject.PassStringParams(array);
+                // shows that the result of json serialization is the same as passing an array or a single arg
+                // just confirmation that the test code was written correctly
+                //var subject = new ProxySubject();
+                //var json1 = subject.PassStringParams(ProxySubject.EchoValueConst);
+                //var json2 = subject.PassStringParams(array);
+            });
         }
     }
 }

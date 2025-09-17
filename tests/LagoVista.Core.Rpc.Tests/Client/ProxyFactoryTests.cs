@@ -50,48 +50,60 @@ namespace LagoVista.Core.Rpc.Tests.Client
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Create_NullProxySettings()
         {
-            var proxyFactory = CreateControlProxyFactory();
-            var proxy = proxyFactory.Create<IProxySubject>(null);
+
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var proxyFactory = CreateControlProxyFactory();
+                var proxy = proxyFactory.Create<IProxySubject>(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Constructor_NullConnectionSettings()
         {
-            var client = new Mock<ITransceiver>();
-            var coupler = new Mock<IAsyncCoupler<IMessage>>();
-            var logger = new Mock<ILogger>();
-            var proxyFactory = new ProxyFactory(null, client.Object, Constants.AsyncCoupler, logger.Object);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var client = new Mock<ITransceiver>();
+                var coupler = new Mock<IAsyncCoupler<IMessage>>();
+                var logger = new Mock<ILogger>();
+                var proxyFactory = new ProxyFactory(null, client.Object, Constants.AsyncCoupler, logger.Object);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Constructor_NullClient()
         {
-            var coupler = new Mock<IAsyncCoupler<IMessage>>();
-            var logger = new Mock<ILogger>();
-            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, null, Constants.AsyncCoupler, logger.Object);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var coupler = new Mock<IAsyncCoupler<IMessage>>();
+                var logger = new Mock<ILogger>();
+                var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, null, Constants.AsyncCoupler, logger.Object);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Constructor_NullCoupler()
         {
-            var client = new Mock<ITransceiver>();
-            var logger = new Mock<ILogger>();
-            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client.Object, null, logger.Object);
+
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var client = new Mock<ITransceiver>();
+                var logger = new Mock<ILogger>();
+                var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client.Object, null, logger.Object);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ProxyFactory_Constructor_NullLogger()
         {
-            var client = new Mock<ITransceiver>();
-            var coupler = new Mock<IAsyncCoupler<IMessage>>();
-            var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client.Object, Constants.AsyncCoupler, null);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var client = new Mock<ITransceiver>();
+                var coupler = new Mock<IAsyncCoupler<IMessage>>();
+                var proxyFactory = new ProxyFactory(Constants.ConnectionSettings, client.Object, Constants.AsyncCoupler, null);
+            });
         }
     }
 }

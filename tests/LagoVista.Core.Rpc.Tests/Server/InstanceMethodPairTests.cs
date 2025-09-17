@@ -122,15 +122,17 @@ namespace LagoVista.Core.Rpc.Tests.Server
 
         #region invoke null param check
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public async Task InstanceMethodPair_Invoke_SynchronousMethodAndSimpleMethodParams_ThrowsArgumentNullException()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var subject = (IProxySubject)new ProxySubject();
-            var pair = new InstanceMethodPair(subject, methodInfo);
-            IRequest request = null;
+            await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                var subject = (IProxySubject)new ProxySubject();
+                var pair = new InstanceMethodPair(subject, methodInfo);
+                IRequest request = null;
 
-            var response = await pair.InvokeAsync(request);
+                var response = await pair.InvokeAsync(request);
+            });
         }
         #endregion
 
@@ -168,71 +170,81 @@ namespace LagoVista.Core.Rpc.Tests.Server
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void InstanceMethodPair_GetArguments_Fails_DueToCountMismatch()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var parameters = methodInfo.GetParameters();
-            var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                var parameters = methodInfo.GetParameters();
+                var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            Assert.AreEqual(3, request.ArgumentCount);
-            Assert.AreEqual(1, parameters.Length);
+                Assert.AreEqual(3, request.ArgumentCount);
+                Assert.AreEqual(1, parameters.Length);
 
-            var arguments = InstanceMethodPair.GetArguments(request, parameters);
+                var arguments = InstanceMethodPair.GetArguments(request, parameters);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void InstanceMethodPair_GetArguments_Fails_DueToTypeMismatch()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var parameters = methodInfo.GetParameters();
-            var request = new Request(methodInfo, new object[] { 3 }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                var parameters = methodInfo.GetParameters();
+                var request = new Request(methodInfo, new object[] { 3 }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            Assert.AreEqual(1, request.ArgumentCount);
-            Assert.AreEqual(1, parameters.Length);
+                Assert.AreEqual(1, request.ArgumentCount);
+                Assert.AreEqual(1, parameters.Length);
 
-            var arguments = InstanceMethodPair.GetArguments(request, parameters);
+                var arguments = InstanceMethodPair.GetArguments(request, parameters);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public void InstanceMethodPair_GetArguments_Fails_DueToUnsupportedParamsKeyword()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
-            var parameters = methodInfo.GetParameters();
-            var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<NotSupportedException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
+                var parameters = methodInfo.GetParameters();
+                var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            Assert.AreEqual(1, request.ArgumentCount);
-            Assert.AreEqual(1, parameters.Length);
+                Assert.AreEqual(1, request.ArgumentCount);
+                Assert.AreEqual(1, parameters.Length);
 
-            var arguments = InstanceMethodPair.GetArguments(request, parameters);
+                var arguments = InstanceMethodPair.GetArguments(request, parameters);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void InstanceMethodPair_GetArguments_NullRequest_ThrowsArgumentNullException()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var parameters = methodInfo.GetParameters();
-            var subject = (IProxySubject)new ProxySubject();
-            var pair = new InstanceMethodPair(subject, methodInfo);
-            IRequest request = null;
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                var parameters = methodInfo.GetParameters();
+                var subject = (IProxySubject)new ProxySubject();
+                var pair = new InstanceMethodPair(subject, methodInfo);
+                IRequest request = null;
 
-            var arguments = InstanceMethodPair.GetArguments(request, parameters);
+                var arguments = InstanceMethodPair.GetArguments(request, parameters);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void InstanceMethodPair_GetArguments_NullParameters_ThrowsArgumentNullException()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            ParameterInfo[] parameters = null;
-            var subject = (IProxySubject)new ProxySubject();
-            var pair = new InstanceMethodPair(subject, methodInfo);
-            var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                ParameterInfo[] parameters = null;
+                var subject = (IProxySubject)new ProxySubject();
+                var pair = new InstanceMethodPair(subject, methodInfo);
+                var request = new Request(methodInfo, new object[1] { ProxySubject.EchoValueConst }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
 
-            var arguments = InstanceMethodPair.GetArguments(request, parameters);
+                var arguments = InstanceMethodPair.GetArguments(request, parameters);
+            });
         }
 
         #endregion

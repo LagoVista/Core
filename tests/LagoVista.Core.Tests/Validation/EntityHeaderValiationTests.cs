@@ -223,12 +223,13 @@ namespace LagoVista.Core.Tests.Validation
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidCastException))]
         public void EntityHeader_TestInvalidEnum_Invalid()
         {
-            var entityHeader = GetValidEntityHeader();
-            entityHeader.PropWithEnum.Id = "thisisntenumvalue";
+            Assert.ThrowsExactly<InvalidCastException>(() =>
+            {
+                var entityHeader = GetValidEntityHeader();
+                entityHeader.PropWithEnum.Id = "thisisntenumvalue";
+            });
         }
-
     }
 }

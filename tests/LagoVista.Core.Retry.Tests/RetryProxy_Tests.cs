@@ -258,47 +258,51 @@ namespace LagoVista.Core.Retry.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public async Task InvokeFailure_MaxAttemptsExceededAsync()
         {
-            var instance = new RetryProxySubject();
-            var retryTest = new CanRetryProxySubjectException();
-            var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(60));
-            var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
-            try
+            await Assert.ThrowsExactlyAsync<ExceededMaxAttemptsException>(async () =>
             {
-                var result = await retryProxy.FailAsync();
-            }
-            catch (RetryException ex)
-            {
-                Assert.IsTrue(ex.Exceptions.Count > 0);
-                Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
-                Assert.AreEqual(5, ex.Attempts);
-                Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var retryTest = new CanRetryProxySubjectException();
+                var retryOptions = new RetryOptions(5, TimeSpan.FromSeconds(60));
+                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
+                try
+                {
+                    var result = await retryProxy.FailAsync();
+                }
+                catch (RetryException ex)
+                {
+                    Assert.IsTrue(ex.Exceptions.Count > 0);
+                    Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
+                    Assert.AreEqual(5, ex.Attempts);
+                    Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
+                    throw;
+                }
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxWaitTimeException))]
         public async Task InvokeFailure_TimeoutExceededAsync()
         {
-            var instance = new RetryProxySubject();
-            var retryTest = new CanRetryProxySubjectException();
-            var retryOptions = new RetryOptions(10000, TimeSpan.FromSeconds(1));
-            var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
-            try
+            await Assert.ThrowsExactlyAsync<ExceededMaxWaitTimeException>(async () =>
             {
-                var result = await retryProxy.FailAsync();
-            }
-            catch (RetryException ex)
-            {
-                Assert.IsTrue(ex.Exceptions.Count > 0);
-                Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
-                Assert.IsTrue(ex.Duration >= TimeSpan.FromSeconds(1));
-                Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
-                throw;
-            }
+                var instance = new RetryProxySubject();
+                var retryTest = new CanRetryProxySubjectException();
+                var retryOptions = new RetryOptions(10000, TimeSpan.FromSeconds(1));
+                var retryProxy = RetryProxy.Create<IRetryProxySubject>(instance, retryOptions, retryTest);
+                try
+                {
+                    var result = await retryProxy.FailAsync();
+                }
+                catch (RetryException ex)
+                {
+                    Assert.IsTrue(ex.Exceptions.Count > 0);
+                    Assert.IsTrue(ex.Exceptions[0] is ProxySubjectTestException);
+                    Assert.IsTrue(ex.Duration >= TimeSpan.FromSeconds(1));
+                    Assert.AreEqual(ex.Attempts, ex.Exceptions.Count);
+                    throw;
+                }
+            });
         }
         #endregion
     }

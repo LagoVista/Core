@@ -41,35 +41,43 @@ namespace LagoVista.Core.Tests.Validation
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Test_Valid_InvalidFirstType_MethodCall()
         {
-            var instance = new CustomValidation_WrongType_Invalid();
-            Validator.Validate(instance);
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var instance = new CustomValidation_WrongType_Invalid();
+                Validator.Validate(instance);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Test_Valid_InvalidSecondType_MethodCall()
         {
-            var instance = new CustomValidation_WrongSecondType_Invalid();
-            Validator.Validate(instance);
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var instance = new CustomValidation_WrongSecondType_Invalid();
+                Validator.Validate(instance);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Test_Valid_NoParamameters_MethodCall()
         {
-            var instance = new CustomValidation_NoParameter_Invalid();
-            Validator.Validate(instance);
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var instance = new CustomValidation_NoParameter_Invalid();
+                Validator.Validate(instance);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Test_Valid_TooManyTypes_MethodCall()
         {
-            var instance = new CustomValidation_TooManyTypes_Invalid();
-            Validator.Validate(instance);
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var instance = new CustomValidation_TooManyTypes_Invalid();
+                Validator.Validate(instance);
+            });
         }
 
         [TestMethod]

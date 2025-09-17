@@ -53,57 +53,69 @@ namespace LagoVista.Core.Tests.Retry
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void RetryProxy_Fail_TransientFunctionEvaluatesTrue()
         {
-            var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(1000)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
-            retryProxy.Fail();
+            Assert.ThrowsExactly<ExceededMaxAttemptsException>( () =>
+            {
+                var instance = new RetryTester();
+                var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(1000)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
+                retryProxy.Fail();
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void RetryProxy_Fail_TransientEnumerationEvaluatesTrue()
         {
-            var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(5)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
-            retryProxy.Fail();
+            Assert.ThrowsExactly<ExceededMaxAttemptsException>( () =>
+            {
+                var instance = new RetryTester();
+                var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(5)), exceptionWhiteList: new Type[] { typeof(RetryTestException) });
+                retryProxy.Fail();
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(RetryNotAllowedException))]
         public void RetryProxy_Fail_NotTransientByFunction()
         {
-            var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(5)), exceptionBlackList: new Type[] { typeof(RetryTestException) });
-            retryProxy.Fail();
+            Assert.ThrowsExactly<RetryNotAllowedException>( () =>
+            {
+                var instance = new RetryTester();
+                var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(5)), exceptionBlackList: new Type[] { typeof(RetryTestException) });
+                retryProxy.Fail();
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(RetryNotAllowedException))]
         public void RetryProxy_Fail_NotTransientByEnumerable()
         {
-            var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(60)), exceptionWhiteList: new Type[] { typeof(NullReferenceException) });
-            retryProxy.Fail();
+            Assert.ThrowsExactly<RetryNotAllowedException>(() =>
+            {
+                var instance = new RetryTester();
+                var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(5, TimeSpan.FromSeconds(60)), exceptionWhiteList: new Type[] { typeof(NullReferenceException) });
+                retryProxy.Fail();
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxAttemptsException))]
         public void RetryProxy_Fail_ExceedMaxAttempts()
         {
-            var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(60)));
-            retryProxy.Fail();
+            Assert.ThrowsExactly<ExceededMaxAttemptsException>(() =>
+            {
+                var instance = new RetryTester();
+                var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(1, TimeSpan.FromSeconds(60)));
+                retryProxy.Fail();
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ExceededMaxWaitTimeException))]
         public void RetryProxy_Fail_ExceedMaxWaitTime()
         {
-            var instance = new RetryTester();
-            var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(10000, TimeSpan.FromSeconds(1)));
-            retryProxy.Fail();
+            Assert.ThrowsExactly<ExceededMaxWaitTimeException>(() =>
+            {
+                var instance = new RetryTester();
+                var retryProxy = RetryProxy.Create<IRetryTester>(instance, new RetryOptions(10000, TimeSpan.FromSeconds(1)));
+                retryProxy.Fail();
+            });
         }
     }
 }

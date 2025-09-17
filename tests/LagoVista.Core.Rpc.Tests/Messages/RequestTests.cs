@@ -36,11 +36,13 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Request_Constructor_MethodInfo_NullArgument()
         {
-            MethodInfo echoMethodInfo = null;
-            var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                MethodInfo echoMethodInfo = null;
+                var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            });
         }
 
         [TestMethod]
@@ -70,28 +72,34 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public void Request_Constructor_MethodInfo_ParamsAr_ThrowsNotSupportedException()
         {
-            var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
-            var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
-            Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(Constants.EchoMethodParamName));
+            Assert.ThrowsExactly<NotSupportedException>(() =>
+            {
+                var echoMethodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.PassStringParams));
+                var request = new Request(echoMethodInfo, Constants.EchoArgs, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+                Assert.AreEqual(ProxySubject.EchoValueConst, request.GetValue(Constants.EchoMethodParamName));
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void InstanceMethodPair_ValidateArguments_Fails_DueToCountMismatch()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                var request = new Request(methodInfo, new object[] { ProxySubject.EchoValueConst, new object(), null }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void InstanceMethodPair_ValidateArguments_Fails_DueToTypeMismatch()
         {
-            var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
-            var request = new Request(methodInfo, new object[] { 3 }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var methodInfo = typeof(ProxySubject).GetMethod(nameof(ProxySubject.Echo));
+                var request = new Request(methodInfo, new object[] { 3 }, Constants.OrganizationId, Constants.InstanceId, Constants.MessageReplyPath);
+            });
         }
     }
 }

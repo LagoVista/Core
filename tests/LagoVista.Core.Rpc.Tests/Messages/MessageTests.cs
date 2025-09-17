@@ -95,11 +95,13 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Message_Constructor_MarshalledData_ArgumentNull()
         {
-            byte[] marshalledData = null;
-            var message = new Message(marshalledData);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                byte[] marshalledData = null;
+                var message = new Message(marshalledData);
+            });
         }
 
         [TestMethod]
@@ -111,14 +113,16 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Message_SetValue_KeyAlreadyExistsError()
         {
-            var controlMessage = CreateControlMessage();
-            var key = "key";
-            // tests duplicate key exception
-            controlMessage.SetValue(key, "value1");
-            controlMessage.SetValue(key, "value2");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var controlMessage = CreateControlMessage();
+                var key = "key";
+                // tests duplicate key exception
+                controlMessage.SetValue(key, "value1");
+                controlMessage.SetValue(key, "value2");
+            });
         }
 
         [TestMethod]
@@ -132,23 +136,27 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Message_SetValue_KeyEmptyArgument()
         {
-            string key = string.Empty;
-            var controlMessage = CreateControlMessage();
-            // tests passing empty key value
-            controlMessage.SetValue(key, "value1");
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                string key = string.Empty;
+                var controlMessage = CreateControlMessage();
+                // tests passing empty key value
+                controlMessage.SetValue(key, "value1");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Message_SetValue_KeyNullArgument()
         {
-            string key = null;
-            var controlMessage = CreateControlMessage();
-            // tests passing null key value
-            controlMessage.SetValue(key, "value1");
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                string key = null;
+                var controlMessage = CreateControlMessage();
+                // tests passing null key value
+                controlMessage.SetValue(key, "value1");
+            });
         }
 
         [TestMethod]
@@ -170,12 +178,14 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Message_SetValue_IllegalKeyPrefix()
         {
-            var controlMessage = CreateControlMessage();
-            // tests using an illegal key prefix
-            controlMessage.SetValue("__key", "value");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var controlMessage = CreateControlMessage();
+                // tests using an illegal key prefix
+                controlMessage.SetValue("__key", "value");
+            });
         }
 
         [TestMethod]
@@ -191,41 +201,49 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Message_GetValue_KeyEmptyArgument()
         {
-            var key = string.Empty;
-            var controlMessage = CreateControlMessage();
-            // tests passing empty key 
-            var v = controlMessage.GetValue(key);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                var key = string.Empty;
+                var controlMessage = CreateControlMessage();
+                // tests passing empty key 
+                var v = controlMessage.GetValue(key);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Message_GetValue_KeyNullArgument()
         {
-            string key = null;
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                string key = null;
             var controlMessage = CreateControlMessage();
             // tests passing null key
             var v = controlMessage.GetValue(key);
+        });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Message_GetValue_IllegalKeyPrefix()
         {
-            var controlMessage = CreateControlMessage();
-            // tests using an illegal key prefix
-            var v = controlMessage.GetValue("__key");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var controlMessage = CreateControlMessage();
+                // tests using an illegal key prefix
+                var v = controlMessage.GetValue("__key");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void Message_GetValue_KeyNotFound()
         {
-            var controlMessage = CreateControlMessage();
+            Assert.ThrowsExactly<KeyNotFoundException>(() =>
+            {
+                var controlMessage = CreateControlMessage();
             // tests key that hasn't been set
-            var v = controlMessage.GetValue("key");
+                var v = controlMessage.GetValue("key");
+            }); 
         }
 
         [TestMethod]
@@ -240,15 +258,17 @@ namespace LagoVista.Core.Rpc.Tests.Messages
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidCastException))]
         public void Message_GetValue_T_InvalidType()
         {
-            var key = "key";
-            var value = new object();
-            var controlMessage = CreateControlMessage();
-            // tests typed get value method with wrong type
-            controlMessage.SetValue(key, value);
-            var v = controlMessage.GetValue<ProxySubject>("key");
+            Assert.ThrowsExactly<InvalidCastException>(() =>
+            {
+                var key = "key";
+                var value = new object();
+                var controlMessage = CreateControlMessage();
+                // tests typed get value method with wrong type
+                controlMessage.SetValue(key, value);
+                var v = controlMessage.GetValue<ProxySubject>("key");
+            });
         }
     }
 }
