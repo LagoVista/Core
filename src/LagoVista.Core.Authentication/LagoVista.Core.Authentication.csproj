@@ -17,9 +17,6 @@
     <ProjectReference Include="..\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="T4ResourceGenerator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>T4ResourceGenerator.cs</LastGenOutput>

@@ -202,7 +202,7 @@ namespace LagoVista.Core.Tests.Validation
             var auditEntity = GetValidAuditableModel();
 
             var result = Validator.Validate(auditEntity);
-            Assert.IsTrue(result.Successful);
+            Assert.IsTrue(result.Successful, result.ErrorMessage);
         }
 
         [TestMethod]
