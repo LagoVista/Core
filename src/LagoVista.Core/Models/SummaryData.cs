@@ -36,7 +36,7 @@ namespace LagoVista.Core.Models
         public int? DiscussionsTotal { get; set; }
         public int? DiscussionsOpen { get; set; }
 
-        public double Stars { get; set; }
+        public double? Stars { get; set; }
         public int RatingsCount { get; set; }
 
         public void Populate(EntityBase entity)

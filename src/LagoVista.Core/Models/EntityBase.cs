@@ -88,7 +88,7 @@ namespace LagoVista.Core.Models
         public string RevisionTimeStamp { get; set; }
 
 
-        public double Stars { get; set; }
+        public double? Stars { get; set; }
         public int RatingsCount { get; set; }
 
         public List<EntityRating> Ratings { get; set; } = new List<EntityRating>();
