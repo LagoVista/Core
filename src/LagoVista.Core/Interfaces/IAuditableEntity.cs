@@ -1,9 +1,6 @@
 ﻿using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
 {
@@ -18,6 +15,7 @@ namespace LagoVista.Core.Interfaces
         bool? IsDeleted { get; set; }
         EntityHeader DeletedBy { get; set; }
         String DeletionDate { get; set; }
+        bool IsDraft { get; }
     }
 
     public interface IAuditableEntity : IAuditableEntitySimple

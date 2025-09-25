@@ -50,6 +50,14 @@ namespace LagoVista.Core.Validation
                 return result;
             }
 
+
+            if(entity is IAuditableEntity draft)
+            {
+                if(draft.IsDraft)
+                // Drafts are not validated.
+                    return result;
+            }
+
             var methods = entity.GetType().GetTypeInfo().DeclaredMethods;
             foreach (var method in methods)
             {

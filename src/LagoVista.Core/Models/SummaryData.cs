@@ -28,6 +28,8 @@ namespace LagoVista.Core.Models
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Deleted, ResourceType: typeof(LagoVistaCommonStrings))]
         public bool? IsDeleted { get; set; }
 
+        public bool IsDraft { get; set; }
+
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Category, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Category { get; set; }
         public string CategoryId { get; set; }
@@ -50,6 +52,7 @@ namespace LagoVista.Core.Models
             Name = entity.Name;
             Key = entity.Key;
             Stars = entity.Stars;
+            IsDraft = entity.IsDraft;
             RatingsCount = entity.RatingsCount;
             var discussableEntity = entity as IDiscussableEntity;
             if (discussableEntity != null)

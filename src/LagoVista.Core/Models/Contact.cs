@@ -139,6 +139,8 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Contact_Notes, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, FieldType: FieldTypes.HtmlEditor)]
         public string Notes { get; set; }
 
+        public bool IsDraft { get; set; }   
+
         public string CreationDate { get; set; }
         public string LastUpdatedDate { get; set; }
         public EntityHeader CreatedBy { get; set; }

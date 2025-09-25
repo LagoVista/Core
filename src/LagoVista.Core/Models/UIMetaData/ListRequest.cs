@@ -32,7 +32,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public double TimeBucketSize { get; set; } 
         public string TimeBucket { get; set; }
-
+        public bool ShowDrafts { get; set; }
         public bool ShowDeleted { get; set; }
 
         public OrderByTypes? OrderBy { get; set; }

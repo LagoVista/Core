@@ -51,6 +51,11 @@ namespace LagoVista.Core.Models.UIMetaData
         public string GetListUrl { get; set; }
         public string HelpUrl { get; set; }
 
+
+        public bool AutoSave { get; set; }
+        public int? AutoSaveIntervalSeconds { get; set; }
+
+
         private string _saveUrl;
         public string SaveUrl
         {
@@ -159,6 +164,8 @@ namespace LagoVista.Core.Models.UIMetaData
             response.DeleteUrl = entity.DeleteUrl;
             response.GetListUrl = entity.GetListUrl;
             response.HelpUrl = entity.HelpUrl;
+            response.AutoSave = entity.AutoSave;
+            response.AutoSaveIntervalSeconds = entity.AutoSaveIntervalSeconds;
 
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)

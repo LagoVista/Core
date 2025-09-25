@@ -29,6 +29,8 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.Col2WidthPercent = attr.Col2WidthPercent;
             entityDescription.CanExport = attr.CanExport;
             entityDescription.CanImport = attr.CanImport;
+            entityDescription.AutoSave = attr.AutoSave;
+            entityDescription.AutoSaveIntervalSeconds = attr.AutoSaveIntervalSeconds;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -97,6 +99,9 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public int? Col1WidthPercent { get; set; }
         public int? Col2WidthPercent { get; set; }
+
+        public bool AutoSave { get; set; }
+        public int? AutoSaveIntervalSeconds { get; set; }
 
 
         public bool CanImport { get; set; }

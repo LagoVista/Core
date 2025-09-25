@@ -8,6 +8,5 @@ namespace LagoVista.Core.Validation
 {
     public interface IValidateable
     {
-
     }
 }

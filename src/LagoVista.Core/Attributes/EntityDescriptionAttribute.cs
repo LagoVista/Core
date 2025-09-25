@@ -45,7 +45,7 @@ namespace LagoVista.Core.Attributes
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null,
             string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null, bool Cloneable = false, bool CanExport = false, bool CanImport = false,
-            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null, int Col1WidthPercent = -1, int Col2WidthPercent = -1)
+            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null, int Col1WidthPercent = -1, int Col2WidthPercent = -1, bool autoSave = true, int autoSaveIntervalSeconds = -1)
         {
             _descriptionResource = DescriptionResource;
             _titleResource = TitleResource;
@@ -70,6 +70,17 @@ namespace LagoVista.Core.Attributes
             this.Cloneable = Cloneable;
             this.CanExport = CanExport;
             this.CanImport = CanImport;
+            AutoSave = autoSave;
+            if(autoSave)
+            {
+                AutoSaveIntervalSeconds = autoSaveIntervalSeconds <= 0 ? 30 : autoSaveIntervalSeconds;
+
+                Console.WriteLine($"YUP {TitleResource} - ====>>> {AutoSaveIntervalSeconds}");
+            }
+            else
+            {
+                Console.WriteLine($"NOPE!! {TitleResource} ====>>>");
+            }
         }
 
         public int? Col1WidthPercent { get { return _col1WidthPct; } }
@@ -99,5 +110,8 @@ namespace LagoVista.Core.Attributes
         public string ListUIUrl { get { return _listUIUrl; } }
         public string EditUIUrl { get { return _editUIUrl; } }
         public string CreateUIUrl { get { return _createUIUrl; } }
+    
+        public bool AutoSave { get; set; }
+        public int? AutoSaveIntervalSeconds { get; set; }
     }
 }

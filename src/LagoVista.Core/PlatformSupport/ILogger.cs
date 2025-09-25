@@ -14,7 +14,9 @@ namespace LagoVista.Core.PlatformSupport
         Verbose,
         TimedEvent,
         Metric,
-        ConfigurationError
+        ConfigurationError,
+        Authentication,
+        Authorization
     }
 
     public enum MetricType

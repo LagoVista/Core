@@ -83,6 +83,7 @@ namespace LagoVista.Core.Models
         public EntityHeader ClonedFromOrg { get; set; }
         public EntityHeader ClonedRevision { get; set; }
 
+        public bool IsDraft { get; set; } = false;
 
         public int Revision { get; set; }
         public string RevisionTimeStamp { get; set; }
