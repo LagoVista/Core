@@ -74,12 +74,6 @@ namespace LagoVista.Core.Attributes
             if(autoSave)
             {
                 AutoSaveIntervalSeconds = autoSaveIntervalSeconds <= 0 ? 30 : autoSaveIntervalSeconds;
-
-                Console.WriteLine($"YUP {TitleResource} - ====>>> {AutoSaveIntervalSeconds}");
-            }
-            else
-            {
-                Console.WriteLine($"NOPE!! {TitleResource} ====>>>");
             }
         }
 
