@@ -41,6 +41,8 @@ namespace LagoVista.Core.Models
         public double? Stars { get; set; }
         public int RatingsCount { get; set; }
 
+        public string LastUpdatedDate { get; set; }
+
         public void Populate(EntityBase entity)
         {
             Id = entity.Id;
@@ -51,6 +53,7 @@ namespace LagoVista.Core.Models
             IsDeleted = entity.IsDeleted;
             Name = entity.Name;
             Key = entity.Key;
+            LastUpdatedDate = entity.LastUpdatedDate;
             Stars = entity.Stars;
             IsDraft = entity.IsDraft;
             RatingsCount = entity.RatingsCount;
