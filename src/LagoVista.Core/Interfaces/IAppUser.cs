@@ -9,6 +9,7 @@ namespace LagoVista.Core.Interfaces
         string UserName { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }
+        string EndUserOrgAppId { get; set; }
         string Email { get; set; }
         bool EmailConfirmed { get; set; }        
         string PhoneNumber { get; set; }
@@ -19,6 +20,5 @@ namespace LagoVista.Core.Interfaces
         List<EntityHeader> Organizations { get; set; }
         List<EntityHeader> CurrentOrganizationRoles { get; set; }
         Dictionary<string, string> Preferences { get; set; } 
-
     }
 }

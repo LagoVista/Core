@@ -31,7 +31,9 @@ namespace LagoVista.Core.Interfaces
         DeviceUser,
         ClientApp,
         Runtime,
-        SingleUseToken
+        SingleUseToken,
+        OrgAppEndUser,
+
     }
 
     public interface IAppConfig
