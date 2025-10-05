@@ -251,6 +251,9 @@ namespace LagoVista.Core.Models
 
         public string LastLogin { get; set; }
 
+        public EntityHeader Customer { get; set; }
+        public EntityHeader CustomerContact { get; set; }
+
         public EntityHeader TimeZone { get; set; }
     }
 
