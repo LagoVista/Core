@@ -45,7 +45,7 @@ namespace LagoVista.Core.Attributes
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null,
             string UpdateUrl = null, string FactoryUrl = null, string GetUrl = null, string GetListUrl = null, string DeleteUrl = null, string HelpUrl = null, string Icon = null, bool Cloneable = false, bool CanExport = false, bool CanImport = false,
-            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null, int Col1WidthPercent = -1, int Col2WidthPercent = -1, bool SaveDraft = true, bool AutoSave = true, int AutoSaveIntervalSeconds = -1)
+            string ListUIUrl = null, string EditUIUrl = null, string CreateUIUrl = null, int Col1WidthPercent = -1, int Col2WidthPercent = -1, bool SaveDraft = false, bool AutoSave = true, int AutoSaveIntervalSeconds = -1)
         {
             _descriptionResource = DescriptionResource;
             _titleResource = TitleResource;
