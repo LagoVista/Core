@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LagoVista.Core.Models.UIMetaData;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,5 +9,6 @@ namespace LagoVista.Core.Interfaces
     {
         List<TimeZoneInfo> GetTimeZones();
         TimeZoneInfo GetTimeZoneById(string id);
-    }
+        List<EnumDescription> GetTimeZoneEnumOptions();
+}
 }
