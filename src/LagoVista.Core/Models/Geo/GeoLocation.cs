@@ -1,4 +1,8 @@
-﻿using LagoVista.Core.Geo;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 20f144e6f5ceb6e68446527d4bb708d080ef75265a5f1e910add237343f4a8ff
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using LagoVista.Core.Geo;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,4 +1,8 @@
-﻿// "Therefore those skilled at the unorthodox
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: f5cabde484c8f66fe207250cc5e207e75da643d29833cc17ea8b9a5ba891a645
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+// "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
 // inexhaustible as the great rivers.
 // When they come to an end,

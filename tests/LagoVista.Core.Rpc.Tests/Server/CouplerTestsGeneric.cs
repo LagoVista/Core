@@ -1,4 +1,8 @@
-﻿using LagoVista.Core.Rpc.Messages;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 32343c270cc6020ecc3374720f2872524fc49021fc8546c454dd3435aafef316
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Tests.Server.Utils;
 using LagoVista.Core.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

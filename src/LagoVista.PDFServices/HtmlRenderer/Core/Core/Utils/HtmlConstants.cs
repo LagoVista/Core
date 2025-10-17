@@ -1,3 +1,7 @@
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 422866b58cd5551fd5b2ea9f0ec90548b3eca2cc4bab41fe50e704cbcda49a73
+// IndexVersion: 1
+// --- END CODE INDEX META ---
 namespace TheArtOfDev.HtmlRenderer.Core.Utils
 {
     /// <summary>

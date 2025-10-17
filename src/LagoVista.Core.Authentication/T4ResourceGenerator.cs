@@ -1,4 +1,8 @@
-﻿/*5/23/2017 17:07:20*/
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: ead21664ae9522d03343fd38a8ca72611ee2a7411ee929e0cf79641b174d8931
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+/*5/23/2017 17:07:20*/
 using System.Globalization;
 using System.Reflection;
 

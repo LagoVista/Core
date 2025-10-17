@@ -1,4 +1,8 @@
-﻿using LagoVista.PDFServices;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: f7df7defec10cfe36bdf83fa7fc2fa7f9746ac91281add5dadba4509fc060337
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using LagoVista.PDFServices;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PdfSharpCore.Fonts;

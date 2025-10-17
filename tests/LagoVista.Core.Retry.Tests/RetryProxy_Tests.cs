@@ -1,3 +1,7 @@
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: f6ba53b37ac76ac673f790ec6b6b4828814d0978e77047da8c6b7ab376d23741
+// IndexVersion: 1
+// --- END CODE INDEX META ---
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;

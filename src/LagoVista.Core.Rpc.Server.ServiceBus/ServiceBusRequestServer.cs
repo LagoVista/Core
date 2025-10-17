@@ -1,4 +1,8 @@
-﻿using Azure;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 3d947227e2e361bdd6cf5058526654d333b24f128690ca263f6260fed8ac4138
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using Azure;
 using Azure.Messaging.ServiceBus;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;

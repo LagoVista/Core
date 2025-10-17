@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.PDFServices</id>
-    <version>3.0.3045.0632</version>
+    <version>3.0.3075.1038</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT LagoVista PDF</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 9/17/2025 10:32:54 AM UTC</releaseNotes>
+    <releaseNotes>Build Date: 10/17/2025 2:38:30 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">

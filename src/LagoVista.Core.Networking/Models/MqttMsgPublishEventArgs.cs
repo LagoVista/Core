@@ -1,4 +1,8 @@
-﻿using LagoVista.Core.Networking.Interfaces;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: dbe7e5e6ca5ae6d9ce0f94eb08bc07d9d4ee478a03992ff2d46e4bc03edefbf3
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using LagoVista.Core.Networking.Interfaces;
 using System;
 
 namespace LagoVista.Core.Networking.Models

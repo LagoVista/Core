@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 3070ee1e39b5a20a32f8ddc500860853bf3041161992929bfb11e4c81e888dec
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using System;
 using System.Reflection;
 
 namespace LagoVista.Core.Diagnostics.ConsoleProxy

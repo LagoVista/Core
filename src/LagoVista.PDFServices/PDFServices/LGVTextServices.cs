@@ -1,4 +1,8 @@
-﻿#region PDFsharp - A .NET library for processing PDF
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: c6f4a236f43b194607d4553e83aa906954c5999e6f6aa74984a3cc517c6fb244
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@pdfsharp.com)

@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: fff68ca8cbba52653d4a0c9141e8b7fa0d065a6e4ba2605d1c287f7de3c68618
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

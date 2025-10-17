@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 1d7615ff5583bce7575a2bfed21de27937106ef03ef60eb5087fc0cd2a048613
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using System;
 
 namespace LagoVista.Core.Rpc.Client
 {

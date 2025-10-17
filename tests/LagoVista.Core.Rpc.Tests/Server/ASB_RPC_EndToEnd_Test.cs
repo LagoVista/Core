@@ -1,4 +1,8 @@
-﻿using LagoVista.Core.Diagnostics.ConsoleProxy;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 464046ad0297aec8627bf0bd2628d5c64bcc4a949cd1e38d2b6a5d7e34a8f544
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using LagoVista.Core.Diagnostics.ConsoleProxy;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Rpc.Client;
 using LagoVista.Core.Rpc.Client.ServiceBus;

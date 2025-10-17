@@ -1,4 +1,8 @@
-﻿#region License
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: c00e02ca3a92fe0bc827dbf4c8b2595e53117a6091ce28dfea19a07ab0457a70
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+#region License
 /*Copyright (c) 2017, Software Logistics, LLC
 All rights reserved.
 

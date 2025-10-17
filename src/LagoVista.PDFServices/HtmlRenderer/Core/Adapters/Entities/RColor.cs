@@ -1,3 +1,7 @@
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: c8433b53afc4a3028c1dd8a4f3ac4ec7683df5d449d3aff893d5e52e12db39d4
+// IndexVersion: 1
+// --- END CODE INDEX META ---
 // Type: System.Drawing.Color
 // Assembly: System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
 // Assembly location: C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll

@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 816cc2d37249b8a2e323f59494893b1b1e27ca4bda595c91fb5e6442779d6eae
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using System;
 
 namespace LagoVista.Core.Retry
 {

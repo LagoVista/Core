@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 1cce7c4331535285237c317ac3f66d6b54a38c438e94b62af75b453b7b28866a
+// IndexVersion: 1
+// --- END CODE INDEX META ---
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using LagoVista.Core.Interfaces;
 
