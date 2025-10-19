@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 9a1e5d66472be097fbd92431ec326f86ea177f51a2f7b9cf097eed96afa221e5
-// IndexVersion: 1
+// IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.AsyncCoupler.Utils.Tests;
 using LagoVista.Core.Utils;

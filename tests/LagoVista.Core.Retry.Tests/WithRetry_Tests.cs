@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: cd76621ce36741fb0425ecaeab3c5e81b25a5ddef31cf47d8a28e98a787e66c0
-// IndexVersion: 1
+// IndexVersion: 0
 // --- END CODE INDEX META ---
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LagoVista.Core.Retry;

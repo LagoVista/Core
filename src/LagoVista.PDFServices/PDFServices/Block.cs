@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: dccf809e6044a477b39075c98bdc542e46cea9a9cf09912f0ee96d013bb448ba
-// IndexVersion: 1
+// IndexVersion: 0
 // --- END CODE INDEX META ---
 #region PDFsharp - A .NET library for processing PDF
 //

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.TestBase</id>
-    <version>3.0.3075.1038</version>
+    <version>3.0.3076.1206</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,7 +12,7 @@
     <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
-    <releaseNotes>Build Date: 10/17/2025 2:38:30 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 10/18/2025 4:06:00 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
@@ -24,7 +24,7 @@
         <dependency id="NUnit" version="4.4.0" />
         <dependency id="NUnit3TestAdapter" version="5.1.0" />
         <dependency id="coverlet.collector" version="6.0.4" />
-        <dependency id="LagoVista.Core" version="3.0.3075.1038" />
+        <dependency id="LagoVista.Core" version="3.0.3076.1206" />
       </group>
     </dependencies>
   </metadata>

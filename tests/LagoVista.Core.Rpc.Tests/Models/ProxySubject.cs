@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: aac61d466eb2e0281eeb0c29fa6c6982630d0236c6126f5ad410b7e6df5f19b2
-// IndexVersion: 1
+// IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.Rpc.Attributes;
 using System.Threading.Tasks;
