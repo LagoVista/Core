@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: c1183f37d4a16e6e6c3f973765fa8e36cc60962d088292ddafc10f4314224e5b
+// ContentHash: 36caf7ef32ad1ea571534b2ce7f2d52077d1b6db9532b8e84550ab507d2ab868
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
@@ -252,6 +252,8 @@ namespace LagoVista.Core.Models
 
         [ListColumn(HeaderResource: AuthenticationResources.Names.UserInfo_Title, ResourceType: typeof(AuthenticationResources))]
         public string Title { get; set; }
+
+        public string LoginType { get; set; }
 
         public string LastLogin { get; set; }
 

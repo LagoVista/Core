@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 0482c90dc8f1f1e8c2c6cc0250eb6b97f4004e331a484a8cef2fa85646f0c9e4
+// ContentHash: ee157431290fa7af75f332e5a480f479b9ea899fea03c7ceef1416e064d6c80e
 // IndexVersion: 0
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
@@ -137,6 +137,24 @@ namespace LagoVista.Core.Models
             }
 
             return latestChanges;
+        }
+
+        public void AddChange(string fieldName, string oldValue, string newValue, EntityHeader user = null, string timeStamp = null)
+        {
+            AuditHistory.Add(new EntityChangeSet()
+            {
+                ChangeDate = timeStamp ?? LastUpdatedDate,
+                ChangedBy = user ?? LastUpdatedBy,
+                Changes = new List<EntityChange>()
+                {
+                   new EntityChange()
+                   {
+                        Field = fieldName,
+                        OldValue = oldValue,
+                        NewValue = newValue,
+                   }
+                }
+            });
         }
     }
 }
