@@ -123,6 +123,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public string[] TagsCSVURls { get; set; }
         public List<ReplaceableTag> Tags { get; set; }
+        public string PickerProviderFieldName { get; set; }
 
 		public static List<EnumDescription> GetEnumOptions<Type>()
         {
@@ -212,7 +213,12 @@ namespace LagoVista.Core.Models.UIMetaData
             field.ParentRowName = attr.ParentRowName;
             field.ParentRowIndex = attr.ParentRowIndex;
             field.Rows = attr.Rows;
+            
+            if (!String.IsNullOrEmpty(attr.PickerProviderFieldName))
+                field.PickerProviderFieldName = attr.PickerProviderFieldName.CamelCase();
+
             field.ImageUpload = attr.ImageUpload;
+            
             if(!String.IsNullOrEmpty(attr.ThumbnailField))
                 field.ThumbnailField = attr.ThumbnailField.CamelCase();
 

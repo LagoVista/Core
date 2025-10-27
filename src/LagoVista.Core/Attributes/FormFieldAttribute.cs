@@ -192,6 +192,7 @@ namespace LagoVista.Core.Attributes
                                   string TagsCSVURls = "",
                                   string ThumbnailField = "",
                                   string ParentRowName = "",
+                                  string PickerProviderFieldName = "",
                                   int ParentRowIndex = -1)
         {
             _labelDisplayResource = LabelResource;
@@ -247,6 +248,7 @@ namespace LagoVista.Core.Attributes
             this.ThumbnailField = ThumbnailField;
             this.ParentRowName = ParentRowName;
             this.ParentRowIndex = ParentRowIndex;
+            this.PickerProviderFieldName = PickerProviderFieldName;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -314,6 +316,7 @@ namespace LagoVista.Core.Attributes
         public string TagsCSVURls { get; }
         public string ParentRowName { get; }
         public int ParentRowIndex { get; set; }
+        public string PickerProviderFieldName { get; set; }
     }
 
     public class SelectListItem
