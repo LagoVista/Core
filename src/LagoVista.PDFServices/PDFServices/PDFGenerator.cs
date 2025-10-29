@@ -730,26 +730,18 @@ namespace LagoVista.PDFServices
 
         public void AddLogo(int maxWidth, int maxHeight, double? top = null, double? left = null, bool? center = false)
         {
-            var imageName = "sllogo.png";
-            using (var ms = new MemoryStream())
+            if (!top.HasValue) top = 10;
+            if (!left.HasValue) left = Margin.Left;
+
+            if (_logoStream != null)
             {
-                var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
-                var fullName = $"{assembly.GetName().Name}.images.{imageName}";
-                var resources = assembly.GetManifestResourceNames();
-                var resourceName = resources.SingleOrDefault(x => x == imageName);
-                if (resourceName == null)
+                _logoStream.Seek(0, SeekOrigin.Begin);
+                using (var ms = new MemoryStream())
                 {
-                    //   throw new ArgumentOutOfRangeException("Could not find resource: " + fullName);
-                }
+                    _logoStream.CopyTo(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    Console.WriteLine("STREAM LENGTH: " + ms.Length);
 
-                if (!top.HasValue) top = 10;
-                if (!left.HasValue) left = Margin.Left;
-
-
-                using (var rs = assembly.GetManifestResourceStream(fullName))
-                {
-                    rs.CopyTo(ms);
-                    ms.Position = 0;
                     using (var img = XImage.FromStream(() => ms))
                     {
                         var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
@@ -762,22 +754,74 @@ namespace LagoVista.PDFServices
                         _graphics.DrawImage(img, left.Value, top.Value, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
                     }
                 }
+
+                Console.WriteLine("STREAM LENGTH: " + _logoStream.Length);
+            }
+            else
+            {
+                var imageName = "sllogo.png";
+                using (var ms = new MemoryStream())
+                {
+                    var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
+                    var fullName = $"{assembly.GetName().Name}.images.{imageName}";
+                    var resources = assembly.GetManifestResourceNames();
+                    var resourceName = resources.SingleOrDefault(x => x == imageName);
+                    if (resourceName == null)
+                    {
+                        //   throw new ArgumentOutOfRangeException("Could not find resource: " + fullName);
+                    }
+
+
+                    using (var rs = assembly.GetManifestResourceStream(fullName))
+                    {
+                        rs.CopyTo(ms);
+                        ms.Position = 0;
+                        using (var img = XImage.FromStream(() => ms))
+                        {
+                            var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
+
+                            if (center.HasValue && center.Value)
+                            {
+                                left = (_currentPage.Width / 2) - ((img.PointWidth * scalingFactor) / 2);
+                            }
+
+                            _graphics.DrawImage(img, left.Value, top.Value, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                        }
+                    }
+                }
             }
         }
 
-
         public void AddLogoToHeader(string imageName, int maxWidth, int maxHeight)
         {
-            using (var ms = new MemoryStream())
+            if (_logoStream == null)
             {
-                var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
-                var fullName = $"{assembly.FullName}.images.{imageName}";
-                var resources = assembly.GetManifestResourceNames();
-                var resourceName = resources.First(x => x == imageName);
-                using (var rs = assembly.GetManifestResourceStream(resourceName))
+                using (var ms = new MemoryStream())
                 {
-                    rs.CopyTo(ms);
-                    ms.Position = 0;
+                    var assembly = typeof(FontResolver).GetTypeInfo().Assembly;
+                    var fullName = $"{assembly.FullName}.images.{imageName}";
+                    var resources = assembly.GetManifestResourceNames();
+                    var resourceName = resources.First(x => x == imageName);
+                    using (var rs = assembly.GetManifestResourceStream(resourceName))
+                    {
+                        rs.CopyTo(ms);
+                        ms.Position = 0;
+                        using (var img = XImage.FromStream(() => ms))
+                        {
+                            var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
+                            _graphics.DrawImage(img, Margin.Left, CurrentY, img.PointWidth * scalingFactor, img.PointHeight * scalingFactor);
+                            CurrentY += img.PointHeight * scalingFactor;
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+                using (var ms = new MemoryStream())
+                {
+                    _logoStream.CopyTo(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
                     using (var img = XImage.FromStream(() => ms))
                     {
                         var scalingFactor = img.PixelWidth > img.PixelHeight ? (float)maxWidth / (float)img.PixelWidth : (float)maxHeight / (float)img.PixelHeight;
@@ -786,6 +830,18 @@ namespace LagoVista.PDFServices
                     }
                 }
             }
+        }
+
+        MemoryStream _logoStream;
+
+        /// <summary>
+        /// Set the logo memory stream, you will be eventually responsible for disposing this, however
+        /// you will need to keep it available until done with generation.
+        /// </summary>
+        /// <param name="logoStream"></param>
+        public void SetLogoStream(MemoryStream logoStream)
+        {
+            _logoStream = logoStream;
         }
 
         public void AddImage(MemoryStream ms, int maxWidth, int maxHeight)
