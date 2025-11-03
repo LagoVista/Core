@@ -14,7 +14,7 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity
+    public class EntityBase: ModelBase, INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity
     {
 
         public EntityBase()
@@ -58,6 +58,10 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: LagoVistaCommonStrings.Names.Common_Category_Select, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, IsUserEditable: true)]
         public EntityHeader Category { get; set; }
 
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]
+        public string Description { get; set; }
+
+
         [CloneOptions(false)]
         public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();
         [CloneOptions(false)]
@@ -91,6 +95,8 @@ namespace LagoVista.Core.Models
 
         public int Revision { get; set; }
         public string RevisionTimeStamp { get; set; }
+
+        public List<Label> Labels { get; set; } = new List<Label>();
 
 
         public double? Stars { get; set; }

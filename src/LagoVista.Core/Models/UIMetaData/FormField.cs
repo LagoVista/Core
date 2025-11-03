@@ -102,8 +102,11 @@ namespace LagoVista.Core.Models.UIMetaData
         public string FactoryUrl { get; set; }
         public string GetUrl { get; set; }
         public string EntityHeaderPickerUrl { get; set; }
-       
+
         public string AiChatPrompt { get; set; }
+        public string AiSystem { get; set; }
+        public string AiContentType { get; set; }
+        public string AiSubContentType { get; set; }
         public string GeneratedImageSize { get; set; }
         public string DisplayImageSize { get; set; }
 
