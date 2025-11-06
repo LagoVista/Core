@@ -4,84 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace LagoVista.Core.Utils
+namespace LagoVista.Core.Utils.Types
 {
-    // RagChunkBuilder.cs
-    // RagChunkBuilder.cs (concise)
-
-    public interface IRagIndexable
-    {
-        string OrgId { get; }
-        string ProjectId { get; }
-        string UniqueId { get; }          // DOCID
-        string ContentSubtype { get; }
-
-        string GetFrontMatter();
-        IEnumerable<IndexSection> GetBodySections();
-
-        IEnumerable<string> GetLabelSlugs();
-        string Language { get; }
-        int Priority { get; }
-        string Audience { get; }
-        string Persona { get; }
-        string Stage { get; }
-    }
-
-    public sealed class IndexSection
-    {
-        public string Key { get; set; }
-        public string Heading { get; set; }
-        public string Text { get; set; }
-    }
-
-    public sealed class ChunkingOptions
-    {
-        public int TargetTokensPerChunk { get; set; } = 700;
-        public int OverlapTokens { get; set; } = 80;
-        public bool IncludeFrontMatter { get; set; } = true;
-        public string VersionOrDate { get; set; } = null; // e.g. "2025-11-03" or commit SHA
-        public string RawFileExtension { get; set; } = "txt"; // default if not inferred
-    }
-
-    public sealed class Chunk
-    {
-        public string PointId { get; set; }
-        public string DocId { get; set; }
-        public string SectionKey { get; set; }
-        public int PartIndex { get; set; }     // 1-based
-        public int PartTotal { get; set; }
-        public string Title { get; set; }
-        public string TextNormalized { get; set; }
-        public int? LineStart { get; set; }    // optional pointer into raw text (1-based)
-        public int? LineEnd { get; set; }      // optional pointer into raw text (inclusive)
-        public int? CharStart { get; set; }
-        public int? CharEnd { get; set; }
-    }
-
-    public sealed class RawArtifact
-    {
-        public string MimeType { get; set; }           // e.g., "text/markdown", "text/html"
-        public string SuggestedBlobPath { get; set; }  // /{org}/{project}/{subtype}/{docId}/{ver}/source.ext
-        public string SourceSha256 { get; set; }
-        public bool IsText { get; set; }             // if true, Text is set; else Bytes/Stream provided elsewhere
-        public string Text { get; set; }               // small docs only
-    }
-
-    public sealed class ChunkPlan
-    {
-        public string DocId { get; set; }
-        public IReadOnlyList<Chunk> Chunks { get; set; }
-        public RawArtifact Raw { get; set; }
-    }
-
-    public sealed class RawInput
-    {
-        public string MimeType { get; set; }      // if null, defaults to "text/plain"
-        public string RawText { get; set; }       // preferred when source is text (markdown/html/plain)
-                                                  // If you later add streaming/bytes, extend this class (kept minimal per your request)
-    }
-
-
     public static class RagChunkBuilder
     {
         private static string ExtractTitle(string frontText)
@@ -105,18 +29,18 @@ namespace LagoVista.Core.Utils
             return string.IsNullOrWhiteSpace(firstLine) ? null : firstLine.Trim();
         }
 
-        public static ChunkPlan Build(IRagIndexable doc, RawInput raw, ChunkingOptions opts = null)
+        public static RagChunkPlan Build(IRagIndexable doc, RawInput raw, ChunkingOptions opts = null)
         {
             opts = opts ?? new ChunkingOptions();
-            var chunks = new List<Chunk>();
-            var docId = doc.UniqueId;
+            var chunks = new List<RagChunk>();
+            var docId = doc.Id;
             var allLines = new List<string>(); // only used for line pointers when raw text is present
 
             // Raw artifact (text case)
             var mime = string.IsNullOrWhiteSpace(raw?.MimeType) ? "text/plain" : raw.MimeType;
             var ext = GuessExtension(mime, opts.RawFileExtension);
             var ver = string.IsNullOrWhiteSpace(opts.VersionOrDate) ? DateStampUtc() : opts.VersionOrDate;
-            var suggested = "/" + Safe(doc.OrgId) + "/" + Safe(doc.ProjectId)
+            var suggested = "/" + Safe(doc.OwnerOrganization.Id) + "/" + Safe(doc.Id)
                             + "/" + Safe(doc.ContentSubtype) + "/" + Safe(docId)
                             + "/" + Safe(ver) + "/source." + ext;
 
@@ -152,7 +76,7 @@ namespace LagoVista.Core.Utils
                 var fm = Normalize(doc.GetFrontMatter());
                 if (!string.IsNullOrWhiteSpace(fm))
                 {
-                    var c = new Chunk
+                    var c = new RagChunk
                     {
                         DocId = docId,
                         SectionKey = "front",
@@ -185,7 +109,7 @@ namespace LagoVista.Core.Utils
                 for (int i = 0; i < total; i++)
                 {
                     var part = sub[i];
-                    var c = new Chunk
+                    var c = new RagChunk
                     {
                         DocId = docId,
                         SectionKey = key,
@@ -247,7 +171,7 @@ namespace LagoVista.Core.Utils
                 }
             }
 
-            return new ChunkPlan { DocId = docId, Chunks = chunks, Raw = rawArtifact };
+            return new RagChunkPlan { DocId = docId, Chunks = chunks, Raw = rawArtifact };
         }
 
         // helpers
@@ -273,7 +197,7 @@ namespace LagoVista.Core.Utils
             var sb = new StringBuilder(s.Length);
             foreach (var ch in s.ToLowerInvariant())
             {
-                if ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) sb.Append(ch);
+                if (ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9') sb.Append(ch);
                 else if (char.IsWhiteSpace(ch) || ch == '-' || ch == '_' || ch == '.' || ch == '/')
                 { if (sb.Length == 0 || sb[sb.Length - 1] != '-') sb.Append('-'); }
             }
@@ -296,7 +220,7 @@ namespace LagoVista.Core.Utils
             // Estimate average line length (bounded) to convert char budgets → line counts.
             int totalLen = 0, nonEmpty = 0;
             foreach (var l in lines) { var ln = l.Length; totalLen += ln; if (ln > 0) nonEmpty++; }
-            var avg = Math.Max(20, Math.Min(200, (nonEmpty > 0 ? totalLen / nonEmpty : 80))); // clamp
+            var avg = Math.Max(20, Math.Min(200, nonEmpty > 0 ? totalLen / nonEmpty : 80)); // clamp
 
             int chunkLines = Math.Max(60, Math.Min(400, approxChars / avg));       // typical ~60–200 lines
             int overlapLines = Math.Max(3, Math.Min(chunkLines / 4, overlapChars / Math.Max(1, avg)));
@@ -348,7 +272,7 @@ namespace LagoVista.Core.Utils
             var sb = new StringBuilder(s.Length);
             foreach (var ch in s.ToLowerInvariant())
             {
-                if ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) sb.Append(ch);
+                if (ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9') sb.Append(ch);
                 else if (ch == '-' || ch == '_' || ch == '/') sb.Append(ch);
                 else if (char.IsWhiteSpace(ch)) sb.Append('-');
                 // else skip

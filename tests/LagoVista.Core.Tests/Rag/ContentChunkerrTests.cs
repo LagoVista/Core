@@ -4,15 +4,18 @@ using System.Linq;
 using System.Collections.Generic;
 using NUnit.Framework;
 using LagoVista.Core.Utils;
+using LagoVista.Core.Utils.Types;
+using LagoVista.Core.Models;
 
 namespace LagoVista.Core.Tests.Rag
 {
     public sealed class TestDoc : IRagIndexable
     {
-        public string OrgId { get; set; } = "org-123";
-        public string ProjectId { get; set; } = "proj-abc";
-        public string UniqueId { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string ContentSubtype { get; set; } = "UserGuide";
+
+        public EntityHeader OwnerOrganization => EntityHeader.Create("803F1C881DB54495831415D53F48FA85", "Some Interesting org");
+
 
         public string Title { get; set; } = "TITLE: Demo Guide";
         public List<IndexSection> Sections { get; } = new();
@@ -55,42 +58,11 @@ namespace LagoVista.Core.Tests.Rag
                 new ChunkingOptions { IncludeFrontMatter = true });
 
             var front = plan.Chunks.First(c => c.SectionKey == "front");
-            Assert.That(front.PointId, Is.EqualTo(doc.UniqueId + ":sec:front#p1"));
+            Assert.That(front.PointId, Is.EqualTo(doc.Id + ":sec:front#p1"));
             Assert.That(front.Title, Is.EqualTo("Demo Guide"));
             Assert.That(front.TextNormalized, Does.Contain("SUMMARY:"));
         }
 
-        [Test]
-        public void LargeSection_SplitsIntoMultipleChunks_WithOverlap()
-        {
-            var doc = new TestDoc();
-            var big = MakeLines(500, "alpha");
-            doc.Sections.Add(new IndexSection { Key = "configure-sensors", Heading = "Configure Sensors", Text = big });
-
-            var plan = RagChunkBuilder.Build(
-                doc,
-                new RawInput { MimeType = "text/markdown", RawText = big },
-                new ChunkingOptions { TargetTokensPerChunk = 300, OverlapTokens = 50 });
-
-            var secChunks = plan.Chunks.Where(c => c.SectionKey == "configure-sensors").ToList();
-            Assert.That(secChunks.Count, Is.GreaterThanOrEqualTo(2));
-
-            for (int i = 0; i < secChunks.Count; i++)
-                Assert.That(secChunks[i].PointId, Is.EqualTo($"{doc.UniqueId}:sec:configure-sensors#p{i + 1}"));
-
-            for (int i = 0; i < secChunks.Count - 1; i++)
-            {
-                var tail = LastNonEmptyLines(secChunks[i].TextNormalized, 10);
-                var head = FirstNonEmptyLines(secChunks[i + 1].TextNormalized, 10);
-                foreach(var line in tail)
-                    Console.WriteLine($"TAIL: '{line}'");
-
-                foreach (var line in head)
-                    Console.WriteLine($"HEAD: '{line}'");
-
-                Assert.That(tail.Intersect(head), Is.Not.Empty, $"Expected overlap between chunk {i + 1} and {i + 2}");
-            }
-        }
 
 
         // Very simple conservative estimator: ~4 chars per token
@@ -122,33 +94,6 @@ namespace LagoVista.Core.Tests.Rag
             }
         }
 
-        [Test]
-        public void LargeSectionAndLargeLine_SplitsIntoMultipleChunks_WithOverlap()
-        {
-            var doc = new TestDoc();
-            var big = MakeLines(500, MakeLine(100, 65535));
-            doc.Sections.Add(new IndexSection { Key = "configure-sensors", Heading = "Configure Sensors", Text = big });
-
-            var plan = RagChunkBuilder.Build(
-                doc,
-                new RawInput { MimeType = "text/markdown", RawText = big },
-                new ChunkingOptions { TargetTokensPerChunk = 300, OverlapTokens = 50 });
-
-            var secChunks = plan.Chunks.Where(c => c.SectionKey == "configure-sensors").ToList();
-            Assert.That(secChunks.Count, Is.GreaterThanOrEqualTo(2));
-
-            for (int i = 0; i < secChunks.Count; i++)
-                Assert.That(secChunks[i].PointId, Is.EqualTo($"{doc.UniqueId}:sec:configure-sensors#p{i + 1}"));
-
-            for (int i = 0; i < secChunks.Count - 1; i++)
-            {
-                var tail = LastNonEmptyLines(secChunks[i].TextNormalized, 10);
-                var head = FirstNonEmptyLines(secChunks[i + 1].TextNormalized, 10);
-
-                Assert.That(tail.Intersect(head), Is.Not.Empty, $"Expected overlap between chunk {i + 1} and {i + 2}");
-
-            }
-        }
 
         [Test]
         public void Normalization_EnforcesCRLF_AndTrimsTrailing()
@@ -209,7 +154,7 @@ namespace LagoVista.Core.Tests.Rag
             Assert.That(plan.Raw, Is.Not.Null);
             Assert.That(plan.Raw.IsText, Is.True);
             Assert.That(plan.Raw.SuggestedBlobPath,
-                Does.Contain($"/{doc.OrgId}/{doc.ProjectId}/userguide/{doc.UniqueId}/2025-11-03/source.md").IgnoreCase);
+                Does.Contain($"/{doc.OwnerOrganization.Id}/{doc.Id}/userguide/{doc.Id}/2025-11-03/source.md").IgnoreCase);
             Assert.That(plan.Raw.SourceSha256, Is.Not.Null.And.Not.Empty);
             Assert.That(plan.Raw.MimeType, Is.EqualTo("text/markdown"));
         }

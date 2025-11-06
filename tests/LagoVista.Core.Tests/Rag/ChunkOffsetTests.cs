@@ -5,6 +5,8 @@ using System.Text;
 using System.Collections.Generic;
 using NUnit.Framework;
 using LagoVista.Core.Utils;
+using LagoVista.Core.Utils.Types;
+using LagoVista.Core.Models;
 
 
 namespace LagoVista.Core.Tests.Rag
@@ -16,9 +18,8 @@ namespace LagoVista.Core.Tests.Rag
         // ---- helpers ----
         private sealed class TestDoc : IRagIndexable
         {
-            public string OrgId { get; set; } = "org";
-            public string ProjectId { get; set; } = "proj";
-            public string UniqueId { get; set; } = Guid.NewGuid().ToString();
+            public EntityHeader OwnerOrganization => EntityHeader.Create("803F1C881DB54495831415D53F48FA85", "Some Interesting org");
+            public string Id { get; set; } = Guid.NewGuid().ToString();
             public string ContentSubtype { get; set; } = "UserGuide";
             public List<IndexSection> Sections { get; } = new();
             public string GetFrontMatter() => "TITLE: Offsets\r\nSUMMARY: test";

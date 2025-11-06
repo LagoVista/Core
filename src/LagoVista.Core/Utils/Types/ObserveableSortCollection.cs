@@ -1,16 +1,9 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 19b2bcee957d6ab21fdeba23f12f55463118e2fa975dc4e7a8241dde217b7198
-// IndexVersion: 0
-// --- END CODE INDEX META ---
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LagoVista.Core.Utils
+namespace LagoVista.Core.Utils.Types
 {
     public class ObservableSortedList<T> : IList<T>,
             INotifyPropertyChanged,
@@ -128,14 +121,14 @@ namespace LagoVista.Core.Utils
         {
             int i = _list.BinarySearch(item, _comparer);
             if (i < 0) return -1;
-            if (object.ReferenceEquals(_list[i], item)) return i;
+            if (ReferenceEquals(_list[i], item)) return i;
             // Search downwards
             for (int s = i - 1; s >= 0 && _comparer.Compare(_list[s], item) == 0; s--)
-                if (object.ReferenceEquals(_list[s], item))
+                if (ReferenceEquals(_list[s], item))
                     return s;
             // Search upwards
             for (int s = i + 1; s < _list.Count && _comparer.Compare(_list[s], item) == 0; s++)
-                if (object.ReferenceEquals(_list[s], item))
+                if (ReferenceEquals(_list[s], item))
                     return s;
             // Not found
             return -1;

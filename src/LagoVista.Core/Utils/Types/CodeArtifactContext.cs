@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace LagoVista.Core.Utils.Types
+{
+    /// <summary>
+    /// Describes the code artifact the chunks came from.
+    /// </summary>
+    public sealed class CodeArtifactContext
+    {
+        public string Repo { get; set; }             // e.g., "github.com/acme/nuviot"
+        public string RepoBranch { get; set; }       // e.g., "main"
+        public string CommitSha { get; set; }        // short or full SHA
+        public string Path { get; set; }             // repo-relative path, e.g., "src/Services/OrderService.cs"
+        public string Subtype { get; set; }          // e.g., "CSharp", "TypeScript", "SQL"
+        public string Language { get; set; }         // optional content language tag for code docs/comments
+        public string TitleOverride { get; set; }    // if you want a specific title per chunk (else we pick)
+    }
+}
