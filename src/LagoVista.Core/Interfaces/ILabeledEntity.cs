@@ -11,4 +11,8 @@ namespace LagoVista.Core.Interfaces
     {
         List<Label> Labels { get; set; }
     }
+
+    public class LabeledEntity : EntityBase, ILabeledEntity
+    {
+    }
 }

@@ -34,6 +34,15 @@ namespace LagoVista.Core.Tests.Rag
         private static string MakeLines(int count, string prefix)
             => string.Join("\r\n", Enumerable.Range(1, count).Select(i => $"{prefix} line {i:D4}"));
 
+        private static string MakeLine(int? minLength = 50, int? maxLength = 1024)
+        {
+            var rand = new Random();
+            int length = rand.Next(minLength ?? 50, maxLength ?? 1024);
+            const string chars = "abcdefghijklmnopqrstuvwxyz ";
+            return new string(Enumerable.Range(0, length).Select(_ => chars[rand.Next(chars.Length)]).ToArray());
+        }
+         
+
         [Test]
         public void FrontMatter_ProducesSingleChunk_WithTitle()
         {
@@ -71,9 +80,73 @@ namespace LagoVista.Core.Tests.Rag
 
             for (int i = 0; i < secChunks.Count - 1; i++)
             {
-                var tail = LastNonEmptyLines(secChunks[i].TextNormalized, 5);
-                var head = FirstNonEmptyLines(secChunks[i + 1].TextNormalized, 5);
+                var tail = LastNonEmptyLines(secChunks[i].TextNormalized, 10);
+                var head = FirstNonEmptyLines(secChunks[i + 1].TextNormalized, 10);
+                foreach(var line in tail)
+                    Console.WriteLine($"TAIL: '{line}'");
+
+                foreach (var line in head)
+                    Console.WriteLine($"HEAD: '{line}'");
+
                 Assert.That(tail.Intersect(head), Is.Not.Empty, $"Expected overlap between chunk {i + 1} and {i + 2}");
+            }
+        }
+
+
+        // Very simple conservative estimator: ~4 chars per token
+        private static int EstimateTokens(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return 0;
+            // Count newlines a bit heavier; trim to avoid trailing gaps
+            var text = s.TrimEnd();
+            var extra = text.Count(c => c == '\n' || c == '\r');
+            return (int)Math.Ceiling((text.Length + extra) / 4.0);
+        }
+
+        [Test]
+        public void SingleLongLine_SplitsWithOverlap()
+        {
+            var longLine = MakeLines(500, MakeLine(100, 65535));
+            var chunks = ChunkSplitter.SplitWithOverlap(longLine, targetTokens: 600, overlapTokens: 80);
+
+            Assert.That(chunks.Count, Is.GreaterThan(1));
+            // Overlap check: tail of chunk[i] appears in head of chunk[i+1]
+            for (int i = 0; i < chunks.Count - 1; i++)
+            {
+                var tokens = EstimateTokens(chunks[i]);
+
+                Assert.That(tokens < 700);
+
+                var tail = chunks[i].Substring(Math.Max(0, chunks[i].Length - 200));
+                Assert.That(chunks[i + 1], Does.Contain(tail.Substring(0, 100)));
+            }
+        }
+
+        [Test]
+        public void LargeSectionAndLargeLine_SplitsIntoMultipleChunks_WithOverlap()
+        {
+            var doc = new TestDoc();
+            var big = MakeLines(500, MakeLine(100, 65535));
+            doc.Sections.Add(new IndexSection { Key = "configure-sensors", Heading = "Configure Sensors", Text = big });
+
+            var plan = RagChunkBuilder.Build(
+                doc,
+                new RawInput { MimeType = "text/markdown", RawText = big },
+                new ChunkingOptions { TargetTokensPerChunk = 300, OverlapTokens = 50 });
+
+            var secChunks = plan.Chunks.Where(c => c.SectionKey == "configure-sensors").ToList();
+            Assert.That(secChunks.Count, Is.GreaterThanOrEqualTo(2));
+
+            for (int i = 0; i < secChunks.Count; i++)
+                Assert.That(secChunks[i].PointId, Is.EqualTo($"{doc.UniqueId}:sec:configure-sensors#p{i + 1}"));
+
+            for (int i = 0; i < secChunks.Count - 1; i++)
+            {
+                var tail = LastNonEmptyLines(secChunks[i].TextNormalized, 10);
+                var head = FirstNonEmptyLines(secChunks[i + 1].TextNormalized, 10);
+
+                Assert.That(tail.Intersect(head), Is.Not.Empty, $"Expected overlap between chunk {i + 1} and {i + 2}");
+
             }
         }
 

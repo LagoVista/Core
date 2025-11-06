@@ -70,7 +70,7 @@ namespace LagoVista.Core.Tests.PDF
             generator.AddInitialsBlock("init1.1", "Frederick Fredrickson");
             generator.AddParagraph(GenerateText(100, 2), "Notes 3");
             generator.AddParagraph(GenerateText(100, 3), "Notes 4");
-            generator.AddInitialsBlock("init1.2", "Daniel Janulewicz");
+            generator.AddInitialsBlock("init1.2", "Tracey Marcey");
             generator.AddParagraph(GenerateText(100, 2), "Notes 5");
             generator.AddParagraph(GenerateText(100, 2), "Notes 6");
             generator.AddParagraph(GenerateText(100, 2), "Notes 7");

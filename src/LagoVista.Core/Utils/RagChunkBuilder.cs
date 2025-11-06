@@ -54,6 +54,8 @@ namespace LagoVista.Core.Utils
         public string TextNormalized { get; set; }
         public int? LineStart { get; set; }    // optional pointer into raw text (1-based)
         public int? LineEnd { get; set; }      // optional pointer into raw text (inclusive)
+        public int? CharStart { get; set; }
+        public int? CharEnd { get; set; }
     }
 
     public sealed class RawArtifact
@@ -132,6 +134,8 @@ namespace LagoVista.Core.Utils
                 sha = Sha256(string.Empty);
             }
 
+            int scanCharPos = 0;
+
             var rawArtifact = new RawArtifact
             {
                 MimeType = mime,
@@ -141,13 +145,14 @@ namespace LagoVista.Core.Utils
                 Text = rawTextNorm // small docs ok; for large sources you can null this before persisting the plan
             };
 
+
             // Front matter
             if (opts.IncludeFrontMatter)
             {
                 var fm = Normalize(doc.GetFrontMatter());
                 if (!string.IsNullOrWhiteSpace(fm))
                 {
-                    chunks.Add(new Chunk
+                    var c = new Chunk
                     {
                         DocId = docId,
                         SectionKey = "front",
@@ -158,7 +163,9 @@ namespace LagoVista.Core.Utils
                         PointId = BuildPointId(docId, "front", 1),
                         LineStart = null,
                         LineEnd = null
-                    });
+                    };
+
+                    chunks.Add(c);
                 }
             }
 
@@ -169,7 +176,7 @@ namespace LagoVista.Core.Utils
                 var header = string.IsNullOrWhiteSpace(s.Heading) ? "" : "SECTION: " + s.Heading + "\r\n";
                 var sectionText = Normalize(header + (s.Text ?? string.Empty));
 
-                var sub = SplitWithOverlap(sectionText, opts.TargetTokensPerChunk * 4, opts.OverlapTokens * 4);
+                var sub = ChunkSplitter.SplitWithOverlap(sectionText, opts.TargetTokensPerChunk * 4, opts.OverlapTokens * 4);
                 var total = Math.Max(1, sub.Count);
 
                 // Optional line pointers (only meaningful if raw text exists and roughly matches this normalized text)
@@ -202,6 +209,38 @@ namespace LagoVista.Core.Utils
                             c.LineEnd = Math.Min(allLines.Count, start + Math.Max(1, partLines.Length));
                             scanPos = c.LineEnd.Value - 1;
                         }
+                    }
+
+                    // --- Character offsets against the normalized raw text (if available) ---
+                    if (rawArtifact.IsText && rawTextNorm != null)
+                    {
+                        // If we injected a header ("SECTION: ...\r\n"), drop it for matching against raw
+                        var toFind = c.TextNormalized;
+                        int sep = toFind.IndexOf("\r\n", StringComparison.Ordinal);
+                        if (sep >= 0 && toFind.StartsWith("SECTION:", StringComparison.OrdinalIgnoreCase))
+                            toFind = toFind.Substring(sep + 2); // skip header line
+
+                        // Try to find this chunk’s content in the normalized raw text, starting from our scan cursor
+                        int idx = rawTextNorm.IndexOf(toFind, scanCharPos, StringComparison.Ordinal);
+                        if (idx < 0 && toFind.Length > 64)
+                        {
+                            // Fallback: match on a middle slice to survive small drift
+                            int mid = toFind.Length / 2;
+                            int span = Math.Min(256, toFind.Length - mid);
+                            string probe = toFind.Substring(mid, span);
+                            int probeIdx = rawTextNorm.IndexOf(probe, scanCharPos, StringComparison.Ordinal);
+                            if (probeIdx >= 0) idx = Math.Max(0, probeIdx - mid);
+                        }
+
+                        if (idx >= 0)
+                        {
+                            c.CharStart = idx;
+                            c.CharEnd = idx + toFind.Length;
+
+                            // advance cursor, leaving some overlap window so the next search tends forward
+                            scanCharPos = Math.Max(scanCharPos, idx + Math.Max(1, toFind.Length - 512));
+                        }
+                        // else: leave CharStart/End null if we couldn’t confidently place it
                     }
 
                     chunks.Add(c);
@@ -242,58 +281,43 @@ namespace LagoVista.Core.Utils
             return string.IsNullOrEmpty(slug) ? "body" : slug;
         }
 
+        // Simpler: split by lines with a fixed line overlap.
+        // We convert approxChars/overlapChars into line counts using an estimated average line length.
+        // Guarantees at least 3 overlapping lines between consecutive chunks.
+
         private static List<string> SplitWithOverlap(string text, int approxChars, int overlapChars)
         {
             if (string.IsNullOrEmpty(text)) return new List<string> { string.Empty };
-            if (text.Length <= approxChars) return new List<string> { text };
 
+            // Work with \n, restore CRLF at the end.
             var lines = text.Replace("\r\n", "\n").Split('\n');
+            if (lines.Length <= 1) return new List<string> { text };
+
+            // Estimate average line length (bounded) to convert char budgets → line counts.
+            int totalLen = 0, nonEmpty = 0;
+            foreach (var l in lines) { var ln = l.Length; totalLen += ln; if (ln > 0) nonEmpty++; }
+            var avg = Math.Max(20, Math.Min(200, (nonEmpty > 0 ? totalLen / nonEmpty : 80))); // clamp
+
+            int chunkLines = Math.Max(60, Math.Min(400, approxChars / avg));       // typical ~60–200 lines
+            int overlapLines = Math.Max(3, Math.Min(chunkLines / 4, overlapChars / Math.Max(1, avg)));
+
+            // If content is short, single chunk.
+            if (lines.Length <= chunkLines) return new List<string> { text };
+
             var chunks = new List<string>();
-            var current = new List<string>();
-            var len = 0;
+            int step = Math.Max(1, chunkLines - overlapLines);
 
-            Action<bool> flush = keepOverlap =>
+            for (int start = 0; start < lines.Length; start += step)
             {
-                if (current.Count == 0) return;
-                chunks.Add(string.Join("\n", current));
-                if (!keepOverlap || overlapChars <= 0) { current.Clear(); len = 0; return; }
-
-                // add near top of RagChunkBuilder
-                const int MinOverlapLines = 5;
-
-                // inside flush(true)
-                var keep = new List<string>();
-                var keptLen = 0;
-                int keptLines = 0;
-                for (int i = current.Count - 1; i >= 0; i--)
-                {
-                    var L = current[i];
-                    // keep while within char budget OR until we have MinOverlapLines
-                    if (keptLen + L.Length + 1 > overlapChars && keptLines >= MinOverlapLines) break;
-                    keep.Insert(0, L);
-                    keptLen += L.Length + 1;
-                    keptLines++;
-                }
-                current = keep;
-                len = keptLen;
-            };
-
-
-
-            foreach (var raw in lines)
-            {
-                var line = raw;
-                if (len + line.Length + 1 > approxChars) flush(true);
-                current.Add(line);
-                len += line.Length + 1;
+                int end = Math.Min(lines.Length, start + chunkLines); // exclusive
+                var slice = string.Join("\n", lines, start, end - start);
+                chunks.Add(slice.Replace("\n", "\r\n"));
+                if (end == lines.Length) break;
             }
-            flush(false);
-
-            for (int i = 0; i < chunks.Count; i++)
-                chunks[i] = chunks[i].Replace("\n", "\r\n");
 
             return chunks;
         }
+
 
         private static int FindLineForward(List<string> haystack, string needleLine, int startAt)
         {
