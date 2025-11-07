@@ -35,10 +35,12 @@ namespace LagoVista.Core.Utils
                 // Option B: 32-hex short ID
                 // var fileDocIdHex = CodeDocId.FileDocIdHex128(canonical);  // if you prefer string id
 
+                c.PointId = Guid.NewGuid().ToString().ToLower();
+
                 // Build stable point id (commit-agnostic)
-                var pointId = CodePointId.Build(fileDocId, c.SectionKey, c.PartIndex);
+          //      var pointId = CodePointId.Build(fileDocId, c.SectionKey, c.PartIndex);
                 // (optional) also stamp it back onto the chunk for traceability:
-                if (string.IsNullOrWhiteSpace(c.PointId)) c.PointId = pointId;
+            //    if (string.IsNullOrWhiteSpace(c.PointId)) c.PointId = pointId;
                 var text = c.TextNormalized ?? string.Empty;
 
                 var title = !string.IsNullOrWhiteSpace(code.TitleOverride) ? code.TitleOverride
@@ -50,7 +52,7 @@ namespace LagoVista.Core.Utils
                     // Identity / tenancy
                     OrgId = ctx.OrgId,
                     ProjectId = ctx.ProjectId,
-                    DocId = plan.DocId,
+                    DocId = fileDocId.ToString(),
 
                     // Classification
                     ContentType = RagContentType.Code,
@@ -95,14 +97,16 @@ namespace LagoVista.Core.Utils
                 var errs = RagVectorPayloadValidator.Validate(payload,
                     new RagVectorPayloadValidator.ValidateOptions { RequireCodeRepoFields = true });
                 if (errs.Count > 0)
-                    throw new InvalidOperationException($"Invalid code payload for {pointId}: {string.Join("; ", errs)}");
+                    throw new InvalidOperationException($"Invalid code payload for {c.DocId}: {string.Join("; ", errs)}");
 
                 results.Add(new PayloadBuildResult
                 {
-                    PointId = pointId,
+                    PointId = c.PointId,
                     Payload = payload,
-                    TextForEmbedding = text,
-                    EstimatedTokens = EstimateTokens(text)
+                    TextForEmbedding = c.TextNormalized,
+                    EstimatedTokens = EstimateTokens(text),
+                    Vector = c.Vector
+                    
                 });
             }
 

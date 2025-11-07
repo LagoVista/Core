@@ -90,7 +90,8 @@ namespace LagoVista.Core.Utils
                     PointId = pointId,
                     Payload = payload,
                     TextForEmbedding = text,
-                    EstimatedTokens = EstimateTokens(text)
+                    EstimatedTokens = EstimateTokens(text),
+                    Vector = c.Vector
                 });
             }
 

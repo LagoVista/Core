@@ -13,8 +13,9 @@
         public int? LineEnd { get; set; }      // optional pointer into raw text (inclusive)
         public int? CharStart { get; set; }
         public int? CharEnd { get; set; }
-        public string Text { get; set; }
         public string Symbol { get; set; }
         public string SymbolType { get; set; }
+        public float[] Vector { get; set; }
+
     }
 }

@@ -504,4 +504,7 @@
   <data name="Common_Icon" xml:space="preserve">
     <value>Icon</value>
   </data>
+  <data name="LLMProvider_OpenAI" xml:space="preserve">
+    <value>Open AI</value>
+  </data>
 </root>

@@ -1,8 +1,4 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 5fb9dcc43e68e72ad70e185b9acc444ad9b0aa4600430bcbeafbc69e384e0977
-// IndexVersion: 0
-// --- END CODE INDEX META ---
-/*9/25/2025 10:10:32 AM*/
+﻿/*11/7/2025 6:56:31 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1136,6 +1132,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:ListResponse_Deleted
 
 		public static string ListResponse_Deleted { get { return GetResourceString("ListResponse_Deleted"); } }
+//Resources:LagoVistaCommonStrings:LLMProvider_OpenAI
+
+		public static string LLMProvider_OpenAI { get { return GetResourceString("LLMProvider_OpenAI"); } }
 //Resources:LagoVistaCommonStrings:Month_April
 
 		public static string Month_April { get { return GetResourceString("Month_April"); } }
@@ -1361,6 +1360,7 @@ namespace LagoVista.Core.Resources
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string ListResponse_Category = "ListResponse_Category";
 			public const string ListResponse_Deleted = "ListResponse_Deleted";
+			public const string LLMProvider_OpenAI = "LLMProvider_OpenAI";
 			public const string Month_April = "Month_April";
 			public const string Month_August = "Month_August";
 			public const string Month_December = "Month_December";
