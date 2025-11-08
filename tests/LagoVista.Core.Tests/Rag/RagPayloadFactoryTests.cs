@@ -132,7 +132,7 @@ namespace LagoVista.Core.Tests.Rag
         }
 
         // -----------------------------
-        // Code
+        // SourceCode
         // -----------------------------
 
         [Test]
@@ -169,14 +169,14 @@ namespace LagoVista.Core.Tests.Rag
 
             // Payload properties
             var p = results[0].Payload;
-            Assert.That(p.ContentType, Is.EqualTo(RagContentType.Code));
+            Assert.That(p.ContentTypeId, Is.EqualTo(RagContentType.SourceCode));
             Assert.That(p.Subtype, Is.EqualTo("CSharp"));
             Assert.That(p.DocId, Is.EqualTo(fileDocId.ToString()));
             Assert.That(p.Repo, Is.EqualTo("github.com/acme/nuviot"));
             Assert.That(p.Path, Is.EqualTo("src/Services/OrderService.cs"));
             Assert.That(p.CommitSha, Is.EqualTo("3f6d9c1a"));
 
-            // Code payload should NOT carry doc-only fields
+            // SourceCode payload should NOT carry doc-only fields
             Assert.That(p.Audience, Is.Null);
             Assert.That(p.Persona, Is.Null);
             Assert.That(p.Stage, Is.Null);

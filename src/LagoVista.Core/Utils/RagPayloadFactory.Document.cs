@@ -45,7 +45,8 @@ namespace LagoVista.Core.Utils
                     DocId = plan.DocId,
 
                     // Classification
-                    ContentType = RagContentType.DomainDocument,
+                    ContentTypeId = RagContentType.DomainDocument,
+                    ContentType = RagContentType.DomainDocument.ToString(),
                     Subtype = !string.IsNullOrWhiteSpace(docCtx.Subtype) ? docCtx.Subtype : doc.ContentSubtype,
 
                     // Sectioning

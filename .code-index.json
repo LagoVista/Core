@@ -1,58 +1,13 @@
 {
   "version": 1,
   "createdAtUtc": "2025-10-17T18:32:40.1025823Z",
-  "updatedAtUtc": "2025-11-07T13:36:06.2664219Z",
+  "updatedAtUtc": "2025-11-08T12:23:22.2385671Z",
   "files": {
-    "../../../../../../../co.core/src/LagoVista.Core/CoreDomain.cs": {
+    "../../../../../../../co.core/src/LagoVista.Core/Interfaces/ISerialNumberManager.cs": {
       "pointIds": [
-        "0d191e75-324b-4be5-86ab-c23366bf0dc6",
-        "3100e5a4-920e-4625-ab26-9a28aad7ca2d",
-        "6c681070-1e37-4f12-8be9-6a2ea164158d",
-        "70ca1f7a-6567-4fec-adf4-f502c2332433",
-        "a5f5ddaf-64e7-4a05-8578-4b5308b23320",
-        "d9a9ed53-2b5c-420e-87b4-469f9cdb9809"
-      ]
-    },
-    "../../../../../../../co.core/src/LagoVista.Core/AuthenticationDomain.cs": {
-      "pointIds": [
-        "146e9702-7a04-4659-a46a-244850715ef8",
-        "533f785a-46ed-445e-b35e-d05bc2183657",
-        "7383f0cd-f517-4d76-8f44-e64d29cb47db",
-        "94853b87-1dc9-4c14-aa15-a7ec4555690c",
-        "9d298167-e3a4-41ca-a7d8-ddeec8dbc4b9",
-        "9e7d7590-f546-4709-a439-bf065ed9d330",
-        "9ea6b04e-6f4c-446a-a02d-3cf2d39ef6ee",
-        "add1fcb9-b4a7-4ab6-b5ae-db2f959bc344",
-        "c9804af3-db9c-42d5-a6f0-466d6314e270",
-        "cfc1dad1-aa7b-42df-bb61-0a3a952d5c2d",
-        "e125c8a7-e5ea-4ddc-b447-4c2fc703d7e2"
-      ]
-    },
-    "../../../../../../../co.core/src/LagoVista.Core/Devices.cs": {
-      "pointIds": [
-        "289fd25e-dd26-4eda-96e9-2d85c799b296",
-        "306fa7f8-07ac-414e-a488-ccc997ccc2bc",
-        "42b482a3-3123-44fa-8b1b-d02c23c0511e",
-        "4dbeee21-46c3-40d1-9b84-e2fe2bedcd42",
-        "d531128b-f600-4a49-9c27-f6ed30673c86"
-      ]
-    },
-    "../../../../../../../co.core/src/LagoVista.Core/IConsoleWriter.cs": {
-      "pointIds": [
-        "01ee9cd7-8d50-4a0c-af2d-6bd574ccf2df",
-        "2014e65b-8da9-4e53-abe8-c5226d42ccdc",
-        "60a25f51-9030-4410-9300-bc1b021d1571",
-        "8037e278-51a8-4374-9e2e-4072342430ee",
-        "825ad79c-5fa9-44c3-a82a-95bf3f877622",
-        "cf536127-52f4-4491-9ee1-d46fa277cd6f",
-        "e56aeeb3-a5e8-4704-a5c2-c18e51d4f53c"
-      ]
-    },
-    "../../../../../../../co.core/src/LagoVista.Core/IDispatcherServices.cs": {
-      "pointIds": [
-        "4067cded-a289-440c-82c1-5d28121e9015",
-        "6bdf44a5-64f6-4dad-a6e3-9d48b0673780",
-        "77812674-dc7d-4c12-955b-a6c526ee769a"
+        "58ef2532-0cf2-449a-ba03-cfd0561f9736",
+        "9d202f2b-ea34-4116-aaff-b2ffb5d73ed0",
+        "a1a8acb7-73f1-4fda-9e64-753a4e1e0936"
       ]
     }
   }

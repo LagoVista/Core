@@ -55,7 +55,8 @@ namespace LagoVista.Core.Utils
                     DocId = fileDocId.ToString(),
 
                     // Classification
-                    ContentType = RagContentType.Code,
+                    ContentTypeId = RagContentType.SourceCode,
+                    ContentType = RagContentType.SourceCode.ToString(),
                     Subtype = string.IsNullOrWhiteSpace(code.Subtype) ? "CSharp" : code.Subtype,
 
                     // Sectioning
@@ -83,7 +84,7 @@ namespace LagoVista.Core.Utils
                     ContentLenChars = text.Length,
                     IndexedUtc = DateTime.UtcNow,
 
-                    // Code-specific
+                    // SourceCode-specific
                     Repo = code.Repo,
                     RepoBranch = code.RepoBranch,
                     CommitSha = code.CommitSha,

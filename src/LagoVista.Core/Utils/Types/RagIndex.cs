@@ -15,7 +15,7 @@ namespace LagoVista.Core.Utils.Types
         {
             Unknown = 0,
             DomainDocument = 1,
-            Code = 2
+            SourceCode = 2
         }
 
         /// <summary>
@@ -29,7 +29,8 @@ namespace LagoVista.Core.Utils.Types
             public string DocId { get; set; }
 
             // ---------- Content Classification ----------
-            public RagContentType ContentType { get; set; }
+            public RagContentType ContentTypeId { get; set; }
+            public string ContentType { get; set; }
             public string Subtype { get; set; } // e.g., "UserGuide", "CSharp", etc.
 
             // ---------- Section & Chunking ----------
@@ -77,7 +78,7 @@ namespace LagoVista.Core.Utils.Types
             public string SourceSystem { get; set; }
             public string SourceObjectId { get; set; }
 
-            // ---------- Code Specific ----------
+            // ---------- SourceCode Specific ----------
             public string Repo { get; set; }
             public string RepoBranch { get; set; }
             public string CommitSha { get; set; }
@@ -178,7 +179,7 @@ namespace LagoVista.Core.Utils.Types
                 Add("source_system", SourceSystem);
                 Add("source_object_id", SourceObjectId);
 
-                // --- Code meta ---
+                // --- SourceCode meta ---
                 Add("repo", Repo);
                 Add("repo_branch", RepoBranch);
                 Add("commit_sha", CommitSha);

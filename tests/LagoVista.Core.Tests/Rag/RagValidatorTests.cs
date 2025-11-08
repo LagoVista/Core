@@ -21,7 +21,7 @@ namespace LagoVista.Core.Tests.Rag
                     OrgId = "org-123",
                     ProjectId = "proj-abc",
                     DocId = Guid.NewGuid().ToString(),
-                    ContentType = RagContentType.DomainDocument,
+                    ContentTypeId = RagContentType.DomainDocument,
                     Subtype = "UserGuide",
 
                     SectionKey = "configure-sensors",
@@ -62,7 +62,7 @@ namespace LagoVista.Core.Tests.Rag
             private static RagVectorPayload BaselineCode()
             {
                 var p = BaselineDomainDoc();
-                p.ContentType = RagContentType.Code;
+                p.ContentTypeId = RagContentType.SourceCode;
                 p.Subtype = "CSharp";
                 p.Repo = "github.com/acme/nuviot";
                 p.RepoBranch = "main";
@@ -123,7 +123,7 @@ namespace LagoVista.Core.Tests.Rag
             public void Unknown_ContentType_Fails()
             {
                 var p = BaselineDomainDoc();
-                p.ContentType = RagContentType.Unknown;
+                p.ContentTypeId = RagContentType.Unknown;
 
                 var errs = Validate(p);
                 Assert.That(errs, Has.Some.Contains("content_type must be DomainDocument or Code."));
@@ -352,7 +352,7 @@ namespace LagoVista.Core.Tests.Rag
                 Assert.That(errs, Has.Some.Contains("content_len_chars cannot be negative"));
             }
 
-            // ---------- Code-specific ----------
+            // ---------- SourceCode-specific ----------
 
             [Test]
             public void CodeChunk_Requires_Repo_Path_CommitSha()

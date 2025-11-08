@@ -27,7 +27,7 @@ namespace LagoVista.Core.Utils.Types
                 public bool EnforcePartBounds { get; set; } = true;
 
                 // ContentType-specific strictness
-                public bool RequireCodeRepoFields { get; set; } = true; // for ContentType=Code
+                public bool RequireCodeRepoFields { get; set; } = true; // for ContentType=SourceCode
             }
 
             public static List<string> Validate(RagVectorPayload p, ValidateOptions opt = null)
@@ -42,7 +42,7 @@ namespace LagoVista.Core.Utils.Types
                 RequireNonEmpty(p.DocId, "doc_id", errs);
 
                 // ---------- Classification ----------
-                if (p.ContentType == RagContentType.Unknown)
+                if (p.ContentTypeId == RagContentType.Unknown)
                     errs.Add("content_type must be DomainDocument or Code.");
                 RequireNonEmpty(p.Subtype, "subtype", errs);
 
@@ -105,8 +105,8 @@ namespace LagoVista.Core.Utils.Types
                 if (p.IndexedUtc == default(DateTime))
                     errs.Add("indexed_utc must be set (UTC).");
 
-                // ---------- Code-specific ----------
-                if (p.ContentType == RagContentType.Code && opt.RequireCodeRepoFields)
+                // ---------- SourceCode-specific ----------
+                if (p.ContentTypeId == RagContentType.SourceCode && opt.RequireCodeRepoFields)
                 {
                     RequireNonEmpty(p.Repo, "repo", errs);
                     RequireNonEmpty(p.Path, "path", errs);

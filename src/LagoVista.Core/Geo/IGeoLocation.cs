@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 6baec1f751c1b626871a5560e78de8a2650b2fe61568a87ea88f1158de36a1b2
-// IndexVersion: 0
+// IndexVersion: 1
 // --- END CODE INDEX META ---
 namespace LagoVista.Core.Geo
 {

@@ -178,7 +178,7 @@ namespace LagoVista.Core.Models.ML
                 ["repo_branch"] = c.RepoBranch,
                 ["commit_sha"] = c.CommitSha,
 
-                // Code location
+                // SourceCode location
                 ["path"] = c.Path,
                 ["symbol"] = NullOr(c.Symbol),
                 ["start_line"] = c.StartLine,
