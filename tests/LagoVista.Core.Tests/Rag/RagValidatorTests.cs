@@ -1,5 +1,8 @@
-﻿
-    // RagVectorPayloadValidatorTests.cs
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 47565987edc1161ce829fd8390eabdaa785d33e4e396abd86888d185dddf0149
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+// RagVectorPayloadValidatorTests.cs
     using System;
     using System.Collections.Generic;
     using System.Linq;

@@ -1,4 +1,8 @@
-﻿// ChunkCharOffsetsTests.cs (NUnit 4.4)
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: d2ed24cce56c3c398ebad187e5168d0377bb4e17bb79fa6fca94a5ab9409f884
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+// ChunkCharOffsetsTests.cs (NUnit 4.4)
 using System;
 using System.Linq;
 using System.Text;

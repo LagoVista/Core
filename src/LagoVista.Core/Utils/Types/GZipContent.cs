@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 59a2b8eae670f879bf9c81504c3c35b61114c34855afa42a175b3c4743301c7a
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using System;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.IO;

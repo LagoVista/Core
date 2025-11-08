@@ -1,4 +1,8 @@
-﻿namespace LagoVista.Core.Utils
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 2ece7b273635a21be9348ee93f184635a1b3b12a394542966ef5ded88ce281ee
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+namespace LagoVista.Core.Utils
 {
     public sealed class ChunkingOptions
     {

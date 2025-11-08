@@ -1,6 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
 // ContentHash: 7995c2b5ec16a680174db350203d7ca30c7b1270a3542178dd13427fc48b6688
-// IndexVersion: 1
+// IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;

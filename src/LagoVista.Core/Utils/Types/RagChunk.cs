@@ -1,4 +1,8 @@
-﻿namespace LagoVista.Core.Utils.Types
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 2fdbf38700460dddb186df66ddfe5e5ce6695df7b37b0d90de9af4fe8130f3ee
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+namespace LagoVista.Core.Utils.Types
 {
     public class RagChunk
     {

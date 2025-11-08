@@ -1,4 +1,8 @@
-﻿namespace LagoVista.Core.Utils.Types
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: c0b22e61d179cd0ce10aed56bedad7dd2aeae07138bfd4258ce75ca62c2ab04d
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+namespace LagoVista.Core.Utils.Types
 {
     public sealed class RawArtifact
     {

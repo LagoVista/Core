@@ -1,3 +1,7 @@
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 727578be972fbac33fe8a63055b8b71ab1dcaf2407ed1e5d1c70796f7bbb2407
+// IndexVersion: 2
+// --- END CODE INDEX META ---
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;

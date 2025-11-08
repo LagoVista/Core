@@ -1,4 +1,8 @@
-﻿using System;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: f272a229146cd7c6d7fef496d4ac0898479ef31b324896f61477fb21f994bb02
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using System;
 using System.Collections.Generic;
 
 namespace LagoVista.Core.Utils

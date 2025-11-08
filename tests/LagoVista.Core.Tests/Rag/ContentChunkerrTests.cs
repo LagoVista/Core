@@ -1,4 +1,8 @@
-﻿// RagChunkBuilderTests.cs (NUnit 4.4)
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 4cfa72be80a0005775ad02ed1efc27a157d8566957668e5bbfa44abbaa51077e
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+// RagChunkBuilderTests.cs (NUnit 4.4)
 using System;
 using System.Linq;
 using System.Collections.Generic;

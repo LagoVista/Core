@@ -1,4 +1,8 @@
-﻿using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
+// --- BEGIN CODE INDEX META (do not edit) ---
+// ContentHash: 4677e189e98954c464e22fd132116fe707717183cae45605f7987fcf83d246bd
+// IndexVersion: 2
+// --- END CODE INDEX META ---
+using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using LagoVista.Core.Utils.Types;
 using System;
 using System.Collections.Generic;
