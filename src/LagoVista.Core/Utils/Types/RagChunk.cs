@@ -1,5 +1,5 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 2fdbf38700460dddb186df66ddfe5e5ce6695df7b37b0d90de9af4fe8130f3ee
+// ContentHash: cd7bb30d14147a3a20c0e4c6b511aac0da03df45107c93cb6720fb76d48d7b99
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 namespace LagoVista.Core.Utils.Types
@@ -20,6 +20,6 @@ namespace LagoVista.Core.Utils.Types
         public string Symbol { get; set; }
         public string SymbolType { get; set; }
         public float[] Vector { get; set; }
-
+        public int EstimatedTokens { get; set; }
     }
 }

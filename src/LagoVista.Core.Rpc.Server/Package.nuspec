@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc.Server</id>
-    <version>3.0.3097.0925</version>
+    <version>3.0.3099.1426</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,13 +12,13 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT RPC Client ServiceBus</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/8/2025 2:25:52 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 11/10/2025 7:26:02 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="Microsoft.CSharp" version="4.7.0" />
-        <dependency id="LagoVista.Core.Rpc" version="3.0.3097.0925" />
-        <dependency id="LagoVista.Core" version="3.0.3097.0925" />
+        <dependency id="LagoVista.Core.Rpc" version="3.0.3099.1426" />
+        <dependency id="LagoVista.Core" version="3.0.3099.1426" />
       </group>
     </dependencies>
   </metadata>
