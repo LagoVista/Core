@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc</id>
-    <version>3.0.3099.1426</version>
+    <version>3.0.3109.1030</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,12 +12,12 @@
     <copyright>Copyright Software Logistics - 2025</copyright>
     <tags>HomeAutomation IoT RPC</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/10/2025 7:26:02 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 11/20/2025 3:30:07 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="Newtonsoft.Json" version="13.0.3" />
-        <dependency id="LagoVista.Core" version="3.0.3099.1426" />
+        <dependency id="LagoVista.Core" version="3.0.3109.1030" />
       </group>
     </dependencies>
   </metadata>
