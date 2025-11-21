@@ -13,9 +13,6 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="PlatformSupport\MQTTClient.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\AuthenticationResources.resx">
       <Generator>
       </Generator>
