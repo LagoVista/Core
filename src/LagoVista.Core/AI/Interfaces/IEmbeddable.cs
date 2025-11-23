@@ -1,3 +1,4 @@
+using LagoVista.Core.Interfaces;
 using System;
 
 namespace LagoVista.Core.AI.Interfaces
@@ -11,22 +12,6 @@ namespace LagoVista.Core.AI.Interfaces
     /// </summary>
     public interface IEmbeddable
     {
-        /// <summary>
-        /// Canonical normalized text used during embedding.
-        /// Must be non-null, deterministic, and pre-cleaned for the target model.
-        /// </summary>
-        string NormalizedText { get; }
-
-        /// <summary>
-        /// Approximate token count of the normalized text.
-        /// Used for budgeting, batching, and cost estimation.
-        /// </summary>
-        int EstimatedTokens { get; }
-
-        /// <summary>
-        /// Embedding vector assigned after the embedding service runs.
-        /// May be null until populated by the embedding pipeline.
-        /// </summary>
-        float[] EmbeddingVectors { get; set; }
+        void CreateEmbeddings(IEmbedder embeddingService);
     }
 }

@@ -1,5 +1,6 @@
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using LagoVista.Core.Validation;
+using System.Collections.Generic;
 
 namespace LagoVista.Core.AI.Interfaces
 {
@@ -18,6 +19,6 @@ namespace LagoVista.Core.AI.Interfaces
         /// Implementations must not return null.
         /// </summary>
         /// <returns>A constructed RagVectorPayload wrapped in an invoke result.</returns>
-        InvokeResult<RagVectorPayload> CreateRagPayload();
+        IEnumerable<InvokeResult<RagVectorPayload>> CreateRagPayloads();
     }
 }

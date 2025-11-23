@@ -56,7 +56,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         /// </summary>
         public string ContentType { get; set; }
         public string Subtype { get; set; } // e.g., "UserGuide", "CSharp", etc.
-
+        public string SubtypeFlavor { get; set; }
         // ---------- Section & Chunking ----------
         public string SectionKey { get; set; }
         public int PartIndex { get; set; }
@@ -251,6 +251,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             var contentTypeName = !string.IsNullOrWhiteSpace(ContentType) ? ContentType : ContentTypeId.ToString();
             Add("ContentType", contentTypeName);
             Add("Subtype", Subtype);
+            Add("SubtypeFlavor", SubtypeFlavor);
 
             // --- Section ---
             Add("SectionKey", SectionKey);
