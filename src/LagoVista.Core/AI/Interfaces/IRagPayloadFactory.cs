@@ -1,4 +1,5 @@
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.Core.AI.Interfaces
 {
@@ -16,7 +17,7 @@ namespace LagoVista.Core.AI.Interfaces
         /// implementing object's current state.
         /// Implementations must not return null.
         /// </summary>
-        /// <returns>A constructed RagVectorPayload.</returns>
-        RagVectorPayload Create();
+        /// <returns>A constructed RagVectorPayload wrapped in an invoke result.</returns>
+        InvokeResult<RagVectorPayload> CreateRagPayload();
     }
 }
