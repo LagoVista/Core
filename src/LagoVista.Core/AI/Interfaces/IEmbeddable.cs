@@ -1,5 +1,7 @@
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Validation;
 using System;
+using System.Threading.Tasks;
 
 namespace LagoVista.Core.AI.Interfaces
 {
@@ -12,6 +14,6 @@ namespace LagoVista.Core.AI.Interfaces
     /// </summary>
     public interface IEmbeddable
     {
-        void CreateEmbeddings(IEmbedder embeddingService);
+        Task<InvokeResult> CreateEmbeddingsAsync(IEmbedder embeddingService);
     }
 }

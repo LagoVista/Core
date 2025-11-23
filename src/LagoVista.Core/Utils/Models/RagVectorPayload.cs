@@ -37,9 +37,15 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
     public sealed class RagVectorPayload
     {
         // ---------- Identity / Tenant Isolation ----------
+        public string PointId { get; set; }
         public string OrgId { get; set; }
         public string ProjectId { get; set; }
         public string DocId { get; set; }
+
+        // ---------- Domain Classification ----------
+        public string DomainKey { get; set; }     // e.g., "billing", "customers", "iot", "hr"
+        public string DomainArea { get; set; }    // optional: e.g., "invoicing", "payments", "onboarding"
+
 
         // ---------- Semantic Identity ----------
         /// <summary>
@@ -110,6 +116,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public int? StartLine { get; set; }
         public int? EndLine { get; set; }
 
+        public float[] Vectors { get; set; }
+
         // ---------- Utility ----------
         public override string ToString()
         {
@@ -163,6 +171,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             {
                 PartTotal = PartIndex;
                 result.AddWarning("PartTotal was less than PartIndex; normalized to match PartIndex.");
+            }
+
+            if (string.IsNullOrWhiteSpace(DomainKey))
+            {
+                result.AddWarning("DomainKey is not set. Domain classification is strongly recommended for all indexed content.");
             }
 
             // --- Index metadata ---
@@ -246,6 +259,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             Add("DocId", DocId);
             Add("SemanticId", SemanticId);
 
+            // --- Domain Classification --
+            Add("DomainKey", DomainKey);
+            Add("DomainArea", DomainArea);
+
             // --- Classification ---
             Add("ContentTypeId", (int)ContentTypeId);
             var contentTypeName = !string.IsNullOrWhiteSpace(ContentType) ? ContentType : ContentTypeId.ToString();
@@ -303,6 +320,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
             return dict;
         }
+
+
 
         public QdrantPoint ToQdrantPoint(string pointId, float[] embedding)
         {

@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
 {
     public interface  IEmbedder
     {
-        InvokeResult<float[]> EmbedAsync(string text, string embeddingModel = null);
+        Task<InvokeResult<float[]>> EmbedAsync(string text, string embeddingModel = null);
     }
 }
