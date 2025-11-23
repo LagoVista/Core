@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using System;
 using System.Collections;
+using LagoVista.Core.Validation;
 
 namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 {
@@ -30,6 +31,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
     /// <summary>
     /// Strongly typed metadata payload stored with each vector in Qdrant.
+    /// Includes a SemanticId that acts as the natural key for the chunk
+    /// (typically DocId + SectionKey + PartIndex).
     /// </summary>
     public sealed class RagVectorPayload
     {
@@ -37,6 +40,14 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string OrgId { get; set; }
         public string ProjectId { get; set; }
         public string DocId { get; set; }
+
+        // ---------- Semantic Identity ----------
+        /// <summary>
+        /// Deterministic, human-readable identity for this chunk.
+        /// Typically built from DocId + SectionKey + PartIndex using BuildSemanticId.
+        /// Used as a natural key for idempotent indexing, logging, and debugging.
+        /// </summary>
+        public string SemanticId { get; set; }
 
         // ---------- Content Classification ----------
         public RagContentType ContentTypeId { get; set; }
@@ -106,6 +117,92 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         }
 
         /// <summary>
+        /// Validate and normalize the payload before indexing.
+        /// Returns an InvokeResult that aggregates all errors and warnings.
+        /// </summary>
+        public InvokeResult ValidateForIndex()
+        {
+            var result = new InvokeResult();
+
+            // --- Required identity ---
+            if (string.IsNullOrWhiteSpace(OrgId))
+            {
+                result.AddUserError("OrgId is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(ProjectId))
+            {
+                result.AddUserError("ProjectId is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(DocId))
+            {
+                result.AddUserError("DocId is required.");
+            }
+
+            // --- Content classification ---
+            if (ContentTypeId == RagContentType.Unknown)
+            {
+                result.AddUserError("ContentTypeId must be specified and cannot be Unknown for indexed content.");
+            }
+
+            // --- Section / chunking ---
+            if (string.IsNullOrWhiteSpace(SectionKey))
+            {
+                SectionKey = "body";
+                result.AddWarning("SectionKey was empty; defaulted to 'body'.");
+            }
+
+            if (PartIndex < 1)
+            {
+                PartIndex = 1;
+                result.AddWarning("PartIndex was less than 1; normalized to 1.");
+            }
+
+            if (PartTotal < PartIndex)
+            {
+                PartTotal = PartIndex;
+                result.AddWarning("PartTotal was less than PartIndex; normalized to match PartIndex.");
+            }
+
+            // --- Index metadata ---
+            if (IndexVersion <= 0)
+            {
+                IndexVersion = 1;
+                result.AddWarning("IndexVersion was not set or invalid; defaulted to 1.");
+            }
+
+            if (string.IsNullOrWhiteSpace(EmbeddingModel))
+            {
+                EmbeddingModel = "text-embedding-3-large";
+                result.AddWarning("EmbeddingModel was empty; defaulted to 'text-embedding-3-large'.");
+            }
+
+            if (IndexedUtc == default)
+            {
+                IndexedUtc = DateTime.UtcNow;
+                result.AddWarning("IndexedUtc was default; set to current UTC time.");
+            }
+
+            // --- Semantic identity ---
+            if (string.IsNullOrWhiteSpace(SemanticId))
+            {
+                // Only generate SemanticId if we have enough information.
+                if (!string.IsNullOrWhiteSpace(DocId))
+                {
+                    SemanticId = BuildSemanticId(DocId, SectionKey, PartIndex);
+                    result.AddWarning("SemanticId was not supplied; generated from DocId, SectionKey, and PartIndex.");
+                }
+                else
+                {
+                    result.AddUserError("SemanticId is missing and DocId is not available to generate one.");
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Converts this payload to a dictionary containing only non-null / non-empty values.
         /// Ideal for uploading as Qdrant payload metadata.
         /// Uses PascalCase keys per DDR.
@@ -147,6 +244,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             Add("OrgId", OrgId);
             Add("ProjectId", ProjectId);
             Add("DocId", DocId);
+            Add("SemanticId", SemanticId);
 
             // --- Classification ---
             Add("ContentTypeId", (int)ContentTypeId);
@@ -219,7 +317,22 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         }
 
         /// <summary>
+        /// Build deterministic semantic IDs like "DOCID:sec:{section_key}#p{n}".
+        /// This is a natural key and is separate from the Qdrant primary key,
+        /// which may be a GUID or numeric identifier.
+        /// </summary>
+        public static string BuildSemanticId(string docId, string sectionKey, int partIndex)
+        {
+            if (string.IsNullOrWhiteSpace(docId)) throw new ArgumentException("docId required", nameof(docId));
+            if (string.IsNullOrWhiteSpace(sectionKey)) sectionKey = "body";
+            if (partIndex < 1) partIndex = 1;
+            return docId + ":sec:" + Slug(sectionKey) + "#p" + partIndex;
+        }
+
+        /// <summary>
         /// Build deterministic point IDs like "DOCID:sec:{section_key}#p{n}".
+        /// Kept for compatibility; in many cases Qdrant Ids will be GUIDs,
+        /// while this value is also available via SemanticId.
         /// </summary>
         public static string BuildPointId(string docId, string sectionKey, int partIndex)
         {

@@ -74,10 +74,6 @@ namespace LagoVista.Core.Models
                       LagoVistaCommonStrings.Names.Company_Help, EntityDescriptionAttribute.EntityTypes.SimpleModel, typeof(LagoVistaCommonStrings))]
     public class Company : EntityBase, IValidateable
     {
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]
-        public string Description { get; set; }
-
-
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Company_Industry, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, FieldType: FieldTypes.Picker,SortEnums: true, AddEnumSelect: true)]
         public EntityHeader Industry { get; set; }
 

@@ -27,6 +27,6 @@ namespace LagoVista.Core.AI.Interfaces
         /// Embedding vector assigned after the embedding service runs.
         /// May be null until populated by the embedding pipeline.
         /// </summary>
-        float[]? EmbeddingVectors { get; set; }
+        float[] EmbeddingVectors { get; set; }
     }
 }

@@ -34,6 +34,11 @@ namespace LagoVista.Core.Validation
         public List<ErrorMessage> Warnings { get; protected set; }
         public List<ErrorMessage> Errors { get; protected set; }
 
+        public void AddWarning(string warning)
+        {
+            Warnings.Add(new Validation.ErrorMessage() {  Message = warning });
+        }
+
         public void AddUserError(String error, string context = null)
         {
             Errors.Add(new ErrorMessage(error) { Context = context });
