@@ -11,7 +11,7 @@ namespace LagoVista.Core.AI.Interfaces
     /// from its current state (previously supplied context, normalized text,
     /// metadata, etc.) without requiring additional parameters.
     /// </summary>
-    public interface IRagPayloadFactory
+    public interface IRagPointFactory
     {
         /// <summary>
         /// Creates a fully-formed RagVectorPayload instance using the
@@ -19,6 +19,6 @@ namespace LagoVista.Core.AI.Interfaces
         /// Implementations must not return null.
         /// </summary>
         /// <returns>A constructed RagVectorPayload wrapped in an invoke result.</returns>
-        IEnumerable<InvokeResult<RagVectorPayload>> CreateRagPayloads();
+        IEnumerable<InvokeResult<IRagPoint>> CreateIRagPoints();
     }
 }

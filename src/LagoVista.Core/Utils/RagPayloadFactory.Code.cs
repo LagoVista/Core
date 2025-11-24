@@ -60,7 +60,6 @@ namespace LagoVista.Core.Utils
 
                     // Classification
                     ContentTypeId = RagContentType.SourceCode,
-                    ContentType = RagContentType.SourceCode.ToString(),
                     Subtype = string.IsNullOrWhiteSpace(code.Subtype) ? "CSharp" : code.Subtype,
 
                     // Sectioning

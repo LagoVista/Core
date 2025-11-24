@@ -10,7 +10,7 @@ namespace LagoVista.Core.AI.Interfaces
     /// Any entity implementing this interface is considered RAG ready:
     /// it can be embedded and can produce a RagVectorPayload for indexing.
     /// </summary>
-    public interface IRagableEntity : IEmbeddable, IRagPayloadFactory
+    public interface IRagableEntity : IEmbeddable, IRagPointFactory
     {
     }
 }

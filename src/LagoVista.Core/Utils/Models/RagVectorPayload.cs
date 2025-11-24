@@ -43,9 +43,14 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string DocId { get; set; }
 
         // ---------- Domain Classification ----------
-        public string DomainKey { get; set; }     // e.g., "billing", "customers", "iot", "hr"
-        public string DomainArea { get; set; }    // optional: e.g., "invoicing", "payments", "onboarding"
+        public string BusinessDomainKey { get; set; }     // e.g., "billing", "customers", "iot", "hr"
+        public string BusinessDomainArea { get; set; }    // optional: e.g., "invoicing", "payments", "onboarding"
 
+
+        // ---------- System CLassification ---------- IDX-007
+        public string SysDomain { get; set; }   // e.g. Backend, UI, Integration
+        public string SysLayer { get; set; }    // Primitive, Composite, Orchestration
+        public string SysRole { get; set; }     // Similar to SubType
 
         // ---------- Semantic Identity ----------
         /// <summary>
@@ -60,9 +65,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         /// <summary>
         /// Optional text label for the content type; if null/empty we fall back to ContentTypeId.ToString().
         /// </summary>
-        public string ContentType { get; set; }
+        public string ContentType { get => ContentTypeId.ToString(); }
         public string Subtype { get; set; } // e.g., "UserGuide", "CSharp", etc.
         public string SubtypeFlavor { get; set; }
+
         // ---------- Section & Chunking ----------
         public string SectionKey { get; set; }
         public int PartIndex { get; set; }
@@ -173,9 +179,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 result.AddWarning("PartTotal was less than PartIndex; normalized to match PartIndex.");
             }
 
-            if (string.IsNullOrWhiteSpace(DomainKey))
+            if (string.IsNullOrWhiteSpace(BusinessDomainKey))
             {
-                result.AddWarning("DomainKey is not set. Domain classification is strongly recommended for all indexed content.");
+                result.AddWarning("BusinessDomainKey is not set. Domain classification is strongly recommended for all indexed content.");
             }
 
             // --- Index metadata ---
@@ -260,8 +266,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             Add("SemanticId", SemanticId);
 
             // --- Domain Classification --
-            Add("DomainKey", DomainKey);
-            Add("DomainArea", DomainArea);
+            Add("BusinessDomainKey", BusinessDomainKey);
+            Add("BusinessDomainArea", BusinessDomainArea);
 
             // --- Classification ---
             Add("ContentTypeId", (int)ContentTypeId);
