@@ -112,7 +112,7 @@ namespace LagoVista.Core.IOC
             {
                 if (!_registeredTypes.ContainsKey(newInstanceType))
                 {
-                    throw new Exception($"Could not create new instance for type {newInstanceType.Name}, registered type does not include this instance type.");
+                    throw new Exception($"Could not create new instance for type {newInstanceType.Name}, registered type does not include this instance type, order of registration is important when building singletons.");
                 }
 
                 newInstanceType = _registeredTypes[newInstanceType];
