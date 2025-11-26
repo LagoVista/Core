@@ -44,7 +44,7 @@ namespace LagoVista.Core.Utils
                 var payload = new RagVectorPayload
                 {
                     // Identity / tenancy
-                    OrgId = ctx.OrgId,
+                    OrgNamespace = ctx.OrgId,
                     ProjectId = ctx.ProjectId,
                     DocId = plan.DocId,
 

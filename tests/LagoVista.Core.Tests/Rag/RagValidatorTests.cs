@@ -21,7 +21,7 @@ namespace LagoVista.Core.Tests.Rag
             {
                 return new RagVectorPayload
                 {
-                    OrgId = "org-123",
+                    OrgNamespace = "org-123",
                     ProjectId = "proj-abc",
                     DocId = Guid.NewGuid().ToString(),
                     ContentTypeId = RagContentType.DomainDocument,
@@ -104,10 +104,10 @@ namespace LagoVista.Core.Tests.Rag
             public void Missing_OrgId_Fails()
             {
                 var p = BaselineDomainDoc();
-                p.OrgId = null;
+                p.OrgNamespace = null;
 
                 var errs = Validate(p);
-                Assert.That(errs, Has.Some.Contains("org_id is required."));
+                Assert.That(errs, Has.Some.Contains("org_namespace is required."));
             }
 
             [Test]

@@ -113,7 +113,7 @@ namespace LagoVista.Core.Tests.Rag
             var p1 = results[0].Payload;
             Assert.That(p1.ContentType, Is.EqualTo(RagContentType.DomainDocument));
             Assert.That(p1.Subtype, Is.EqualTo("UserGuide"));
-            Assert.That(p1.OrgId, Is.EqualTo("org-123"));
+            Assert.That(p1.OrgNamespace, Is.EqualTo("org-123"));
             Assert.That(p1.ProjectId, Is.EqualTo("proj-abc"));
             Assert.That(p1.DocId, Is.EqualTo(plan.DocId));
             Assert.That(p1.SectionKey, Is.EqualTo("Introduction"));

@@ -41,7 +41,7 @@ namespace LagoVista.Core.Utils.Types
                 opt = opt ?? new ValidateOptions();
 
                 // ---------- Identity / tenancy ----------
-                RequireNonEmpty(p.OrgId, "org_id", errs);
+                RequireNonEmpty(p.OrgNamespace, "org_namespace", errs);
                 // project_id may be optional in some installs
                 RequireNonEmpty(p.DocId, "doc_id", errs);
 

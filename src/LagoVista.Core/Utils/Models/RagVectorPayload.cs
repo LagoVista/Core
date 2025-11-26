@@ -38,7 +38,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
     {
         // ---------- Identity / Tenant Isolation ----------
         public string PointId { get; set; }
-        public string OrgId { get; set; }
+        public string OrgNamespace { get; set; }
         public string ProjectId { get; set; }
         public string DocId { get; set; }
 
@@ -127,7 +127,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         // ---------- Utility ----------
         public override string ToString()
         {
-            return $"{OrgId}/{ProjectId}/{DocId} ({ContentType ?? ContentTypeId.ToString()}) sec={SectionKey} p={PartIndex}/{PartTotal}";
+            return $"{OrgNamespace}/{ProjectId}/{DocId} ({ContentType ?? ContentTypeId.ToString()}) sec={SectionKey} p={PartIndex}/{PartTotal}";
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             var result = new InvokeResult();
 
             // --- Required identity ---
-            if (string.IsNullOrWhiteSpace(OrgId))
+            if (string.IsNullOrWhiteSpace(OrgNamespace))
             {
                 result.AddUserError("OrgId is required.");
             }
@@ -260,7 +260,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             };
 
             // --- Identity ---
-            Add("OrgId", OrgId);
+            Add("OrgNsamepace", OrgNamespace);
             Add("ProjectId", ProjectId);
             Add("DocId", DocId);
             Add("SemanticId", SemanticId);
