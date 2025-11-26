@@ -11,6 +11,7 @@ namespace LagoVista.Core.AI.Models
         public string AgentContextId { get; set; }
 
         public string ConversationContextId { get; set; }
+        public string ResponseContinuationId { get; set; }
 
         public string Mode { get; set; }
 

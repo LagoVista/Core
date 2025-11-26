@@ -86,6 +86,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         // ---------- Raw Source Pointers ----------
         public string BlobUri { get; set; }
+        public string FullDocumentBlobUri { get; set; }
+        public string SnippetBlobUri { get; set; }
         public string BlobVersionId { get; set; }
         public string SourceSha256 { get; set; }
 
