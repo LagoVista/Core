@@ -11,6 +11,8 @@ namespace LagoVista.Core.AI.Models
         public EntityHeader ConversationContext { get; set; }
 
         public string ConversationId { get; set; }
+
+        public string PreviousTurnId { get; set; }
         public string ResponseContinuationId { get; set; }
 
         public string Mode { get; set; }

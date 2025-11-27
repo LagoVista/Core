@@ -13,6 +13,9 @@ namespace LagoVista.Core.AI.Models
         public string ConversationContextId { get; set; }
         public string ResponseContinuationId { get; set; }
 
+        public string RequestEnvelopeUrl { get; set; }
+        public string FullResponseUrl { get; set; }
+
         public string Mode { get; set; }
 
         public List<SourceRef> Sources { get; set; } = new List<SourceRef>();
