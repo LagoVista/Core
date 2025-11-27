@@ -388,5 +388,236 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             var slug = sb.ToString().Trim('-');
             return string.IsNullOrEmpty(slug) ? "body" : slug;
         }
+
+        public static RagVectorPayload FromDictionary(IDictionary<string, object> source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            // --- helpers --------------------------------------------------------------
+            object GetRaw(string key)
+            {
+                // Case-insensitive lookup to mirror ToDictionary()'s StringComparer
+                foreach (var kvp in source)
+                {
+                    if (string.Equals(kvp.Key, key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return kvp.Value;
+                    }
+                }
+                return null;
+            }
+
+            string GetString(string key)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return null;
+                if (raw is string s) return s;
+                return raw.ToString();
+            }
+
+            int GetInt(string key, int defaultValue = 0)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return defaultValue;
+
+                if (raw is int i) return i;
+                if (raw is long l) return (int)l;
+
+                if (int.TryParse(raw.ToString(), out var v)) return v;
+                return defaultValue;
+            }
+
+            int? GetNullableInt(string key)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return null;
+
+                if (raw is int i) return i;
+                if (raw is long l) return (int)l;
+
+                if (int.TryParse(raw.ToString(), out var v)) return v;
+                return null;
+            }
+
+            DateTime GetDateTime(string key, DateTime defaultValue)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return defaultValue;
+
+                if (raw is DateTime dt) return dt;
+
+                // Assume ISO 8601 (what ToDictionary() produces)
+                if (DateTime.TryParse(
+                        raw.ToString(),
+                        null,
+                        System.Globalization.DateTimeStyles.RoundtripKind,
+                        out var parsed))
+                {
+                    return parsed;
+                }
+
+                return defaultValue;
+            }
+
+            DateTime? GetNullableDateTime(string key)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return null;
+
+                if (raw is DateTime dt) return dt;
+
+                if (DateTime.TryParse(
+                        raw.ToString(),
+                        null,
+                        System.Globalization.DateTimeStyles.RoundtripKind,
+                        out var parsed))
+                {
+                    return parsed;
+                }
+
+                return null;
+            }
+
+            List<string> GetStringList(string key)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return new List<string>();
+
+                if (raw is IEnumerable enumerable && !(raw is string))
+                {
+                    var list = new List<string>();
+                    foreach (var item in enumerable)
+                    {
+                        if (item == null) continue;
+                        list.Add(item.ToString());
+                    }
+                    return list;
+                }
+
+                return new List<string> { raw.ToString() };
+            }
+
+            List<int> GetIntList(string key)
+            {
+                var raw = GetRaw(key);
+                if (raw == null) return null;
+
+                if (raw is IEnumerable enumerable && !(raw is string))
+                {
+                    var list = new List<int>();
+                    foreach (var item in enumerable)
+                    {
+                        if (item == null) continue;
+
+                        if (item is int i) list.Add(i);
+                        else if (item is long l) list.Add((int)l);
+                        else if (int.TryParse(item.ToString(), out var v)) list.Add(v);
+                    }
+                    return list;
+                }
+
+                return null;
+            }
+
+            RagContentType GetContentType()
+            {
+                var raw = GetRaw("ContentTypeId");
+                if (raw == null) return RagContentType.Unknown;
+
+                if (raw is int i) return (RagContentType)i;
+                if (raw is long l) return (RagContentType)(int)l;
+
+                if (int.TryParse(raw.ToString(), out var v))
+                {
+                    return (RagContentType)v;
+                }
+
+                if (Enum.TryParse<RagContentType>(raw.ToString(), true, out var parsedEnum))
+                {
+                    return parsedEnum;
+                }
+
+                return RagContentType.Unknown;
+            }
+
+            // --- materialize payload --------------------------------------------------
+            var payload = new RagVectorPayload
+            {
+                // Identity / tenant
+                OrgNamespace = GetString("OrgNamespace") ?? GetString("OrgNsamepace"), // handle current key
+                ProjectId = GetString("ProjectId"),
+                DocId = GetString("DocId"),
+                SemanticId = GetString("SemanticId"),
+
+                // Domain classification
+                BusinessDomainKey = GetString("BusinessDomainKey"),
+                BusinessDomainArea = GetString("BusinessDomainArea"),
+
+                // System classification (if present in payload)
+                SysDomain = GetString("SysDomain"),
+                SysLayer = GetString("SysLayer"),
+                SysRole = GetString("SysRole"),
+
+                // Content classification
+                ContentTypeId = GetContentType(),
+                Subtype = GetString("Subtype"),
+                SubtypeFlavor = GetString("SubtypeFlavor"),
+
+                // Section / chunking
+                SectionKey = GetString("SectionKey"),
+                PartIndex = GetInt("PartIndex", 1),
+                PartTotal = GetInt("PartTotal", 1),
+
+                // Core metadata
+                Title = GetString("Title"),
+                Language = GetString("Language"),
+                Priority = GetInt("Priority", 3),
+                Audience = GetString("Audience"),
+                Persona = GetString("Persona"),
+                Stage = GetString("Stage"),
+                LabelSlugs = GetStringList("LabelSlugs"),
+                LabelIds = GetStringList("LabelIds"),
+
+                // Raw source pointers
+                BlobUri = GetString("BlobUri"),
+                FullDocumentBlobUri = GetString("FullDocumentBlobUri"),
+                SnippetBlobUri = GetString("SnippetBlobUri"),
+                BlobVersionId = GetString("BlobVersionId"),
+                SourceSha256 = GetString("SourceSha256"),
+                LineStart = GetNullableInt("LineStart"),
+                LineEnd = GetNullableInt("LineEnd"),
+                CharStart = GetNullableInt("CharStart"),
+                CharEnd = GetNullableInt("CharEnd"),
+                HtmlAnchor = GetString("HtmlAnchor"),
+                PdfPages = GetIntList("PdfPages"),
+
+                // Index / embedding metadata
+                IndexVersion = GetInt("IndexVersion", 1),
+                EmbeddingModel = GetString("EmbeddingModel") ?? "text-embedding-3-large",
+                ContentHash = GetString("ContentHash"),
+                ChunkSizeTokens = GetNullableInt("ChunkSizeTokens"),
+                OverlapTokens = GetNullableInt("OverlapTokens"),
+                ContentLenChars = GetNullableInt("ContentLenChars"),
+                IndexedUtc = GetDateTime("IndexedUtc", DateTime.UtcNow),
+                UpdatedUtc = GetNullableDateTime("UpdatedUtc"),
+                SourceSystem = GetString("SourceSystem"),
+                SourceObjectId = GetString("SourceObjectId"),
+
+                // Source-code metadata
+                Repo = GetString("Repo"),
+                RepoBranch = GetString("RepoBranch"),
+                CommitSha = GetString("CommitSha"),
+                Path = GetString("Path"),
+                Symbol = GetString("Symbol"),
+                SymbolType = GetString("SymbolType"),
+                StartLine = GetNullableInt("StartLine"),
+                EndLine = GetNullableInt("EndLine"),
+
+                // Note: Vectors are not part of the payload dictionary; caller sets them separately.
+            };
+
+            return payload;
+        }
+
     }
 }
