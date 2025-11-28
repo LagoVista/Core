@@ -64,10 +64,19 @@ namespace LagoVista.Core.AI.Models
 
     public class AgentToolCall
     {
-        public string CallId { get; set; }           // tool_call.id
-        public string Name { get; set; }             // tool_call.name (e.g., "ddr_document")
-        public string ArgumentsJson { get; set; }    // raw JSON arguments from the LLM
+        public string CallId { get; set; }
+        public string Name { get; set; }
+        public string ArgumentsJson { get; set; }
+
+        // New: where did we expect this tool to run?
+        public bool IsServerTool { get; set; }        // true = server, false = client
+        public bool WasExecuted { get; set; }         // did *anyone* run it yet?
+
+        // New: tool execution result (if available)
+        public string ResultJson { get; set; }        // raw JSON result payload
+        public string ErrorMessage { get; set; }      // error from server-side execution, if any
     }
+
 
     public class LlmUsage
     {

@@ -42,6 +42,17 @@ namespace LagoVista.Core.AI.Models
         /// If set to a tool name, the server should set `tool_choice` to that tool.
         /// </summary>
         public string ToolChoiceName { get; set; }
+
+        /// <summary>
+        /// JSON-serialized array of tool results previously produced by the client or server.
+        /// Shape should mirror the "tool_output" / "tool_result" the LLM expects.
+        /// </summary>
+        public string ToolResultsJson { get; set; }
+
+        /// <summary>
+        /// Optional strongly-typed convenience mirror of ToolResultsJson.
+        /// </summary>
+        public List<AgentToolCall> ToolResults { get; set; } = new List<AgentToolCall>();
     }
 
 
