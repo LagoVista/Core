@@ -17,6 +17,7 @@ namespace LagoVista.Core.AI.Models
 
         public string Mode { get; set; }
 
+        public string SystemPrompt { get; set; }
         public string Instruction { get; set; }
 
         public string WorkspaceId { get; set; }
