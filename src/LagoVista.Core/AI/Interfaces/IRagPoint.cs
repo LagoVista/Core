@@ -11,5 +11,7 @@ namespace LagoVista.Core.AI.Interfaces
         public float[] Vector { get; set; }
         public RagVectorPayload Payload { get; set; }
         public byte[] Contents { get; set; }
+        public byte[] FinderSnippet { get; set; }
+
     }
 }
