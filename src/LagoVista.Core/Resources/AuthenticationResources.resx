@@ -166,7 +166,7 @@
     <value>Status</value>
   </data>
   <data name="UserInfo_Description" xml:space="preserve">
-    <value>User Information is a class that contains information about the user, it is different, but created from the AppUser class so we can send it to remote service calls.</value>
+    <value>A simplified user data model derived from AppUser for use in remote service calls.</value>
   </data>
   <data name="UserInfo_Email" xml:space="preserve">
     <value>Email Address</value>
@@ -175,7 +175,7 @@
     <value>First Name</value>
   </data>
   <data name="UserInfo_Help" xml:space="preserve">
-    <value>User Information is a class that contains information about the user</value>
+    <value>Contains summary information about a user.</value>
   </data>
   <data name="UserInfo_IsEmailConfirmed" xml:space="preserve">
     <value>Is Email Confirmed</value>

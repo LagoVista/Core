@@ -127,7 +127,7 @@
     <value>QOS2</value>
   </data>
   <data name="Subscription_Description" xml:space="preserve">
-    <value>An MQTT description is used by MQTT Clients to subscribe to messages from an MQTT Broker.</value>
+    <value>Represents your billing subscription, including resource usage and payment method details. This is not related to MQTT subscriptions.</value>
   </data>
   <data name="Subscription_QOS" xml:space="preserve">
     <value>Quality of Service</value>
@@ -139,7 +139,7 @@
     <value>-select qos level-</value>
   </data>
   <data name="Subscription_Title" xml:space="preserve">
-    <value>Subscription</value>
+    <value>MQTT Subscription</value>
   </data>
   <data name="Subscription_Topic" xml:space="preserve">
     <value>Topic</value>
