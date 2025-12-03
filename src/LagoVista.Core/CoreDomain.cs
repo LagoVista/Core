@@ -13,7 +13,6 @@ namespace LagoVista.Core
     public class Domains
     {
         public const string CoreDomainName = "CoreDomain";
-
         [DomainDescription(CoreDomainName)]
         public static DomainDescription BillingDomain
         {
@@ -21,7 +20,7 @@ namespace LagoVista.Core
             {
                 return new DomainDescription()
                 {
-                    Description = "Contains core models and managers.",
+                    Description = "Contains core models and related management features.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
                     Name = "Core",
                     CurrentVersion = new Core.Models.VersionInfo()
@@ -37,5 +36,4 @@ namespace LagoVista.Core
             }
         }
     }
-
 }

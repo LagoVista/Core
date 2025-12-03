@@ -14,7 +14,6 @@ namespace LagoVista.Core
     public class AuthDomain
     {
         public const string AuthenticationDomain = "AuthenticationDomain";
-
         [DomainDescription(AuthenticationDomain)]
         public static DomainDescription UserDomainDescription
         {
@@ -22,9 +21,9 @@ namespace LagoVista.Core
             {
                 return new DomainDescription()
                 {
-                    Description = "Models and Services for Authentication of remote clients.",
+                    Description = "Shared models used throughout the LagoVista system.",
                     DomainType = DomainDescription.DomainTypes.BusinessObject,
-                    Name = "Authentication",
+                    Name = "Common",
                     CurrentVersion = new Core.Models.VersionInfo()
                     {
                         Major = 1,
@@ -43,7 +42,6 @@ namespace LagoVista.Core
     public class LGVCommonDomain
     {
         public const string CommonDomain = "CommonDomain";
-
         [DomainDescription(CommonDomain)]
         public static DomainDescription UserDomainDescription
         {

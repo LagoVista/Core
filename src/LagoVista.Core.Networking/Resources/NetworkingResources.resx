@@ -127,7 +127,7 @@
     <value>QOS2</value>
   </data>
   <data name="Subscription_Description" xml:space="preserve">
-    <value>Represents your billing subscription, including resource usage and payment method details. This is not related to MQTT subscriptions.</value>
+    <value>Represents your billing subscription, including resource usage and payment method details. Not related to MQTT message subscriptions.</value>
   </data>
   <data name="Subscription_QOS" xml:space="preserve">
     <value>Quality of Service</value>

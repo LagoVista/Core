@@ -145,13 +145,13 @@
     <value>Country</value>
   </data>
   <data name="Address_Description" xml:space="preserve">
-    <value>Enter the full physical address to associate with this record.</value>
+    <value>Enter the full physical address to link to this record.</value>
   </data>
   <data name="Address_GeoLocation" xml:space="preserve">
     <value>Geo Location</value>
   </data>
   <data name="Address_Help" xml:space="preserve">
-    <value>Physical location details that can be linked to other records.</value>
+    <value>Stores physical address information that can be associated with other records.</value>
   </data>
   <data name="Address_PostalCode" xml:space="preserve">
     <value>Postal Code</value>
@@ -256,7 +256,7 @@
     <value>Stores company information</value>
   </data>
   <data name="Company_Help" xml:space="preserve">
-    <value>Use this model to record and manage company information, such as industry, address, and notes.</value>
+    <value>Use this model to store and update key company details, such as industry, address, website, and notes.</value>
   </data>
   <data name="Company_Industry" xml:space="preserve">
     <value>Industry</value>
@@ -268,7 +268,7 @@
     <value>Company</value>
   </data>
   <data name="Contact_Description" xml:space="preserve">
-    <value>Use this to track people who are not currently NuvIoT users but with whom communication is needed.</value>
+    <value>Use this to track and manage people who are not currently NuvIoT users but with whom you still need or expect to communicate.</value>
   </data>
   <data name="Contact_DoNotContact" xml:space="preserve">
     <value>Do not contact</value>
@@ -280,7 +280,7 @@
     <value>First Name</value>
   </data>
   <data name="Contact_Help" xml:space="preserve">
-    <value>A person who is not yet a NuvIoT user but with whom we need to communicate.</value>
+    <value>A person who is not yet a NuvIoT user but with whom you still need to communicate.</value>
   </data>
   <data name="Contact_LastName" xml:space="preserve">
     <value>Last Name</value>
@@ -337,7 +337,7 @@
     <value>Responses</value>
   </data>
   <data name="DiscussionResponse_Help" xml:space="preserve">
-    <value>Create or view a reply to an existing discussion. Use this to add responses to a discussion’s starting point or other messages.</value>
+    <value>Create or view a reply in an existing discussion, whether responding to the original post or to another message.</value>
   </data>
   <data name="Discussion_TimeStamp" xml:space="preserve">
     <value>Time Stamp</value>
@@ -406,7 +406,7 @@
     <value>Day of Week</value>
   </data>
   <data name="Schedule_Description" xml:space="preserve">
-    <value>Use a schedule to specify when an event is active (for example, by date range, time of day, and days of the week).</value>
+    <value>Use this schedule to control when an event is active. Configure active periods by date range, time of day, and days of the week.</value>
   </data>
   <data name="Schedule_EndsOn" xml:space="preserve">
     <value>Ends On</value>
@@ -499,7 +499,7 @@
     <value>Category</value>
   </data>
   <data name="Category_Description" xml:space="preserve">
-    <value>Use categories to organize related entities within the same entity type.</value>
+    <value>Use categories to organize and manage related items within the same entity type.</value>
   </data>
   <data name="Common_Icon" xml:space="preserve">
     <value>Icon</value>
