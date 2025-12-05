@@ -67,7 +67,7 @@ namespace LagoVista.Core.Utils
                     LabelSlugs = doc.GetLabelSlugs() != null ? doc.GetLabelSlugs().ToList() : new List<string>(),
 
                     // Provenance (blob + offsets)
-                    BlobUri = plan.Raw != null ? plan.Raw.SuggestedBlobPath : null,
+                    FullDocumentBlobUri = plan.Raw != null ? plan.Raw.SuggestedBlobPath : null,
                     SourceSha256 = plan.Raw != null ? plan.Raw.SourceSha256 : null,
                     LineStart = c.LineStart,
                     LineEnd = c.LineEnd,

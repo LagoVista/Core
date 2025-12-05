@@ -73,7 +73,7 @@ namespace LagoVista.Core.Utils
                     Priority = 3, // neutral default
 
                     // Provenance
-                    BlobUri = plan.Raw?.SuggestedBlobPath,
+                    FullDocumentBlobUri = plan.Raw?.SuggestedBlobPath,
                     SourceSha256 = plan.Raw?.SourceSha256,
                     LineStart = c.LineStart,
                     LineEnd = c.LineEnd,

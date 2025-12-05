@@ -84,10 +84,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public List<string> LabelSlugs { get; set; } = new List<string>();
         public List<string> LabelIds { get; set; } = new List<string>();
 
-        // ---------- Raw Source Pointers ----------
-        public string BlobUri { get; set; }
         public string FullDocumentBlobUri { get; set; }
-        public string SnippetBlobUri { get; set; }
+        public string SourceSliceBlobUri { get; set; }
+        public string DescriptionBlobUri { get; set; }
+
         public string BlobVersionId { get; set; }
         public string SourceSha256 { get; set; }
 
@@ -293,8 +293,12 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             Add("LabelSlugs", LabelSlugs);
             Add("LabelIds", LabelIds);
 
+
+
             // --- Raw pointers ---
-            Add("BlobUri", BlobUri);
+            Add(nameof(FullDocumentBlobUri), FullDocumentBlobUri);
+            Add(nameof(SourceSliceBlobUri), SourceSliceBlobUri);
+            Add(nameof(DescriptionBlobUri), DescriptionBlobUri);
             Add("BlobVersionId", BlobVersionId);
             Add("SourceSha256", SourceSha256);
             Add("LineStart", LineStart);
@@ -579,9 +583,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 LabelIds = GetStringList("LabelIds"),
 
                 // Raw source pointers
-                BlobUri = GetString("BlobUri"),
                 FullDocumentBlobUri = GetString("FullDocumentBlobUri"),
-                SnippetBlobUri = GetString("SnippetBlobUri"),
+                SourceSliceBlobUri = GetString("SourceSliceBlobUri"),
+                DescriptionBlobUri = GetString("DescriptionBlobUri"),
                 BlobVersionId = GetString("BlobVersionId"),
                 SourceSha256 = GetString("SourceSha256"),
                 LineStart = GetNullableInt("LineStart"),

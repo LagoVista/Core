@@ -80,7 +80,7 @@ namespace LagoVista.Core.Utils.Types
                 // ---------- Raw pointers / provenance ----------
                 if (opt.RequireBlobPointer)
                 {
-                    RequireNonEmpty(p.BlobUri, "blob_uri", errs);
+                    RequireNonEmpty(p.FullDocumentBlobUri, "blob_uri", errs);
                     // If any offsets are present, check ordering
                     ValidateRange(p.LineStart, p.LineEnd, "line_start", "line_end", errs, min: 1);
                     ValidateRange(p.CharStart, p.CharEnd, "char_start", "char_end", errs, min: 0);

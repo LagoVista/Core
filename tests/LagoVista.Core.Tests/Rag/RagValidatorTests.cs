@@ -40,7 +40,7 @@ namespace LagoVista.Core.Tests.Rag
                     LabelSlugs = new List<string> { "alerting", "retail" },
                     LabelIds = new List<string> { "11111111-1111-1111-1111-111111111111", "22222222-2222-2222-2222-222222222222" },
 
-                    BlobUri = "/org-123/proj-abc/userguide/doc-id/2025-11-06/source.md",
+                    FullDocumentBlobUri = "/org-123/proj-abc/userguide/doc-id/2025-11-06/source.md",
                     BlobVersionId = "v1",
                     SourceSha256 = new string('a', 64),
                     LineStart = 120,
@@ -226,7 +226,7 @@ namespace LagoVista.Core.Tests.Rag
             public void BlobUri_Required_When_Option_Enabled()
             {
                 var p = BaselineDomainDoc();
-                p.BlobUri = null;
+                p.FullDocumentBlobUri = null;
 
                 var opt = new RagVectorPayloadValidator.ValidateOptions { RequireBlobPointer = true };
                 var errs = Validate(p, opt);
@@ -237,7 +237,7 @@ namespace LagoVista.Core.Tests.Rag
             public void BlobUri_NotRequired_When_Option_Disabled()
             {
                 var p = BaselineDomainDoc();
-                p.BlobUri = null;
+                p.FullDocumentBlobUri = null;
 
                 var opt = new RagVectorPayloadValidator.ValidateOptions { RequireBlobPointer = false };
                 var errs = Validate(p, opt);

@@ -19,6 +19,6 @@ namespace LagoVista.Core.AI.Interfaces
         /// Implementations must not return null.
         /// </summary>
         /// <returns>A constructed RagVectorPayload wrapped in an invoke result.</returns>
-        IEnumerable<InvokeResult<IRagPoint>> CreateIRagPoints();
+        IEnumerable<InvokeResult<IRagPoint>> BuildRagPoints();
     }
 }

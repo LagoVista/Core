@@ -119,7 +119,7 @@ namespace LagoVista.Core.Tests.Rag
             Assert.That(p1.SectionKey, Is.EqualTo("Introduction"));
             Assert.That(p1.PartIndex, Is.EqualTo(1));
             Assert.That(p1.PartTotal, Is.EqualTo(2));
-            Assert.That(p1.BlobUri, Is.EqualTo("/docs/userguide.md"));
+            Assert.That(p1.FullDocumentBlobUri, Is.EqualTo("/docs/userguide.md"));
             Assert.That(p1.SourceSha256, Is.EqualTo(new string('b', 64)));
             Assert.That(p1.LineStart, Is.EqualTo(1));
             Assert.That(p1.LineEnd, Is.EqualTo(25));
