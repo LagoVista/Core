@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
 namespace LagoVista.Core.Validation
@@ -16,6 +17,11 @@ namespace LagoVista.Core.Validation
         public string ContentType { get; set; } = "application/json";
 
         public string RedirectURL { get; set; }
+
+        public InvokeResult<T2> Transform<T2>()
+        {
+            return InvokeResult<T2>.FromInvokeResult(this.ToInvokeResult());
+        }
 
         public static InvokeResult<T> Create(T result)
         {
@@ -48,6 +54,8 @@ namespace LagoVista.Core.Validation
         {
             return new InvokeResult<T>() { };
         }
+
+
 
 
         public static InvokeResult<T> FromErrors(params ErrorMessage[] errs)
