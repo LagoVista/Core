@@ -68,14 +68,47 @@ namespace LagoVista.Core.AI.Models
         public string Name { get; set; }
         public string ArgumentsJson { get; set; }
 
-        // New: where did we expect this tool to run?
-        public bool IsServerTool { get; set; }        // true = server, false = client
-        public bool WasExecuted { get; set; }         // did *anyone* run it yet?
+        /// <summary>
+        /// True if this AgentToolCall record was produced by the server-side executor
+        /// (IAgentToolExecutor / IAgentTool). False if it was produced by a client
+        /// executor and sent back to the server as a final result.
+        /// </summary>
+        public bool IsServerTool { get; set; }
 
-        // New: tool execution result (if available)
-        public string ResultJson { get; set; }        // raw JSON result payload
-        public string ErrorMessage { get; set; }      // error from server-side execution, if any
+        /// <summary>
+        /// Indicates whether the side that produced this record actually ran
+        /// any tool logic (validation, preflight, or final behavior).
+        /// </summary>
+        public bool WasExecuted { get; set; }
+
+        /// <summary>
+        /// Server-side declaration that this tool call still needs client execution
+        /// to complete its intended behavior.
+        ///
+        /// - For server-produced records:
+        ///     - true  => server preflight succeeded, but the final side effect
+        ///                must be performed by the client.
+        ///     - false => either the tool is fully executed on the server, or it
+        ///                failed/short-circuited and should NOT be retried on client.
+        ///
+        /// - For client-produced records:
+        ///     - MUST be false (client is the final executor from the LLM's POV).
+        /// </summary>
+        public bool RequiresClientExecution { get; set; }
+
+        /// <summary>
+        /// Raw JSON result payload. For server-final tools, this can be passed
+        /// directly to the LLM as a tool_result. For client-final tools, this
+        /// is typically a preflighted payload the client should execute.
+        /// </summary>
+        public string ResultJson { get; set; }
+
+        /// <summary>
+        /// Error message from server-side execution, if any.
+        /// </summary>
+        public string ErrorMessage { get; set; }
     }
+
 
 
     public class LlmUsage
