@@ -2,7 +2,10 @@ namespace LagoVista.Core.AI.Models
 {
     public class ActiveFile
     {
-        public string Path { get; set; }
+        public string AbsolutePath { get; set; }
+        public string RelativePath { get; set; }
+        public string FileName { get; set; }
+        public string Sha256Hash { get; set; }
 
         public string Contents { get; set; }
 
