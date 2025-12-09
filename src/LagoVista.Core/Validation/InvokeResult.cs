@@ -56,8 +56,6 @@ namespace LagoVista.Core.Validation
         }
 
 
-
-
         public static InvokeResult<T> FromErrors(params ErrorMessage[] errs)
         {
             var result = new InvokeResult<T>();
@@ -82,7 +80,7 @@ namespace LagoVista.Core.Validation
             result.Errors.Add(new ErrorMessage()
             {
                 ErrorCode = "EXC9999",
-                Message = "Unhandled Excpetion",
+                Message = "Unhandled Exception",
                 Details = tag
             });
 
@@ -100,7 +98,7 @@ namespace LagoVista.Core.Validation
                     result.Errors.Add(new ErrorMessage()
                     {
                         ErrorCode = "EXC9997",
-                        Message = ex.InnerException.Message,
+                        Message = $"(inner ex) {ex.InnerException.Message}" ,
                         Details = ex.InnerException.StackTrace
                     });
                 }

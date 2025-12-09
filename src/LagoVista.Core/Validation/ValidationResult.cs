@@ -26,7 +26,7 @@ namespace LagoVista.Core.Validation
         {
             get
             {
-                return Errors.Count == 0 ? "No Error" : Errors.First().Message;
+                return Errors.Count == 0 ? "No Error" : string.Join(", ", Errors.Select(er => er.Message));
             }
         }
 
