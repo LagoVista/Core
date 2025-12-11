@@ -18,6 +18,33 @@ namespace LagoVista.Core.Validation
 
         public string RedirectURL { get; set; }
 
+
+        public bool Aborted { get; private set; } = false;
+
+        public string AbortReason { get; private set; }
+
+        public static InvokeResult<T> Abort()
+        {
+            return Abort("Session Aborted");
+        }
+
+        public static InvokeResult<T> Abort(string reason)
+        {
+            var result = new InvokeResult<T>()
+            {
+                Aborted = true,
+                AbortReason = reason
+            };
+
+            result.Errors.Add(new ErrorMessage()
+            {
+                ErrorCode = "ABORT001",
+                Message = reason
+            });
+
+            return result;
+        }
+
         public InvokeResult<T2> Transform<T2>()
         {
             return InvokeResult<T2>.FromInvokeResult(this.ToInvokeResult());
@@ -153,6 +180,34 @@ namespace LagoVista.Core.Validation
         public static InvokeResult Success => new InvokeResult();
 
         public static InvokeResult SuccessRedirect(string url) => new InvokeResult() { RedirectURL = url};
+
+
+        public bool Aborted { get; private set; } = false;
+
+        public string AbortReason { get; private set; }
+
+        public static InvokeResult Abort()
+        {
+            return Abort("Session Aborted");
+        }
+
+        public static InvokeResult Abort(string reason)
+        {
+            var result = new InvokeResult()
+            {
+                Aborted = true,
+                AbortReason = reason
+            };
+
+            result.Errors.Add(new ErrorMessage()
+            {
+                ErrorCode = "ABORT001",
+                Message = reason
+            });
+
+            return result;
+
+        }
 
 
         public static InvokeResult FromError(string err, string errorCode = "", List<ResultTiming> timings = null)
