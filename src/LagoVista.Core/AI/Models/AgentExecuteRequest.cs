@@ -17,6 +17,8 @@ namespace LagoVista.Core.AI.Models
 
         public string Mode { get; set; }
 
+        public bool Streaming { get; set; } = false;
+
         public string SystemPrompt { get; set; }
         public string Instruction { get; set; }
 
@@ -54,6 +56,15 @@ namespace LagoVista.Core.AI.Models
         /// Optional strongly-typed convenience mirror of ToolResultsJson.
         /// </summary>
         public List<AgentToolCall> ToolResults { get; set; } = new List<AgentToolCall>();
+
+        public List<ImageAttachment> ImageAttachments { get; set; } = new List<ImageAttachment>();
+    }
+
+    public class ImageAttachment
+    {
+        public string Id { get; set; }
+        public string MimeType { get; set; }
+        public string DataBase64 { get; set; }
     }
 
 
