@@ -16,6 +16,8 @@ namespace LagoVista.Core.AI.Models
         public string RequestEnvelopeUrl { get; set; }
         public string FullResponseUrl { get; set; }
 
+        public string RestoreTurnId { get; set; }
+
         public string Mode { get; set; }
 
         public List<SourceRef> Sources { get; set; } = new List<SourceRef>();

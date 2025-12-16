@@ -14,7 +14,7 @@ namespace LagoVista.Core.Exceptions
         public string RecordType { get; private set; }
         public string RecordId { get; private set; }
 
-        public RecordNotFoundException(String recordType, string recordId)
+        public RecordNotFoundException(String recordType, string recordId) : base($"Record Of Type: {recordType} With Id: {recordId} Not Found")
         {
             RecordType = recordType;
             RecordId = recordId;
