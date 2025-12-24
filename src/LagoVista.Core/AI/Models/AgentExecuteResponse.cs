@@ -70,12 +70,7 @@ namespace LagoVista.Core.AI.Models
         public string Name { get; set; }
         public string ArgumentsJson { get; set; }
 
-        /// <summary>
-        /// True if this AgentToolCall record was produced by the server-side executor
-        /// (IAgentToolExecutor / IAgentTool). False if it was produced by a client
-        /// executor and sent back to the server as a final result.
-        /// </summary>
-        public bool IsServerTool { get; set; }
+        public int ExecutionMs { get; set; }
 
         /// <summary>
         /// Indicates whether the side that produced this record actually ran
@@ -83,19 +78,6 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         public bool WasExecuted { get; set; }
 
-        /// <summary>
-        /// Server-side declaration that this tool call still needs client execution
-        /// to complete its intended behavior.
-        ///
-        /// - For server-produced records:
-        ///     - true  => server preflight succeeded, but the final side effect
-        ///                must be performed by the client.
-        ///     - false => either the tool is fully executed on the server, or it
-        ///                failed/short-circuited and should NOT be retried on client.
-        ///
-        /// - For client-produced records:
-        ///     - MUST be false (client is the final executor from the LLM's POV).
-        /// </summary>
         public bool RequiresClientExecution { get; set; }
 
         /// <summary>
