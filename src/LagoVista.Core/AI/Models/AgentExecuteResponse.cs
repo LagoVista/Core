@@ -2,8 +2,13 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.AI.Models
 {
+ 
+    
     public class AgentExecuteResponse
     {
+        public const string ResponseKindOk = "ok";
+        public const string ResponseKindToolsOnly = "tools-only";
+
         public string Kind { get; set; }
 
         public string SessionId { get; set; }
