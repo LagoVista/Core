@@ -27,6 +27,7 @@ namespace LagoVista.Core.Validation
         }
 
         public string ErrorCode { get; set; }
+        public bool FatalError { get; set; }
 
         public bool SystemError { get; set; }
 

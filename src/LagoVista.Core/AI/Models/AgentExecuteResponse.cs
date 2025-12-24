@@ -6,7 +6,7 @@ namespace LagoVista.Core.AI.Models
     {
         public string Kind { get; set; }
 
-        public string ConversationId { get; set; }
+        public string SessionId { get; set; }
         public string TurnId { get; set; }
         public string AgentContextId { get; set; }
 
