@@ -14,11 +14,11 @@ namespace LagoVista.Core.AI.Interfaces
         Task<AgentExecuteResponse> AskAsync(EntityHeader agentContext, EntityHeader conversationContext,
             string instruction, string conversationId = null, string workspaceId = null,
             string repo = null, string language = null, string ragScope = null,
-            IEnumerable<ActiveFile> activeFiles = null,
+            IEnumerable<InputArtifact> inputArtifacts = null,
             CancellationToken cancellationToken = default);
 
         Task<AgentExecuteResponse> EditAsync(EntityHeader agentContext, EntityHeader conversationContext,
-            string instruction, IEnumerable<ActiveFile> activeFiles, string conversationId = null,
+            string instruction, IEnumerable<InputArtifact> inputArtifacts, string conversationId = null,
             string workspaceId = null, string repo = null, string language = null,
             string ragScope = null, CancellationToken cancellationToken = default);
     }

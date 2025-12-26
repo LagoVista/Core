@@ -91,6 +91,18 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         [JsonProperty("usage", NullValueHandling = NullValueHandling.Ignore)]
         public LlmUsage Usage { get; set; }
+
+        /// <summary>
+        /// Error Code for Call if Present
+        /// </summary>
+        [JsonProperty("errorCode", NullValueHandling = NullValueHandling.Ignore)]
+        public string ErrorCode { get; set; }
+
+        /// <summary>
+        /// Error Message for call if present
+        /// </summary>
+        [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -100,8 +112,12 @@ namespace LagoVista.Core.AI.Models
         Final,
 
         [EnumMember(Value = "client_tool_continuation")]
-        ClientToolContinuation
-    }
+        ClientToolContinuation,
+
+
+        [EnumMember(Value = "error")]
+        Error
+     }
 
     /// <summary>
     /// Tool call request emitted by the server for client execution.
