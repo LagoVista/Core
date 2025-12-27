@@ -196,7 +196,13 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("completionTokens")]
         public int CompletionTokens { get; set; }
 
+        [JsonProperty("cachedTokens")]
+        public int CachedTokends { get; set; }
+
         [JsonProperty("totalTokens")]
         public int TotalTokens { get; set; }
-    }
+
+        [JsonProperty("reasoningTokens")]
+        public int ReasoningTokens { get; set; }
+   }
 }
