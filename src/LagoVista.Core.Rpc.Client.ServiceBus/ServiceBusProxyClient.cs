@@ -48,7 +48,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
 
             var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
-            Console.WriteLine($"Request Server Connection String {connstr}");
+            _logger.Trace($"Request Server Connection String {connstr}");
 
             var client = new ServiceBusAdministrationClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
@@ -94,8 +94,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-
+           
             var endPoint = $"sb://{_subscriberSettings.AccountId}.servicebus.windows.net";
             _topicPath = _subscriberSettings.ResourceName;
             _subscriptionPath = _subscriberSettings.Uri;
@@ -116,19 +115,14 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
 
-            Console.WriteLine($"[ClientListenerStarting] EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
+            _logger.Trace($"[ServiceBusProxyClient__CustomStartAsync__Starting] EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
             await _processor.StartProcessingAsync();
-            Console.WriteLine($"[ClientListenerStarted]  EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
-
-            Console.ResetColor();
+            _logger.Trace($"[ServiceBusProxyClient__CustomStartAsync__Started]  EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
         }
 
         private Task _processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"ERROR PROCESSING MESSAGE: {arg.ErrorSource} - {arg.Exception.Message}");
-            Console.ResetColor();
-
+     
             _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription"));
 
             //todo: ML - replace sample code from SbListener with appropriate error handling.
@@ -142,8 +136,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             try
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-
                 /* 
                  * it is possible that this may not be the client that asked for the RPC request
                  * but it could be the one that consumed the message.  If this is the case the 
@@ -172,15 +164,9 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[Dead Letter] {arg.Message} {ex.Message}");
                 await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
                 _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription")) ;
                 throw;
-            }
-            finally
-            {
-                Console.ResetColor();
             }
         }
 
@@ -198,6 +184,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _senderClient = new ServiceBusClient(_transmitterConnectionSettings, clientOptions);
             _sender = _senderClient.CreateSender(entityPath);
 
+            _logger.Trace($"[ServiceBusProxyClient__CustomTransmitMessageAsync] {entityPath}");
             Console.WriteLine($"[SendingFromClient]: {entityPath}");
 
             try
