@@ -82,7 +82,8 @@ namespace LagoVista.Core.Attributes
         RawHtml,
         Currency,
         ContactPicker,
-        FontAwesomeIconPicker
+        FontAwesomeIconPicker,
+        StringList
     }
 
     public enum NamespaceTypes
