@@ -32,7 +32,7 @@ namespace LagoVista.Core.AI.Models
         /// Identifies the conversation context that should be used within the AgentContext specifed above
         /// Optional - will not be valid without an AgentContextId
         /// </summary>
-        public string ConversationContextId { get; set; }
+        public string RoleId { get; set; }
 
         /// <summary>
         /// Identifies the session ("room") in which execution occurs.
