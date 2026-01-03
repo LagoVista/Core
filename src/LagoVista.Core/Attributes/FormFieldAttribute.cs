@@ -83,7 +83,8 @@ namespace LagoVista.Core.Attributes
         Currency,
         ContactPicker,
         FontAwesomeIconPicker,
-        StringList
+        StringList,
+        EntithHeaderPickerDropDown
     }
 
     public enum NamespaceTypes
