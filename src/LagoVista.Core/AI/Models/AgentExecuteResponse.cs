@@ -73,6 +73,12 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("toolResults", NullValueHandling = NullValueHandling.Ignore)]
         public List<ClientToolResult> ToolResults { get; set; }
 
+        [JsonProperty("clientAcpCalls", NullValueHandling = NullValueHandling.Ignore)]
+        public List<ClientAcpCall> ClientAcpCalls { get; set; }
+
+        [JsonProperty("clientAcpCallResults", NullValueHandling = NullValueHandling.Ignore)]
+        public List<ClientAcpCallResult> ClientAcpCallResults { get; set; }
+
         /// <summary>
         /// Final-only. Optional supplemental file references associated with the final response.
         /// Files MUST NOT appear in tool-continuation responses.
@@ -103,6 +109,10 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
+
+
+        [JsonProperty("acpIntents", NullValueHandling = NullValueHandling.Ignore)]
+        public List<AcpIntent> AcpIntents { get; set; } = new List<AcpIntent>();
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -130,6 +140,8 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("kind")]
+        public string Kind { get; set; }
         /// <summary>
         /// Raw JSON string for tool arguments.
         /// </summary>
@@ -154,6 +166,39 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         [JsonProperty("resultJson", NullValueHandling = NullValueHandling.Ignore)]
         public string ResultJson { get; set; }
+
+        [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+    }
+   
+    public sealed class ClientAcpCall
+    {
+        [JsonProperty("interactionId")]
+        public string InteractionId { get; set; }
+
+        [JsonProperty("commandId")]
+        public string CommandId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }   // e.g. "picker", "confirm" or "acp.command_picker"
+
+        [JsonProperty("argumentsJson")]
+        public string ArgumentsJson { get; set; } // JSON payload for UI rendering
+    }
+
+    public sealed class ClientAcpCallResult
+    {
+        [JsonProperty("interactionId")]
+        public string InteractionId { get; set; }
+
+        [JsonProperty("commandId")]
+        public string CommandId { get; set; }
+
+        [JsonProperty("executionMs")]
+        public int ExecutionMs { get; set; }    
+
+        [JsonProperty("resultJson")]
+        public string ResultJson { get; set; } // JSON payload of selection/confirmation/etc.
 
         [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
@@ -205,4 +250,90 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("reasoningTokens")]
         public int ReasoningTokens { get; set; }
    }
+
+
+    public interface IUIIntentPayload
+    {
+
+    }
+
+    public sealed class AcpIntent
+    {
+        [JsonProperty("kind")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public UiIntentKind Kind { get; set; }
+
+        // Correlation id so the client can post back a structured selection later
+        [JsonProperty("intentId")]
+        public string IntentId { get; set; }
+
+        // Display hints
+        [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
+        public string Title { get; set; }
+
+        [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
+        public string Message { get; set; }
+
+        // Generic payload so you can evolve without breaking schema
+        [JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
+        public IUIIntentPayload Payload { get; set; }
+    }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum UiIntentKind
+    {
+        [EnumMember(Value = "picker")]
+        Picker,
+
+        [EnumMember(Value = "confirm")]
+        Confirm,
+
+        [EnumMember(Value = "notification")]
+        Notification
+    }
+
+    public sealed class PickerIntentPayload : IUIIntentPayload
+    {
+        [JsonProperty("prefilterText", NullValueHandling = NullValueHandling.Ignore)]
+        public string PrefilterText { get; set; }
+
+        [JsonProperty("allowSearch")]
+        public bool AllowSearch { get; set; } = true;
+
+        [JsonProperty("items")]
+        public List<PickerItem> Items { get; set; } = new List<PickerItem>();
+    }
+
+    public sealed class PickerItem
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("displayName")]
+        public string DisplayName { get; set; }
+
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
+        public string Description { get; set; }
+    }
+
+    public sealed class ConfirmIntentPayload : IUIIntentPayload
+    {
+        [JsonProperty("confirmText")]
+        public string ConfirmText { get; set; }
+
+        [JsonProperty("confirmLabel", NullValueHandling = NullValueHandling.Ignore)]
+        public string ConfirmLabel { get; set; } = "Yes";
+
+        [JsonProperty("cancelLabel", NullValueHandling = NullValueHandling.Ignore)]
+        public string CancelLabel { get; set; } = "No";
+    }
+
+    public sealed class NotificationIntentPayload : IUIIntentPayload
+    {
+        [JsonProperty("level")]
+        public string Level { get; set; } // "info" | "warning" | "error"
+
+        [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
+        public string Details { get; set; }
+    }
 }

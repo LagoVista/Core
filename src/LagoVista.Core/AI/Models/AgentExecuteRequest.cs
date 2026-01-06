@@ -322,6 +322,15 @@ namespace LagoVista.Core.AI.Models
         }
     }
 
+    public sealed class AcpResultSubmission
+    {
+        public string IntentId { get; set; }
+        public int ExecutionMs { get; set; }
+        public string CommandId { get; set; }
+        public string ErrorMessage { get; set; }
+        public string ResultsJson { get; set; }
+    }
+
     public sealed class RagScope
     {
         public List<RagScopeCondition> Conditions { get; set; } = new List<RagScopeCondition>();
