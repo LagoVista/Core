@@ -35,6 +35,11 @@ namespace LagoVista.Core.AI.Models
         public string RoleId { get; set; }
 
         /// <summary>
+        /// If this is set or changed, a persona should be loaded. 
+        /// </summary>
+        public string AgentPersonaId { get; set; }
+
+        /// <summary>
         /// Identifies the session ("room") in which execution occurs.
         /// Required for all requests.
         /// </summary>
