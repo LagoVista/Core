@@ -269,6 +269,24 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 result.AddWarning("IndexedUtc was default; set to current UTC time.");
             }
 
+            if (Meta.IndexedUtc == default)
+            {
+                Meta.IndexedUtc = DateTime.UtcNow;
+                result.AddWarning("IndexedUtc was default; set to current UTC time.");
+            }
+
+            // Always keep IndexedUnix in sync
+            Meta.IndexedUnix = new DateTimeOffset(Meta.IndexedUtc).ToUnixTimeSeconds();
+
+            if (Meta.UpdatedUtc.HasValue)
+            {
+                Meta.UpdatedUnix = new DateTimeOffset(Meta.UpdatedUtc.Value).ToUnixTimeSeconds();
+            }
+            else
+            {
+                Meta.UpdatedUnix = null;
+            }
+
             // --- Semantic identity ---
             if (string.IsNullOrWhiteSpace(Meta.SemanticId))
             {
