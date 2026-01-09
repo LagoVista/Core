@@ -1,8 +1,13 @@
+using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
@@ -105,6 +110,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public DateTime IndexedUtc { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedUtc { get; set; }
 
+        public bool HasIssues { get; set; }
+
+        public bool Deleted { get; set; }
+
         public long IndexedUnix { get; set; }
         public long? UpdatedUnix { get; set; }
 
@@ -139,10 +148,15 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string RepoBranch { get; set; }
         public string CommitSha { get; set; }
         public string Path { get; set; }
+        public string ModelContentFileName { get; set; }
+        public string HumanContentFileName { get; set; }
+        public string IssuesFileName { get; set; }
+
         public int? StartLine { get; set; }
         public int? EndLine { get; set; }
 
         public string EditorUrl { get; set; }
+        public string PreviewUrl { get; set; }
     }
 
     public sealed class RagVectorPayloadLenses
@@ -396,6 +410,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadMeta.UpdatedUtc), Meta.UpdatedUtc?.ToString("o"));
                 Add(nameof(RagVectorPayloadMeta.SourceSystem), Meta.SourceSystem);
                 Add(nameof(RagVectorPayloadMeta.SourceObjectId), Meta.SourceObjectId);
+                Add(nameof(RagVectorPayloadMeta.IndexedUnix), Meta.IndexedUnix);
+                Add(nameof(RagVectorPayloadMeta.UpdatedUnix), Meta.UpdatedUnix);
+                Add(nameof(RagVectorPayloadMeta.HasIssues), Meta.HasIssues);
+                Add(nameof(RagVectorPayloadMeta.Deleted), Meta.Deleted);
+
             });
 
             var extra = BuildBucket(Add =>
@@ -421,11 +440,16 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.Repo), Extra.Repo);
                 Add(nameof(RagVectorPayloadExtra.RepoBranch), Extra.RepoBranch);
                 Add(nameof(RagVectorPayloadExtra.CommitSha), Extra.CommitSha);
-                Add(nameof(RagVectorPayloadExtra.Path), Extra.Path);
                 Add(nameof(RagVectorPayloadExtra.StartLine), Extra.StartLine);
                 Add(nameof(RagVectorPayloadExtra.EndLine), Extra.EndLine);
 
+                Add(nameof(RagVectorPayloadExtra.Path), Extra.Path);
+                Add(nameof(RagVectorPayloadExtra.ModelContentFileName), Extra.ModelContentFileName);
+                Add(nameof(RagVectorPayloadExtra.HumanContentFileName), Extra.HumanContentFileName);
+                Add(nameof(RagVectorPayloadExtra.IssuesFileName), Extra.IssuesFileName);
+
                 Add(nameof(RagVectorPayloadExtra.EditorUrl), Extra.EditorUrl);
+                Add(nameof(RagVectorPayloadExtra.PreviewUrl), Extra.PreviewUrl);
             });
 
             var lenses = BuildBucket(Add =>
@@ -539,6 +563,27 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 if (int.TryParse(raw.ToString(), out var v)) return v;
                 return defaultValue;
             }
+
+            bool GetBool(IDictionary<string, object> dict, string key, bool defaultValue = false)
+            {
+                var raw = GetRaw(dict, key);
+                if (raw == null) return defaultValue;
+
+                if (raw is bool b) return b;
+
+                if (raw is int i) return i != 0;
+                if (raw is long l) return l != 0;
+
+                if (raw is string s)
+                {
+                    if (bool.TryParse(s, out var bv)) return bv;
+
+                    if (int.TryParse(s, out var iv)) return iv != 0;
+                }
+
+                return defaultValue;
+            }
+
 
             int? GetNullableInt(IDictionary<string, object> dict, string key)
             {
@@ -705,6 +750,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.UpdatedUtc = GetNullableDateTimeFromIso(M, nameof(RagVectorPayloadMeta.UpdatedUtc));
             payload.Meta.SourceSystem = GetString(M, nameof(RagVectorPayloadMeta.SourceSystem));
             payload.Meta.SourceObjectId = GetString(M, nameof(RagVectorPayloadMeta.SourceObjectId));
+            payload.Meta.HasIssues = GetBool(M, nameof(RagVectorPayloadMeta.HasIssues));
+            payload.Meta.Deleted = GetBool(M, nameof(RagVectorPayloadMeta.Deleted));
 
             // --- Extra
             payload.Extra.FullDocumentBlobUri = GetString(E, nameof(RagVectorPayloadExtra.FullDocumentBlobUri));
@@ -732,7 +779,15 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Extra.StartLine = GetNullableInt(E, nameof(RagVectorPayloadExtra.StartLine));
             payload.Extra.EndLine = GetNullableInt(E, nameof(RagVectorPayloadExtra.EndLine));
 
+
+            payload.Extra.Path = GetString(E, nameof(RagVectorPayloadExtra.Path));
+            payload.Extra.HumanContentFileName = GetString(E, nameof(RagVectorPayloadExtra.HumanContentFileName));
+            payload.Extra.ModelContentFileName = GetString(E, nameof(RagVectorPayloadExtra.ModelContentFileName));
+            payload.Extra.IssuesFileName = GetString(E, nameof(RagVectorPayloadExtra.IssuesFileName));
+
+
             payload.Extra.EditorUrl = GetString(E, nameof(RagVectorPayloadExtra.EditorUrl));
+            payload.Extra.PreviewUrl = GetString(E, nameof(RagVectorPayloadExtra.PreviewUrl));
 
             // --- Lenses
             payload.Lenses.Embed = GetString(L, nameof(RagVectorPayloadLenses.Embed));
@@ -774,7 +829,30 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             // Optional numeric date fields (if you add them)
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.IndexedUnix)), QdrantPayloadIndexKind.Integer),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.UpdatedUnix)), QdrantPayloadIndexKind.Integer),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.HasIssues)), QdrantPayloadIndexKind.Boolean),
             };
+    
+        public static RagVectorPayload FromEntity(IEntityBase entity)
+        {
+            var entityType = entity.GetType();
+            var attr = entityType.GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
+            var entityDescription = EntityDescription.Create(entityType, attr);
+
+            var payload = new RagVectorPayload();
+            payload.Meta.DocId = entity.Id;
+            payload.Meta.Title = entity.Name;
+            payload.Extra.EditorUrl = entityDescription.EditUIUrl;
+            payload.Meta.SectionKey = "main";
+            payload.Meta.PartIndex = 1;
+            payload.Meta.PartTotal = 1;
+            payload.Meta.Deleted = entity.IsDeleted ?? false;
+            payload.Meta.SemanticId = $"{entityDescription.DomainName}:{entityType.Name}:{entity.Id}";
+            payload.Meta.ContentTypeId = Core.Utils.Types.Nuviot.RagIndexing.RagContentType.DomainDocument;
+            payload.Meta.Subtype = entity.EntityType;
+            payload.Meta.ProjectId = "default";
+            payload.Meta.OrgNamespace = entity.OwnerOrganization.Id;
+            return payload;
+        }
     }
 
     // You already have these types in your project; included here just to show the shape.

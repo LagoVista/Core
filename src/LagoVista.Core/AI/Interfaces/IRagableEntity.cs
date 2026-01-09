@@ -1,4 +1,7 @@
+using LagoVista.Core.AI.Models;
 using LagoVista.Core.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LagoVista.Core.AI.Interfaces
 {
@@ -12,7 +15,8 @@ namespace LagoVista.Core.AI.Interfaces
     /// Any entity implementing this interface is considered RAG ready:
     /// it can be embedded and can produce a RagVectorPayload for indexing.
     /// </summary>
-    public interface IRagableEntity : IEmbeddable, IRagPointFactory, IEntityBase
+    public interface IRagableEntity :  IEntityBase
     {
+        Task<List<EntityRagContent>> GetRagContentAsync();
     }
 }
