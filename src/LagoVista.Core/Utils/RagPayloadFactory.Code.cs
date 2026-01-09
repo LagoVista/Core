@@ -1,7 +1,3 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 4677e189e98954c464e22fd132116fe707717183cae45605f7987fcf83d246bd
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using LagoVista.Core.Utils.Types;
 using System;
@@ -33,75 +29,87 @@ namespace LagoVista.Core.Utils
             {
                 var canonical = CodeDocId.Canonical(code.Repo, code.Path);
 
-                // Option A: GUID v5 (recommended)
+                // Stable, commit-agnostic document id
                 var fileDocId = CodeDocId.FileDocIdV5(canonical);
 
-                // Option B: 32-hex short ID
-                // var fileDocIdHex = CodeDocId.FileDocIdHex128(canonical);  // if you prefer string id
+                // Qdrant point id (opaque)
+                c.PointId = Guid.NewGuid().ToString("N");
 
-                c.PointId = Guid.NewGuid().ToString().ToLower();
-
-                // Build stable point id (commit-agnostic)
-          //      var pointId = CodePointId.Build(fileDocId, c.SectionKey, c.PartIndex);
-                // (optional) also stamp it back onto the chunk for traceability:
-            //    if (string.IsNullOrWhiteSpace(c.PointId)) c.PointId = pointId;
                 var text = c.TextNormalized ?? string.Empty;
 
-                var title = !string.IsNullOrWhiteSpace(code.TitleOverride) ? code.TitleOverride
-                          : (!string.IsNullOrWhiteSpace(c.Symbol) ? c.Symbol
-                          : (!string.IsNullOrWhiteSpace(c.Title) ? c.Title : code.Path));
+                var title =
+                    !string.IsNullOrWhiteSpace(code.TitleOverride) ? code.TitleOverride :
+                    !string.IsNullOrWhiteSpace(c.Symbol) ? c.Symbol :
+                    !string.IsNullOrWhiteSpace(c.Title) ? c.Title :
+                    code.Path;
 
-                var payload = new RagVectorPayload
-                {
-                    // Identity / tenancy
-                    OrgNamespace = ctx.OrgId,
-                    ProjectId = ctx.ProjectId,
-                    DocId = fileDocId.ToString(),
+                var payload = new RagVectorPayload();
 
-                    // Classification
-                    ContentTypeId = RagContentType.SourceCode,
-                    Subtype = string.IsNullOrWhiteSpace(code.Subtype) ? "CSharp" : code.Subtype,
+                // -------------------------
+                // META (filterable / canonical)
+                // -------------------------
+                payload.Meta.OrgNamespace = ctx.OrgId;
+                payload.Meta.ProjectId = ctx.ProjectId;
+                payload.Meta.DocId = fileDocId.ToString();
+                payload.Meta.PointId = c.PointId;
 
-                    // Sectioning
-                    SectionKey = c.SectionKey,
-                    PartIndex = c.PartIndex,
-                    PartTotal = c.PartTotal,
+                payload.Meta.ContentTypeId = RagContentType.SourceCode;
+                payload.Meta.ContentType = RagContentType.SourceCode.ToString();
+                payload.Meta.Subtype = string.IsNullOrWhiteSpace(code.Subtype) ? "CSharp" : code.Subtype;
 
-                    // Core meta
-                    Title = title,
-                    Language = code.Language,
-                    Priority = 3, // neutral default
+                payload.Meta.SectionKey = c.SectionKey;
+                payload.Meta.PartIndex = c.PartIndex;
+                payload.Meta.PartTotal = c.PartTotal;
 
-                    // Provenance
-                    FullDocumentBlobUri = plan.Raw?.SuggestedBlobPath,
-                    SourceSha256 = plan.Raw?.SourceSha256,
-                    LineStart = c.LineStart,
-                    LineEnd = c.LineEnd,
-                    CharStart = c.CharStart,
-                    CharEnd = c.CharEnd,
+                payload.Meta.Title = title;
+                payload.Meta.Language = code.Language;
+                payload.Meta.Priority = 3;
 
-                    // Index / embedding
-                    IndexVersion = ctx.IndexVersion,
-                    EmbeddingModel = ctx.EmbeddingModel,
-                    ContentHash = Sha256(text),
-                    ContentLenChars = text.Length,
-                    IndexedUtc = DateTime.UtcNow,
+                payload.Meta.IndexVersion = ctx.IndexVersion;
+                payload.Meta.EmbeddingModel = ctx.EmbeddingModel;
+                payload.Meta.ContentHash = Sha256(text);
+                payload.Meta.ContentLenChars = text.Length;
+                payload.Meta.IndexedUtc = DateTime.UtcNow;
 
-                    // SourceCode-specific
-                    Repo = code.Repo,
-                    RepoBranch = code.RepoBranch,
-                    CommitSha = code.CommitSha,
-                    Path = code.Path,
-                    Symbol = c.Symbol,
-                    SymbolType = c.SymbolType,
-                    StartLine = c.LineStart,
-                    EndLine = c.LineEnd
-                };
+                // Optional numeric timestamps if you add them
+                // payload.Meta.IndexedUnix = new DateTimeOffset(payload.Meta.IndexedUtc).ToUnixTimeSeconds();
 
-                var errs = RagVectorPayloadValidator.Validate(payload,
-                    new RagVectorPayloadValidator.ValidateOptions { RequireCodeRepoFields = true });
+                // -------------------------
+                // EXTRA (non-filter helpers)
+                // -------------------------
+                payload.Extra.FullDocumentBlobUri = plan.Raw?.SuggestedBlobPath;
+                payload.Extra.SourceSha256 = plan.Raw?.SourceSha256;
+
+                payload.Extra.LineStart = c.LineStart;
+                payload.Extra.LineEnd = c.LineEnd;
+                payload.Extra.CharStart = c.CharStart;
+                payload.Extra.CharEnd = c.CharEnd;
+
+                payload.Extra.Repo = code.Repo;
+                payload.Extra.RepoBranch = code.RepoBranch;
+                payload.Extra.CommitSha = code.CommitSha;
+                payload.Extra.Path = code.Path;
+
+                payload.Extra.Symbol = c.Symbol;
+                payload.Extra.SymbolType = c.SymbolType;
+                payload.Extra.StartLine = c.LineStart;
+                payload.Extra.EndLine = c.LineEnd;
+
+                // -------------------------
+                // VALIDATION (unchanged semantics)
+                // -------------------------
+                var errs = RagVectorPayloadValidator.Validate(
+                    payload,
+                    new RagVectorPayloadValidator.ValidateOptions
+                    {
+                        RequireCodeRepoFields = true
+                    });
+
                 if (errs.Count > 0)
-                    throw new InvalidOperationException($"Invalid code payload for {c.DocId}: {string.Join("; ", errs)}");
+                {
+                    throw new InvalidOperationException(
+                        $"Invalid code payload for {payload.Meta.DocId}: {string.Join("; ", errs)}");
+                }
 
                 results.Add(new PayloadBuildResult
                 {
@@ -110,12 +118,21 @@ namespace LagoVista.Core.Utils
                     TextForEmbedding = c.TextNormalized,
                     EstimatedTokens = EstimateTokens(text),
                     Vector = c.Vector
-                    
                 });
             }
 
             return results;
         }
+
+        private static string Sha256(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return null;
+
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(text));
+            var sb = new StringBuilder(bytes.Length * 2);
+            foreach (var b in bytes) sb.Append(b.ToString("x2"));
+            return sb.ToString();
+        }
     }
 }
- 

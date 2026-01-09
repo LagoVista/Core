@@ -41,51 +41,66 @@ namespace LagoVista.Core.Utils
                           : (!string.IsNullOrWhiteSpace(c.Title) ? c.Title
                           : doc.ContentSubtype);
 
-                var payload = new RagVectorPayload
-                {
-                    // Identity / tenancy
-                    OrgNamespace = ctx.OrgId,
-                    ProjectId = ctx.ProjectId,
-                    DocId = plan.DocId,
+                var payload = new RagVectorPayload();
 
-                    // Classification
-                    ContentTypeId = RagContentType.DomainDocument,
-                    Subtype = !string.IsNullOrWhiteSpace(docCtx.Subtype) ? docCtx.Subtype : doc.ContentSubtype,
+                // -------------------------
+                // META (filterable / canonical)
+                // -------------------------
+                payload.Meta.OrgNamespace = ctx.OrgId;
+                payload.Meta.ProjectId = ctx.ProjectId;
+                payload.Meta.DocId = plan.DocId;
+                payload.Meta.PointId = c.PointId;
 
-                    // Sectioning
-                    SectionKey = c.SectionKey,
-                    PartIndex = c.PartIndex,
-                    PartTotal = c.PartTotal,
+                payload.Meta.ContentTypeId = RagContentType.DomainDocument;
+                payload.Meta.ContentType = RagContentType.DomainDocument.ToString();
 
-                    // Core meta
-                    Title = title,
-                    Language = !string.IsNullOrWhiteSpace(docCtx.Language) ? docCtx.Language : doc.Language,
-                    Priority = doc.Priority,
-                    Audience = doc.Audience,
-                    Persona = doc.Persona,
-                    Stage = doc.Stage,
-                    LabelSlugs = doc.GetLabelSlugs() != null ? doc.GetLabelSlugs().ToList() : new List<string>(),
+                payload.Meta.Subtype = !string.IsNullOrWhiteSpace(docCtx.Subtype)
+                    ? docCtx.Subtype
+                    : doc.ContentSubtype;
 
-                    // Provenance (blob + offsets)
-                    FullDocumentBlobUri = plan.Raw != null ? plan.Raw.SuggestedBlobPath : null,
-                    SourceSha256 = plan.Raw != null ? plan.Raw.SourceSha256 : null,
-                    LineStart = c.LineStart,
-                    LineEnd = c.LineEnd,
-                    CharStart = c.CharStart,
-                    CharEnd = c.CharEnd,
+                payload.Meta.SectionKey = c.SectionKey;
+                payload.Meta.PartIndex = c.PartIndex;
+                payload.Meta.PartTotal = c.PartTotal;
 
-                    // Index / embedding
-                    IndexVersion = ctx.IndexVersion,
-                    EmbeddingModel = ctx.EmbeddingModel,
-                    ContentHash = Sha256(text),
-                    ContentLenChars = text.Length,
-                    IndexedUtc = DateTime.UtcNow
-                };
+                payload.Meta.Title = title;
+                payload.Meta.Language = !string.IsNullOrWhiteSpace(docCtx.Language) ? docCtx.Language : doc.Language;
+                payload.Meta.Priority = doc.Priority;
+                payload.Meta.Audience = doc.Audience;
+                payload.Meta.Persona = doc.Persona;
+                payload.Meta.Stage = doc.Stage;
+
+                payload.Meta.LabelSlugs = doc.GetLabelSlugs() != null
+                    ? doc.GetLabelSlugs().ToList()
+                    : new List<string>();
+
+                // -------------------------
+                // EXTRA (non-filter helpers)
+                // -------------------------
+                payload.Extra.FullDocumentBlobUri = plan.Raw != null ? plan.Raw.SuggestedBlobPath : null;
+                payload.Extra.SourceSha256 = plan.Raw != null ? plan.Raw.SourceSha256 : null;
+
+                payload.Extra.LineStart = c.LineStart;
+                payload.Extra.LineEnd = c.LineEnd;
+                payload.Extra.CharStart = c.CharStart;
+                payload.Extra.CharEnd = c.CharEnd;
+
+                // -------------------------
+                // Index / embedding (Meta)
+                // -------------------------
+                payload.Meta.IndexVersion = ctx.IndexVersion;
+                payload.Meta.EmbeddingModel = ctx.EmbeddingModel;
+                payload.Meta.ContentHash = Sha256(text);
+                payload.Meta.ContentLenChars = text.Length;
+                payload.Meta.IndexedUtc = DateTime.UtcNow;
+
+                // Optional numeric timestamps if you add them
+                // payload.Meta.IndexedUnix = new DateTimeOffset(payload.Meta.IndexedUtc).ToUnixTimeSeconds();
 
                 var errs = RagVectorPayloadValidator.Validate(payload, new RagVectorPayloadValidator.ValidateOptions
                 {
                     RequireCodeRepoFields = false // doc mode
                 });
+
                 if (errs.Count > 0)
                     throw new InvalidOperationException("Invalid document payload for " + pointId + ": " + string.Join("; ", errs));
 
@@ -102,18 +117,6 @@ namespace LagoVista.Core.Utils
             return results;
         }
 
-        // Helpers reused by both entry points
-        private static string Sha256(string text)
-        {
-            using (var sha = SHA256.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes(text ?? string.Empty);
-                var hash = sha.ComputeHash(bytes);
-                var sb = new StringBuilder(hash.Length * 2);
-                for (int i = 0; i < hash.Length; i++) sb.Append(hash[i].ToString("x2"));
-                return sb.ToString();
-            }
-        }
 
         private static int EstimateTokens(string s)
         {

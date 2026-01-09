@@ -338,6 +338,32 @@ namespace LagoVista.Core
             return guid.ToString().Replace("-", "").ToUpper();
         }
 
+        public static string ToGuidString(this string hex)
+        {
+            if (string.IsNullOrWhiteSpace(hex))
+                throw new ArgumentException("GUID value cannot be null or empty.", nameof(hex));
+
+            hex = hex.Trim().ToUpperInvariant();
+
+            if (hex.Length != 32)
+                throw new FormatException("Hex GUID must be exactly 32 characters.");
+
+            // Insert hyphens: 8-4-4-4-12
+            var formatted =
+                $"{hex.Substring(0, 8)}-" +
+                $"{hex.Substring(8, 4)}-" +
+                $"{hex.Substring(12, 4)}-" +
+                $"{hex.Substring(16, 4)}-" +
+                $"{hex.Substring(20, 12)}";
+
+            // Validate it is a real GUID
+            if (!Guid.TryParse(formatted, out _))
+                throw new FormatException("Invalid hex GUID format.");
+
+            return formatted.ToLower();
+        }
+
+
         public static string EmptyOrValue(this string value)
         {
             return value.IfEmpty(string.Empty);
