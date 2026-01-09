@@ -200,6 +200,16 @@ namespace LagoVista.Core.AI.Models
     public sealed class InputArtifact
     {
         /// <summary>
+        /// Will be either cloud or local work space.
+        /// </summary>
+        public string FileSource { get; set; }
+
+        /// <summary>
+        /// Will be work space associated with this file.
+        /// </summary>
+        public string WorkSpace { get; set; }
+
+        /// <summary>
         /// Path relative to the VS Code opened root folder.
         /// This is the canonical identity in the request.
         /// </summary>
@@ -229,6 +239,11 @@ namespace LagoVista.Core.AI.Models
         /// Optional mime type hint (e.g., "text/plain", "application/json", "image/png").
         /// </summary>
         public string MimeType { get; set; }
+
+        /// <summary>
+        /// Optional SHA-256 hash of the raw file bytes, hex-encoded lowercase.
+        /// </summary>
+        public string Sha256Hash { get; set; }
 
         /// <summary>
         /// Required. Indicates how the artifact was sourced by the client.
