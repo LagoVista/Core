@@ -1,3 +1,5 @@
+using LagoVista.Core.Models;
+
 namespace LagoVista.Core.AI.Interfaces
 {
     /// <summary>
@@ -10,7 +12,7 @@ namespace LagoVista.Core.AI.Interfaces
     /// Any entity implementing this interface is considered RAG ready:
     /// it can be embedded and can produce a RagVectorPayload for indexing.
     /// </summary>
-    public interface IRagableEntity : IEmbeddable, IRagPointFactory
+    public interface IRagableEntity : IEmbeddable, IRagPointFactory, IEntityBase
     {
     }
 }
