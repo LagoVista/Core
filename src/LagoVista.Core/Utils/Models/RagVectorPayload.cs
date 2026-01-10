@@ -125,6 +125,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
     public sealed class RagVectorPayloadExtra
     {
         // ---------- Raw pointers ----------
+        public string ModelContentUri { get; set; }
         public string FullDocumentBlobUri { get; set; }
         public string SourceSliceBlobUri { get; set; }
         public string DescriptionBlobUri { get; set; }
@@ -149,8 +150,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string RepoBranch { get; set; }
         public string CommitSha { get; set; }
         public string Path { get; set; }
-        public string ModelContentFileName { get; set; }
-        public string HumanContentFileName { get; set; }
+        public string ModelContentUrl { get; set; }
+        public string HumanContentUrl { get; set; }
         public string IssuesFileName { get; set; }
 
         public int? StartLine { get; set; }
@@ -447,8 +448,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.EndLine), Extra.EndLine);
 
                 Add(nameof(RagVectorPayloadExtra.Path), Extra.Path);
-                Add(nameof(RagVectorPayloadExtra.ModelContentFileName), Extra.ModelContentFileName);
-                Add(nameof(RagVectorPayloadExtra.HumanContentFileName), Extra.HumanContentFileName);
+                Add(nameof(RagVectorPayloadExtra.ModelContentUrl), Extra.ModelContentUrl);
+                Add(nameof(RagVectorPayloadExtra.HumanContentUrl), Extra.HumanContentUrl);
                 Add(nameof(RagVectorPayloadExtra.IssuesFileName), Extra.IssuesFileName);
 
                 Add(nameof(RagVectorPayloadExtra.RestPUTUrl), Extra.RestPUTUrl);
@@ -786,8 +787,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
 
             payload.Extra.Path = GetString(E, nameof(RagVectorPayloadExtra.Path));
-            payload.Extra.HumanContentFileName = GetString(E, nameof(RagVectorPayloadExtra.HumanContentFileName));
-            payload.Extra.ModelContentFileName = GetString(E, nameof(RagVectorPayloadExtra.ModelContentFileName));
+            payload.Extra.HumanContentUrl = GetString(E, nameof(RagVectorPayloadExtra.HumanContentUrl));
+            payload.Extra.ModelContentUrl = GetString(E, nameof(RagVectorPayloadExtra.ModelContentUrl));
             payload.Extra.IssuesFileName = GetString(E, nameof(RagVectorPayloadExtra.IssuesFileName));
 
 
