@@ -2,6 +2,7 @@ using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,8 +58,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
     public sealed class RagVectorPayloadMeta
     {
         // ---------- Identity / Tenant Isolation ----------
-        public string PointId { get; set; }
         public string OrgNamespace { get; set; }
+        public string OrgId { get; set; }
         public string ProjectId { get; set; }
         public string DocId { get; set; }
 
@@ -191,13 +192,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         public RagVectorPayloadMeta Meta { get; set; } = new RagVectorPayloadMeta();
         public RagVectorPayloadExtra Extra { get; set; } = new RagVectorPayloadExtra();
+      
+        [JsonIgnore]
         public RagVectorPayloadLenses Lenses { get; set; } = new RagVectorPayloadLenses();
 
-        /// <summary>
-        /// Optional: hold vectors in-memory for pipeline convenience. Never emitted in payload.
-        /// </summary>
-        public float[] Vectors { get; set; }
-
+        
         public override string ToString()
         {
             var ct = !string.IsNullOrWhiteSpace(Meta.ContentType)
@@ -365,8 +364,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             var meta = BuildBucket(Add =>
             {
                 // Identity / tenant
-                Add(nameof(RagVectorPayloadMeta.PointId), Meta.PointId);
                 Add(nameof(RagVectorPayloadMeta.OrgNamespace), Meta.OrgNamespace);
+                Add(nameof(RagVectorPayloadMeta.OrgId), Meta.OrgId);
                 Add(nameof(RagVectorPayloadMeta.ProjectId), Meta.ProjectId);
                 Add(nameof(RagVectorPayloadMeta.DocId), Meta.DocId);
 
@@ -714,8 +713,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             var payload = new RagVectorPayload();
 
             // --- Meta
-            payload.Meta.PointId = GetString(M, nameof(RagVectorPayloadMeta.PointId));
             payload.Meta.OrgNamespace = GetString(M, nameof(RagVectorPayloadMeta.OrgNamespace));
+            payload.Meta.OrgId = GetString(M, nameof(RagVectorPayloadMeta.OrgId));
             payload.Meta.ProjectId = GetString(M, nameof(RagVectorPayloadMeta.ProjectId));
             payload.Meta.DocId = GetString(M, nameof(RagVectorPayloadMeta.DocId));
 
@@ -867,7 +866,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.Subtype = entity.EntityType;
             payload.Meta.SubtypeFlavor = "ModelContents";
             payload.Meta.ProjectId = "default";
-            payload.Meta.OrgNamespace = entity.OwnerOrganization.Id;
+            payload.Meta.OrgId = entity.OwnerOrganization.Id;
             return payload;
         }
     }

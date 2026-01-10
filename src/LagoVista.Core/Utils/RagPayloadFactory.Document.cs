@@ -46,10 +46,10 @@ namespace LagoVista.Core.Utils
                 // -------------------------
                 // META (filterable / canonical)
                 // -------------------------
-                payload.Meta.OrgNamespace = ctx.OrgId;
+                payload.Meta.OrgId = ctx.OrgId;
+                payload.Meta.OrgNamespace = ctx.OrgNamspace;
                 payload.Meta.ProjectId = ctx.ProjectId;
                 payload.Meta.DocId = plan.DocId;
-                payload.Meta.PointId = c.PointId;
 
                 payload.Meta.ContentTypeId = RagContentType.DomainDocument;
                 payload.Meta.ContentType = RagContentType.DomainDocument.ToString();

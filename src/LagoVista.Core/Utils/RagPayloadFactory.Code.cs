@@ -48,11 +48,11 @@ namespace LagoVista.Core.Utils
                 // -------------------------
                 // META (filterable / canonical)
                 // -------------------------
-                payload.Meta.OrgNamespace = ctx.OrgId;
+                payload.Meta.OrgNamespace = ctx.OrgNamspace;
+                payload.Meta.OrgId = ctx.OrgId;
                 payload.Meta.ProjectId = ctx.ProjectId;
                 payload.Meta.DocId = fileDocId.ToString();
-                payload.Meta.PointId = c.PointId;
-
+           
                 payload.Meta.ContentTypeId = RagContentType.SourceCode;
                 payload.Meta.ContentType = RagContentType.SourceCode.ToString();
                 payload.Meta.Subtype = string.IsNullOrWhiteSpace(code.Subtype) ? "CSharp" : code.Subtype;
