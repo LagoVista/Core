@@ -157,6 +157,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         public string EditorUrl { get; set; }
         public string PreviewUrl { get; set; }
+
+        public string RestGETUrl { get; set; }
+        public string RestPUTUrl { get; set; }
+
     }
 
     public sealed class RagVectorPayloadLenses
@@ -448,6 +452,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.HumanContentFileName), Extra.HumanContentFileName);
                 Add(nameof(RagVectorPayloadExtra.IssuesFileName), Extra.IssuesFileName);
 
+                Add(nameof(RagVectorPayloadExtra.RestPUTUrl), Extra.RestPUTUrl);
+                Add(nameof(RagVectorPayloadExtra.RestGETUrl), Extra.RestGETUrl);
                 Add(nameof(RagVectorPayloadExtra.EditorUrl), Extra.EditorUrl);
                 Add(nameof(RagVectorPayloadExtra.PreviewUrl), Extra.PreviewUrl);
             });
@@ -788,6 +794,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
             payload.Extra.EditorUrl = GetString(E, nameof(RagVectorPayloadExtra.EditorUrl));
             payload.Extra.PreviewUrl = GetString(E, nameof(RagVectorPayloadExtra.PreviewUrl));
+            payload.Extra.RestGETUrl = GetString(E, nameof(RagVectorPayloadExtra.RestGETUrl));
+            payload.Extra.RestPUTUrl = GetString(E, nameof(RagVectorPayloadExtra.RestPUTUrl));
 
             // --- Lenses
             payload.Lenses.Embed = GetString(L, nameof(RagVectorPayloadLenses.Embed));
@@ -842,13 +850,22 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.DocId = entity.Id;
             payload.Meta.Title = entity.Name;
             payload.Extra.EditorUrl = entityDescription.EditUIUrl;
+            payload.Extra.PreviewUrl = entityDescription.PreviewUIUrl;
+            if(!String.IsNullOrEmpty(entityDescription.GetUrl)) payload.Extra.RestGETUrl = entityDescription.GetUrl.Replace("{id}", entity.Id);
+            payload.Extra.RestPUTUrl =  entityDescription.UpdateUrl;
             payload.Meta.SectionKey = "main";
+            payload.Meta.BusinessDomainArea = "EntityModel";
+            payload.Meta.BusinessDomainKey = entityDescription.DomainName;
+            payload.Meta.SysDomain = "AppDomain";
+            payload.Meta.SysLayer = "Server";
+            payload.Meta.SysRole = "EntityModel";
             payload.Meta.PartIndex = 1;
             payload.Meta.PartTotal = 1;
             payload.Meta.Deleted = entity.IsDeleted ?? false;
             payload.Meta.SemanticId = $"{entityDescription.DomainName}:{entityType.Name}:{entity.Id}";
             payload.Meta.ContentTypeId = Core.Utils.Types.Nuviot.RagIndexing.RagContentType.DomainDocument;
             payload.Meta.Subtype = entity.EntityType;
+            payload.Meta.SubtypeFlavor = "ModelContents";
             payload.Meta.ProjectId = "default";
             payload.Meta.OrgNamespace = entity.OwnerOrganization.Id;
             return payload;

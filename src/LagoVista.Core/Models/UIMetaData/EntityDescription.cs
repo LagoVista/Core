@@ -29,12 +29,19 @@ namespace LagoVista.Core.Models.UIMetaData
             entityDescription.ListUIUrl = attr.ListUIUrl;
             entityDescription.EditUIUrl =  attr.EditUIUrl;
             entityDescription.CreateUIUrl = attr.CreateUIUrl;
+            entityDescription.PreviewUIUrl = attr.PreviewUIUrl;
             entityDescription.Col1WidthPercent = attr.Col1WidthPercent;
             entityDescription.Col2WidthPercent = attr.Col2WidthPercent;
             entityDescription.CanExport = attr.CanExport;
             entityDescription.CanImport = attr.CanImport;
             entityDescription.AutoSave = attr.AutoSave;
             entityDescription.AutoSaveIntervalSeconds = attr.AutoSaveIntervalSeconds;
+
+            if (String.IsNullOrEmpty(entityDescription.UpdateUrl))
+                entityDescription.UpdateUrl = attr.SaveUrl;
+
+            if (String.IsNullOrEmpty(entityDescription.InsertUrl))
+                entityDescription.InsertUrl = attr.SaveUrl;
 
             var properties = entityType.GetRuntimeProperties();
             foreach (var property in properties)
@@ -84,7 +91,7 @@ namespace LagoVista.Core.Models.UIMetaData
             }
 
             entityDescription.DomainName = attr.Domain;
-            
+           
 
             entityDescription.EntityType = attr.EntityType;
             entityDescription.Cloneable = attr.Cloneable;
@@ -131,6 +138,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<ListColumn> ListColumns { get;  set; }
 
         public string ListUIUrl { get; set; }
+        public string PreviewUIUrl { get; set; }
         public string EditUIUrl { get; set; }
         public string CreateUIUrl { get; set; }
     }

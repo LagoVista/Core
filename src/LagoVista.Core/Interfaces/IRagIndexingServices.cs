@@ -18,5 +18,6 @@ namespace LagoVista.Core.Interfaces
         Task UpsertInBatchesAsync(IAIAgentContext agentContext, IReadOnlyList<PayloadBuildResult> points, int vectorDims, int? maxPerBatch = null, CancellationToken ct = default);
         Task RemoveStaleVectorsAsync(IAIAgentContext agentContext, string docId, CancellationToken ct = default);
         Task<InvokeResult> IndexAsync(IEntityBase entity);
+        Task<InvokeResult> RemoveIndexAsync(string orgId, string docId);
     }
 }

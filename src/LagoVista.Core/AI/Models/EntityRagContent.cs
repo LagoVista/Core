@@ -8,7 +8,7 @@ namespace LagoVista.Core.AI.Models
     public class EntityRagContent
     {
         public RagVectorPayload Payload { get; set; }
-
+        public bool SummarizeModelForEmbeddings { get; set; }
         public string EmbeddingContent {get; set;}
         public string ModelDescription { get; set; }
         public string HumanDescription { get; set; }
