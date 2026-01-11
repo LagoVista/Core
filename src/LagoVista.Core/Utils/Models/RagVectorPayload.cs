@@ -63,6 +63,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string ProjectId { get; set; }
         public string DocId { get; set; }
 
+        public string ParentPointId { get; set; }
+
         // ---------- Domain Classification ----------
         public string BusinessDomainKey { get; set; }     // e.g., "billing", "customers", "iot", "hr"
         public string BusinessDomainArea { get; set; }    // optional: e.g., "invoicing", "payments", "onboarding"
@@ -140,6 +142,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         public string Symbol { get; set; }
         public string SymbolType { get; set; }
+        public string SymbolContentUrl { get; set; }
 
         // Optional alternate locators
         public string HtmlAnchor { get; set; }
@@ -152,7 +155,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string Path { get; set; }
         public string ModelContentUrl { get; set; }
         public string HumanContentUrl { get; set; }
-        public string IssuesFileName { get; set; }
+        public string IssuesContentUrl { get; set; }
 
         public int? StartLine { get; set; }
         public int? EndLine { get; set; }
@@ -165,13 +168,6 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
     }
 
-    public sealed class RagVectorPayloadLenses
-    {
-        public string Embed { get; set; }
-        public string Model { get; set; }
-        public string User { get; set; }
-        public string Cleanup { get; set; }
-    }
 
     /// <summary>
     /// Strongly typed payload stored with each vector in Qdrant, with nested buckets:
@@ -193,11 +189,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         public RagVectorPayloadMeta Meta { get; set; } = new RagVectorPayloadMeta();
         public RagVectorPayloadExtra Extra { get; set; } = new RagVectorPayloadExtra();
-      
-        [JsonIgnore]
-        public RagVectorPayloadLenses Lenses { get; set; } = new RagVectorPayloadLenses();
 
-        
+
         public override string ToString()
         {
             var ct = !string.IsNullOrWhiteSpace(Meta.ContentType)
@@ -369,6 +362,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadMeta.OrgId), Meta.OrgId);
                 Add(nameof(RagVectorPayloadMeta.ProjectId), Meta.ProjectId);
                 Add(nameof(RagVectorPayloadMeta.DocId), Meta.DocId);
+                Add(nameof(RagVectorPayloadMeta.ParentPointId), Meta.ParentPointId);
 
                 // Domain classification
                 Add(nameof(RagVectorPayloadMeta.BusinessDomainKey), Meta.BusinessDomainKey);
@@ -437,6 +431,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
                 Add(nameof(RagVectorPayloadExtra.Symbol), Extra.Symbol);
                 Add(nameof(RagVectorPayloadExtra.SymbolType), Extra.SymbolType);
+                Add(nameof(RagVectorPayloadExtra.SymbolContentUrl), Extra.SymbolContentUrl);
 
                 Add(nameof(RagVectorPayloadExtra.HtmlAnchor), Extra.HtmlAnchor);
                 Add(nameof(RagVectorPayloadExtra.PdfPages), Extra.PdfPages);
@@ -450,7 +445,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.Path), Extra.Path);
                 Add(nameof(RagVectorPayloadExtra.ModelContentUrl), Extra.ModelContentUrl);
                 Add(nameof(RagVectorPayloadExtra.HumanContentUrl), Extra.HumanContentUrl);
-                Add(nameof(RagVectorPayloadExtra.IssuesFileName), Extra.IssuesFileName);
+                Add(nameof(RagVectorPayloadExtra.IssuesContentUrl), Extra.IssuesContentUrl);
 
                 Add(nameof(RagVectorPayloadExtra.RestPUTUrl), Extra.RestPUTUrl);
                 Add(nameof(RagVectorPayloadExtra.RestGETUrl), Extra.RestGETUrl);
@@ -458,17 +453,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.PreviewUrl), Extra.PreviewUrl);
             });
 
-            var lenses = BuildBucket(Add =>
-            {
-                Add(nameof(RagVectorPayloadLenses.Embed), Lenses.Embed);
-                Add(nameof(RagVectorPayloadLenses.Model), Lenses.Model);
-                Add(nameof(RagVectorPayloadLenses.User), Lenses.User);
-                Add(nameof(RagVectorPayloadLenses.Cleanup), Lenses.Cleanup);
-            });
-
+          
             var root = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             if (meta != null) root[BucketMeta] = meta;
-            if (lenses != null) root[BucketLenses] = lenses;
             if (extra != null) root[BucketExtra] = extra;
 
             return root;
@@ -718,6 +705,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.OrgId = GetString(M, nameof(RagVectorPayloadMeta.OrgId));
             payload.Meta.ProjectId = GetString(M, nameof(RagVectorPayloadMeta.ProjectId));
             payload.Meta.DocId = GetString(M, nameof(RagVectorPayloadMeta.DocId));
+            payload.Meta.ParentPointId = GetString(M, nameof(RagVectorPayloadMeta.ParentPointId));
 
             payload.Meta.BusinessDomainKey = GetString(M, nameof(RagVectorPayloadMeta.BusinessDomainKey));
             payload.Meta.BusinessDomainArea = GetString(M, nameof(RagVectorPayloadMeta.BusinessDomainArea));
@@ -774,6 +762,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
             payload.Extra.Symbol = GetString(E, nameof(RagVectorPayloadExtra.Symbol));
             payload.Extra.SymbolType = GetString(E, nameof(RagVectorPayloadExtra.SymbolType));
+            payload.Extra.SymbolContentUrl = GetString(E, nameof(RagVectorPayloadExtra.SymbolContentUrl));
 
             payload.Extra.HtmlAnchor = GetString(E, nameof(RagVectorPayloadExtra.HtmlAnchor));
             payload.Extra.PdfPages = GetIntList(E, nameof(RagVectorPayloadExtra.PdfPages));
@@ -789,7 +778,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Extra.Path = GetString(E, nameof(RagVectorPayloadExtra.Path));
             payload.Extra.HumanContentUrl = GetString(E, nameof(RagVectorPayloadExtra.HumanContentUrl));
             payload.Extra.ModelContentUrl = GetString(E, nameof(RagVectorPayloadExtra.ModelContentUrl));
-            payload.Extra.IssuesFileName = GetString(E, nameof(RagVectorPayloadExtra.IssuesFileName));
+            payload.Extra.IssuesContentUrl = GetString(E, nameof(RagVectorPayloadExtra.IssuesContentUrl));
 
 
             payload.Extra.EditorUrl = GetString(E, nameof(RagVectorPayloadExtra.EditorUrl));
@@ -797,11 +786,6 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Extra.RestGETUrl = GetString(E, nameof(RagVectorPayloadExtra.RestGETUrl));
             payload.Extra.RestPUTUrl = GetString(E, nameof(RagVectorPayloadExtra.RestPUTUrl));
 
-            // --- Lenses
-            payload.Lenses.Embed = GetString(L, nameof(RagVectorPayloadLenses.Embed));
-            payload.Lenses.Model = GetString(L, nameof(RagVectorPayloadLenses.Model));
-            payload.Lenses.User = GetString(L, nameof(RagVectorPayloadLenses.User));
-            payload.Lenses.Cleanup = GetString(L, nameof(RagVectorPayloadLenses.Cleanup));
 
             return payload;
         }
