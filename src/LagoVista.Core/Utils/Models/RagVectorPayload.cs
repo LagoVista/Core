@@ -140,9 +140,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public int? CharStart { get; set; }
         public int? CharEnd { get; set; }
 
-        public string Symbol { get; set; }
+        public string SymbolFullName { get; set; }
+        public string SymbolName { get; set; }
         public string SymbolType { get; set; }
         public string SymbolContentUrl { get; set; }
+        public string PrimaryEntity { get; set; }
 
         // Optional alternate locators
         public string HtmlAnchor { get; set; }
@@ -429,7 +431,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.CharStart), Extra.CharStart);
                 Add(nameof(RagVectorPayloadExtra.CharEnd), Extra.CharEnd);
 
-                Add(nameof(RagVectorPayloadExtra.Symbol), Extra.Symbol);
+
+                Add(nameof(RagVectorPayloadExtra.PrimaryEntity), Extra.PrimaryEntity);
+                Add(nameof(RagVectorPayloadExtra.SymbolFullName), Extra.SymbolFullName);
+                Add(nameof(RagVectorPayloadExtra.SymbolName), Extra.SymbolName);
                 Add(nameof(RagVectorPayloadExtra.SymbolType), Extra.SymbolType);
                 Add(nameof(RagVectorPayloadExtra.SymbolContentUrl), Extra.SymbolContentUrl);
 
@@ -760,7 +765,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Extra.CharStart = GetNullableInt(E, nameof(RagVectorPayloadExtra.CharStart));
             payload.Extra.CharEnd = GetNullableInt(E, nameof(RagVectorPayloadExtra.CharEnd));
 
-            payload.Extra.Symbol = GetString(E, nameof(RagVectorPayloadExtra.Symbol));
+            payload.Extra.PrimaryEntity = GetString(E, nameof(RagVectorPayloadExtra.PrimaryEntity));
+            payload.Extra.SymbolFullName = GetString(E, nameof(RagVectorPayloadExtra.SymbolFullName));
+            payload.Extra.SymbolName = GetString(E, nameof(RagVectorPayloadExtra.SymbolName));
             payload.Extra.SymbolType = GetString(E, nameof(RagVectorPayloadExtra.SymbolType));
             payload.Extra.SymbolContentUrl = GetString(E, nameof(RagVectorPayloadExtra.SymbolContentUrl));
 

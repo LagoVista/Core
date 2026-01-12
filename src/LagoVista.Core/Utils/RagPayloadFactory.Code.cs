@@ -90,7 +90,7 @@ namespace LagoVista.Core.Utils
                 payload.Extra.CommitSha = code.CommitSha;
                 payload.Extra.Path = code.Path;
 
-                payload.Extra.Symbol = c.Symbol;
+                payload.Extra.SymbolName = c.Symbol;
                 payload.Extra.SymbolType = c.SymbolType;
                 payload.Extra.StartLine = c.LineStart;
                 payload.Extra.EndLine = c.LineEnd;
