@@ -27,5 +27,7 @@ namespace LagoVista.Core.Interfaces
         EntityHeader DeprecatedBy { get; set; }
         String DeprecationDate { get; set; }
         String DeprecationNotes { get; set; }
+
+        string ETag { get; set; }
     }
 }

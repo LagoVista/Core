@@ -45,7 +45,8 @@ namespace LagoVista.Core.Attributes
             AdminModel,
             ChildObject,
             Manufacturing,
-            CircuitBoards
+            CircuitBoards,
+            Ai
         }
 
         public EntityDescriptionAttribute(String Domain, String TitleResource, String UserHelpResource, String DescriptionResource, EntityTypes entityType, Type ResourceType, string SaveUrl = null, string InsertUrl = null,

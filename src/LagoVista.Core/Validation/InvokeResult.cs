@@ -45,6 +45,11 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
+        public InvokeResult<T> ToInvokeResult<T>()
+        {
+            return InvokeResult<T>.FromInvokeResult(this.ToInvokeResult());
+        }
+
         public InvokeResult<T2> Transform<T2>()
         {
             return InvokeResult<T2>.FromInvokeResult(this.ToInvokeResult());
@@ -209,6 +214,11 @@ namespace LagoVista.Core.Validation
 
         }
 
+
+        public InvokeResult<T> ToInvokeResult<T>()
+        {
+            return InvokeResult<T>.FromInvokeResult(this);  
+        }
 
         public static InvokeResult FromError(string err, string errorCode = "", List<ResultTiming> timings = null)
         {

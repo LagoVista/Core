@@ -45,6 +45,9 @@ namespace LagoVista.Core.Models
         public string DatabaseName { get; set; }
         public string EntityType { get; set; }  
 
+        [CloneOptions(false)]
+        [JsonProperty(PropertyName = "_etag")]
+        public string ETag { get; set; }
 
         private string _name;
         [CloneOptions(false)]
