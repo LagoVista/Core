@@ -127,7 +127,6 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
     public sealed class RagVectorPayloadExtra
     {
         // ---------- Raw pointers ----------
-        public string ModelContentUri { get; set; }
         public string FullDocumentBlobUri { get; set; }
         public string SourceSliceBlobUri { get; set; }
         public string DescriptionBlobUri { get; set; }
@@ -840,10 +839,12 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             var payload = new RagVectorPayload();
             payload.Meta.DocId = entity.Id;
             payload.Meta.Title = entity.Name;
-            payload.Extra.EditorUrl = entityDescription.EditUIUrl;
-            payload.Extra.PreviewUrl = entityDescription.PreviewUIUrl;
+
+            if (!String.IsNullOrEmpty(entityDescription.EditUIUrl)) payload.Extra.EditorUrl = entityDescription.EditUIUrl.Replace("{id}", entity.Id);
+            if (!String.IsNullOrEmpty(entityDescription.PreviewUIUrl)) payload.Extra.PreviewUrl = entityDescription.PreviewUIUrl.Replace("{id}", entity.Id); 
             if(!String.IsNullOrEmpty(entityDescription.GetUrl)) payload.Extra.RestGETUrl = entityDescription.GetUrl.Replace("{id}", entity.Id);
             payload.Extra.RestPUTUrl =  entityDescription.UpdateUrl;
+
             payload.Meta.SectionKey = "main";
             payload.Meta.BusinessDomainArea = "EntityModel";
             payload.Meta.BusinessDomainKey = entityDescription.DomainName;
@@ -853,7 +854,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.PartIndex = 1;
             payload.Meta.PartTotal = 1;
             payload.Meta.Deleted = entity.IsDeleted ?? false;
-            payload.Meta.SemanticId = $"{entityDescription.DomainName}:{entityType.Name}:{entity.Id}";
+            payload.Meta.SemanticId = $"{entityDescription.DomainName}:{entityType.Name}:{entity.Id}".Replace(" ", String.Empty).ToLower();
             payload.Meta.ContentTypeId = Core.Utils.Types.Nuviot.RagIndexing.RagContentType.DomainDocument;
             payload.Meta.Subtype = entity.EntityType;
             payload.Meta.SubtypeFlavor = "ModelContents";
