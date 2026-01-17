@@ -693,14 +693,12 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             // Buckets (preferred)
             var metaDict = AsDict(GetRaw(source, BucketMeta));
             var extraDict = AsDict(GetRaw(source, BucketExtra));
-            var lensesDict = AsDict(GetRaw(source, BucketLenses));
 
             // Flat fallback: if no buckets exist, treat root as meta-ish
-            var flatFallback = (metaDict == null && extraDict == null && lensesDict == null) ? source : null;
+            var flatFallback = (metaDict == null && extraDict == null) ? source : null;
 
             IDictionary<string, object> M = metaDict ?? flatFallback;
             IDictionary<string, object> E = extraDict ?? flatFallback;
-            IDictionary<string, object> L = lensesDict ?? flatFallback;
 
             var payload = new RagVectorPayload();
 
