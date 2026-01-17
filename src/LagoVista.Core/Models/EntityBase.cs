@@ -2,6 +2,7 @@
 // ContentHash: 83d87a7e34b4e0c2b0c21cedd51bf92b2d7182f4556928c09e9b99b232c5d5e7
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Resources;
@@ -14,7 +15,7 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public interface IEntityBase : INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity
+    public interface IEntityBase : INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
     {
 
     }
@@ -69,6 +70,7 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Description { get; set; }
 
+        public List<EntityHeader> AISessions { get; set; } = new List<EntityHeader>();   
 
         [CloneOptions(false)]
         public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();

@@ -19,4 +19,9 @@ namespace LagoVista.Core.AI.Interfaces
     {
         Task<List<EntityRagContent>> GetRagContentAsync();
     }
+
+    public interface IAISessionTracker
+    {
+        List<EntityHeader> AISessions { get; }
+    }
 }

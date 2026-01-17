@@ -56,6 +56,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public string HelpUrl { get; set; }
 
 
+        public string AiPromptInstructions { get; set; }
+        public string AiDefaultMode{ get; set; }
+
         public bool AutoSave { get; set; }
         public int? AutoSaveIntervalSeconds { get; set; }
         public bool SaveDraft { get; set; }
@@ -147,6 +150,13 @@ namespace LagoVista.Core.Models.UIMetaData
             {
                 var conditionalFields  = (model as IFormConditionalFields).GetConditionalFields();
                 response.ConditionalFields = conditionalFields.ValuesAsCamelCase();
+            }
+
+            if(model is IAIPlaybook)
+            {
+                var playbook = (model as IAIPlaybook);
+                response.AiPromptInstructions = playbook.GetAiPromptInstructions();
+                response.AiDefaultMode = playbook.GetDefaultMode();
             }
 
             response.ModelTitle = entity.Title;
