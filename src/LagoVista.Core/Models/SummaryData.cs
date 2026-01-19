@@ -4,6 +4,7 @@
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Resources;
 using System;
 using System.Linq;
@@ -46,6 +47,19 @@ namespace LagoVista.Core.Models
         public int RatingsCount { get; set; }
 
         public string LastUpdatedDate { get; set; }
+
+        public EnumDescription CreateEnumDescription()
+        {
+            return new EnumDescription()
+            {
+                Id = Id,
+                Label = Name,
+                Key = Key,
+                Name = Name,
+                Text = Name,
+            };
+        }
+
 
         public void Populate(EntityBase entity)
         {
