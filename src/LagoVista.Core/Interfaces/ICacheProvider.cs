@@ -10,13 +10,14 @@ namespace LagoVista.Core.Interfaces
 {
     public interface ICacheProvider
     {
+        Task AddAsync<T>(string key, T value, TimeSpan? ttl = null);
         Task AddAsync(string key, string value, TimeSpan? ttl = null);
         Task AddToCollectionAsync(string collectionKey, string key, string value);
         Task RemoveAsync(string key);
         Task RemoveFromCollectionAsync(string collectionKey, string key);
         Task<string> GetAsync(string key);
-        Task<T> GetAsync<T>(string key);
-        Task<T> GetAndDeleteAsync<T>(string key);
+        Task<T> GetAsync<T>(string key) where T : class;
+        Task<T> GetAndDeleteAsync<T>(string key) where T : class;
         Task<IEnumerable<object>> GetCollection(string collectionKey);
         Task<string> GetFromCollection(string collectionKey, string key);
         Task<IDictionary<string, string>> GetManyAsync(IEnumerable<string> keys);
