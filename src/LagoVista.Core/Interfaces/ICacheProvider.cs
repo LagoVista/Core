@@ -15,6 +15,8 @@ namespace LagoVista.Core.Interfaces
         Task RemoveAsync(string key);
         Task RemoveFromCollectionAsync(string collectionKey, string key);
         Task<string> GetAsync(string key);
+        Task<T> GetAsync<T>(string key);
+        Task<T> GetAndDeleteAsync<T>(string key);
         Task<IEnumerable<object>> GetCollection(string collectionKey);
         Task<string> GetFromCollection(string collectionKey, string key);
         Task<IDictionary<string, string>> GetManyAsync(IEnumerable<string> keys);
