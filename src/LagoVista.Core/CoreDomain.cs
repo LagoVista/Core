@@ -43,7 +43,7 @@ namespace LagoVista.Core
                     DefaultIndexPriority = 60,
 
                     // Optional: hint clusters you expect in CoreDomain
-                    Clusters = new List<string>() { "identity", "resources", "security", "metadata", "ui" }
+                    Clusters = new List<Cluster>()
                 };
             }
         }

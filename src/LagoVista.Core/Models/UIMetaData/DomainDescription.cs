@@ -68,6 +68,13 @@ namespace LagoVista.Core.Models.UIMetaData
         /// Optional comma-separated list of cluster keys expected within this domain.
         /// Purely organizational/navigation hint.
         /// </summary>
-        public List<string> Clusters { get; set; } = new List<string>();
+        public List<Cluster> Clusters { get; set; } = new List<Cluster>();
+    }
+
+    public class Cluster
+    {
+          public string Key { get; set; }
+          public string Name { get; set; }
+          public string Description { get; set; } 
     }
 }
