@@ -1,11 +1,5 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 9746ffa951ee27485cd2d0bc645f8d7b96991ad0f14563104a8c81e4e0df6cd9
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
@@ -13,7 +7,6 @@ namespace LagoVista.Core.Models.UIMetaData
     {
         public DomainDescription()
         {
-
         }
 
         public String Key { get; set; }
@@ -36,5 +29,45 @@ namespace LagoVista.Core.Models.UIMetaData
         }
 
         public DomainTypes DomainType { get; set; }
+
+        // -----------------------------
+        // New: domain-level defaults
+        // -----------------------------
+
+        /// <summary>
+        /// Default model classification for entities in this domain, unless overridden at the entity level.
+        /// </summary>
+        public LagoVista.Core.Attributes.EntityDescriptionAttribute.ModelTypes? DefaultModelType { get; set; }
+
+        /// <summary>
+        /// Default lifecycle for entities in this domain, unless overridden at the entity level.
+        /// </summary>
+        public LagoVista.Core.Attributes.EntityDescriptionAttribute.Lifecycles? DefaultLifecycle { get; set; }
+
+        /// <summary>
+        /// Default sensitivity for entities in this domain, unless overridden at the entity level.
+        /// </summary>
+        public LagoVista.Core.Attributes.EntityDescriptionAttribute.Sensitivities? DefaultSensitivity { get; set; }
+
+        /// <summary>
+        /// Default indexing tier for entities in this domain, unless overridden at the entity level.
+        /// </summary>
+        public LagoVista.Core.Attributes.EntityDescriptionAttribute.IndexTiers? DefaultIndexTier { get; set; }
+
+        /// <summary>
+        /// Default inclusion in indexing for entities in this domain, unless overridden at the entity level.
+        /// </summary>
+        public bool? DefaultIndexInclude { get; set; }
+
+        /// <summary>
+        /// Default index priority (0-100) for entities in this domain, unless overridden at the entity level.
+        /// </summary>
+        public int? DefaultIndexPriority { get; set; }
+
+        /// <summary>
+        /// Optional comma-separated list of cluster keys expected within this domain.
+        /// Purely organizational/navigation hint.
+        /// </summary>
+        public List<string> Clusters { get; set; } = new List<string>();
     }
 }

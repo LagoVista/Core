@@ -13,8 +13,9 @@ namespace LagoVista.Core
     public class Domains
     {
         public const string CoreDomainName = "CoreDomain";
+
         [DomainDescription(CoreDomainName)]
-        public static DomainDescription BillingDomain
+        public static DomainDescription CoreDomain
         {
             get
             {
@@ -31,9 +32,21 @@ namespace LagoVista.Core
                         DateStamp = new DateTime(2024, 3, 21),
                         Revision = 1,
                         ReleaseNotes = ""
-                    }
+                    },
+
+                    // New defaults
+                    DefaultSensitivity = LagoVista.Core.Attributes.EntityDescriptionAttribute.Sensitivities.Internal,
+                    DefaultLifecycle = LagoVista.Core.Attributes.EntityDescriptionAttribute.Lifecycles.DesignTime,
+                    DefaultModelType = LagoVista.Core.Attributes.EntityDescriptionAttribute.ModelTypes.DomainEntity,
+                    DefaultIndexTier = LagoVista.Core.Attributes.EntityDescriptionAttribute.IndexTiers.Secondary,
+                    DefaultIndexInclude = true,
+                    DefaultIndexPriority = 60,
+
+                    // Optional: hint clusters you expect in CoreDomain
+                    Clusters = new List<string>() { "identity", "resources", "security", "metadata", "ui" }
                 };
             }
         }
     }
+
 }

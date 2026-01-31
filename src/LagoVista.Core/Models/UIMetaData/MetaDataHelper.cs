@@ -59,7 +59,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     entityDescription.Domain = _domains[entityDescription.DomainName];
                   
                     _entities.Add(entityDescription);
-                    var summary = EntitySummary.Create(entityDescription);
+                    var summary = EntitySummary.CreateFromAttribute(type, attr);
                     summary.ShortClassName = type.Name;
                     _entitySummaries.Add(summary);
                 }
