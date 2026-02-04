@@ -10,6 +10,7 @@ using LagoVista.Core.Exceptions;
 using LagoVista.Core.Attributes;
 using System.Text;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace LagoVista.Core.Models
 {
@@ -40,6 +41,17 @@ namespace LagoVista.Core.Models
             }
         }
 
+        [JsonProperty("_t")]
+        public string Indexer
+        {
+            get; set;
+        } = "eh";
+
+
+        public string EntityType
+        {
+            get;set;
+        }
 
         private string _key;
         public String Key
