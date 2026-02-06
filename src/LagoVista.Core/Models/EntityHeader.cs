@@ -48,10 +48,9 @@ namespace LagoVista.Core.Models
         } = "eh";
 
 
-        public string EntityType
-        {
-            get;set;
-        }
+        public string EntityType{ get;set;}
+
+        public string OwnerOrgId { get; set; }
 
         private string _key;
         public String Key

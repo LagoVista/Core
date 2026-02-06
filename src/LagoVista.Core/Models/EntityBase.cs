@@ -101,6 +101,8 @@ namespace LagoVista.Core.Models
         public EntityHeader ClonedFromOrg { get; set; }
         public EntityHeader ClonedRevision { get; set; }
 
+        public string Sha256Hex {get; set;}
+
         public bool IsDraft { get; set; } = false;
 
         public int Revision { get; set; }
@@ -117,7 +119,15 @@ namespace LagoVista.Core.Models
 
         public EntityHeader ToEntityHeader()
         {
-            return EntityHeader.Create(Id, Key, Name);
+            var entityHheader = new EntityHeader()
+            {
+                Id = this.Id,
+                Key = this.Key,
+                Text = this.Name,
+                EntityType = this.EntityType,
+                OwnerOrgId = this.OwnerOrganization?.Id
+            };
+            return entityHheader;
         }
 
         private Dictionary<string, object> _originalValues = new Dictionary<string, object>();

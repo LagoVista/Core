@@ -11,10 +11,14 @@ namespace LagoVista.Core.Interfaces
 
     public interface IAuditableEntitySimple : ISoftDeletable
     {
+        String Sha256Hex { get; set; }
         String CreationDate { get; set; }
         String LastUpdatedDate { get; set; }
         EntityHeader CreatedBy { get; set; }
         EntityHeader LastUpdatedBy { get; set; }
+        EntityHeader ClonedFromId { get; set; }
+        EntityHeader ClonedFromOrg { get; set; }
+        EntityHeader ClonedRevision { get; set; }
 
         bool IsDraft { get; }
     }
