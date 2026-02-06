@@ -85,5 +85,11 @@ namespace LagoVista.Core.Models
 
         public string EntityType =>
             (Object["entityType"] ?? Object["EntityType"])?.Value<string>();
+
+        public string OwnerOrgId =>
+            (Object["ownerOrgId"] ?? Object["OwnerOrgId"])?.Value<string>();
+
+        public bool IsPublic =>
+            (Object["isPublic"] ?? Object["IsPublic"])?.Value<bool>() ?? false;
     }
 }

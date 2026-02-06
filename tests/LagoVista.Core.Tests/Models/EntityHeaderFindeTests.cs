@@ -34,7 +34,7 @@ namespace LagoVista.Core.Tests.Models
     public class EntityHeaderFindeTests
     {
         [TestMethod]
-        public void FindChildren()
+        public void SetChildOobjects()
         {
             var model = new EntityHeaderFinderTestModel()
             {
@@ -68,22 +68,23 @@ namespace LagoVista.Core.Tests.Models
 
             var ehNodes =  model.FindEntityHeaderNodes();
 
+            Console.WriteLine($"Found {ehNodes.Count} Entity Headers");
+
             var idx = 0;
             foreach (var eh in ehNodes)
             {
-                Console.WriteLine($"Found Entity Header with Id: {eh.Path} - {eh.Id} - {eh.Text}");
+                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - Id[{eh.Id}] Key[{eh.Key}] Type:[{eh.EntityType}] - Name[{eh.Text}] IsPublic:[{eh.IsPublic}] - Ownr[{eh.OwnerOrgId}]");
                 idx++;
 
-                model.UpdateEntityHeaders(eh, key: $"KEY-{idx}", entityType: "NA1");
+                model.UpdateEntityHeaders(eh, key: $"KEY-{idx}", ownerOrgId:"TheOwner", isPublic: idx % 2 == 0, entityType: "NA1");
             }
 
             var ehNodes2 = model.FindEntityHeaderNodes();
 
             foreach (var eh in ehNodes2)
             {
-                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - {eh.Id} - {eh.Text} {eh.Key} - {eh.EntityType}");
-            }
-
+                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - Id[{eh.Id}] Key[{eh.Key}] Type:[{eh.EntityType}] - Name[{eh.Text}] - IsPublic:[{eh.IsPublic}] -  Ownr[{eh.OwnerOrgId}]");
             }
         }
+    }
 }

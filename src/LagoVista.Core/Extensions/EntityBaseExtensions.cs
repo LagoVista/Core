@@ -85,7 +85,7 @@ namespace LagoVista
         /// <summary>
         /// Extract values from a found EntityHeader node.
         /// </summary>
-        public static (string id, string key, string name, string entityType) Extract(EntityHeaderNode header)
+        public static (string id, string key, string name, string ownerOrgId, bool? isPublic, string entityType) Extract(EntityHeaderNode header)
         {
             if (header == null) throw new ArgumentNullException(nameof(header));
 
@@ -93,8 +93,10 @@ namespace LagoVista
             var key = header.Object["Key"]?.Value<string>();
             var name = header.Object["Text"]?.Value<string>(); // NAME always present per your rule
             var entityType = header.Object["EntityType"]?.Value<string>();
+            var ownerOrgId = header.Object["OwnerOrgId"]?.Value<string>();
+            var isPublic = header.Object["EntityType"]?.Value<bool?>();
 
-            return (id, key, name, entityType);
+            return (id, key, name, ownerOrgId, isPublic, entityType);
         }
 
         /// <summary>
@@ -107,13 +109,15 @@ namespace LagoVista
             EntityHeaderNode header,
             string key = null,
             string name = null,
+            string ownerOrgId = null,
+            bool? isPublic = null,
             string entityType = null,
             UpdateOptions options = null)
         {
             if (header == null) throw new ArgumentNullException(nameof(header));
             options ??= UpdateOptions.Default;
 
-            Update(header.Object, key, name, entityType, options);
+            Update(header.Object, key, name, ownerOrgId, isPublic, entityType, options);
         }
 
         /// <summary>
@@ -123,6 +127,8 @@ namespace LagoVista
             JObject entityHeaderObject,
             string key = null,
             string name = null,
+            string ownerOrgId = null,
+            bool? isPublic = null,
             string entityType = null,
             UpdateOptions options = null)
         {
@@ -135,8 +141,12 @@ namespace LagoVista
                 entityHeaderObject["Text"] = name.Trim();
             }
 
+            ApplyOptionalString(entityHeaderObject, "OwnerOrgId", ownerOrgId, options);
+
             // KEY: may or may not be present. You choose behavior.
             ApplyOptionalString(entityHeaderObject, "Key", key, options);
+
+            ApplyOptionalBool(entityHeaderObject, "IsPublic", isPublic, options);
 
             // ENTITYTYPE: usually absent. You choose behavior.
             ApplyOptionalString(entityHeaderObject, "EntityType", entityType, options);
@@ -168,6 +178,17 @@ namespace LagoVista
                 obj.Remove(propName);
             }
             // else: leave as-is
+        }
+
+        private static void ApplyOptionalBool(JObject obj, string propName, bool? value, UpdateOptions options)
+        {
+            if (value.HasValue)
+            {
+                obj[propName] = value;
+                return;
+            }
+
+            obj.Remove(propName);
         }
 
         private static bool LooksLikeEntityHeader(JObject obj)
@@ -208,18 +229,19 @@ namespace LagoVista
             EntityHeaderNode headerNode,
             string key = null,
             string name = null,
+            string ownerOrgId = null,
+            bool? isPublic = null,
             string entityType = null,
             EntityHeaderJson.UpdateOptions options = null)
         {
             if (rootClrObject == null) throw new ArgumentNullException(nameof(rootClrObject));
             if (headerNode == null) throw new ArgumentNullException(nameof(headerNode));
 
-
             // 2) Update CLR object at the same path
             var targetClrHeader = ResolveClrObjectAtPath(rootClrObject, headerNode.Path);
             if (targetClrHeader == null) return; // nothing to update, path didn't resolve
 
-            UpdateEntityHeaderClr(targetClrHeader, key, name, entityType, options);
+            UpdateEntityHeaderClr(targetClrHeader, key, name, ownerOrgId, isPublic, entityType, options);
         }
 
         /// <summary>
@@ -230,6 +252,8 @@ namespace LagoVista
             object entityHeaderClr,
             string key = null,
             string name = null,
+            string ownerOrgId = null,
+            bool? isPublic = null,
             string entityType = null,
             EntityHeaderJson.UpdateOptions options = null)
         {
@@ -249,6 +273,10 @@ namespace LagoVista
 
             // KEY: optional
             ApplyOptional(entityHeaderClr, "Key", key, options);
+
+            ApplyOptional(entityHeaderClr, "OwnerOrgId", ownerOrgId, options);
+
+            ApplyOptionalBool(entityHeaderClr, "IsPublic", isPublic, options);
 
             // ENTITYTYPE: usually absent
             // Try EntityType first; if your CLR uses a different name, add it here.
@@ -437,6 +465,40 @@ namespace LagoVista
             }
 
             return false;
+        }
+
+        private static bool TrySetBool(object instance, string memberName, bool value)
+        {
+            if (instance == null) return false;
+            if (string.IsNullOrWhiteSpace(memberName)) return false;
+
+            var t = instance.GetType();
+
+            var prop = t.GetProperty(memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            if (prop != null && prop.CanWrite && prop.PropertyType == typeof(bool))
+            {
+                prop.SetValue(instance, value);
+                return true;
+            }
+
+            var field = t.GetField(memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+            if (field != null && field.FieldType == typeof(string))
+            {
+                field.SetValue(instance, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void ApplyOptionalBool(object instance, string memberName, bool? value, EntityHeaderJson.UpdateOptions options)
+        {
+
+            if (value.HasValue)
+            {
+                TrySetBool(instance, memberName, value.Value);
+                return;
+            }
         }
 
         private static void ApplyOptional(object instance, string memberName, string value, EntityHeaderJson.UpdateOptions options)

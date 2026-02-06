@@ -47,6 +47,7 @@ namespace LagoVista.Core.Models
             get; set;
         } = "eh";
 
+        public bool IsPublic { get; set; }
 
         public string EntityType{ get;set;}
 

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Models;
+using LagoVista.Core.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,8 +12,8 @@ namespace LagoVista
 {
     public static class EntityHasher
     {
-        public static void SetHash(this IEntityBase value)
-        {
+        public static string CalculateHash(JToken token)
+        { 
             var excludedJsonPointerPaths = new List<string>()
             {
                 "/id",
@@ -35,14 +36,6 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.Sha256Hex)}",
             };
 
-            if (value == null) throw new ArgumentNullException(nameof(value));
-
-            var settings = DefaultSettings();
-
-            // 1) Serialize to JToken
-            var token = JToken.FromObject(value, JsonSerializer.Create(settings));
-
-            // 2) Remove excluded paths (JSON Pointer-ish: /a/b/0/c)
             if (excludedJsonPointerPaths != null)
             {
                 foreach (var p in excludedJsonPointerPaths.Where(x => !string.IsNullOrWhiteSpace(x)))
@@ -51,12 +44,21 @@ namespace LagoVista
                 }
             }
 
-            // 3) Canonicalize (sort object properties recursively)
             var canonical = Canonicalize(token);
 
-            // 4) Hash canonical JSON string
             var json = canonical.ToString(Formatting.None);
-            value.Sha256Hex = Sha256Hex(json);
+            return Sha256Hex(json);
+        }
+
+        public static void SetHash(this IEntityBase value)
+        {
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var settings = DefaultSettings();
+
+            // 1) Serialize to JToken
+            var token = JToken.FromObject(value, JsonSerializer.Create(settings));
+            value.Sha256Hex = CalculateHash(token);
         }
 
         private static JsonSerializerSettings DefaultSettings()
