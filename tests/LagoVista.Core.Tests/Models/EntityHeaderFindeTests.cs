@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,20 +31,20 @@ namespace LagoVista.Core.Tests.Models
     }
 
 
+
     [TestClass]
     public class EntityHeaderFindeTests
     {
-        [TestMethod]
-        public void SetChildOobjects()
+        EntityHeaderFinderTestModel GetTestModel()
         {
-            var model = new EntityHeaderFinderTestModel()
+            return new EntityHeaderFinderTestModel()
             {
-                OwnerOrganization = LagoVista.Core.Models.EntityHeader.Create("6053688597EE41CFBCE56372BD590501", "Organization 1"),    
+                OwnerOrganization = LagoVista.Core.Models.EntityHeader.Create("6053688597EE41CFBCE56372BD590501", "Organization 1"),
                 CreatedBy = LagoVista.Core.Models.EntityHeader.Create("6053688597EE41CFBCE56372BD590502", "User 1"),
                 LastUpdatedBy = LagoVista.Core.Models.EntityHeader.Create("6053688597EE41CFBCE56372BD590502", "User 1"),
                 Child = new NestedEntityHeaderFinderTestModel()
                 {
-                    Child1 = new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A1", Text = "CHILD1" },
+                    Child1 = new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A1", Text = "CHILD1", Resolved = true },
                     Child2 = new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A2", Text = "CHILD2" },
                     GrandChildren = new List<NestedEntityHeaderFinderTestModel2>()
                     {
@@ -55,7 +56,7 @@ namespace LagoVista.Core.Tests.Models
                         new NestedEntityHeaderFinderTestModel2()
                         {
                             Child3 = new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A5", Text="GRANDCHILD21" },
-                            Child4 = new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A6", Text="GRANDCHILD22" }, 
+                            Child4 = new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A6", Text="GRANDCHILD22" },
                         }
                     }
                 },
@@ -65,7 +66,63 @@ namespace LagoVista.Core.Tests.Models
                     new LagoVista.Core.Models.EntityHeader() { Id = "6053688597EE41CFBCE56372BD5905A8", Text="DEV2" },
                 }
             };
+        }
+        [TestMethod]
+        public void SetResolvedJSONTests()
+        {
+            var model = GetTestModel();
 
+            var token = JObject.FromObject(model);
+            var nodes = EntityHeaderJson.FindEntityHeaderNodes(token);
+            var idx = 0;
+            foreach (var eh in nodes)
+            {
+                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - Id[{eh.Id}] Has Resolved [{eh.Resolved.HasValue}]");
+                idx++;
+                EntityHeaderJson.SetResolved(eh.Object, idx % 2 ==  0);
+            }
+
+            var ehNodes2 = EntityHeaderJson.FindEntityHeaderNodes(token);
+
+            foreach (var eh in ehNodes2)
+            {
+                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - Id[{eh.Id}] HasResolved [{eh.Resolved.HasValue}] Key[{eh.Resolved}]");
+            }
+
+
+        }
+
+        [TestMethod]
+        public void SetResolvedTests()
+        {
+            var model = GetTestModel();
+
+            var ehNodes = model.FindEntityHeaderNodes();
+
+
+            Console.WriteLine($"Found {ehNodes.Count} Entity Headers");
+
+            var idx = 0;
+            foreach (var eh in ehNodes)
+            {
+                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - Id[{eh.Id}] Has Resolved [{eh.Resolved.HasValue}]");
+                idx++;
+                model.SetResolved(eh, idx % 2 == 0);
+            }
+
+            var ehNodes2 = model.FindEntityHeaderNodes();
+
+            foreach (var eh in ehNodes2)
+            {
+                Console.WriteLine($"Found Entity Header with Id: {eh.NormalizedPath} - Id[{eh.Id}] HasResolved [{eh.Resolved.HasValue}] Key[{eh.Resolved}]");
+            }
+        }
+
+        [TestMethod]
+        public void SetChildOobjects()
+        {
+            var model = GetTestModel();
+         
             var ehNodes =  model.FindEntityHeaderNodes();
 
             Console.WriteLine($"Found {ehNodes.Count} Entity Headers");

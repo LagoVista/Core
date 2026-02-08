@@ -91,5 +91,10 @@ namespace LagoVista.Core.Models
 
         public bool IsPublic =>
             (Object["isPublic"] ?? Object["IsPublic"])?.Value<bool>() ?? false;
+   
+    
+        public bool? Resolved =>
+            (Object[nameof(EntityHeader.Resolved).CamelCase()] ?? Object[nameof(EntityHeader.Resolved)])?.Value<bool?>();
+
     }
 }

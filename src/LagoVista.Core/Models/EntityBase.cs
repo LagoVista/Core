@@ -34,6 +34,10 @@ namespace LagoVista.Core.Models
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_IsPublic, ResourceType: typeof(LagoVistaCommonStrings), FieldType:FieldTypes.CheckBox, IsUserEditable: true)]
         public bool IsPublic { get; set; }
 
+        public EntityHeader PublicPromotedBy { get; set; }
+        public string PublicPromotionDate { get; set; }
+        public string PublicPromotionRevision { get; set; }
+
         [CloneOptions(false)]
         public EntityHeader OwnerOrganization { get; set; }
 

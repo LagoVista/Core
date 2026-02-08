@@ -1,4 +1,6 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
@@ -152,6 +154,13 @@ namespace LagoVista
             ApplyOptionalString(entityHeaderObject, "EntityType", entityType, options);
         }
 
+        public static void SetResolved(JObject entityHeaderObject, bool resolved, UpdateOptions options = null)
+        {
+            if (entityHeaderObject == null) throw new ArgumentNullException(nameof(entityHeaderObject));
+            options ??= UpdateOptions.Default;
+            ApplyOptionalBool(entityHeaderObject, nameof(EntityHeader.Resolved), resolved, UpdateOptions.Default);
+        }
+
         public sealed class UpdateOptions
         {
             /// <summary>If true and key/entityType is null/empty, remove the property if present.</summary>
@@ -218,21 +227,27 @@ namespace LagoVista
         // Public API
         // -------------------------------------------------------
 
+        public static void SetResolved(this IEntityBase rootClrObject, EntityHeaderNode headerNode, bool resolved, EntityHeaderJson.UpdateOptions options = null)
+        {
+            if (rootClrObject == null) throw new ArgumentNullException(nameof(rootClrObject));
+            if (headerNode == null) throw new ArgumentNullException(nameof(headerNode));
+
+            // 2) Update CLR object at the same path
+            var targetClrHeader = ResolveClrObjectAtPath(rootClrObject, headerNode.Path);
+
+            ApplyOptionalBool(targetClrHeader, nameof(EntityHeader.Resolved), resolved, options);
+        }
+
+
         /// <summary>
         /// Updates BOTH:
         ///  1) the JSON EntityHeader JObject (in-place), and
         ///  2) the C# object graph at the same path (in-place),
         /// using the EntityHeaderNode.Path (like $.ownerUser or $.devices[0].ownerOrganization).
         /// </summary>
-        public static void UpdateEntityHeaders(
-            this IEntityBase rootClrObject,
-            EntityHeaderNode headerNode,
-            string key = null,
-            string name = null,
-            string ownerOrgId = null,
-            bool? isPublic = null,
-            string entityType = null,
-            EntityHeaderJson.UpdateOptions options = null)
+        public static void UpdateEntityHeaders(this IEntityBase rootClrObject, EntityHeaderNode headerNode,
+            string key = null, string name = null, string ownerOrgId = null, bool? isPublic = null,
+            string entityType = null, EntityHeaderJson.UpdateOptions options = null)
         {
             if (rootClrObject == null) throw new ArgumentNullException(nameof(rootClrObject));
             if (headerNode == null) throw new ArgumentNullException(nameof(headerNode));
@@ -475,14 +490,14 @@ namespace LagoVista
             var t = instance.GetType();
 
             var prop = t.GetProperty(memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-            if (prop != null && prop.CanWrite && prop.PropertyType == typeof(bool))
+            if (prop != null && prop.CanWrite && (prop.PropertyType == typeof(bool) || prop.PropertyType == typeof(bool?)))
             {
                 prop.SetValue(instance, value);
                 return true;
             }
 
             var field = t.GetField(memberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-            if (field != null && field.FieldType == typeof(string))
+            if (field != null && (field.FieldType == typeof(bool) || field.FieldType == typeof(bool?)))
             {
                 field.SetValue(instance, value);
                 return true;
