@@ -12,9 +12,7 @@ namespace LagoVista
 {
     public static class EntityHasher
     {
-        public static string CalculateHash(JToken token)
-        { 
-            var excludedJsonPointerPaths = new List<string>()
+        public static List<string> ExcludedNodes  = new List<string>()
             {
                 "/id",
                 $"/{nameof(IEntityBase.OwnerOrganization)}",
@@ -31,24 +29,85 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.ClonedFromOrg)}",
                 $"/{nameof(IEntityBase.ClonedRevision)}",
                 $"/{nameof(IEntityBase.DatabaseName)}",
-                $"/{nameof(IEntityBase.DatabaseName)}",
                 $"/{nameof(IEntityBase.AISessions)}",
                 $"/{nameof(IEntityBase.Sha256Hex)}",
+                $"/_etag",
+                $"/_rid",
+                $"/_self",
+                $"/_ts",
             };
 
-            if (excludedJsonPointerPaths != null)
-            {
-                foreach (var p in excludedJsonPointerPaths.Where(x => !string.IsNullOrWhiteSpace(x)))
-                {
-                    RemoveAtPointer(token, p);
-                }
-            }
-
-            var canonical = Canonicalize(token);
-
+        public static string CalculateHash(JToken token)
+        {
+            var canonical = NormalizeForHash(token, true);
             var json = canonical.ToString(Formatting.None);
             return Sha256Hex(json);
         }
+
+        public static JToken NormalizeForHash(JToken token, bool dropNullsAndDefaults)
+        {
+            if (token == null) return JValue.CreateNull();
+
+            // Work on a clone (no side effects)
+            var working = token.DeepClone();
+
+            // 1) remove volatile nodes
+            foreach (var p in ExcludedNodes.Where(x => !string.IsNullOrWhiteSpace(x)))
+                RemoveAtPointer(working, p);
+
+            // 2) optionally drop nulls/defaults from raw JSON so it matches object serialization
+            if (dropNullsAndDefaults)
+                working = StripNullAndDefaultValues(working);
+
+            // 3) sort object properties
+            return Canonicalize(working);
+        }
+
+
+        private static JToken StripNullAndDefaultValues(JToken token)
+        {
+            if (token is JObject obj)
+            {
+                var props = obj.Properties().ToList();
+                foreach (var p in props)
+                {
+                    var normalized = StripNullAndDefaultValues(p.Value);
+
+                    // drop nulls
+                    if (normalized.Type == JTokenType.Null)
+                    {
+                        p.Remove();
+                        continue;
+                    }
+
+                    // drop "default" primitives (optional; only if you truly want to mimic DefaultValueHandling.Ignore)
+                    if (normalized is JValue v)
+                    {
+                        if (v.Type == JTokenType.Boolean && v.Value is bool b && b == false)
+                        {
+                            // remove false booleans IF you consider them "default"
+                            // Comment this out if false is meaningful in your domain
+                            // p.Remove();
+                        }
+                    }
+
+                    p.Value = normalized;
+                }
+
+                return obj;
+            }
+
+            if (token is JArray arr)
+            {
+                for (int i = 0; i < arr.Count; i++)
+                    arr[i] = StripNullAndDefaultValues(arr[i]);
+
+                return arr;
+            }
+
+            return token;
+        }
+
 
         public static void SetHash(this IEntityBase value)
         {
@@ -123,7 +182,7 @@ namespace LagoVista
         /// Removes the property from its parent object or the element from its parent array.
         /// If the path doesn't exist, it's a no-op.
         /// </summary>
-        private static void RemoveAtPointer(JToken root, string pointer)
+        public static void RemoveAtPointer(JToken root, string pointer)
         {
             if (root == null) return;
 
@@ -140,16 +199,19 @@ namespace LagoVista
 
             var last = parts[parts.Count - 1];
 
-
             if (current is JObject parentObj)
             {
-                parentObj.Remove(last);
+                var prop = parentObj.Properties()
+                    .FirstOrDefault(p => string.Equals(p.Name, last, StringComparison.OrdinalIgnoreCase));
+
+                prop?.Remove();
             }
             else if (current is JArray parentArr && int.TryParse(last, out var idx))
             {
                 if (idx >= 0 && idx < parentArr.Count)
                     parentArr.RemoveAt(idx);
             }
+
         }
 
         private static string ToHexLower(byte[] bytes)

@@ -11,5 +11,6 @@ namespace LagoVista.Core.Models
         public string HostEntityType { get; set; }
         public string HostEntityId { get; set; }
         public bool IsHostEntityPublic { get; set; }
+        public bool Exists { get; set; } = true;
     }
 }
