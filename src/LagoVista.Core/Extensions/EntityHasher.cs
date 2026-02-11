@@ -31,6 +31,8 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.DatabaseName)}",
                 $"/{nameof(IEntityBase.AISessions)}",
                 $"/{nameof(IEntityBase.Sha256Hex)}",
+                $"/{nameof(IEntityBase.PublicPromotedBy)}",
+                $"/{nameof(IEntityBase.PublicPromotionDate)}",
                 $"/_etag",
                 $"/_rid",
                 $"/_self",

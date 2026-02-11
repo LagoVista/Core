@@ -1,8 +1,4 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 53a02ce9c0f93764318b5097a1030490b026a8a082c5462f5f5ad78d7018f02b
-// IndexVersion: 2
-// --- END CODE INDEX META ---
-/*11/7/2025 6:56:31 AM*/
+﻿/*2/11/2026 9:06:41 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -962,9 +958,15 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:Common_Icon
 
 		public static string Common_Icon { get { return GetResourceString("Common_Icon"); } }
+//Resources:LagoVistaCommonStrings:Common_Id
+
+		public static string Common_Id { get { return GetResourceString("Common_Id"); } }
 //Resources:LagoVistaCommonStrings:Common_Image
 
 		public static string Common_Image { get { return GetResourceString("Common_Image"); } }
+//Resources:LagoVistaCommonStrings:Common_IsDraft
+
+		public static string Common_IsDraft { get { return GetResourceString("Common_IsDraft"); } }
 //Resources:LagoVistaCommonStrings:Common_IsPublic
 
 		public static string Common_IsPublic { get { return GetResourceString("Common_IsPublic"); } }
@@ -1306,7 +1308,9 @@ namespace LagoVista.Core.Resources
 			public const string Common_CreationDate = "Common_CreationDate";
 			public const string Common_Description = "Common_Description";
 			public const string Common_Icon = "Common_Icon";
+			public const string Common_Id = "Common_Id";
 			public const string Common_Image = "Common_Image";
+			public const string Common_IsDraft = "Common_IsDraft";
 			public const string Common_IsPublic = "Common_IsPublic";
 			public const string Common_Key = "Common_Key";
 			public const string Common_Key_Help = "Common_Key_Help";

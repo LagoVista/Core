@@ -50,6 +50,8 @@ namespace LagoVista.Core.Models.AIMetaData
         /// </summary>
         public IDictionary<string, object> CurrentValues { get; set; } = new Dictionary<string, object>();
 
+        public ValidationResult ValidationResult { get; set; } 
+
         /// <summary>
         /// Convenience factory: build AI projection directly from the UI-oriented DetailResponse.
         /// </summary>
@@ -64,7 +66,6 @@ namespace LagoVista.Core.Models.AIMetaData
             {
                 ModelTitle = detail.ModelTitle,
                 ModelHelp = detail.ModelHelp,
-                ModelName = detail.ModelName,
                 FullClassName = detail.FullClassName,
                 AssemblyName = detail.AssemblyName,
                 AiPromptInstructions = detail.AiPromptInstructions,
@@ -92,6 +93,11 @@ namespace LagoVista.Core.Models.AIMetaData
                             ai.CurrentValues[fieldName] = field.DefaultValue;
                     }
                 }
+            }
+
+            if(detail.Model != null && detail.Model is IValidateable)
+            {
+                ai.ValidationResult = Validator.Validate(detail.Model as IValidateable, Actions.Update);
             }
 
             return ai;
@@ -176,6 +182,7 @@ namespace LagoVista.Core.Models.AIMetaData
         public bool IsRequired { get; set; }
         public int? MinLength { get; set; }
         public int? MaxLength { get; set; }
+        public string GetEntityHeaderOptionsUrl { get; set; }
 
         public string AiChatPrompt { get; set; }
 
@@ -202,11 +209,14 @@ namespace LagoVista.Core.Models.AIMetaData
                 IsRequired = field.IsRequired,
                 MinLength = field.MinLength,
                 MaxLength = field.MaxLength,
-                AiChatPrompt = field.AiChatPrompt
+                AiChatPrompt = field.AiChatPrompt,
+                GetEntityHeaderOptionsUrl = field.EntityHeaderPickerUrl
             };
+
 
             if (field.Options != null && field.Options.Count > 0)
             {
+                field.AiChatPrompt += "When assinging property on entity, MUST use format {\"id\":<id>,\"key\":<key>,\"text\":<text>}.";
                 desc.Options = field.Options.Select(opt => new AiOption
                 {
                     Id = opt.Id,

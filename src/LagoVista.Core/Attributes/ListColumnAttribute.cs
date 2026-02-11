@@ -30,7 +30,7 @@ namespace LagoVista.Core.Attributes
             Right
         }
 
-        public ListColumnAttribute(String HeaderResource = "", String HelpResources = "", int Ordinal = -1, bool Visible = true, bool Sortable = false, String FormatString = "", TextAlignment Alignment = TextAlignment.Left, Type ResourceType = null)
+        public ListColumnAttribute(String HeaderResource = "", String HelpResources = "", int Ordinal = -1, bool Visible = true, bool Sortable = false, string AiChatPrompt = "", String FormatString = "", TextAlignment Alignment = TextAlignment.Left, Type ResourceType = null)
         {
             _headerResource = HeaderResource;
             _helpResource = HelpResources;
@@ -40,7 +40,10 @@ namespace LagoVista.Core.Attributes
             _alignment = Alignment;
             _formatString = FormatString;
             _resourceType = ResourceType;
+            this.AiChatPrompt = AiChatPrompt;
         }
+
+        public string AiChatPrompt { get; }    
 
         public String HelpResource { get { return _helpResource; } }
         public String HeaderResource { get { return _headerResource; } }

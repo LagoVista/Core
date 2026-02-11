@@ -507,4 +507,10 @@
   <data name="LLMProvider_OpenAI" xml:space="preserve">
     <value>Open AI</value>
   </data>
+  <data name="Common_Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Common_IsDraft" xml:space="preserve">
+    <value>Is Draft</value>
+  </data>
 </root>

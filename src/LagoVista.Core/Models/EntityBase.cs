@@ -36,7 +36,6 @@ namespace LagoVista.Core.Models
 
         public EntityHeader PublicPromotedBy { get; set; }
         public string PublicPromotionDate { get; set; }
-        public string PublicPromotionRevision { get; set; }
 
         [CloneOptions(false)]
         public EntityHeader OwnerOrganization { get; set; }
@@ -46,6 +45,7 @@ namespace LagoVista.Core.Models
 
         [CloneOptions(false)]
         [JsonProperty("id")]
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Id, FieldType: FieldTypes.ReadonlyLabel, AiChatPrompt:"Do not show to the user unless they explicity ask to view it.", ResourceType: typeof(LagoVistaCommonStrings))]
         public string Id { get; set; }
         public string DatabaseName { get; set; }
         public string EntityType { get; set; }  
@@ -64,7 +64,7 @@ namespace LagoVista.Core.Models
         }       
 
         [CloneOptions(false)]
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, 
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, AiChatPrompt:"When isDraft is not TRUE, the key MUST NEVER be updated.", 
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
         public virtual string Key { get; set; }
 

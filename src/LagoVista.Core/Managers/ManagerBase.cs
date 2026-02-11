@@ -66,12 +66,18 @@ namespace LagoVista.Core.Managers
 
         protected void ValidationCheck(IValidateable entity, Actions action)
         {
+            var entityBase = entity as EntityBase;
+            if (entityBase != null && entityBase.IsDraft)
+                return;
+
             var result = Validator.Validate(entity, action);
             if (!result.Successful)
             {
                 throw new ValidationException("Invalid Data", result.Errors);
             }
         }
+
+
 
         public bool IsForInitialization { get; set; } = false;
 

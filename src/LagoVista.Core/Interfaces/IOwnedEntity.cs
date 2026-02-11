@@ -16,5 +16,8 @@ namespace LagoVista.Core.Interfaces
         bool IsPublic { get; set; }
         EntityHeader OwnerOrganization { get; set; }
         EntityHeader OwnerUser { get; set; }
+    
+        EntityHeader PublicPromotedBy { get; set; }
+        string PublicPromotionDate { get; set; }
     }
 }

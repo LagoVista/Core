@@ -13,7 +13,7 @@ namespace LagoVista.Core.Models
 {
     public class SummaryData : ISummaryData
     {
-        [ListColumn(Visible: false)]
+        [ListColumn(Visible: false, AiChatPrompt:"Do not display to the user unless they explicitly ask to see it")]
         public String Id { get; set; }
 
         public string Icon { get; set; } = "icon-ae-document";
@@ -33,9 +33,10 @@ namespace LagoVista.Core.Models
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Deleted, ResourceType: typeof(LagoVistaCommonStrings))]
         public bool? IsDeleted { get; set; }
 
+        [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_IsDraft,AiChatPrompt:"If this is set to try you should let the user know that this is a draft.",  ResourceType: typeof(LagoVistaCommonStrings))]
         public bool IsDraft { get; set; }
 
-        [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Category, ResourceType: typeof(LagoVistaCommonStrings))]
+        [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.ListResponse_Category, AiChatPrompt:"If this has a field it should be showed to the user.", ResourceType: typeof(LagoVistaCommonStrings))]
         public string Category { get; set; }
         public string CategoryId { get; set; }
         public string CategoryKey { get; set; }
