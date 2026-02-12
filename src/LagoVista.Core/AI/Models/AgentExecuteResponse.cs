@@ -98,6 +98,9 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("usage", NullValueHandling = NullValueHandling.Ignore)]
         public LlmUsage Usage { get; set; }
 
+        [JsonProperty("totalSessionTokens", NullValueHandling = NullValueHandling.Ignore)]
+        public long TotalSessionTokens { get; set; }
+
         /// <summary>
         /// Error Code for Call if Present
         /// </summary>

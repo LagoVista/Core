@@ -44,11 +44,7 @@ namespace LagoVista.Core.Models.AIMetaData
         /// </summary>
         public IDictionary<string, AiFieldDescriptor> Fields { get; set; } = new Dictionary<string, AiFieldDescriptor>();
 
-        /// <summary>
-        /// Optional: include current values to support edit / confirm flows.
-        /// Keyed by camelCase field name.
-        /// </summary>
-        public IDictionary<string, object> CurrentValues { get; set; } = new Dictionary<string, object>();
+        public TModel Model { get; set; }
 
         public ValidationResult ValidationResult { get; set; } 
 
@@ -70,9 +66,15 @@ namespace LagoVista.Core.Models.AIMetaData
                 AssemblyName = detail.AssemblyName,
                 AiPromptInstructions = detail.AiPromptInstructions,
                 AiDefaultMode = detail.AiDefaultMode,
+                Model = detail.Model
             };
 
             ai.FieldOrder = BuildOrder(detail, includeAdvancedOrdering);
+
+            if(detail.Model != null && detail.Model is IValidateable)
+            {
+                ai.ValidationResult = Validator.Validate(detail.Model as IValidateable, Actions.Update);
+            }
 
             if (detail.View != null)
             {
@@ -81,23 +83,7 @@ namespace LagoVista.Core.Models.AIMetaData
                     var fieldName = kvp.Key;
                     var field = kvp.Value;
                     ai.Fields[fieldName] = AiFieldDescriptor.FromFormField(field);
-
-                    if (includeCurrentValues && ai.CurrentValues != null && detail.Model != null)
-                    {
-                        // Prefer FormField.Value if set; otherwise reflect from model via View name (already camelCase).
-                        // Note: DetailResponse currently does not populate FormField.Value; it sets DefaultValue for non-generics.
-                        // Keeping this conservative: only include DefaultValue unless you later populate Value.
-                        if (!string.IsNullOrEmpty(field.Value))
-                            ai.CurrentValues[fieldName] = field.Value;
-                        else if (!string.IsNullOrEmpty(field.DefaultValue))
-                            ai.CurrentValues[fieldName] = field.DefaultValue;
-                    }
                 }
-            }
-
-            if(detail.Model != null && detail.Model is IValidateable)
-            {
-                ai.ValidationResult = Validator.Validate(detail.Model as IValidateable, Actions.Update);
             }
 
             return ai;
@@ -216,7 +202,7 @@ namespace LagoVista.Core.Models.AIMetaData
 
             if (field.Options != null && field.Options.Count > 0)
             {
-                field.AiChatPrompt += "When assinging property on entity, MUST use format {\"id\":<id>,\"key\":<key>,\"text\":<text>}.";
+                desc.AiChatPrompt += "When assinging property on entity, MUST use format {\"id\":<id>,\"key\":<key>,\"text\":<text>}.";
                 desc.Options = field.Options.Select(opt => new AiOption
                 {
                     Id = opt.Id,
