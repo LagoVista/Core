@@ -28,7 +28,7 @@ public static class LogExtensions
         return $"[{typeName}__{memberName}] Line: {lineNumber}";
     }
 
-    private static string? GetLogicalDeclaringTypeName(MethodBase method)
+    private static string GetLogicalDeclaringTypeName(MethodBase method)
     {
         // Normal case (non-async, non-generated)
         var declaringType = method.DeclaringType;

@@ -379,12 +379,12 @@ namespace LagoVista.Core.AI.Models
                 throw new InvalidOperationException("RagScopeCondition.Key is required.");
 
             if (String.IsNullOrWhiteSpace(Operator) ||
-                (Operator != RagScopeOperator.Equals &&
+                (Operator != RagScopeOperator.IsEquals &&
                  Operator != RagScopeOperator.NotEquals &&
                  Operator != RagScopeOperator.Contains &&
                  Operator != RagScopeOperator.DoesNotContain))
             {
-                throw new InvalidOperationException($"RagScopeCondition.Operator must be one of: {RagScopeOperator.Equals}, {RagScopeOperator.NotEquals}, {RagScopeOperator.Contains}, {RagScopeOperator.DoesNotContain}.");
+                throw new InvalidOperationException($"RagScopeCondition.Operator must be one of: {RagScopeOperator.IsEquals}, {RagScopeOperator.NotEquals}, {RagScopeOperator.Contains}, {RagScopeOperator.DoesNotContain}.");
             }
 
             if (Values == null || Values.Count == 0)
@@ -394,7 +394,7 @@ namespace LagoVista.Core.AI.Models
 
     public static class RagScopeOperator
     {
-        public const string Equals = "==";
+        public const string IsEquals = "==";
         public const string NotEquals = "!=";
         public const string Contains = "contains";
         public const string DoesNotContain = "does_not_contain";

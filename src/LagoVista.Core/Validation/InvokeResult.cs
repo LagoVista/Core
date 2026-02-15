@@ -45,14 +45,14 @@ namespace LagoVista.Core.Validation
             return result;
         }
 
-        public InvokeResult<T> ToInvokeResult<T>()
-        {
-            return InvokeResult<T>.FromInvokeResult(this.ToInvokeResult());
-        }
-
         public InvokeResult<T2> Transform<T2>()
         {
             return InvokeResult<T2>.FromInvokeResult(this.ToInvokeResult());
+        }
+
+        public InvokeResult<TResult> ToInvokeResult<TResult>()
+        {
+            return InvokeResult<TResult>.FromInvokeResult(this.ToInvokeResult());
         }
 
         public static InvokeResult<T> Create(T result)

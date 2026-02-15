@@ -16,7 +16,7 @@ namespace LagoVista.Core.Models
             Name = "labelset";
         }
 
-        public List<Label> Labels { get; set; }
+        public new List<Label> Labels { get; set; }
 
     }
 
