@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,17 @@ namespace LagoVista.Core.Interfaces.AutoMapper
 
     public interface IMapValueConverterRegistry
     {
+        int AddRange(params IMapValueConverter[] converters);
+        IEnumerable<IMapValueConverter> Converters { get; }
+
         bool TryConvert(object sourceValue, Type targetType, out object convertedValue);
+        bool CanConvert(Type sourceType, Type targetType);
+    }
+
+
+    public interface IMappingPlanBuilder
+    {
+        IMappingPlan Build(Type sourceType, Type targetType);
     }
 
 

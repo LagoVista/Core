@@ -1,8 +1,5 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.Core.AutoMapper
 {

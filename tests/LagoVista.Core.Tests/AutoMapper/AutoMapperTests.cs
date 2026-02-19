@@ -24,7 +24,7 @@ namespace LagoVista.Core.Tests.Mapping
         IEncryptionKeyProvider _keyProvider = new EncryptionKeyProvider(new FakeSecureStorage());
         IEncryptedMapper _encryptedMapper;
         ILagoVistaAutoMapper _mapper;
-
+        IMappingPlanBuilder _planBuilder;
         MapValueConverterRegistry _registry = new MapValueConverterRegistry(new IMapValueConverter[] {
                new DateTimeIsoStringConverter(),
                new NumericStringConverter(),
@@ -33,8 +33,10 @@ namespace LagoVista.Core.Tests.Mapping
         [SetUp]
         public void TestInitialize()
         {
+            _planBuilder = new ReflectionMappingPlanBuilder(ConvertersStartup.DefaultConverterRegistery);
+
             _encryptedMapper = new EncryptedMapper(_keyProvider, _registry, new Encryptor());
-            _mapper = new LagoVistaAutoMapper(_encryptedMapper, _registry);
+            _mapper = new LagoVistaAutoMapper(_encryptedMapper, _planBuilder);
         }
 
         
