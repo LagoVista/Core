@@ -15,7 +15,7 @@ namespace LagoVista.Core.Tests.AutoMapper
         public EntityHeader LastUpdatedBy { get; set; }
 
         [MapTo(nameof(DbModelBase.OrganizationId))]
-        public EntityHeader Organization { get; set; }
+        public EntityHeader OwnerOrganization { get; set; }
         
         public string CreationDate { get; set; }
 

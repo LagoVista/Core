@@ -26,7 +26,7 @@ namespace LagoVista.Models
         [Required]
         public string LastUpdatedById { get; set; }
 
-        [MapFrom("Organization")]
+        [MapFrom("OwnerOrganization")]
         [Required]
         public string OrganizationId { get; set; }  
 
@@ -45,6 +45,7 @@ namespace LagoVista.Models
         [IgnoreOnMapTo]
         public AppUserDTO LastUpdatedByUser { get; set; }
 
+        [MapTo("OwnerOrganization")]
         [IgnoreOnMapTo]
         public OrganizationDTO Organization { get; set; }
 
