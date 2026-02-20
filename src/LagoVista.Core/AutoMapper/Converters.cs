@@ -170,7 +170,7 @@ namespace LagoVista.Core.AutoMapper
             if (st != typeof(EntityHeader))
                 return false;
 
-            return tt == typeof(string) || tt == typeof(Guid);
+            return tt == typeof(string) || tt == typeof(Guid) || tt == typeof(Guid?);
         }
 
         public object Convert(object sourceValue, Type targetType)
@@ -301,6 +301,8 @@ namespace LagoVista.Core.AutoMapper
             services.AddSingleton<IMapValueConverter, EntityHeaderIdConverter>();
             services.AddSingleton<IMapValueConverter, DateTimeIsoStringConverter>();
             services.AddSingleton<IMapValueConverter, NumericStringConverter>();
+            services.AddSingleton<IMapValueConverter, EntityHeaderEnumToStringConverter>();
+            services.AddSingleton<IMapValueConverter, StringToEntityHeaderEnumConverter>();
             services.AddSingleton<IMapValueConverter, GuidStringConverter>();
             services.AddSingleton<IMapValueConverterRegistry, MapValueConverterRegistry>();
         }
@@ -311,7 +313,9 @@ namespace LagoVista.Core.AutoMapper
             new EntityHeaderIdConverter(),
             new DateTimeIsoStringConverter(),
             new NumericStringConverter(),
-            new GuidStringConverter()
+            new GuidStringConverter(),
+            new EntityHeaderEnumToStringConverter(),
+            new StringToEntityHeaderEnumConverter(),
         });
 
     }
