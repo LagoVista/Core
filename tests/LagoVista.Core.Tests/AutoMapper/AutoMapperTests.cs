@@ -1,12 +1,10 @@
-﻿using LagoVista.Core.Attributes;
-using LagoVista.Core.AutoMapper;
-using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
-using LagoVista.Core.Validation;
+using LagoVista.Core.Tests.AutoMapper;
+using LagoVista.Models;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,7 +14,7 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Tests.Mapping
 {
     [TestFixture]
-    public sealed class LagoVistaAutoMapperV1Tests
+    public sealed partial class LagoVistaAutoMapperV1Tests
     {
         private static EntityHeader Org() { return new EntityHeader() { Id = "org-123" }; }
         private static EntityHeader User() { return new EntityHeader() { Id = "user-456" }; }
@@ -39,6 +37,22 @@ namespace LagoVista.Core.Tests.Mapping
             _mapper = new LagoVistaAutoMapper(_encryptedMapper, _planBuilder);
         }
 
+
+        [Test]
+        public async Task TestCoreMapping()
+        {
+            try
+            {
+                MappingVerifier.Verify<DbModelBase, CoreEntity>();
+                MappingVerifier.Verify<CoreEntity, DbModelBase>();
+                MappingVerifier.Verify<Account, AccountDto>();
+                MappingVerifier.Verify<AccountDto, Account>();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\\n", Environment.NewLine)}");
+            }
+        }
         
         [Test]
         public async Task PlainMapping_CaseInsensitive_And_MapFrom_And_Ignore_Works()
@@ -102,15 +116,6 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task EndToEnd_Double_ToString_ToEncryptedString_ThenBackToDouble_Works()
         {
-            var converters = new IMapValueConverter[]
-            {
-                new NumericStringConverter(),
-                new GuidStringConverter(),
-                new DateTimeIsoStringConverter()
-            };
-
-            var registry = new MapValueConverterRegistry(converters);
-
             var dto = new AccountDto() { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), EncryptedBalance = null };
 
             var domainIn = new Account() { Balance = 77.01 };
@@ -123,100 +128,6 @@ namespace LagoVista.Core.Tests.Mapping
             var domainOut = await _mapper.CreateAsync<AccountDto, Account>(dto, Org(), User(), null, CancellationToken.None);
 
             Assert.That(domainOut.Balance, Is.EqualTo(domainIn.Balance).Within(0.0000001));
-        }
-
-        // ----------------------------
-        // Test Models + Fakes
-        // ----------------------------
-
-        private sealed class PlainSource
-        {
-            public string name { get; set; }
-            public string EXTERNALPROVIDERID { get; set; }
-            public string ShouldNotCopy { get; set; }
-        }
-
-        private sealed class PlainTarget
-        {
-            public string Name { get; set; }
-
-            [MapFrom(nameof(PlainSource.EXTERNALPROVIDERID))]
-            public string ExternalProviderId { get; set; }
-
-            [MapIgnore]
-            public string ShouldNotCopy { get; set; }
-        }
-
-        [EncryptionKey("AccountKey-{id}", IdProperty = nameof(AccountDto.Id), CreateIfMissing = true)]
-        private sealed class AccountDto
-        {
-            public Guid Id { get; set; }
-            public string EncryptedBalance { get; set; }
-        }
-
-        private sealed class Account
-        {
-            [EncryptedField(nameof(AccountDto.EncryptedBalance), SaltProperty = nameof(AccountDto.Id), SkipIfEmpty = true)]
-            public double Balance { get; set; }
-        }
-
-        public class FakeSecureStorage : ISecureStorage
-        {
-            private readonly Dictionary<string, string> _storage = new Dictionary<string, string>();
-
-            public Task<InvokeResult<string>> AddSecretAsync(EntityHeader org, string value)
-            {
-                var id = Guid.NewGuid().ToString();
-                _storage.Add(id, value);
-                return Task.FromResult(InvokeResult<string>.Create(id));
-            }
-
-            public Task<InvokeResult<string>> AddSecretAsync(EntityHeader org, string id, string value)
-            {
-                _storage.Add(id, value);
-                return Task.FromResult(InvokeResult<string>.Create(id));
-            }
-
-            public Task<InvokeResult<string>> AddUserSecretAsync(EntityHeader user, string value)
-            {
-                var id = Guid.NewGuid().ToString();
-                _storage.Add(id, value);
-                return Task.FromResult(InvokeResult<string>.Create(id));
-            }
-
-            public Task<InvokeResult<string>> GetSecretAsync(EntityHeader org, string id, EntityHeader user)
-            {
-                if (_storage.TryGetValue(id, out var value))
-                {
-                    return Task.FromResult(InvokeResult<string>.Create(value));
-                }
-                else
-                {
-                    return Task.FromResult(InvokeResult<string>.FromError($"Secret with id {id} not found."));
-                }
-            }
-
-            public Task<InvokeResult<string>> GetUserSecretAsync(EntityHeader user, string id)
-            {
-                if (_storage.TryGetValue(id, out var value))
-                {
-                    return Task.FromResult(InvokeResult<string>.Create(value));
-                }
-                else
-                {
-                    return Task.FromResult(InvokeResult<string>.FromError($"Secret with id {id} not found."));
-                }
-            }
-
-            public Task<InvokeResult> RemoveSecretAsync(EntityHeader org, string id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<InvokeResult> RemoveUserSecretAsync(EntityHeader user, string id)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

@@ -34,7 +34,8 @@ namespace LagoVista.Core.Interfaces.AutoMapper
     {
         Direct,        // sourceProp -> targetProp (maybe via converter)
         MapToFanout,   // resolved via [MapTo]
-        Ignored        // [MapIgnore] (or future ignore rules)
+        Ignored,        // [MapIgnore] (or future ignore rules)
+        Crypto
     }
 
 }

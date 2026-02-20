@@ -1,10 +1,12 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace LagoVista.Core.AutoMapper
 {
@@ -48,7 +50,7 @@ namespace LagoVista.Core.AutoMapper
             for (var i = 0; i < targetProps.Length; ++i)
             {
                 var tprop = targetProps[i];
-                if (tprop.GetCustomAttribute<MapIgnoreAttribute>() != null)
+                if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
                 {
                     bindings.Add(new MappingBinding(tprop.Name, sourceProperty: "", MappingBindingKind.Ignored));
                     mappedTargets.Add(tprop.Name);
@@ -60,10 +62,20 @@ namespace LagoVista.Core.AutoMapper
             {
                 var tprop = targetProps[i];
 
+                var encryptedAttr = tprop.GetCustomAttribute<EncryptedFieldAttribute>();
+                if (encryptedAttr != null)
+                {
+                    var sourceHasKey = sourceType.GetCustomAttributes(true)
+                                                 .Any(a => a is EncryptionKeyAttribute);
+
+                    if (sourceHasKey)
+                        continue; // Crypto will handle it
+                }
+
                 if (mappedTargets.Contains(tprop.Name))
                     continue;
 
-                if (tprop.GetCustomAttribute<MapIgnoreAttribute>() != null)
+                if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
                     continue;
 
                 var mapFrom = tprop.GetCustomAttribute<MapFromAttribute>();
@@ -76,6 +88,10 @@ namespace LagoVista.Core.AutoMapper
                 if (assign == null)
                     continue;
 
+                // If this target property is encrypted and source has EncryptionKey,
+                // consider it handled by crypto.
+               
+
                 actions.Add(assign);
                 bindings.Add(new MappingBinding(tprop.Name, sprop.Name, MappingBindingKind.Direct));
                 mappedTargets.Add(tprop.Name);
@@ -85,6 +101,18 @@ namespace LagoVista.Core.AutoMapper
             for (var i = 0; i < sourceProps.Length; ++i)
             {
                 var sprop = sourceProps[i];
+
+                var encryptedAttr = sprop.GetCustomAttribute<EncryptedFieldAttribute>();
+                if (encryptedAttr != null)
+                {
+                    var targetHasKey = targetType.GetCustomAttributes(true)
+                                                 .Any(a => a is EncryptionKeyAttribute);
+
+                    if(String.IsNullOrEmpty(encryptedAttr.CiphertextProperty))
+
+                    if (targetHasKey)
+                        continue; // Crypto will handle it
+                }
 
                 var mapTos = sprop.GetCustomAttributes<MapToAttribute>(inherit: true);
                 foreach (var mapTo in mapTos)
@@ -98,12 +126,12 @@ namespace LagoVista.Core.AutoMapper
                     if (mappedTargets.Contains(tprop.Name))
                         continue;
 
-                    if (tprop.GetCustomAttribute<MapIgnoreAttribute>() != null)
+                    if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
                         continue;
 
                     var assign = BuildAssignment(sprop, tprop);
                     if (assign == null)
-                        continue;
+                        continue;                    
 
                     actions.Add(assign);
                     bindings.Add(new MappingBinding(tprop.Name, sprop.Name, MappingBindingKind.MapToFanout));
@@ -114,10 +142,85 @@ namespace LagoVista.Core.AutoMapper
             var canDecrypt = HasCryptoForDecrypt(sourceType, targetType);
             var canEncrypt = HasCryptoForEncrypt(sourceType, targetType);
 
+            // NEW: add Crypto bindings so verifier knows these are handled later by EncryptedMapper.
+            // - Decrypt direction: source is DTO (has [EncryptionKey]), target is Domain (has [EncryptedField])
+            //   => mark domain plaintext properties as Crypto-bound.
+            // - Encrypt direction: source is Domain (has [EncryptedField]), target is DTO (has [EncryptionKey])
+            //   => mark DTO ciphertext properties as Crypto-bound (and optionally salt properties if you ever set them).
+            if (canDecrypt)
+            {
+                // targetType is Domain here, so encrypted attributes live on target props.
+                foreach (var tprop in targetProps)
+                {
+                    if (mappedTargets.Contains(tprop.Name))
+                        continue;
+
+                    if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
+                        continue;
+
+                    var enc = tprop.GetCustomAttribute<EncryptedFieldAttribute>();
+                    if (enc == null)
+                        continue;
+
+                    // This property is populated by crypto decryption, not plan.Apply.
+                    bindings.Add(new MappingBinding(tprop.Name, enc.CiphertextProperty, MappingBindingKind.Crypto));
+                    mappedTargets.Add(tprop.Name);
+                }
+            }
+
+            if (canEncrypt)
+            {
+                // targetType is DTO here; ciphertext property names are referenced by [EncryptedField] on source (Domain).
+                foreach (var sprop in sourceProps)
+                {
+                    var enc = sprop.GetCustomAttribute<EncryptedFieldAttribute>();
+                    if (enc == null)
+                        continue;
+
+                    // Mark ciphertext target property as handled by crypto (dto.{CiphertextProperty} is set during Encrypt).
+                    // We intentionally do NOT add an action; EncryptedMapper will set it.
+                    if (!String.IsNullOrWhiteSpace(enc.CiphertextProperty))
+                    {
+                        // If the ciphertext property doesn't exist, that's a real error: fail fast here
+                        // so you get a clean build-time exception instead of "missing mapping".
+                        if (!targetLookup.ContainsKey(enc.CiphertextProperty))
+                            throw new InvalidOperationException(
+                                $"Crypto plan error for {sourceType.Name} -> {targetType.Name}: ciphertext property '{enc.CiphertextProperty}' not found on DTO '{targetType.Name}'.");
+
+                        if (!mappedTargets.Contains(enc.CiphertextProperty))
+                        {
+                            bindings.Add(new MappingBinding(enc.CiphertextProperty, sprop.Name, MappingBindingKind.Crypto));
+                            mappedTargets.Add(enc.CiphertextProperty);
+                        }
+                    }
+
+                    // Optional: If encryption ever sets salt property, mark it too.
+                    // Right now your EncryptedMapper reads salt from DTO (it doesn't set it),
+                    // so we do NOT mark salt as Crypto-bound.
+                    // If you later start writing salt, uncomment this.
+
+                    /*
+                    if (!String.IsNullOrWhiteSpace(enc.SaltProperty))
+                    {
+                        if (!targetLookup.ContainsKey(enc.SaltProperty))
+                            throw new InvalidOperationException(
+                                $"Crypto plan error for {sourceType.Name} -> {targetType.Name}: salt property '{enc.SaltProperty}' not found on DTO '{targetType.Name}'.");
+
+                        if (!mappedTargets.Contains(enc.SaltProperty))
+                        {
+                            bindings.Add(new MappingBinding(enc.SaltProperty, sprop.Name, MappingBindingKind.Crypto));
+                            mappedTargets.Add(enc.SaltProperty);
+                        }
+                    }
+                    */
+                }
+
+            }
+            
             return new CompiledMappingPlan(sourceType, targetType, actions.ToArray(), bindings, canDecrypt, canEncrypt);
         }
 
-        private Action<object, object>? BuildAssignment(PropertyInfo sprop, PropertyInfo tprop)
+        private Action<object, object> BuildAssignment(PropertyInfo sprop, PropertyInfo tprop)
         {
             var st = sprop.PropertyType;
             var tt = tprop.PropertyType;

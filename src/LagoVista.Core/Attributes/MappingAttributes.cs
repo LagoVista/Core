@@ -27,11 +27,18 @@ namespace LagoVista.Core.Attributes
     }
 
 
-
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class MapIgnoreAttribute : Attribute
+    public sealed class MapToIgnoreAttribute : Attribute
     {
         public string? Reason { get; }
-        public MapIgnoreAttribute(string? reason = null) => Reason = reason;
+        public MapToIgnoreAttribute(string? reason = null) => Reason = reason;
+    }
+
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class IgnoreOnMapToAttribute : Attribute
+    {
+        public string? Reason { get; }
+        public IgnoreOnMapToAttribute(string? reason = null) => Reason = reason;
     }
 }

@@ -48,4 +48,20 @@ namespace LagoVista.Core.Attributes
             CiphertextProperty = ciphertextProperty ?? throw new ArgumentNullException(nameof(ciphertextProperty));
         }
     }
+
+    /// <summary>
+    /// Applied to domain plaintext properties. Points to ciphertext property on the DTO.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public sealed class DecryptedFieldAttribute : Attribute
+    {
+        public string DecryptedValueProperty { get; }
+        public string SaltProperty { get; set; } = "Id"; // defaults to dto.Id
+        public bool SkipIfEmpty { get; set; } = true;
+
+        public DecryptedFieldAttribute(string decryptedValueProperty)
+        {
+            DecryptedValueProperty = decryptedValueProperty ?? throw new ArgumentNullException(nameof(decryptedValueProperty));
+        }
+    }
 }
