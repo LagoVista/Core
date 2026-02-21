@@ -30,14 +30,20 @@ namespace LagoVista.Core.AutoMapper
         public PropertyInfo TargetProperty { get; }
         public PropertyInfo SourceProperty { get; }
         public AtomicMapStepKind Kind { get; }
-        public Type ConverterTargetType { get; }
+        public Type ConverterType { get; }
 
-        public AtomicMapStep(PropertyInfo targetProperty, PropertyInfo sourceProperty, AtomicMapStepKind kind, Type converterTargetType = null)
+        public AtomicMapStep(PropertyInfo targetProperty, PropertyInfo sourceProperty, AtomicMapStepKind kind, Type converterType = null)
         {
             TargetProperty = targetProperty ?? throw new ArgumentNullException(nameof(targetProperty));
             SourceProperty = sourceProperty;
             Kind = kind;
-            ConverterTargetType = converterTargetType;
+            ConverterType = converterType;
+        }
+
+        public override string ToString()
+        {
+            var convertType = ConverterType == null ? "None" : ConverterType.Name;  
+            return $"{SourceProperty?.Name ?? "none"}=>{TargetProperty?.Name ?? "none"}; Strategy={Kind}; Converter={convertType};";
         }
     }
 
@@ -48,7 +54,8 @@ namespace LagoVista.Core.AutoMapper
         ConverterAssign,
         MapToFanoutAssign,
         Ignored,
-        Crypto
+        Crypto,
+        ChildLeaf,
     }
 
     public interface IChildMapStep
@@ -71,23 +78,25 @@ namespace LagoVista.Core.AutoMapper
         EntityHeaderValue
     }
 
-    public sealed class ChildMapStep : IChildMapStep
+    public sealed class ChildEdge : IChildMapStep
     {
         public ChildMapStepKind Kind { get; }
         public PropertyInfo TargetProperty { get; }
         public PropertyInfo SourceProperty { get; }
+
         public Type ChildSourceType { get; }
         public Type ChildTargetType { get; }
+
         public IReadOnlyList<IChildMapStep> Children { get; }
 
-        public ChildMapStep(ChildMapStepKind kind, PropertyInfo targetProperty, PropertyInfo sourceProperty, Type childSourceType, Type childTargetType, IReadOnlyList<IChildMapStep> children)
+        public ChildEdge(ChildMapStepKind kind, PropertyInfo targetProperty, PropertyInfo sourceProperty, Type childSourceType, Type childTargetType, IReadOnlyList<IChildMapStep> children)
         {
             Kind = kind;
             TargetProperty = targetProperty ?? throw new ArgumentNullException(nameof(targetProperty));
             SourceProperty = sourceProperty ?? throw new ArgumentNullException(nameof(sourceProperty));
             ChildSourceType = childSourceType ?? throw new ArgumentNullException(nameof(childSourceType));
             ChildTargetType = childTargetType ?? throw new ArgumentNullException(nameof(childTargetType));
-            Children = children ?? Array.Empty<IChildMapStep>();
+            Children = children ?? throw new ArgumentNullException(nameof(children));
         }
     }
 }

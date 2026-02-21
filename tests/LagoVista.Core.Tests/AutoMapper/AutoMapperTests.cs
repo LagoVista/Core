@@ -1,16 +1,14 @@
 ﻿using LagoVista.Core.AutoMapper;
 using LagoVista.Core.AutoMapper.Converters;
+using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
 using LagoVista.Core.Tests.AutoMapper;
 using LagoVista.Models;
 using NUnit.Framework;
 using System;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 
 namespace LagoVista.Core.Tests.Mapping
 {
@@ -20,42 +18,68 @@ namespace LagoVista.Core.Tests.Mapping
         private static EntityHeader Org() { return new EntityHeader() { Id = "org-123" }; }
         private static EntityHeader User() { return new EntityHeader() { Id = "user-456" }; }
 
-        IEncryptionKeyProvider _keyProvider = new EncryptionKeyProvider(new FakeSecureStorage());
-        IEncryptedMapper _encryptedMapper;
-        ILagoVistaAutoMapper _mapper;
-        IMappingPlanBuilder _planBuilder;
-        MapValueConverterRegistry _registry = new MapValueConverterRegistry(new IMapValueConverter[] {
-               new DateTimeIsoStringConverter(),
-               new NumericStringConverter(),
-               new GuidStringConverter() });
+        private readonly IEncryptionKeyProvider _keyProvider = new EncryptionKeyProvider(new FakeSecureStorage());
+
+        private IEncryptedMapper _encryptedMapper;
+        private ILagoVistaAutoMapper _mapper;
+        private IAtomicPlanBuilder _atomicBuilder;
+        private IMapValueConverterRegistry _registry;
 
         [SetUp]
         public void TestInitialize()
         {
-            _planBuilder = new ReflectionMappingPlanBuilder(ConvertersRegistration.DefaultConverterRegistery);
+            _registry = ConvertersRegistration.DefaultConverterRegistery;
+            _atomicBuilder = new ReflectionAtomicPlanBuilder(_registry);
 
+            // EncryptedMapper uses its own converter registry for string <-> domain conversions.
+            // Use the same default registry to keep behavior consistent.
             _encryptedMapper = new EncryptedMapper(_keyProvider, _registry, new Encryptor());
-            _mapper = new LagoVistaAutoMapper(_encryptedMapper, _planBuilder);
+
+            _mapper = new LagoVistaAutoMapper(_encryptedMapper, _atomicBuilder, _registry);
         }
 
+        [Test]
+        public async Task TestModels()
+        {
+            try
+            {
+                MappingVerifier.Verify<DbModelBase, CoreEntity>(true);
+                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
+                MappingVerifier.Verify<Account, AccountDto>(true);
+                MappingVerifier.Verify<PlainEntityHeaderSource, PlainEntityHeaderDestination>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
 
         [Test]
         public async Task TestCoreMapping()
         {
             try
             {
-                MappingVerifier.Verify<DbModelBase, CoreEntity>();
-                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>();
-                MappingVerifier.Verify<CoreEntity, DbModelBase>();
-                MappingVerifier.Verify<Account, AccountDto>();
-                MappingVerifier.Verify<PlainEntityHeaderSource, PlainEntityHeaderDestination>();
+                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
             }
             catch (Exception ex)
             {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\\n", Environment.NewLine)}");
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
         }
-        
+
+        [Test]
+        public async Task TestGraphMapping()
+        {
+            try
+            {
+                MappingVerifier.Verify<BigParent, BigParentDTO>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
         [Test]
         public async Task PlainMapping_CaseInsensitive_And_MapFrom_And_Ignore_Works()
         {

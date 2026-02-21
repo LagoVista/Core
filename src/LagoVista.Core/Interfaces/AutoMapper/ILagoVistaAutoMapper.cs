@@ -19,6 +19,7 @@ namespace LagoVista.Core.Interfaces.AutoMapper
 
         bool TryConvert(object sourceValue, Type targetType, out object convertedValue);
         bool CanConvert(Type sourceType, Type targetType);
+        IMapValueConverter GetConverter(Type sourceType, Type targetType);
     }
 
 

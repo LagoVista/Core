@@ -11,156 +11,71 @@ namespace LagoVista.Core.AutoMapper
 {
     public static class MappingVerifier
     {
-        public static void Verify<TSource, TTarget>(IMappingPlanBuilder planBuilder = null, IMapValueConverterRegistry converters = null)
+        public static void Verify<TSource, TTarget>(bool writePlan = false)
            where TSource : class
            where TTarget : class
         {
 
-            Verify(typeof(TSource), typeof(TTarget), planBuilder, converters);
-            Verify(typeof(TTarget), typeof(TSource), planBuilder, converters);
-        }
+            var builder = new ReflectionAtomicPlanBuilder(ConvertersRegistration.DefaultConverterRegistery);
+            var toResult = builder.BuildAtomicSteps(typeof(TSource), typeof(TTarget));
+            var fromResult = builder.BuildAtomicSteps(typeof(TTarget), typeof(TSource));
 
-        public static void Verify(
-            Type sourceType,
-            Type targetType,
-            IMappingPlanBuilder planBuilder,
-            IMapValueConverterRegistry converters = null)
-        {
-            if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
-
-            // Keep your current behavior of defaulting / augmenting converters.
-            if (converters == null)
+            if (writePlan)
             {
-                converters = ConvertersRegistration.DefaultConverterRegistery;
-            }
-            else
-            {
-                converters.AddRange(ConvertersRegistration.DefaultConverterRegistery.Converters.ToArray());
-            }
-
-            if (planBuilder == null)
-                planBuilder = new ReflectionMappingPlanBuilder(converters);
-
-            var plan = planBuilder.Build(sourceType, targetType);
-
-            // Target properties that are in-scope for verification.
-            var targetProps = targetType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanWrite)
-                .Where(p => p.GetIndexParameters().Length == 0)
-                .ToArray();
-
-            // What the plan says it will handle.
-            var boundTargets = new HashSet<string>(
-                plan.Bindings
-                    .Where(b => b.Kind != MappingBindingKind.Ignored)
-                    .Select(b => b.TargetProperty),
-                StringComparer.OrdinalIgnoreCase);
-
-            var ignoredTargets = new HashSet<string>(
-                plan.Bindings
-                    .Where(b => b.Kind == MappingBindingKind.Ignored)
-                    .Select(b => b.TargetProperty),
-                StringComparer.OrdinalIgnoreCase);
-
-            // Optional: detect duplicates (two bindings to same target).
-            var dupes = plan.Bindings
-                .Where(b => b.Kind != MappingBindingKind.Ignored)
-                .GroupBy(b => b.TargetProperty, StringComparer.OrdinalIgnoreCase)
-                .Where(g => g.Count() > 1)
-                .ToArray();
-
-            var errors = new List<string>();
-
-            if (dupes.Length > 0)
-            {
-                foreach (var dupe in dupes)
+                Console.WriteLine($"{typeof(TSource).Name} ({typeof(TSource).GetProperties().Count()}) => {typeof(TTarget).Name} ({typeof(TTarget).GetProperties().Count()})");
+                Console.WriteLine("----------------------------");
+                foreach (var step in toResult.Result)
                 {
-                    errors.Add(
-                        $"Multiple bindings for target '{targetType.Name}.{dupe.Key}': " +
-                        string.Join(", ", dupe.Select(b => $"{sourceType.Name}.{b.SourceProperty} ({b.Kind})")));
+                    Console.WriteLine(step);
                 }
-            }
+                Console.WriteLine();
 
-            // Core policy: every writable target prop must be resolved or explicitly ignored.
-            for (var i = 0; i < targetProps.Length; ++i)
-            {
-                var tprop = targetProps[i];
-
-                // Respect IgnoreOnMapToAttribute as "ignored" even if builder doesn’t emit it for some reason.
-                if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
-                    continue;
-
-                if (ignoredTargets.Contains(tprop.Name))
-                    continue;
-
-                if (boundTargets.Contains(tprop.Name))
-                    continue;
-
-                // Not resolved.
-                errors.Add(
-                    $"Missing source for target '{targetType.Name}.{tprop.Name}'. " +
-                    $"Use [MapFrom(\"...\")], [MapIgnore], or [MapTo] (or update plan builder rules).");
-            }
-
-            // Optional: type compatibility check based on plan bindings.
-            // This gives better diagnostics than “missing source” when a binding exists but is nonsensical.
-            // (Your builder’s runtime behavior is permissive, but verifier can still flag impossible type pairs.)
-            var sourceProps = sourceType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead)
-                .Where(p => p.GetIndexParameters().Length == 0)
-                .ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
-
-            var targetPropsLookup = targetProps.ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
-
-            foreach (var binding in plan.Bindings.Where(b => b.Kind != MappingBindingKind.Ignored))
-            {
-                if (!targetPropsLookup.TryGetValue(binding.TargetProperty, out var tprop))
-                    continue;
-
-                if (!sourceProps.TryGetValue(binding.SourceProperty, out var sprop))
-                    continue;
-
-                if (!IsCompatiblePerMapper(sprop.PropertyType, tprop.PropertyType, converters))
+                Console.WriteLine($"{typeof(TTarget).Name} ({typeof(TTarget).GetProperties().Count()}) => {typeof(TSource).Name} ({typeof(TSource).GetProperties().Count()})");
+                Console.WriteLine("----------------------------");
+                foreach (var step in fromResult.Result)
                 {
-                    errors.Add(
-                        $"Type mismatch '{sourceType.Name}.{sprop.Name}' ({PrettyType(sprop.PropertyType)}) -> " +
-                        $"'{targetType.Name}.{tprop.Name}' ({PrettyType(tprop.PropertyType)}). " +
-                        $"Add/adjust converter or change types.");
+                    Console.WriteLine(step);
                 }
+
+                Console.WriteLine();
             }
 
-            if (errors.Count > 0)
+            var graph = new ReflectionMappingPlanGraphValidator(builder);
+
+            foreach (var pair in graph.EnumeratePairs(typeof(TSource), typeof(TTarget)))
             {
-                throw new InvalidOperationException(
-                    $"Auto-mapper verification failed for {sourceType.Name} -> {targetType.Name}:\\n" +
-                    string.Join("\\n", errors.Select(e => " - " + e)) + Environment.NewLine);
+                if (pair.Depth == 0) continue; // root already printed above
+
+                var indent = new string(' ', pair.Depth * 2);
+                var steps = builder.BuildAtomicSteps(pair.SourceType, pair.TargetType).Result;
+
+                Console.WriteLine($"{indent}{pair.Path}");
+                Console.WriteLine($"{indent}{pair.SourceType.Name} ({pair.SourceType.GetProperties().Count()}) => {pair.TargetType.Name} ({pair.TargetType.GetProperties().Count()})");
+                Console.WriteLine($"{indent}----------------------------");
+                foreach (var step in steps)
+                    Console.WriteLine($"{indent}{step}");
+                Console.WriteLine();
             }
         }
 
-        private static bool IsCompatiblePerMapper(Type st, Type tt, IMapValueConverterRegistry converters)
+        public class MappingPair
         {
-            if (tt.IsAssignableFrom(st))
-                return true;
+            public MappingPair(Type sourceType, Type targetType, string path, int depth)
+            {
+                SourceType = sourceType;
+                TargetType = targetType;
+                Path = path;
+                Depth = depth;
+            }
 
-            var stNonNull = Nullable.GetUnderlyingType(st) ?? st;
-            var ttNonNull = Nullable.GetUnderlyingType(tt) ?? tt;
+            public Type SourceType { get; }
+            public Type TargetType { get; }
 
-            if (ttNonNull.IsAssignableFrom(stNonNull))
-                return true;
+            public string Path { get;  }
+            public int Depth { get; }  
 
-            return converters.CanConvert(st, tt);
-        }
+        } 
 
-        private static string PrettyType(Type t)
-        {
-            if (!t.IsGenericType) return t.Name;
-            var def = t.GetGenericTypeDefinition();
-            var args = string.Join(", ", t.GetGenericArguments().Select(PrettyType));
-            var name = def.Name.Split('`')[0];
-            return $"{name}<{args}>";
-        }
+
     }
 }

@@ -8,7 +8,7 @@ namespace LagoVista.Core.AutoMapper
 {
     public sealed class GraphShape<TSource, TTarget>
     {
-        private readonly List<ChildMapStep> _steps = new List<ChildMapStep>();
+        private readonly List<ChildEdge> _steps = new List<ChildEdge>();
 
         public IReadOnlyList<IChildMapStep> Steps => _steps;
 
@@ -25,7 +25,7 @@ namespace LagoVista.Core.AutoMapper
                 children = (IReadOnlyList<IChildMapStep>)nested.Steps;
             }
 
-            _steps.Add(new ChildMapStep(ChildMapStepKind.Object, tprop, sprop, typeof(TChildSource), typeof(TChildTarget), children));
+            _steps.Add(new ChildEdge(ChildMapStepKind.Object, tprop, sprop, typeof(TChildSource), typeof(TChildTarget), children));
             return this;
         }
 
@@ -42,7 +42,7 @@ namespace LagoVista.Core.AutoMapper
                 children = (IReadOnlyList<IChildMapStep>)nested.Steps;
             }
 
-            _steps.Add(new ChildMapStep(ChildMapStepKind.Collection, tprop, sprop, typeof(TChildSource), typeof(TChildTarget), children));
+            _steps.Add(new ChildEdge(ChildMapStepKind.Collection, tprop, sprop, typeof(TChildSource), typeof(TChildTarget), children));
             return this;
         }
 
@@ -59,7 +59,7 @@ namespace LagoVista.Core.AutoMapper
                 children = (IReadOnlyList<IChildMapStep>)nested.Steps;
             }
 
-            _steps.Add(new ChildMapStep(ChildMapStepKind.EntityHeaderValue, tprop, sprop, typeof(TChildSource), typeof(TChildTarget), children));
+            _steps.Add(new ChildEdge(ChildMapStepKind.EntityHeaderValue, tprop, sprop, typeof(TChildSource), typeof(TChildTarget), children));
             return this;
         }
     }

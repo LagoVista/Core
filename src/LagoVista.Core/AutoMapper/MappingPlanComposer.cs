@@ -8,6 +8,7 @@ namespace LagoVista.Core.AutoMapper
     using global::LagoVista.Core.Validation;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     namespace LagoVista.Core.AutoMapper
     {
@@ -49,6 +50,12 @@ namespace LagoVista.Core.AutoMapper
                 var atomic = _atomicBuilder.BuildAtomicSteps(typeof(TSource), typeof(TTarget));
                 if (!atomic.Successful)
                     return InvokeResult<MappingPlan<TSource, TTarget>>.FromErrors(atomic.Errors.ToArray());
+
+                    // Validate the full reachable mapping graph via reflection (GraphShape is execution-only).
+                var graphValidator = new ReflectionMappingPlanGraphValidator(_atomicBuilder);
+                var graphErrors = graphValidator.Validate(typeof(TSource), typeof(TTarget));
+                if (graphErrors.Count > 0)
+                    return InvokeResult<MappingPlan<TSource, TTarget>>.FromErrors(graphErrors.Select(err => new ErrorMessage() { Message = err}).ToArray());
 
                 var plan = new MappingPlan<TSource, TTarget>(atomic.Result, (IReadOnlyList<IChildMapStep>)_shape.Steps);
                 return InvokeResult<MappingPlan<TSource, TTarget>>.Create(plan);

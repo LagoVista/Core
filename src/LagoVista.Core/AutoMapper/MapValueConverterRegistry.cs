@@ -53,6 +53,21 @@ namespace LagoVista.Core.AutoMapper
             return false;
         }
 
+        public IMapValueConverter GetConverter(Type sourceType, Type targetType)
+        {
+            if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
+            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
+
+            var st = Nullable.GetUnderlyingType(sourceType) ?? sourceType;
+            var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
+
+            for (var i = 0; i < _converters.Count; ++i)
+                if (_converters[i].CanConvert(st, tt))
+                    return _converters[i];
+
+            return null;
+        }
+
         /// <summary>
         /// Adds converters, skipping duplicates by converter Type. Returns the number added.
         /// </summary>
