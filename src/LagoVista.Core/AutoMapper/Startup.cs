@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces;
+﻿using LagoVista.Core.AutoMapper.Converters;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 
 namespace LagoVista.Core.AutoMapper
@@ -7,7 +8,8 @@ namespace LagoVista.Core.AutoMapper
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            ConvertersStartup.ConfigureServices(services);
+            ConvertersRegistration.ConfigureServices(services);
+
             services.AddSingleton<IEncryptedMapper, EncryptedMapper>();
             services.AddSingleton<IEncryptor, Encryptor>();
             services.AddSingleton<IEncryptionKeyProvider, EncryptionKeyProvider>();

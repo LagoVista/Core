@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.Attributes;
+using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.Interfaces.AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,11 @@ namespace LagoVista.Core.AutoMapper
             // Keep your current behavior of defaulting / augmenting converters.
             if (converters == null)
             {
-                converters = ConvertersStartup.DefaultConverterRegistery;
+                converters = ConvertersRegistration.DefaultConverterRegistery;
             }
             else
             {
-                converters.AddRange(ConvertersStartup.DefaultConverterRegistery.Converters.ToArray());
+                converters.AddRange(ConvertersRegistration.DefaultConverterRegistery.Converters.ToArray());
             }
 
             if (planBuilder == null)

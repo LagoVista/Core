@@ -4,12 +4,11 @@ using LagoVista.Core.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
-namespace LagoVista.Core.AutoMapper
+namespace LagoVista.Core.AutoMapper.Converters
 {
-    public sealed class StringToEntityHeaderEnumConverter : IMapValueConverter
+    public sealed class EntityHeaderEnumToStringConverter : IMapValueConverter
     {
         private readonly ConcurrentDictionary<Type, object> _enumMaps =
             new ConcurrentDictionary<Type, object>();
@@ -19,11 +18,11 @@ namespace LagoVista.Core.AutoMapper
             var st = Nullable.GetUnderlyingType(sourceType) ?? sourceType;
             var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
 
-            if (st != typeof(string))
+            if (tt != typeof(string))
                 return false;
 
-            // EntityHeader<TEnum>
-            return TryGetEntityHeaderEnumType(tt, out _);
+            Type enumType;
+            return TryGetEntityHeaderEnumType(st, out enumType);
         }
 
         public object Convert(object sourceValue, Type targetType)
@@ -31,33 +30,28 @@ namespace LagoVista.Core.AutoMapper
             if (sourceValue == null)
                 return null;
 
-            var code = sourceValue as string;
-            if (code == null)
-                throw new InvalidOperationException("Expected string source value.");
-
-            var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
+            var st = sourceValue.GetType();
 
             Type enumType;
-            if (!TryGetEntityHeaderEnumType(tt, out enumType))
-                throw new InvalidOperationException("Target type is not EntityHeader<TEnum>.");
+            if (!TryGetEntityHeaderEnumType(st, out enumType))
+                throw new InvalidOperationException("Source type is not EntityHeader<TEnum>.");
+
+            // Read the enum value from EntityHeader<TEnum>.Value
+            var valueProp = st.GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+            if (valueProp == null)
+                throw new InvalidOperationException("EntityHeader<" + enumType.Name + "> is missing Value property.");
+
+            var enumValue = valueProp.GetValue(sourceValue);
+            if (enumValue == null)
+                return null;
 
             var map = GetOrBuildEnumMap(enumType);
+            var code = map.GetCodeForEnumValue(enumValue);
 
             if (String.IsNullOrWhiteSpace(code))
-            {
-                // If the target is nullable, allow null. Otherwise, still return null (EntityHeader is ref-type).
-                return null;
-            }
+                throw new InvalidOperationException("No EnumLabel code found for enum value " + enumType.Name + "." + enumValue + ".");
 
-            object enumValue;
-            if (!map.TryGetEnumValue(code, out enumValue))
-            {
-                throw new InvalidOperationException(
-                    "Could not map code '" + code + "' to enum " + enumType.Name +
-                    ". Ensure the enum value has [EnumLabel(\"" + code + "\", ...)].");
-            }
-
-            return CreateEntityHeader(enumType, enumValue);
+            return code;
         }
 
         private bool TryGetEntityHeaderEnumType(Type type, out Type enumType)
@@ -90,39 +84,27 @@ namespace LagoVista.Core.AutoMapper
             return map;
         }
 
-        private object CreateEntityHeader(Type enumType, object enumValue)
-        {
-            // EntityHeader<TEnum>.Create(TEnum value)
-            var ehType = typeof(EntityHeader<>).MakeGenericType(enumType);
-            var createMethod = ehType.GetMethods(BindingFlags.Public | BindingFlags.Static)
-                .FirstOrDefault(m =>
-                    m.Name == "Create" &&
-                    m.GetParameters().Length == 1 &&
-                    m.GetParameters()[0].ParameterType == enumType);
-
-            if (createMethod == null)
-                throw new InvalidOperationException("Could not find EntityHeader<" + enumType.Name + ">.Create(TEnum).");
-
-            return createMethod.Invoke(null, new[] { enumValue });
-        }
-
         private sealed class EnumMap
         {
-            private readonly Dictionary<string, object> _codeToEnum;
+            private readonly Dictionary<object, string> _enumToCode;
 
-            private EnumMap(Dictionary<string, object> codeToEnum)
+            private EnumMap(Dictionary<object, string> enumToCode)
             {
-                _codeToEnum = codeToEnum;
+                _enumToCode = enumToCode;
             }
 
-            public bool TryGetEnumValue(string code, out object value)
+            public string GetCodeForEnumValue(object enumValue)
             {
-                return _codeToEnum.TryGetValue(code, out value);
+                string code;
+                if (_enumToCode.TryGetValue(enumValue, out code))
+                    return code;
+
+                return null;
             }
 
             public static EnumMap Build(Type enumType)
             {
-                var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+                var dict = new Dictionary<object, string>();
 
                 var fields = enumType.GetFields(BindingFlags.Public | BindingFlags.Static);
                 for (var i = 0; i < fields.Length; i++)
@@ -132,20 +114,16 @@ namespace LagoVista.Core.AutoMapper
                     if (attr == null)
                         continue;
 
-                    // EnumLabelAttribute’s first constructor arg is your stable string code.
-                    // In LagoVista, that is typically stored as "Key" or similar.
-                    // We’ll read it via reflection to avoid depending on internal API details.
-                    var code = GetEnumLabelCode(attr);
-                    if (String.IsNullOrWhiteSpace(code))
+                    var code = typeof(StringToEntityHeaderEnumConverter).Assembly; // placeholder to avoid circular; see note below
+
+                    // We’ll use the same reflection helper approach as the other converter,
+                    // but implemented locally to keep files independent.
+                    var labelCode = GetEnumLabelCode(attr);
+                    if (String.IsNullOrWhiteSpace(labelCode))
                         continue;
 
                     var enumValue = Enum.Parse(enumType, f.Name);
-
-                    // Allow duplicates? No. Last one wins would hide bugs. Throw.
-                    if (dict.ContainsKey(code))
-                        throw new InvalidOperationException("Duplicate EnumLabel code '" + code + "' on enum " + enumType.Name + ".");
-
-                    dict.Add(code, enumValue);
+                    dict[enumValue] = labelCode;
                 }
 
                 return new EnumMap(dict);
@@ -153,7 +131,6 @@ namespace LagoVista.Core.AutoMapper
 
             private static string GetEnumLabelCode(EnumLabelAttribute attr)
             {
-                // Prefer a public property if available.
                 var prop = attr.GetType().GetProperty("Key", BindingFlags.Public | BindingFlags.Instance)
                            ?? attr.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance)
                            ?? attr.GetType().GetProperty("Id", BindingFlags.Public | BindingFlags.Instance)
@@ -162,14 +139,12 @@ namespace LagoVista.Core.AutoMapper
                 if (prop != null && prop.PropertyType == typeof(string))
                     return (string)prop.GetValue(attr);
 
-                // Fallback: try field backing (rare)
                 var field = attr.GetType().GetField("_key", BindingFlags.NonPublic | BindingFlags.Instance)
                             ?? attr.GetType().GetField("_value", BindingFlags.NonPublic | BindingFlags.Instance);
 
                 if (field != null && field.FieldType == typeof(string))
                     return (string)field.GetValue(attr);
 
-                // If none found, we can’t infer. You can hardcode once you confirm the real property name.
                 throw new InvalidOperationException("Could not read EnumLabelAttribute code. Confirm EnumLabelAttribute exposes the code as a string property (e.g., Key).");
             }
         }

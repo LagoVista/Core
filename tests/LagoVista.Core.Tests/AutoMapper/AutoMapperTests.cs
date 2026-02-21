@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.AutoMapper;
+using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
 using LagoVista.Core.Tests.AutoMapper;
@@ -31,7 +32,7 @@ namespace LagoVista.Core.Tests.Mapping
         [SetUp]
         public void TestInitialize()
         {
-            _planBuilder = new ReflectionMappingPlanBuilder(ConvertersStartup.DefaultConverterRegistery);
+            _planBuilder = new ReflectionMappingPlanBuilder(ConvertersRegistration.DefaultConverterRegistery);
 
             _encryptedMapper = new EncryptedMapper(_keyProvider, _registry, new Encryptor());
             _mapper = new LagoVistaAutoMapper(_encryptedMapper, _planBuilder);
@@ -44,9 +45,10 @@ namespace LagoVista.Core.Tests.Mapping
             try
             {
                 MappingVerifier.Verify<DbModelBase, CoreEntity>();
+                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>();
                 MappingVerifier.Verify<CoreEntity, DbModelBase>();
                 MappingVerifier.Verify<Account, AccountDto>();
-                MappingVerifier.Verify<AccountDto, Account>();
+                MappingVerifier.Verify<PlainEntityHeaderSource, PlainEntityHeaderDestination>();
             }
             catch (Exception ex)
             {

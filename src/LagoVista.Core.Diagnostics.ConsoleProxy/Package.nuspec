@@ -2,22 +2,22 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
-    <version>3.0.3109.1030</version>
+    <version>3.0.3201.1535</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
     <description>Console Logging Functionality for Debugging the LagoVista IoT and Devices Framework. What to log a call to every method with it's argument values? Just wrap it in the console proxy.</description>
-    <copyright>Copyright Software Logistics - 2025</copyright>
+    <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Diagnostics Console</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 11/20/2025 3:30:07 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 2/20/2026 8:35:35 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="System.Reflection.DispatchProxy" version="4.7.1" />
-        <dependency id="LagoVista.Core" version="3.0.3109.1030" />
+        <dependency id="LagoVista.Core" version="3.0.3201.1535" />
       </group>
     </dependencies>
   </metadata>
