@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using LagoVista.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -98,8 +99,12 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("usage", NullValueHandling = NullValueHandling.Ignore)]
         public LlmUsage Usage { get; set; }
 
-        [JsonProperty("totalSessionTokens", NullValueHandling = NullValueHandling.Ignore)]
-        public long TotalSessionTokens { get; set; }
+        [JsonProperty("totalSessionPromptTokens", NullValueHandling = NullValueHandling.Ignore)]
+        public long TotalSessionPromptTokens { get; set; }
+
+
+        [JsonProperty("totalSessionCompletionTokens", NullValueHandling = NullValueHandling.Ignore)]
+        public long TotalSessionCompletionTokens { get; set; }
 
         /// <summary>
         /// Error Code for Call if Present
@@ -116,6 +121,9 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("acpIntents", NullValueHandling = NullValueHandling.Ignore)]
         public List<AcpIntent> AcpIntents { get; set; } = new List<AcpIntent>();
+
+        [JsonProperty("chapters")]
+        public List<EntityHeader> Chapters { get; set; } = new List<EntityHeader>();
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
