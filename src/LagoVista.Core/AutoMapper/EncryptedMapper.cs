@@ -72,6 +72,8 @@ namespace LagoVista.Core.AutoMapper
 
         private object ConvertStringToDomainValue(string plaintext, Type domainType)
         {
+            Console.WriteLine($"[SetPlainText] Converting plaintext to domain value. DomainType={domainType.Name}, Plaintext='{plaintext}'");
+
             if (domainType == typeof(string))
                 return plaintext;
 
@@ -81,8 +83,11 @@ namespace LagoVista.Core.AutoMapper
                 return null;
 
             if (_converters.TryConvert(plaintext, domainType, out var converted))
-                return converted;
+            {
+                Console.WriteLine($"[SetPlainText] Converting plaintext to domain value. DomainType={domainType.Name}, Plaintext='{plaintext}, Converted={converted};");
 
+                return converted;
+            }
             throw new InvalidOperationException($"No converter registered to convert string to {domainType.Name} for decryption.");
         }
 
@@ -189,8 +194,14 @@ namespace LagoVista.Core.AutoMapper
             Func<TDto, string> getSalt = dto => saltProp.GetValue(dto)?.ToString() ?? "";
 
             Func<TDomain, string> getPlain = domain => ConvertDomainValueToString(domainProp.GetValue(domain), domainProp.PropertyType);
-            Action<TDomain, string> setPlain = (domain, plaintext) => domainProp.SetValue(domain, ConvertStringToDomainValue(plaintext, domainProp.PropertyType));
+            Action<TDomain, string> setPlain = (domain, plaintext) =>
+            {
+                var value = ConvertStringToDomainValue(plaintext, domainProp.PropertyType);
 
+                Console.WriteLine($"[SETVALUE] {value} {domainProp.Name}"); 
+
+                domainProp.SetValue(domain, value);
+            };
             return new FieldPlan<TDomain, TDto>(cipherProp.Name, attr.SaltProperty, attr.SkipIfEmpty, getCipher, setCipher, getSalt, getPlain, setPlain);
         }
 

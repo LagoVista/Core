@@ -77,6 +77,57 @@ namespace LagoVista.Core.Models.UIMetaData
             return response;
         }
 
+        public static ListResponse<TModel> Create(IReadOnlyList<TModel> items, ListRequest request, Func<TModel, DateTime> partitionKeySelector, Func<TModel, string> rowKeySelector)
+        {
+            var response = Create(items, request); // your existing Create
+
+            response.NextPartitionKey = null;
+            response.NextRowKey = null;
+
+            if (items != null && items.Count > 0)
+            {
+                var last = items[items.Count - 1];
+                response.NextPartitionKey = partitionKeySelector(last).ToString("O");
+                response.NextRowKey = rowKeySelector(last);
+            }
+
+            response.PageSize = request.PageSize;
+            response.PageIndex = request.PageIndex;
+
+            // With keyset paging, PageCount is often unknown. You can leave it 0 or keep old behavior if you still compute RecordCount.
+            response.HasMoreRecords = items != null && items.Count > request.PageSize;
+
+            response.Model = response.HasMoreRecords ? items.Take(request.PageIndex).ToList() : items;
+
+            return response;
+        }
+
+        public static ListResponse<TModel> Create(IReadOnlyList<TModel> items, ListRequest request, Func<TModel, string> partitionKeySelector, Func<TModel, string> rowKeySelector)
+        {
+            var response = Create(items, request); // your existing Create
+
+            response.NextPartitionKey = null;
+            response.NextRowKey = null;
+
+            if (items != null && items.Count > 0)
+            {
+                var last = items[items.Count - 1];
+                response.NextPartitionKey = partitionKeySelector(last);
+                response.NextRowKey = rowKeySelector(last);
+            }
+
+            response.PageSize = request.PageSize;
+            response.PageIndex = request.PageIndex;
+
+            // With keyset paging, PageCount is often unknown. You can leave it 0 or keep old behavior if you still compute RecordCount.
+            response.HasMoreRecords = items != null && items.Count > request.PageSize;
+
+            response.Model = response.HasMoreRecords ? items.Take(request.PageIndex).ToList() : items;
+
+            return response;
+        }
+
+
         public static ListResponse<TModel> Create(IEnumerable<TModel> model, IListResponse original, TimingBuilder bldr = null)
         {
             var response = Create(model);

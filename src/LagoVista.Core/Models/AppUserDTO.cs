@@ -9,6 +9,7 @@ namespace LagoVista.Models
     [Table("AppUser")]
     public class AppUserDTO
     {
+        [Key]
         public string AppUserId { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }

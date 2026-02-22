@@ -26,6 +26,7 @@ namespace LagoVista.Core.AutoMapper
                         using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
                         {
                             var plainText = streamReader.ReadToEnd();
+                            Console.WriteLine($"[DECRYPTED] {plainText}");
                             return plainText.Replace(salt, String.Empty);
                         }
                     }
