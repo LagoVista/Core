@@ -11,33 +11,35 @@ namespace LagoVista.Core.AutoMapper
 {
     public static class MappingVerifier
     {
+        public sealed class MappingVerificationException : Exception
+        {
+            public MappingVerificationException(string message) : base(message) { }
+        }
+
         public static void Verify<TSource, TTarget>(bool writePlan = false)
            where TSource : class
            where TTarget : class
         {
 
             var builder = new ReflectionAtomicPlanBuilder(ConvertersRegistration.DefaultConverterRegistery);
-            var toResult = builder.BuildAtomicSteps(typeof(TSource), typeof(TTarget));
-            var fromResult = builder.BuildAtomicSteps(typeof(TTarget), typeof(TSource));
+            var rootSteps = builder.BuildAtomicSteps(typeof(TSource), typeof(TTarget));
+            var failures = new List<string>();
 
             if (writePlan)
             {
                 Console.WriteLine($"{typeof(TSource).Name} ({typeof(TSource).GetProperties().Count()}) => {typeof(TTarget).Name} ({typeof(TTarget).GetProperties().Count()})");
                 Console.WriteLine("----------------------------");
-                foreach (var step in toResult.Result)
+                foreach (var step in rootSteps.Result)
                 {
                     Console.WriteLine(step);
                 }
                 Console.WriteLine();
+            }
 
-                Console.WriteLine($"{typeof(TTarget).Name} ({typeof(TTarget).GetProperties().Count()}) => {typeof(TSource).Name} ({typeof(TSource).GetProperties().Count()})");
-                Console.WriteLine("----------------------------");
-                foreach (var step in fromResult.Result)
-                {
-                    Console.WriteLine(step);
-                }
-
-                Console.WriteLine();
+            var rootMissing = GetMissingTargetProperties(typeof(TTarget), rootSteps.Result);
+            if (rootMissing.Count > 0)
+            {
+                failures.Add(FormatMissing("[root]", typeof(TSource), typeof(TTarget), rootMissing));
             }
 
             var graph = new ReflectionMappingPlanGraphValidator(builder);
@@ -56,7 +58,55 @@ namespace LagoVista.Core.AutoMapper
                     Console.WriteLine($"{indent}{step}");
                 Console.WriteLine();
             }
+
+            if (failures.Count > 0)
+            {
+                throw new MappingVerificationException(
+                    "Mapping verification failed. Every writable target property must be mapped or ignored.\\n\\n" +
+                    string.Join("\\n\\n", failures));
+            }
         }
+
+        private static string FormatMissing(string path, Type sourceType, Type targetType, IReadOnlyList<PropertyInfo> missing)
+        {
+            // include type info so it’s immediately actionable
+            var items = missing.Select(p => $"  - {p.Name} : {p.PropertyType.Name}");
+            return $"{path} {sourceType.Name} => {targetType.Name}\\nMissing target properties:\\n{string.Join("\\n", items)}";
+        }
+
+        private static IReadOnlyList<PropertyInfo> GetRequiredTargetProperties(Type targetType)
+        {
+            return targetType
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => p.GetIndexParameters().Length == 0) // no indexers
+                .Where(p => p.CanWrite)                         // writable only
+                .ToList();
+        }
+
+        private static IReadOnlyList<PropertyInfo> GetMissingTargetProperties(
+            Type targetType,
+            IReadOnlyList<AtomicMapStep> steps)
+        {
+            var required = GetRequiredTargetProperties(targetType);
+            var covered = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (var step in steps)
+            {
+                if (step.TargetProperty != null)
+                {
+                    covered.Add(step.TargetProperty.Name);
+                }
+            }
+            ;
+
+            var missing = required
+                .Where(p => !covered.Contains(p.Name))
+                .OrderBy(p => p.Name, StringComparer.Ordinal)
+                .ToList();
+
+            return missing;
+        }
+
 
         public class MappingPair
         {

@@ -108,9 +108,13 @@ namespace LagoVista.Core.AutoMapper
                     if (TryBuildAtomicStep(sourceType, targetType, sprop, tprop, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, errors, out var step))
                     {
                         steps.Add(step);
+
+                        DiagnosticsPrint(this.Tag(), $"Added step {sprop.Name}");
                         mappedTargets.Add(tprop.Name);
                     }
                 }
+
+                DiagnosticsPrint(this.Tag(), $"Processed MapTo for source property {sprop.Name}");
             }
 
             // Crypto marking (mirrors old builder intent)
@@ -119,29 +123,46 @@ namespace LagoVista.Core.AutoMapper
 
             if (canDecrypt)
             {
+                DiagnosticsPrint(this.Tag(), "Can Decrypt");
                 // targetType is Domain; [EncryptedField] lives on target properties (plaintext props)
                 foreach (var tprop in targetProps)
                 {
-                    if (mappedTargets.Contains(tprop.Name))
+                    var enc = tprop.GetCustomAttribute<EncryptedFieldAttribute>();
+                    if (enc == null)
+                    {
                         continue;
+                    }
+
 
                     if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
                         continue;
 
-                    var enc = tprop.GetCustomAttribute<EncryptedFieldAttribute>();
-                    if (enc == null)
-                        continue;
+                    if (mappedTargets.Contains(tprop.Name))
+                    {
+                        DiagnosticsPrint(this.Tag(), "contains existing, removing old...");
+                        mappedTargets.Remove(tprop.Name);
+                        steps.Remove(steps.First(s => s.TargetProperty.Name.Equals(tprop.Name, StringComparison.OrdinalIgnoreCase)));
+                    }
 
-                    steps.Add(new AtomicMapStep(tprop, sourceProperty: null, kind: AtomicMapStepKind.Crypto));
+                    var srcProperty = sourceProps.FirstOrDefault(sp => sp.Name.Equals(enc.CiphertextProperty, StringComparison.OrdinalIgnoreCase));
+
+                    steps.Add(new AtomicMapStep(tprop, srcProperty, kind: AtomicMapStepKind.Crypto));
                     mappedTargets.Add(tprop.Name);
                 }
             }
+            else
+            {
+                DiagnosticsPrint(this.Tag(), "No decryption capability");
+            }   
 
             if (canEncrypt)
             {
+                DiagnosticsPrint(this.Tag(), "Can Decrypt");
+
                 // sourceType is Domain; [EncryptedField] lives on source properties (plaintext props)
                 foreach (var sprop in sourceProps)
                 {
+
                     var enc = sprop.GetCustomAttribute<EncryptedFieldAttribute>();
                     if (enc == null)
                         continue;
@@ -155,18 +176,35 @@ namespace LagoVista.Core.AutoMapper
                         continue;
                     }
 
-                    if (mappedTargets.Contains(cipherTargetProp.Name))
-                        continue;
+                    DiagnosticsPrint(this.Tag(), "found target");
 
+
+                    if (mappedTargets.Contains(cipherTargetProp.Name))
+                    {
+                        DiagnosticsPrint(this.Tag(), "contains existing, removing old...");
+                        mappedTargets.Remove(cipherTargetProp.Name);
+                        steps.Remove(steps.First(s => s.TargetProperty.Name.Equals(cipherTargetProp.Name, StringComparison.OrdinalIgnoreCase)));
+                    }
+
+                    DiagnosticsPrint(this.Tag(), "contains existing, adding...");
                     steps.Add(new AtomicMapStep(cipherTargetProp, sourceProperty: sprop, kind: AtomicMapStepKind.Crypto));
                     mappedTargets.Add(cipherTargetProp.Name);
                 }
+            }
+            else
+            {
+                DiagnosticsPrint(this.Tag(), "No encryption capability");
             }
 
             if (errors.Count > 0)
                 throw new MappingPlanBuildException(errors);
 
             return InvokeResult<IReadOnlyList<AtomicMapStep>>.Create(steps);
+        }
+
+        private void DiagnosticsPrint(string tag, string message)
+        {
+            Console.WriteLine($"[{tag}] {message}");
         }
 
         private bool TryBuildAtomicStep(

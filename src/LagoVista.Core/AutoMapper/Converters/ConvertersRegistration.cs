@@ -10,7 +10,9 @@ namespace LagoVista.Core.AutoMapper.Converters
         {
             services.AddSingleton<IMapValueConverter, ToEntityHeaderConverter>();
             services.AddSingleton<IMapValueConverter, EntityHeaderIdConverter>();
+            services.AddSingleton<IMapValueConverter, RelationalEntityToIdConverter>();
             services.AddSingleton<IMapValueConverter, DateTimeIsoStringConverter>();
+            services.AddSingleton<IMapValueConverter, DateOnlyStringConverter>();
             services.AddSingleton<IMapValueConverter, NumericStringConverter>();
             services.AddSingleton<IMapValueConverter, EntityHeaderEnumToStringConverter>();
             services.AddSingleton<IMapValueConverter, StringToEntityHeaderEnumConverter>();
@@ -20,9 +22,11 @@ namespace LagoVista.Core.AutoMapper.Converters
 
         public static IMapValueConverterRegistry DefaultConverterRegistery = new MapValueConverterRegistry(new IMapValueConverter[]
         {
+            new RelationalEntityToIdConverter(),
             new ToEntityHeaderConverter(),
             new EntityHeaderIdConverter(),
             new DateTimeIsoStringConverter(),
+            new DateOnlyStringConverter(),
             new NumericStringConverter(),
             new GuidStringConverter(),
             new EntityHeaderEnumToStringConverter(),

@@ -2,7 +2,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Models;
 
-namespace LagoVista.Core.Tests.AutoMapper
+namespace LagoVista.Core.Tests.AutoMapper.TestModels
 {
     public class CoreEntity
     {

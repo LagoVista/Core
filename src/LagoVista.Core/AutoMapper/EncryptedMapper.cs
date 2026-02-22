@@ -52,7 +52,6 @@ namespace LagoVista.Core.AutoMapper
                     throw new InvalidOperationException($"Salt resolved empty for DTO {typeof(TDto).Name}.{f.SaltPropertyName}.");
 
                 var plaintext = _encryptor.Decrypt(salt, ciphertext, encryptionKey);
-                f.SetPlaintext(domain, plaintext);
             }
         }
 
@@ -197,9 +196,6 @@ namespace LagoVista.Core.AutoMapper
             Action<TDomain, string> setPlain = (domain, plaintext) =>
             {
                 var value = ConvertStringToDomainValue(plaintext, domainProp.PropertyType);
-
-                Console.WriteLine($"[SETVALUE] {value} {domainProp.Name}"); 
-
                 domainProp.SetValue(domain, value);
             };
             return new FieldPlan<TDomain, TDto>(cipherProp.Name, attr.SaltProperty, attr.SkipIfEmpty, getCipher, setCipher, getSalt, getPlain, setPlain);

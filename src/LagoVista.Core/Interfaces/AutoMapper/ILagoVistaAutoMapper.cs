@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
+using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -37,6 +38,14 @@ namespace LagoVista.Core.Interfaces.AutoMapper
         Task MapAsync<TSource, TTarget>(TSource source, TTarget target, EntityHeader org, EntityHeader user, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
             where TTarget : class
             where TSource : class;
+
+        Task<TTarget> CreateAsync<TSource, TTarget>(TSource source, EntityHeader org, EntityHeader user, Action<MappingPlanComposer<TSource, TTarget>> configurePlan, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
+         where TTarget : class, new()
+         where TSource : class;
+
+        Task MapAsync<TSource, TTarget>(TSource source, TTarget target, EntityHeader org, EntityHeader user, Action<MappingPlanComposer<TSource, TTarget>> configurePlan, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
+                    where TTarget : class
+                    where TSource : class;
     }
 
     public interface IEncryptionKeyProvider

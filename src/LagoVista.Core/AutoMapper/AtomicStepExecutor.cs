@@ -26,27 +26,33 @@ namespace LagoVista.Core.AutoMapper
             for (var i = 0; i < steps.Count; i++)
             {
                 var step = steps[i];
-
-                switch (step.Kind)
+                if (step.ConverterType != null)
                 {
-                    case AtomicMapStepKind.Ignored:
-                    case AtomicMapStepKind.Crypto:
-                    case AtomicMapStepKind.ChildLeaf:
-                        // Not executed here.
-                        continue;
+                    AssignWithConverter(source, target, step);
+                }
+                else
+                {
+                    switch (step.Kind)
+                    {
+                        case AtomicMapStepKind.Ignored:
+                        case AtomicMapStepKind.Crypto:
+                        case AtomicMapStepKind.ChildLeaf:
+                            // Not executed here.
+                            continue;
 
-                    case AtomicMapStepKind.DirectAssign:
-                    case AtomicMapStepKind.NullableDirectAssign:
-                    case AtomicMapStepKind.MapToFanoutAssign:
-                        AssignDirect(source, target, step);
-                        continue;
+                        case AtomicMapStepKind.DirectAssign:
+                        case AtomicMapStepKind.NullableDirectAssign:
+                        case AtomicMapStepKind.MapToFanoutAssign:
+                            AssignDirect(source, target, step);
+                            continue;
 
-                    case AtomicMapStepKind.ConverterAssign:
-                        AssignWithConverter(source, target, step);
-                        continue;
+                        case AtomicMapStepKind.ConverterAssign:
+                            AssignWithConverter(source, target, step);
+                            continue;
 
-                    default:
-                        throw new NotSupportedException($"Unsupported atomic step kind: {step.Kind}.");
+                        default:
+                            throw new NotSupportedException($"Unsupported atomic step kind: {step.Kind}.");
+                    }
                 }
             }
         }

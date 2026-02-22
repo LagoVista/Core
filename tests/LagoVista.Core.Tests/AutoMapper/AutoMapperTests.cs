@@ -3,7 +3,7 @@ using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
-using LagoVista.Core.Tests.AutoMapper;
+using LagoVista.Core.Tests.AutoMapper.TestModels;
 using LagoVista.Models;
 using NUnit.Framework;
 using System;
@@ -39,11 +39,28 @@ namespace LagoVista.Core.Tests.Mapping
         }
 
         [Test]
+        public async Task AppModels()
+        {
+            try
+            {
+                MappingVerifier.Verify<CoreEntity, DbModelBase>(true);
+                MappingVerifier.Verify<DbModelBase, CoreEntity>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
+        [Test]
         public async Task TestModels()
         {
             try
             {
-                MappingVerifier.Verify<DbModelBase, CoreEntity>(true);
+                MappingVerifier.Verify<ChildIdMappingSource, ChildIdMappingTarget>(true);
+
+
+
                 MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
                 MappingVerifier.Verify<Account, AccountDto>(true);
                 MappingVerifier.Verify<PlainEntityHeaderSource, PlainEntityHeaderDestination>(true);
@@ -52,6 +69,15 @@ namespace LagoVista.Core.Tests.Mapping
             {
                 Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
+        }
+
+        [Test]
+        public async Task MapstoChildIdTest()
+        {
+            var source = new ChildIdMappingSource();
+            source.GrandChild = new GrandChild() { Id = "grandchild-789" }; 
+            var tgt = await _mapper.CreateAsync<ChildIdMappingSource, ChildIdMappingTarget>(source, Org(), User(), null, CancellationToken.None);
+            Assert.That(tgt.GrandChildId, Is.EqualTo("grandchild-789"));
         }
 
         [Test]

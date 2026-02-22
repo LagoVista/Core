@@ -3,7 +3,7 @@ using LagoVista.Models;
 using System;
 using System.Collections.Generic;
 
-namespace LagoVista.Core.Tests.AutoMapper
+namespace LagoVista.Core.Tests.AutoMapper.TestModels
 {
     public class BigParent : RelationalEntityBase
     {

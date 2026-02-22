@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 
-namespace LagoVista.Core.Tests.AutoMapper
+namespace LagoVista.Core.Tests.AutoMapper.TestModels
 {
 
     [TestFixture]

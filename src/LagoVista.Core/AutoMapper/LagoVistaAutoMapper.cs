@@ -19,7 +19,7 @@ namespace LagoVista.Core.AutoMapper
         private readonly IEncryptedMapper _encryptedMapper;
         private readonly IAtomicPlanBuilder _atomicBuilder;
         private readonly IMapValueConverterRegistry _converters;
-
+     
         private readonly AtomicStepExecutor _atomicExecutor;
 
         // Cache atomic steps only: GraphShape/ChildSteps are per-call.
@@ -35,12 +35,7 @@ namespace LagoVista.Core.AutoMapper
             _atomicExecutor = new AtomicStepExecutor(_converters);
         }
 
-        public async Task<TTarget> CreateAsync<TSource, TTarget>(
-            TSource source,
-            EntityHeader org,
-            EntityHeader user,
-            Action<TSource, TTarget> afterMap = null,
-            CancellationToken ct = default)
+        public async Task<TTarget> CreateAsync<TSource, TTarget>(TSource source, EntityHeader org, EntityHeader user, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
             where TTarget : class, new()
             where TSource : class
         {
@@ -49,13 +44,7 @@ namespace LagoVista.Core.AutoMapper
             return target;
         }
 
-        public async Task<TTarget> CreateAsync<TSource, TTarget>(
-            TSource source,
-            EntityHeader org,
-            EntityHeader user,
-            Action<MappingPlanComposer<TSource, TTarget>> configurePlan,
-            Action<TSource, TTarget> afterMap = null,
-            CancellationToken ct = default)
+        public async Task<TTarget> CreateAsync<TSource, TTarget>(TSource source, EntityHeader org, EntityHeader user, Action<MappingPlanComposer<TSource, TTarget>> configurePlan, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
             where TTarget : class, new()
             where TSource : class
         {
@@ -64,27 +53,14 @@ namespace LagoVista.Core.AutoMapper
             return target;
         }
 
-        public async Task MapAsync<TSource, TTarget>(
-            TSource source,
-            TTarget target,
-            EntityHeader org,
-            EntityHeader user,
-            Action<TSource, TTarget> afterMap = null,
-            CancellationToken ct = default)
+        public async Task MapAsync<TSource, TTarget>(TSource source, TTarget target, EntityHeader org, EntityHeader user, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
             where TTarget : class
             where TSource : class
         {
             await MapAsync(source, target, org, user, configurePlan: null, afterMap, ct).ConfigureAwait(false);
         }
 
-        public async Task MapAsync<TSource, TTarget>(
-            TSource source,
-            TTarget target,
-            EntityHeader org,
-            EntityHeader user,
-            Action<MappingPlanComposer<TSource, TTarget>> configurePlan,
-            Action<TSource, TTarget> afterMap = null,
-            CancellationToken ct = default)
+        public async Task MapAsync<TSource, TTarget>( TSource source, TTarget target, EntityHeader org, EntityHeader user, Action<MappingPlanComposer<TSource, TTarget>> configurePlan,Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)
             where TTarget : class
             where TSource : class
         {
@@ -133,6 +109,10 @@ namespace LagoVista.Core.AutoMapper
                     throw new InvalidOperationException(string.Join("\r\n", planResult.Errors.Select(err => err.Message)));
 
                 childSteps = planResult.Result.ChildSteps;
+                foreach (var step in atomicSteps)
+                {
+                    Console.WriteLine($"[MAPPER] {step.SourceProperty.Name} - {step.TargetProperty.Name} - {step.Kind}");
+                }
             }
 
             return new MappingPlan<TSource, TTarget>(atomicSteps, childSteps);
