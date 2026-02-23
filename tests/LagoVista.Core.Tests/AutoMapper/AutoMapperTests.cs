@@ -57,10 +57,10 @@ namespace LagoVista.Core.Tests.Mapping
         {
             try
             {
+                MappingVerifier.Verify<SimpleManual, SimpleManualDto>(true);
+                MappingVerifier.Verify<SimpleManualDto, SimpleManual>(true);
+
                 MappingVerifier.Verify<ChildIdMappingSource, ChildIdMappingTarget>(true);
-
-
-
                 MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
                 MappingVerifier.Verify<Account, AccountDto>(true);
                 MappingVerifier.Verify<PlainEntityHeaderSource, PlainEntityHeaderDestination>(true);
