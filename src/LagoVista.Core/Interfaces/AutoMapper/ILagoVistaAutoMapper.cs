@@ -23,13 +23,6 @@ namespace LagoVista.Core.Interfaces.AutoMapper
         IMapValueConverter GetConverter(Type sourceType, Type targetType);
     }
 
-
-    public interface IMappingPlanBuilder
-    {
-        IMappingPlan Build(Type sourceType, Type targetType);
-    }
-
-
     public interface ILagoVistaAutoMapper
     {
         Task<TTarget> CreateAsync<TSource, TTarget>(TSource source, EntityHeader org, EntityHeader user, Action<TSource, TTarget> afterMap = null, CancellationToken ct = default)

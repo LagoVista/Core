@@ -31,6 +31,8 @@ namespace LagoVista.Core.AutoMapper
             where TDomain : class
             where TDto : class
         {
+            Console.WriteLine($"{this.Tag()} - {typeof(TDto).Name} => {typeof(TDomain).Name } ");
+
             if (domain == null) throw new ArgumentNullException(nameof(domain));
             if (dto == null) throw new ArgumentNullException(nameof(dto));
             if (org == null) throw new ArgumentNullException(nameof(org));
@@ -39,10 +41,14 @@ namespace LagoVista.Core.AutoMapper
             var plan = GetOrBuildPlan<TDomain, TDto>();
 
             var secretId = BuildSecretId(plan, dto, org);
+            Console.WriteLine($"[MapDecrypt] Resolved secretId='{secretId}' for DTO {typeof(TDto).Name}.");
+
             var encryptionKey = await _keyProvider.GetKeyAsync(secretId, org, user, plan.CreateIfMissing, ct).ConfigureAwait(false);
 
             foreach (var f in plan.Fields)
             {
+                
+
                 var ciphertext = f.GetCiphertext(dto);
                 if (f.SkipIfEmpty && String.IsNullOrEmpty(ciphertext))
                     continue;
@@ -52,6 +58,8 @@ namespace LagoVista.Core.AutoMapper
                     throw new InvalidOperationException($"Salt resolved empty for DTO {typeof(TDto).Name}.{f.SaltPropertyName}.");
 
                 var plaintext = _encryptor.Decrypt(salt, ciphertext, encryptionKey);
+                Console.WriteLine($"[MapDecrypt] Decrypted field for DTO {typeof(TDto).Name}.{f.CiphertextPropertyName}. Ciphertext='{ciphertext}', Plaintext='{plaintext}'.");
+                f.SetPlaintext(domain, plaintext);
             }
         }
 
@@ -89,7 +97,6 @@ namespace LagoVista.Core.AutoMapper
             }
             throw new InvalidOperationException($"No converter registered to convert string to {domainType.Name} for decryption.");
         }
-
 
         public async Task MapEncryptAsync<TDomain, TDto>(TDomain domain, TDto dto, EntityHeader org, EntityHeader user, CancellationToken ct = default)
             where TDomain : class
@@ -166,6 +173,7 @@ namespace LagoVista.Core.AutoMapper
                 .Where(x => x.Attr != null)
                 .Select(x => BuildField<TDomain, TDto>(x.Prop, x.Attr))
                 .ToArray();
+
 
             return new Plan<TDomain, TDto>(keyAttr.SecretIdFormat, keyAttr.CreateIfMissing, keyAttr.IdProperty, getId, fields);
         }

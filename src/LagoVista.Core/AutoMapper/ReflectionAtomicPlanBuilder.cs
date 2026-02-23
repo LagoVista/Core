@@ -60,6 +60,12 @@ namespace LagoVista.Core.AutoMapper
                     steps.Add(new AtomicMapStep(tprop, sourceProperty: null, kind: AtomicMapStepKind.Ignored));
                     mappedTargets.Add(tprop.Name);
                 }
+
+                if (tprop.GetCustomAttribute<ManualMappingAttribute>() != null)
+                {
+                    steps.Add(new AtomicMapStep(tprop, sourceProperty: null, kind: AtomicMapStepKind.Manual));
+                    mappedTargets.Add(tprop.Name);
+                }
             }
 
             // Pass 1: target-driven (MapFrom + same-name)
@@ -69,6 +75,9 @@ namespace LagoVista.Core.AutoMapper
                     continue;
 
                 if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
+                    continue;
+
+                if (tprop.GetCustomAttribute<ManualMappingAttribute>() != null)
                     continue;
 
                 // Crypto plaintext properties are handled by crypto when decrypting.
@@ -105,6 +114,9 @@ namespace LagoVista.Core.AutoMapper
                     if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
                         continue;
 
+                    if (tprop.GetCustomAttribute<ManualMappingAttribute>() != null)
+                        continue;
+
                     if (TryBuildAtomicStep(sourceType, targetType, sprop, tprop, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, errors, out var step))
                     {
                         steps.Add(step);
@@ -133,8 +145,10 @@ namespace LagoVista.Core.AutoMapper
                         continue;
                     }
 
-
                     if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
+                        continue;
+
+                    if (tprop.GetCustomAttribute<ManualMappingAttribute>() != null)
                         continue;
 
                     if (mappedTargets.Contains(tprop.Name))
@@ -204,28 +218,25 @@ namespace LagoVista.Core.AutoMapper
 
         private void DiagnosticsPrint(string tag, string message)
         {
-            Console.WriteLine($"[{tag}] {message}");
+           // Console.WriteLine($"{tag} {message}");
         }
 
-        private bool TryBuildAtomicStep(
-            Type sourceType,
-            Type targetType,
-            PropertyInfo sprop,
-            PropertyInfo tprop,
-            AtomicMapStepKind directKind,
-            AtomicMapStepKind nullableKind,
-            AtomicMapStepKind converterKind,
-            List<string> errors,
-            out AtomicMapStep step)
+        private bool TryBuildAtomicStep(Type sourceType, Type targetType, PropertyInfo sprop,
+            PropertyInfo tprop,  AtomicMapStepKind directKind, AtomicMapStepKind nullableKind,
+            AtomicMapStepKind converterKind, List<string> errors, out AtomicMapStep step)
         {
             step = null;
 
             var st = sprop.PropertyType;
             var tt = tprop.PropertyType;
 
+            var targetMappingType = TargetTypes.FromProperty;
+            if (tt.GetCustomAttribute<DateOnlydAttribute>() != null)
+                targetMappingType = TargetTypes.DateOnly;
+
             if (tt.IsAssignableFrom(st))
             {
-                step = new AtomicMapStep(tprop, sprop, directKind);
+                step = new AtomicMapStep(tprop, sprop, directKind, targetType: targetMappingType);
                 return true;
             }
 
@@ -250,7 +261,7 @@ namespace LagoVista.Core.AutoMapper
             if (_converters.CanConvert(st, tt))
             {
                 var converter = _converters.GetConverter(st, tt);
-                step = new AtomicMapStep(tprop, sprop, converterKind, converterType: converter.GetType());
+                step = new AtomicMapStep(tprop, sprop, converterKind, converterType: converter.GetType(), targetType: targetMappingType);
                 return true;
             }
 

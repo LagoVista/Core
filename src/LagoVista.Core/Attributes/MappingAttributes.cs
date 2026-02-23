@@ -31,7 +31,7 @@ namespace LagoVista.Core.Attributes
     public sealed class MapToIgnoreAttribute : Attribute
     {
         public string? Reason { get; }
-        public MapToIgnoreAttribute(string? reason = null) => Reason = reason;
+        public MapToIgnoreAttribute(string reason = null) => Reason = reason;
     }
 
 
@@ -39,6 +39,34 @@ namespace LagoVista.Core.Attributes
     public sealed class IgnoreOnMapToAttribute : Attribute
     {
         public string? Reason { get; }
-        public IgnoreOnMapToAttribute(string? reason = null) => Reason = reason;
+        public IgnoreOnMapToAttribute(string reason = null) => Reason = reason;
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class ManualMappingAttribute : Attribute
+    {
+        public string? How { get; }
+        public ManualMappingAttribute(string how = null) => How = how;
+    }
+
+
+    /// <summary>
+    /// Put this on domain properties that must be represented in the DTO persistence layer.
+    /// (Avoids having to ignore every transient/computed domain property.)
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class MapRequiredAttribute : Attribute
+    {
+        public string? Reason { get; }
+        public MapRequiredAttribute(string reason = null) => Reason = reason;
+    }
+
+    /// <summary>
+    /// Put this on domain properties that must be represented in the DTO persistence layer.
+    /// (Avoids having to ignore every transient/computed domain property.)
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class DateOnlydAttribute : Attribute
+    {
     }
 }

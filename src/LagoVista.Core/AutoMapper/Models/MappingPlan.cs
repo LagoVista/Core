@@ -30,14 +30,17 @@ namespace LagoVista.Core.AutoMapper
         public PropertyInfo TargetProperty { get; }
         public PropertyInfo SourceProperty { get; }
         public AtomicMapStepKind Kind { get; }
+
+        public TargetTypes TargetType { get; }
         public Type ConverterType { get; }
 
-        public AtomicMapStep(PropertyInfo targetProperty, PropertyInfo sourceProperty, AtomicMapStepKind kind, Type converterType = null)
+        public AtomicMapStep(PropertyInfo targetProperty, PropertyInfo sourceProperty, AtomicMapStepKind kind, Type converterType = null, TargetTypes targetType = TargetTypes.FromProperty)
         {
             TargetProperty = targetProperty ?? throw new ArgumentNullException(nameof(targetProperty));
             SourceProperty = sourceProperty;
             Kind = kind;
             ConverterType = converterType;
+            TargetType = targetType;
         }
 
         public override string ToString()
@@ -45,6 +48,12 @@ namespace LagoVista.Core.AutoMapper
             var convertType = ConverterType == null ? "None" : ConverterType.Name;  
             return $"{SourceProperty?.Name ?? "none"}=>{TargetProperty?.Name ?? "none"}; Strategy={Kind}; Converter={convertType};";
         }
+    }
+
+    public enum TargetTypes
+    {
+        FromProperty,
+        DateOnly
     }
 
     public enum AtomicMapStepKind
@@ -56,6 +65,7 @@ namespace LagoVista.Core.AutoMapper
         Ignored,
         Crypto,
         ChildLeaf,
+        Manual,
     }
 
     public interface IChildMapStep

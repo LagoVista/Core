@@ -34,6 +34,7 @@ namespace LagoVista.Core.AutoMapper
                 {
                     switch (step.Kind)
                     {
+                        case AtomicMapStepKind.Manual:
                         case AtomicMapStepKind.Ignored:
                         case AtomicMapStepKind.Crypto:
                         case AtomicMapStepKind.ChildLeaf:

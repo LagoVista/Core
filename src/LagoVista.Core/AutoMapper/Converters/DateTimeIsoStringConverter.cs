@@ -30,8 +30,10 @@ namespace LagoVista.Core.AutoMapper.Converters
 
             // DateTime -> string
             if (sourceValue is DateTime dt && tt == typeof(string))
-                return dt.ToJSONString();
+            {
 
+                return dt.ToJSONString();
+            }
             // string -> DateTime / DateTime?
             if (sourceValue is string s && tt == typeof(DateTime))
             {
