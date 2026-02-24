@@ -22,6 +22,14 @@ namespace LagoVista.Core.Managers
         readonly IDependencyManager _dependencyManager;
         readonly ISecurity _security;
 
+        public enum CoreSecurityRoles
+        {
+            SysAdmin,
+            OrgAdmin,
+            FinanceAdmin,
+        }
+
+
         public ManagerBase(ILogger logger, IAppConfig appConfig, IDependencyManager dependencyManager, ISecurity security)
         {
             _appConfig = appConfig;
@@ -78,6 +86,25 @@ namespace LagoVista.Core.Managers
         }
 
 
+        protected void AssertRole(CoreSecurityRoles coreRole)
+        {
+            
+        }
+
+        protected bool HasRole(CoreSecurityRoles coreRole)
+        {
+            return true;
+        }
+
+        protected void AssertRole(string roleName)
+        {
+
+        }
+
+        protected bool HasRole(string roleNane)
+        {
+            return true;
+        }
 
         public bool IsForInitialization { get; set; } = false;
 
