@@ -21,5 +21,7 @@ namespace LagoVista.Core.Interfaces
         Task<IEnumerable<object>> GetCollection(string collectionKey);
         Task<string> GetFromCollection(string collectionKey, string key);
         Task<IDictionary<string, string>> GetManyAsync(IEnumerable<string> keys);
+        Task<long> GetLongAsync(string key);
+        Task<long> IncrementAsync(string key);
     }
 }

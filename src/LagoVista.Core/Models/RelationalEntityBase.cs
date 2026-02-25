@@ -9,7 +9,8 @@ namespace LagoVista.Core.Models
 {
     public class RelationalEntityBase 
     {
-        public string Id { get; set; }
+        // This should NOT use our normalized Guid format, it's actually a GUID in the database.
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [MapTo(nameof(DbModelBase.Organization))]
         public EntityHeader OwnerOrganization { get; set; }
