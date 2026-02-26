@@ -38,6 +38,15 @@ namespace LagoVista.Core.Managers
             _security = security;
         }
 
+        public ManagerBase(ICoreAppServices services)
+        {
+            if(services == null) throw new ArgumentNullException(nameof(services));
+            _appConfig = services.AppConfig ?? throw new ArgumentNullException(nameof(services.AppConfig));
+            _logger = services.Logger ?? throw new ArgumentNullException(nameof(services.Logger));
+            _dependencyManager = services.DependencyManager ?? throw new ArgumentNullException(nameof(services.DependencyManager));
+            _security = services.Security ?? throw new ArgumentNullException(nameof(services.Security));
+        }
+
         public IAppConfig AppConfig { get { return _appConfig; } }
         public ILogger Logger { get { return _logger; } }
 
