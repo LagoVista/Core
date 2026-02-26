@@ -22,4 +22,18 @@ namespace LagoVista.Core.Tests.AutoMapper.TestModels
         [MapTo(nameof(DbModelBase.LastUpdateDate))]
         public string LastUpdatedDate { get; set; }
     }
+
+    public class EntityHeaderPrimary
+    {
+
+        [MapToNameAndId("Id", "Text")]
+        public EntityHeader TheProperty { get; set; }
+
+    }
+
+    public class EntityHeaderDTO
+    {
+        public string Id { get; set; }
+        public string Text { get; set; }
+    }
 }

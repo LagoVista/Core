@@ -17,6 +17,20 @@ namespace LagoVista.Core.AutoMapper
             _converters = converters == null ? new List<IMapValueConverter>() : new List<IMapValueConverter>(converters);
         }
 
+        public IMapValueConverter GetConverter(Type converterType)
+        {
+            if (converterType == null) throw new ArgumentNullException(nameof(converterType));
+
+            for (var i = 0; i < _converters.Count; ++i)
+            {
+                var c = _converters[i];
+                if (c != null && c.GetType() == converterType)
+                    return c;
+            }
+
+            return null;
+        }
+
         public bool TryConvert(object sourceValue, Type targetType, out object convertedValue)
         {
             convertedValue = null;
@@ -38,6 +52,28 @@ namespace LagoVista.Core.AutoMapper
             return false;
         }
 
+
+        public bool TryConvert(object sourceValue, Type targetType, Type converterType, out object convertedValue)
+        {
+            convertedValue = null;
+
+            if (converterType == null) throw new ArgumentNullException(nameof(converterType));
+
+            if (sourceValue == null)
+                return true;
+
+            var converter = GetConverter(converterType);
+            if (converter == null)
+                return false;
+
+            // Optional safety: ensure the converter claims it can do this
+            if (!converter.CanConvert(sourceValue.GetType(), targetType))
+                return false;
+
+            convertedValue = converter.Convert(sourceValue, targetType);
+            return true;
+        }
+
         public bool CanConvert(Type sourceType, Type targetType)
         {
             if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
@@ -45,7 +81,7 @@ namespace LagoVista.Core.AutoMapper
 
             var st = Nullable.GetUnderlyingType(sourceType) ?? sourceType;
             var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
-
+    
             for (var i = 0; i < _converters.Count; ++i)
                 if (_converters[i].CanConvert(st, tt))
                     return true;

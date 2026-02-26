@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LagoVista.Core.Interfaces
 {
-    internal interface IDependencyPack
+    public interface IDependencyPack
     {
     }
 }

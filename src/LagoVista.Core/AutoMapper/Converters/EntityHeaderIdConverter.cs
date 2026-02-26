@@ -87,5 +87,37 @@ namespace LagoVista.Core.AutoMapper
 
             return (string)idProp.GetValue(entityHeader);
         }
-    } 
+    }
+
+    public sealed class EntityHeaderTextConverter : IMapValueConverter
+    {
+        public bool CanConvert(Type sourceType, Type targetType)
+        {
+            var st = Nullable.GetUnderlyingType(sourceType) ?? sourceType;
+            var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
+
+            if (!typeof(EntityHeader).IsAssignableFrom(st))
+                return false;
+
+            return tt == typeof(string);
+        }
+
+        public object Convert(object sourceValue, Type targetType)
+        {
+            if (sourceValue == null)
+                return null;
+
+            // Prefer Text, fallback to Name if present
+            var t = sourceValue.GetType();
+            var textProp = t.GetProperty("Text");
+            if (textProp != null && textProp.PropertyType == typeof(string))
+                return (string)textProp.GetValue(sourceValue);
+
+            var nameProp = t.GetProperty("Name");
+            if (nameProp != null && nameProp.PropertyType == typeof(string))
+                return (string)nameProp.GetValue(sourceValue);
+
+            return null;
+        }
+    }
 }

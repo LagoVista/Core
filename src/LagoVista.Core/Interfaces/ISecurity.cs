@@ -14,6 +14,7 @@ namespace LagoVista.Core.Interfaces
     public interface ISecurity
     {
         Task AuthorizeAsync(IOwnedEntity ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, string actionName);
+        Task AuthorizeAsync(RelationalEntityBase ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, string actionName);
         Task AuthorizeAsync(EntityHeader user, EntityHeader org, string actionName, Object data );
         Task AuthorizeFinanceAdminAsync(EntityHeader user, EntityHeader org, string actionName, Object data);
         Task AuthorizeAsync(EntityHeader user, EntityHeader org, Type entityType, Actions action, string id);

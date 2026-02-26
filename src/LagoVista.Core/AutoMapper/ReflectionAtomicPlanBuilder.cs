@@ -96,6 +96,71 @@ namespace LagoVista.Core.AutoMapper
                 }
             }
 
+            // Pass 1.5a: EntityHeader <-> (Id, Text) mapping
+            // Pass 1.5a: Id + Text -> EntityHeader
+            foreach (var tprop in targetProps)
+            {
+                if (mappedTargets.Contains(tprop.Name))
+                    continue;
+
+                if (tprop.GetCustomAttribute<IgnoreOnMapToAttribute>() != null)
+                    continue;
+
+                if (tprop.GetCustomAttribute<ManualMappingAttribute>() != null)
+                    continue;
+
+                var map = tprop.GetCustomAttribute<MapToNameAndIdAttribute>(inherit: true);
+                if (map == null)
+                    continue;
+
+                if (!typeof(EntityHeader).IsAssignableFrom(tprop.PropertyType))
+                    continue;
+
+                if (!sourceLookup.TryGetValue(map.IdPropertyName, out var idSource))
+                    continue;
+
+                if (!sourceLookup.TryGetValue(map.TextPropertyName, out var textSource))
+                    continue;
+
+                steps.Add(new AtomicMapStep(tprop, idSource, AtomicMapStepKind.EntityHeaderFromIdText, sourceProperty2: textSource));
+                mappedTargets.Add(tprop.Name);
+            }
+
+            // Pass 1.5b: MapTo fan-out for EntityHeader -> (Id, Text)
+            foreach (var sprop in sourceProps)
+            {
+                var map = sprop.GetCustomAttribute<MapToNameAndIdAttribute>(inherit: true);
+                if (map == null)
+                    continue;
+
+                // Forward: EntityHeaderPrimary -> DTO (fan-out into Id + Text)
+                if (targetLookup.TryGetValue(map.IdPropertyName, out var idTarget) &&
+                    !mappedTargets.Contains(idTarget.Name) &&
+                    idTarget.GetCustomAttribute<IgnoreOnMapToAttribute>() == null &&
+                    idTarget.GetCustomAttribute<ManualMappingAttribute>() == null)
+                {
+                    steps.Add(new AtomicMapStep(
+                        targetProperty: idTarget,
+                        sourceProperty: sprop,
+                        kind: AtomicMapStepKind.MapToFanoutAssign,
+                        converterType: typeof(EntityHeaderIdConverter)));
+                        mappedTargets.Add(idTarget.Name);
+                }
+
+                if (targetLookup.TryGetValue(map.TextPropertyName, out var textTarget) &&
+                    !mappedTargets.Contains(textTarget.Name) &&
+                    textTarget.GetCustomAttribute<IgnoreOnMapToAttribute>() == null &&
+                    textTarget.GetCustomAttribute<ManualMappingAttribute>() == null)
+                {
+                    steps.Add(new AtomicMapStep(
+                         targetProperty: textTarget,
+                         sourceProperty: sprop,
+                         kind: AtomicMapStepKind.MapToFanoutAssign,
+                         converterType: typeof(EntityHeaderTextConverter)));
+                         mappedTargets.Add(textTarget.Name);
+                }
+            }
+
             // Pass 2: MapTo fan-out
             foreach (var sprop in sourceProps)
             {
@@ -171,7 +236,7 @@ namespace LagoVista.Core.AutoMapper
 
             if (canEncrypt)
             {
-                DiagnosticsPrint(this.Tag(), "Can Decrypt");
+                DiagnosticsPrint(this.Tag(), "Can Encrypt");
 
                 // sourceType is Domain; [EncryptedField] lives on source properties (plaintext props)
                 foreach (var sprop in sourceProps)

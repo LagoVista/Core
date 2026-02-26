@@ -69,4 +69,17 @@ namespace LagoVista.Core.Attributes
     public sealed class DateOnlydAttribute : Attribute
     {
     }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class MapToNameAndIdAttribute : Attribute
+    {
+        public string IdPropertyName { get; }
+        public string TextPropertyName { get; }
+
+        public MapToNameAndIdAttribute(string idPropertyName, string namePropertyName)
+        {
+            IdPropertyName = idPropertyName ?? throw new ArgumentNullException(nameof(idPropertyName));
+            TextPropertyName = namePropertyName ?? throw new ArgumentNullException(nameof(namePropertyName));
+        }
+    }
 }

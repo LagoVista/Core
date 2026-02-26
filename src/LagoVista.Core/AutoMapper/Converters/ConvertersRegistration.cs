@@ -17,6 +17,7 @@ namespace LagoVista.Core.AutoMapper.Converters
             services.AddSingleton<IMapValueConverter, EntityHeaderEnumToStringConverter>();
             services.AddSingleton<IMapValueConverter, StringToEntityHeaderEnumConverter>();
             services.AddSingleton<IMapValueConverter, GuidStringConverter>();
+            services.AddSingleton<IMapValueConverter, EntityHeaderEnumToStringConverter>();
             services.AddSingleton<IMapValueConverterRegistry, MapValueConverterRegistry>();
         }
 
@@ -29,6 +30,7 @@ namespace LagoVista.Core.AutoMapper.Converters
             new DateOnlyStringConverter(),
             new NumericStringConverter(),
             new GuidStringConverter(),
+            new EntityHeaderTextConverter(),
             new EntityHeaderEnumToStringConverter(),
             new StringToEntityHeaderEnumConverter(),
         });

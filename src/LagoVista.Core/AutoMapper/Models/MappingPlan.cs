@@ -27,26 +27,34 @@ namespace LagoVista.Core.AutoMapper
 
     public sealed class AtomicMapStep
     {
-        public PropertyInfo TargetProperty { get; }
-        public PropertyInfo SourceProperty { get; }
-        public AtomicMapStepKind Kind { get; }
-
-        public TargetTypes TargetType { get; }
-        public Type ConverterType { get; }
-
-        public AtomicMapStep(PropertyInfo targetProperty, PropertyInfo sourceProperty, AtomicMapStepKind kind, Type converterType = null, TargetTypes targetType = TargetTypes.FromProperty)
+        public AtomicMapStep(
+            PropertyInfo targetProperty,
+            PropertyInfo sourceProperty,
+            AtomicMapStepKind kind,
+            PropertyInfo sourceProperty2 = null,
+            Type converterType = null,
+            TargetTypes targetType = TargetTypes.FromProperty)
         {
-            TargetProperty = targetProperty ?? throw new ArgumentNullException(nameof(targetProperty));
+            TargetProperty = targetProperty;
             SourceProperty = sourceProperty;
+            SourceProperty2 = sourceProperty2;
             Kind = kind;
             ConverterType = converterType;
             TargetType = targetType;
         }
 
+        public PropertyInfo TargetProperty { get; }
+        public PropertyInfo SourceProperty { get; }
+        public PropertyInfo SourceProperty2 { get; } // used only when Kind needs it
+        public AtomicMapStepKind Kind { get; }
+        public Type ConverterType { get; }
+        public TargetTypes TargetType { get; }
+
         public override string ToString()
         {
-            var convertType = ConverterType == null ? "None" : ConverterType.Name;  
-            return $"{SourceProperty?.Name ?? "none"}=>{TargetProperty?.Name ?? "none"}; Strategy={Kind}; Converter={convertType};";
+            return $"{Kind}: {SourceProperty?.Name ?? "[null]"}{(SourceProperty2 != null ? $" + {SourceProperty2.Name}" : "")} => {TargetProperty.Name}" +
+                   $"{(ConverterType != null ? $" (Converter: {ConverterType.Name})" : "")}" +
+                   $"{(TargetType != TargetTypes.FromProperty ? $" (TargetType: {TargetType})" : "")}";
         }
     }
 
@@ -66,6 +74,7 @@ namespace LagoVista.Core.AutoMapper
         Crypto,
         ChildLeaf,
         Manual,
+        EntityHeaderFromIdText
     }
 
     public interface IChildMapStep

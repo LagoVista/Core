@@ -13,6 +13,10 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="AutoMapper\Converters\EntityHeaderRelationalConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AutoMapper\Converters\EntityHeaderRelationalConverter.cs" />
     <None Include="Resources\AuthenticationResources.resx">
       <Generator>
       </Generator>

@@ -51,6 +51,20 @@ namespace LagoVista.Core.Tests.Mapping
                 Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
         }
+        [Test]
+        public void TestEHMapping()
+        {
+            try
+            { 
+                MappingVerifier.Verify<EntityHeaderPrimary, EntityHeaderDTO>(true);
+                MappingVerifier.Verify<EntityHeaderDTO, EntityHeaderPrimary>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
 
         [Test]
         public async Task TestModels()
@@ -146,6 +160,24 @@ namespace LagoVista.Core.Tests.Mapping
 
             var roundTrip = await _mapper.CreateAsync<AccountDto, Account>(dto, Org(), User(), null, CancellationToken.None);
             Assert.That(roundTrip.Balance, Is.EqualTo(77.01));
+        }
+
+        [Test]
+        public async Task EH_To_Name_and_Id()
+        {
+            var eh = new EntityHeaderPrimary() { TheProperty = EntityHeader.Create("eh-123", "My Entity Header") };     
+            var dto = await _mapper.CreateAsync<EntityHeaderPrimary, EntityHeaderDTO>(eh, Org(), User(), null, CancellationToken.None);
+            Assert.That(dto.Id, Is.EqualTo("eh-123"));
+            Assert.That(dto.Text, Is.EqualTo("My Entity Header"));
+    }
+
+        [Test]
+        public async Task Name_and_Id_ToEH()
+        {
+            var dto = new EntityHeaderDTO() { Id = "MYID", Text = "The TextFor The Property" };
+            var eh   = await _mapper.CreateAsync<EntityHeaderDTO, EntityHeaderPrimary>(dto, Org(), User(), null, CancellationToken.None);
+            Assert.That(eh.TheProperty.Id, Is.EqualTo("MYID"));
+            Assert.That(eh.TheProperty.Text, Is.EqualTo("The TextFor The Property"));
         }
 
         [Test]

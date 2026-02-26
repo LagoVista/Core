@@ -125,6 +125,14 @@ namespace LagoVista.Core.Managers
             await _security.AuthorizeAsync(ownedEntity, action, user, org, actionName);
         }
 
+        protected async Task AuthorizeAsync(RelationalEntityBase ownedEntity, AuthorizeActions action, EntityHeader user, EntityHeader org, String actionName = null)
+        {
+            if (IsForInitialization)
+                return;
+
+            await _security.AuthorizeAsync(ownedEntity, action, user, org, actionName);
+        }
+
         protected Task<DependentObjectCheckResult> CheckForDepenenciesAsync(IIDEntity instance)
         {
             return _dependencyManager.CheckForDependenciesAsync(instance);

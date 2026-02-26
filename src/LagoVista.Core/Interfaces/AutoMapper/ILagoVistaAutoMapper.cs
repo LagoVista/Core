@@ -18,9 +18,11 @@ namespace LagoVista.Core.Interfaces.AutoMapper
         int AddRange(params IMapValueConverter[] converters);
         IEnumerable<IMapValueConverter> Converters { get; }
 
-        bool TryConvert(object sourceValue, Type targetType, out object convertedValue);
         bool CanConvert(Type sourceType, Type targetType);
         IMapValueConverter GetConverter(Type sourceType, Type targetType);
+        IMapValueConverter GetConverter(Type converterType);
+        bool TryConvert(object sourceValue, Type targetType, out object convertedValue);
+        bool TryConvert(object sourceValue, Type targetType, Type converterType, out object convertedValue);
     }
 
     public interface ILagoVistaAutoMapper
