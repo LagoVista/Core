@@ -97,10 +97,6 @@ namespace LagoVista.Core.AutoMapper
                 _atomicStepsCache.TryAdd(key, atomicSteps);
             }
 
-            foreach (var step in atomicSteps)
-            {
-                Console.WriteLine($"{this.Tag()} - ATOMIC {step.SourceProperty?.Name ?? "NULL"} - {step.TargetProperty?.Name ?? "NULL"} - {step.Kind}");
-            }
 
             IReadOnlyList<IChildMapStep> childSteps = Array.Empty<IChildMapStep>();
             if (configurePlan != null)
@@ -114,12 +110,6 @@ namespace LagoVista.Core.AutoMapper
                     throw new InvalidOperationException(string.Join("\r\n", planResult.Errors.Select(err => err.Message)));
 
                 childSteps = planResult.Result.ChildSteps;
-
-                foreach (var step in atomicSteps)
-                {
-                    Console.WriteLine($"${this.Tag()} - CHILD {step.SourceProperty?.Name ?? "NULL"} - {step.TargetProperty?.Name ?? "NULL"} - {step.Kind}");
-                }
-
             }
 
             return new MappingPlan<TSource, TTarget>(atomicSteps, childSteps);
