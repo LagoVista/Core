@@ -6,14 +6,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LagoVista.Models
 {
-    [Table("AppUser")]
+    [Table("AppUser", Schema="dbo")]
     public class AppUserDTO
     {
         [Key]
         public string AppUserId { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string FullName { get; set; }
+        [Required]
         public DateTime CreationDate { get; set; }
+        [Required]
         public DateTime LastUpdatedDate { get; set; }
 
         public EntityHeader ToEntityHeader()

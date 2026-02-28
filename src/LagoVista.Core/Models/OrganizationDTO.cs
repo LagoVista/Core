@@ -6,18 +6,25 @@ using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace LagoVista.Models
 {
+    [Table("Org", Schema = "dbo")]
     public class OrganizationDTO 
     {
         [Key]
         public string OrgId { get; set; }
+        [Required]
         public string OrgName { get; set; }
+        [Required]
         public string OrgBillingContactId { get; set; }
+        [Required]
         public string Status { get; set; }
+        [Required]
         public DateTime CreationDate { get; set; }
+        [Required]
         public DateTime LastUpdatedDate { get; set; }
 
         public EntityHeader ToEntityHeader()
