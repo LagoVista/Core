@@ -2,6 +2,7 @@
 // ContentHash: e4b5345b334d8680ed116b0c76b29eaa80bb2484731f7bea69c54a68fb61f1f9
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,9 @@ namespace LagoVista.Models
         public DateTime CreationDate { get; set; }
         [Required]
         public DateTime LastUpdatedDate { get; set; }
+
+        [IgnoreOnMapTo]
+        public AppUserDTO BillingContact { get; set; }
 
         public EntityHeader ToEntityHeader()
         {
