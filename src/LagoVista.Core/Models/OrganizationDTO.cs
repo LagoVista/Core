@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,16 @@ using System.Text;
 namespace LagoVista.Models
 {
     [Table("Org", Schema = "dbo")]
-    public class OrganizationDTO 
+    public class OrganizationDTO : IEntityHeader
     {
+        public string Id { get => OrgId; set => OrgId = value; }
+        public string Text { get => OrgName; set => OrgName = value; }
+
+
+        [MapTo("Id")]
         [Key]
         public string OrgId { get; set; }
+        [MapTo("Text")]
         [Required]
         public string OrgName { get; set; }
         [Required]
@@ -30,6 +37,11 @@ namespace LagoVista.Models
 
         [IgnoreOnMapTo]
         public AppUserDTO BillingContact { get; set; }
+
+        public bool IsEmpty()
+        {
+            return String.IsNullOrEmpty(OrgId) || String.IsNullOrEmpty(OrgName);
+        }
 
         public EntityHeader ToEntityHeader()
         {

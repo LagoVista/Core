@@ -91,7 +91,7 @@ namespace LagoVista.Core.AutoMapper.Converters
 
 		private static bool IsEntityHeaderType(Type type)
 		{
-			if (type == typeof(EntityHeader))
+			if (type == typeof(IEntityHeader))
 				return true;
 
 			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(EntityHeader<>))

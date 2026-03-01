@@ -121,6 +121,89 @@ namespace LagoVista.Core.Tests.Mapping
         }
 
         [Test]
+        public async Task DbModel_RelationBase_Maps_EH_Props_With_Child_Map()
+        {
+            var timeStamp = DateTime.UtcNow;
+
+            var db = new DbModelBase() { Id = Guid.NewGuid(), 
+                CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
+                LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
+                Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
+                LastUpdateDate = timeStamp,
+                CreationDate = timeStamp
+            };
+
+            MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
+            var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), pln=>
+            {   
+                pln.IncludeChild(ch => ch.CreatedBy, s => s.CreatedByUser);
+                pln.IncludeChild(ch => ch.LastUpdatedBy, s => s.LastUpdatedByUser);
+                pln.IncludeChild(ch => ch.OwnerOrganization, s => s.Organization);
+            },
+            null, CancellationToken.None );
+
+
+            Assert.That(entity.Id, Is.EqualTo(db.Id.ToString()));
+            Assert.That(entity.CreatedBy.Id, Is.EqualTo("user-123"));
+            Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
+            Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
+            Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Frnks Fish"));
+            Assert.That(entity.CreationDate, Is.EqualTo(timeStamp.ToJSONString()));
+            Assert.That(entity.LastUpdatedDate, Is.EqualTo(timeStamp.ToJSONString()));
+        }
+
+        [Test]
+        public async Task DbModel_RelationBase_Maps_EH_Props_Without_Child_Map()
+        {
+            var timeStamp = DateTime.UtcNow;
+
+            var db = new DbModelBase()
+            {
+                Id = Guid.NewGuid(),
+                CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
+                LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
+                Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
+                LastUpdateDate = timeStamp,
+                CreationDate = timeStamp
+            };
+
+            MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
+            var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), null, CancellationToken.None);
+
+            Assert.That(entity.Id, Is.EqualTo(db.Id.ToString()));
+            Assert.That(entity.CreatedBy.Id, Is.EqualTo("user-123"));
+            Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
+            Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
+            Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Frnks Fish"));
+            Assert.That(entity.CreationDate, Is.EqualTo(timeStamp.ToJSONString()));
+            Assert.That(entity.LastUpdatedDate, Is.EqualTo(timeStamp.ToJSONString()));
+        }
+
+        [Test]
+        public async Task DbModel_RelationBase_Maps_EH_Props_With_Child_Map_But_Null_EH()
+        {
+            var timeStamp = DateTime.UtcNow;
+            var entity = new RelationalEntityBase()
+            {
+                Id = Guid.NewGuid().ToString(),
+                CreatedBy = User(),
+                LastUpdatedBy = User(),
+                OwnerOrganization = Org(),
+                LastUpdatedDate = timeStamp.ToJSONString(),
+                CreationDate = timeStamp.ToJSONString()
+            };
+
+            MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
+            var dto = await _mapper.CreateAsync<RelationalEntityBase, DbModelBase>(entity, Org(), User(), null, CancellationToken.None);
+            Assert.That(dto.Id, Is.EqualTo(Guid.Parse(entity.Id)));
+            Assert.That(dto.CreatedById, Is.EqualTo("user-456"));
+            Assert.That(dto.OrganizationId, Is.EqualTo("org-123"));
+            Assert.That(dto.CreationDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
+            Assert.That(dto.LastUpdateDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
+
+        }
+
+        [Test]
         public async Task PlainMapping_CaseInsensitive_And_MapFrom_And_Ignore_Works()
         {
             var src = new PlainSource() { name = "Checking", EXTERNALPROVIDERID = "plaid-item-9", ShouldNotCopy = "nope" };

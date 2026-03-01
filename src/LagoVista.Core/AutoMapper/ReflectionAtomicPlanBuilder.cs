@@ -1,5 +1,6 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
@@ -341,9 +342,9 @@ namespace LagoVista.Core.AutoMapper
                 return true;
 
             // Non-generic EntityHeader is NOT a leaf (child edge).
-            if (typeof(EntityHeader).IsAssignableFrom(sourcePropType) &&
-                typeof(EntityHeader).IsAssignableFrom(targetPropType))
-                return true;
+            if (typeof(IEntityHeader).IsAssignableFrom(sourcePropType) &&
+                typeof(IEntityHeader).IsAssignableFrom(targetPropType))
+                return false;
 
             // Collections/lists are child edges (element types validated by graph validator).
             if (TryGetEnumerableElementType(sourcePropType, out _) && TryGetEnumerableElementType(targetPropType, out _))
