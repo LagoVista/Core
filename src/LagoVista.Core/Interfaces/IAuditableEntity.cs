@@ -12,8 +12,8 @@ namespace LagoVista.Core.Interfaces
     public interface IAuditableEntitySimple : ISoftDeletable
     {
         String Sha256Hex { get; set; }
-        String CreationDate { get; set; }
-        String LastUpdatedDate { get; set; }
+        UtcTimestamp CreationDate { get; set; }
+        UtcTimestamp LastUpdatedDate { get; set; }
         EntityHeader CreatedBy { get; set; }
         EntityHeader LastUpdatedBy { get; set; }
         EntityHeader ClonedFromId { get; set; }
@@ -29,7 +29,7 @@ namespace LagoVista.Core.Interfaces
 
         bool IsDeprecated { get; set; }
         EntityHeader DeprecatedBy { get; set; }
-        String DeprecationDate { get; set; }
+        UtcTimestamp? DeprecationDate { get; set; }
         String DeprecationNotes { get; set; }
 
         string ETag { get; set; }

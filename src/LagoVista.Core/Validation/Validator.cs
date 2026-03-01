@@ -321,7 +321,7 @@ namespace LagoVista.Core.Validation
                 {
                     result.AddSystemError(Resources.ValidationResource.CreationDateRequired, context);
                 }
-                else if (!auditableModel.CreationDate.SuccessfulJSONDate())
+                else if (!auditableModel.CreationDate.Value.SuccessfulJSONDate())
                 {
                     if (DateTime.TryParse(auditableModel.CreationDate, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
                     {
@@ -338,7 +338,7 @@ namespace LagoVista.Core.Validation
 
                     result.AddSystemError(Resources.ValidationResource.LastUpdatedDateRequired, context);
                 }
-                else if (!auditableModel.LastUpdatedDate.SuccessfulJSONDate())
+                else if (!auditableModel.LastUpdatedDate.Value.SuccessfulJSONDate())
                 {
                     if (DateTime.TryParse(auditableModel.LastUpdatedDate, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
                     {

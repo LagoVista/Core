@@ -83,19 +83,19 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         public EntityHeader DeletedBy { get; set; }
         [CloneOptions(false)]
-        public string DeletionDate { get; set; }
+        public UtcTimestamp? DeletionDate { get; set; }
         [CloneOptions(false)]
         public bool IsDeprecated { get; set; }
         [CloneOptions(false)]
         public EntityHeader DeprecatedBy { get; set; }
         [CloneOptions(false)]
-        public string DeprecationDate { get; set; }
+        public UtcTimestamp? DeprecationDate { get; set; }
         [CloneOptions(false)]
         public string DeprecationNotes { get; set; }
         [CloneOptions(false)]
-        public string CreationDate { get; set; }
+        public UtcTimestamp CreationDate { get; set; }
         [CloneOptions(false)]
-        public string LastUpdatedDate { get; set; }
+        public UtcTimestamp LastUpdatedDate { get; set; }
         [CloneOptions(false)]
         public EntityHeader CreatedBy { get; set; }
         [CloneOptions(false)]

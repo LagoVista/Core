@@ -12,8 +12,8 @@ namespace LagoVista.Core.AutoMapper.Converters
 
     public sealed class ToEntityHeaderConverter : IMapValueConverter
     {
-        private static readonly ConcurrentDictionary<Type, MethodInfo?> _methodCache =
-            new ConcurrentDictionary<Type, MethodInfo?>();
+        private static readonly ConcurrentDictionary<Type, MethodInfo> _methodCache =
+            new ConcurrentDictionary<Type, MethodInfo>();
 
         public bool CanConvert(Type sourceType, Type targetType)
         {

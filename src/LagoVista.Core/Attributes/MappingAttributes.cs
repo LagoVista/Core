@@ -30,7 +30,7 @@ namespace LagoVista.Core.Attributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MapToIgnoreAttribute : Attribute
     {
-        public string? Reason { get; }
+        public string Reason { get; }
         public MapToIgnoreAttribute(string reason = null) => Reason = reason;
     }
 
@@ -38,14 +38,14 @@ namespace LagoVista.Core.Attributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class IgnoreOnMapToAttribute : Attribute
     {
-        public string? Reason { get; }
+        public string Reason { get; }
         public IgnoreOnMapToAttribute(string reason = null) => Reason = reason;
     }
 
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class ManualMappingAttribute : Attribute
     {
-        public string? How { get; }
+        public string How { get; }
         public ManualMappingAttribute(string how = null) => How = how;
     }
 
@@ -57,7 +57,7 @@ namespace LagoVista.Core.Attributes
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class MapRequiredAttribute : Attribute
     {
-        public string? Reason { get; }
+        public string Reason { get; }
         public MapRequiredAttribute(string reason = null) => Reason = reason;
     }
 

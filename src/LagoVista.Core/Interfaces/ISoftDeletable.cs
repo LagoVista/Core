@@ -10,6 +10,6 @@ namespace LagoVista.Core.Interfaces
     {
         bool? IsDeleted { get; set; }
         EntityHeader DeletedBy { get; set; }
-        string DeletionDate { get; set; }
+        UtcTimestamp? DeletionDate { get; set; }
     }
 }

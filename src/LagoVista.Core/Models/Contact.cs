@@ -141,8 +141,8 @@ namespace LagoVista.Core.Models
 
         public bool IsDraft { get; set; }   
 
-        public string CreationDate { get; set; }
-        public string LastUpdatedDate { get; set; }
+        public UtcTimestamp CreationDate { get; set; }
+        public UtcTimestamp LastUpdatedDate { get; set; }
         public EntityHeader CreatedBy { get; set; }
         public EntityHeader LastUpdatedBy { get; set; }
 
@@ -151,7 +151,7 @@ namespace LagoVista.Core.Models
 
         public bool? IsDeleted { get; set; }
         public EntityHeader DeletedBy { get; set; }
-        public String DeletionDate { get; set; }
+        public UtcTimestamp? DeletionDate { get; set; }
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Contact_DoNotContact, ResourceType: typeof(LagoVistaCommonStrings), FieldType: FieldTypes.CheckBox)]
         public bool DoNotContact { get; set; }
