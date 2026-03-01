@@ -23,6 +23,9 @@
     </None>
   </ItemGroup>
   <PropertyGroup>
+    <DefineConstants>$(DefineConstants);MIGRATION_IMPLICIT_WIRE_TYPES</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>

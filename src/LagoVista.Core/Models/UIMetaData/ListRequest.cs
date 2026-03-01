@@ -83,7 +83,7 @@ namespace LagoVista.Core.Models.UIMetaData
             };
         }
 
-        public bool TryGetDateRange(out DateTime? startInclusive, out DateTime? endExclusive, out string? error)
+        public bool TryGetDateRange(out System.DateTime? startInclusive, out System.DateTime? endExclusive, out string? error)
         {
             startInclusive = null;
             endExclusive = null;

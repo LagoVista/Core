@@ -71,6 +71,9 @@ namespace LagoVista.Core.Tests.Mapping
         {
             try
             {
+                MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
+                MappingVerifier.Verify<DateMappingDTO, DateMapping>(true);
+
                 MappingVerifier.Verify<SimpleManual, SimpleManualDto>(true);
                 MappingVerifier.Verify<SimpleManualDto, SimpleManual>(true);
 
@@ -105,6 +108,47 @@ namespace LagoVista.Core.Tests.Mapping
             {
                 Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
+        }
+
+        [Test]
+        public async Task ISO_DateTime_To_DTO_Test()
+        {
+            MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
+            var timeStamp = DateTime.UtcNow.ToJSONString();    
+            var entity = new DateMapping() { TheDate = timeStamp };
+            var dto = await _mapper.CreateAsync<DateMapping, DateMappingDTO>(entity, Org(), User());
+            var jsonDate = dto.TheDate.ToJSONString();
+            Assert.That(jsonDate, Is.EqualTo(timeStamp));
+        }
+
+        [Test]
+        public async Task DTO_To_ISO_DateTime_Test()
+        {
+            MappingVerifier.Verify<DateMappingDTO, DateMapping>(true);
+            var timeStamp = DateTime.UtcNow;
+            var dto = new DateMappingDTO() { TheDate = timeStamp};
+            var entity = await _mapper.CreateAsync<DateMappingDTO, DateMapping>(dto, Org(), User());
+            Assert.That(entity.TheDate, Is.EqualTo(new UtcTimestamp(timeStamp.ToJSONString())));
+        }
+
+        [Test]
+        public async Task ISO_DateOnly_To_DTO_Test()
+        {
+            MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
+            var dateOnly = DateOnly.Parse("2024-06-01");
+            var entity = new DateMapping() { TheDateOnly = dateOnly.ToString("yyyy/MM/dd") };
+            var dto = await _mapper.CreateAsync<DateMapping, DateMappingDTO>(entity, Org(), User());
+            Assert.That(dto.TheDateOnly, Is.EqualTo(dateOnly));
+        }
+
+        [Test]
+        public async Task DTO_To_ISO_DateOnly_Test()
+        {
+            MappingVerifier.Verify<DateMappingDTO, DateMapping>(true);
+            var dateOnly = DateOnly.Parse("2024-06-01");
+            var dto = new DateMappingDTO() { TheDateOnly = dateOnly };
+            var entity = await _mapper.CreateAsync<DateMappingDTO, DateMapping>(dto, Org(), User());
+            Assert.That(entity.TheDateOnly, Is.EqualTo(new CalendarDate(dateOnly.ToString("yyyy-MM-dd"))));
         }
 
         [Test]

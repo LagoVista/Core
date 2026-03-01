@@ -46,6 +46,7 @@ namespace LagoVista.Core
         public const string JSON_DATE_FORMAT = "yyyy-MM-ddTHH\\:mm\\:ss.fffZ";
         public const string DATE_ONLY_FORMAT = "yyyy/MM/dd";
         private const string TIME_ONLY_FORMAT = "HH\\:mm";
+        public const string DATE_ONLY_FORMAT_DASH = "yyyy-MM-dd"; // new
 
         public static bool IsEmpty(this string value)
         {
@@ -71,7 +72,12 @@ namespace LagoVista.Core
             else
             {
                 DateTime result;
-                if (DateTime.TryParseExact(value, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None, out result))
+                if (DateTime.TryParseExact(
+                    NormalizeFormatString(value),
+                    JSON_DATE_FORMAT,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                    out result))
                 {
                     return result;
                 }
@@ -133,7 +139,6 @@ namespace LagoVista.Core
 
             return key;
         }
-
 
         private static string NormalizeFormatString(String value)
         {
@@ -248,9 +253,15 @@ namespace LagoVista.Core
 
             var normalizedValue = NormalizeFormatString(value);
 
-            if (DateTime.TryParseExact(normalizedValue, JSON_DATE_FORMAT, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime dateTime))
+            if (DateTime.TryParseExact(
+                   normalizedValue,
+                   JSON_DATE_FORMAT,
+                   CultureInfo.InvariantCulture,
+                   DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                   out DateTime dateTime))
             {
-                return dateTime.ToUniversalTime();
+                // Already UTC, no shifting needed
+                return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
             }
 
             throw new Exception($"Could Not Parse DateTime, value provided {value}.");
@@ -283,6 +294,67 @@ namespace LagoVista.Core
             {
                 return dateTime.Value.ToString(DATE_ONLY_FORMAT);
             }
+        }
+
+        public static bool InUtcPeriod(this string utcTimestamp, string startDateOnly, string endDateOnly)
+        {
+            if (String.IsNullOrEmpty(utcTimestamp) || String.IsNullOrEmpty(startDateOnly) || String.IsNullOrEmpty(endDateOnly))
+                return false;
+
+            // Parse timestamp using your existing ToDateTime (now fixed to treat Z as UTC)
+            var ts = utcTimestamp.ToDateTime();
+            if (ts.Kind != DateTimeKind.Utc)
+                ts = DateTime.SpecifyKind(ts, DateTimeKind.Utc);
+
+            // Parse date-only bounds (accept both separators)
+            if (!DateTime.TryParseExact(startDateOnly, DATE_ONLY_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out var s) &&
+                !DateTime.TryParseExact(startDateOnly, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out s))
+                return false;
+
+            if (!DateTime.TryParseExact(endDateOnly, DATE_ONLY_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out var e) &&
+                !DateTime.TryParseExact(endDateOnly, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out e))
+                return false;
+
+            s = DateTime.SpecifyKind(s.Date, DateTimeKind.Utc);
+            e = DateTime.SpecifyKind(e.Date, DateTimeKind.Utc);
+
+            var endExclusive = e.AddDays(1);
+
+            // Inclusive business semantics achieved via exclusive upper bound on timeline.
+            return ts >= s && ts < endExclusive;
+        }
+
+        public static bool InDatePeriod(this string dateOnly, string startDateOnly, string endDateOnly)
+        {
+            if (String.IsNullOrEmpty(dateOnly) || String.IsNullOrEmpty(startDateOnly) || String.IsNullOrEmpty(endDateOnly))
+                return false;
+
+            // Reuse your existing DATE_ONLY_FORMAT and the new dashed format you added.
+            if (!DateTime.TryParseExact(dateOnly, DATE_ONLY_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out var d) &&
+                !DateTime.TryParseExact(dateOnly, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out d))
+                return false;
+
+            if (!DateTime.TryParseExact(startDateOnly, DATE_ONLY_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out var s) &&
+                !DateTime.TryParseExact(startDateOnly, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out s))
+                return false;
+
+            if (!DateTime.TryParseExact(endDateOnly, DATE_ONLY_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out var e) &&
+                !DateTime.TryParseExact(endDateOnly, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out e))
+                return false;
+
+            s = s.Date; e = e.Date; d = d.Date;
+            return d >= s && d <= e; // inclusive / inclusive
+        }
+
+        public static bool TryParseDateOnly(this string value, out DateTime date)
+        {
+            date = default;
+
+            if (string.IsNullOrWhiteSpace(value) || value.Length != 10)
+                return false;
+
+            return DateTime.TryParseExact(value, DATE_ONLY_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out date)
+                || DateTime.TryParseExact(value, DATE_ONLY_FORMAT_DASH, CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
         }
 
         public static String ToJSONString(this DateTime? dateTime)
@@ -627,6 +699,7 @@ namespace LagoVista.Core
         }
     }
 
+
     public static class IAuditableExtensions
     {
         public static void SetCreationUpdatedFields(this IAuditableEntity entity, IEntityHeader user)
@@ -636,7 +709,7 @@ namespace LagoVista.Core
                 throw new InvalidOperationException("Must provide a valid user instance to assign to auditable fields.");
             }
 
-            entity.CreationDate = DateTime.Now.ToJSONString();
+            entity.CreationDate = DateTime.UtcNow.ToJSONString();
             entity.CreatedBy = new EntityHeader()
             {
                 Id = user.Id,
@@ -658,7 +731,7 @@ namespace LagoVista.Core
                 throw new InvalidOperationException("Must provide a valid user instance to assign to auditable fields.");
             }
 
-            entity.CreationDate = DateTime.Now.ToJSONString();
+            entity.CreationDate = DateTime.UtcNow.ToJSONString();
             entity.CreatedBy = user.Text;
             entity.CreatedById = user.Id;
 
@@ -669,7 +742,7 @@ namespace LagoVista.Core
 
         public static void SetLastUpdatedFields(this IAuditableEntity entity, IEntityHeader user)
         {
-            entity.LastUpdatedDate = DateTime.Now.ToJSONString();
+            entity.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
             entity.LastUpdatedBy = new EntityHeader()
             {
                 Id = user.Id,
