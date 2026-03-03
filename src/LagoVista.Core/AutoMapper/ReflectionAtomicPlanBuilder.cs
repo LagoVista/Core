@@ -346,6 +346,11 @@ namespace LagoVista.Core.AutoMapper
                 typeof(IEntityHeader).IsAssignableFrom(targetPropType))
                 return false;
 
+            if (typeof(IEntityHeaderFactory).IsAssignableFrom(sourcePropType) &&
+                typeof(IEntityHeader).IsAssignableFrom(targetPropType))
+                return false;
+
+
             // Collections/lists are child edges (element types validated by graph validator).
             if (TryGetEnumerableElementType(sourcePropType, out _) && TryGetEnumerableElementType(targetPropType, out _))
                 return true;

@@ -6,6 +6,7 @@ using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Resources;
+using LagoVista.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,8 @@ namespace LagoVista.Core.Models
         public string DeprecationNotes { get; set; }
         [CloneOptions(false)]
         public UtcTimestamp CreationDate { get; set; }
+
+        [MapTo(nameof(DbModelBase.LastUpdateDate))]
         [CloneOptions(false)]
         public UtcTimestamp LastUpdatedDate { get; set; }
         [CloneOptions(false)]

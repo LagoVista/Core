@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static LagoVista.Core.Models.AdaptiveCard.MSTeams;
 
 namespace LagoVista.Core.Tests.Mapping
 {
@@ -67,6 +68,21 @@ namespace LagoVista.Core.Tests.Mapping
 
 
         [Test]
+        public async Task MappingForChildDTO_ToParentDTOProp()
+        {
+            try
+            {
+                MappingVerifier.Verify<SimpleWithEH, SimpleWithEHDto>(true);
+                MappingVerifier.Verify<SimpleWithEHDto, SimpleWithEH>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
+
+        [Test]
         public async Task TestModels()
         {
             try
@@ -108,6 +124,17 @@ namespace LagoVista.Core.Tests.Mapping
             {
                 Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
+        }
+
+        [Test]
+        public async Task TestCoreMapping_Reverse()
+        {
+            var dto = new SimpleWithEHDto() { Name = "Test", ChildForEH = new SimpleWithEHDtoChild() { Id = "eh-001", Key = "key-001", Name = "Entity Header Name" } };
+            var entity = await _mapper.CreateAsync<SimpleWithEHDto, SimpleWithEH>(dto, Org(), User());
+
+            Assert.That(entity.EntityEH.Id, Is.EqualTo("eh-001"));
+            Assert.That(entity.EntityEH.Key, Is.EqualTo("key-001"));
+            Assert.That(entity.EntityEH.Text, Is.EqualTo("Entity Header Name"));
         }
 
         [Test]
@@ -192,8 +219,8 @@ namespace LagoVista.Core.Tests.Mapping
             Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
             Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
             Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Frnks Fish"));
-            Assert.That(entity.CreationDate, Is.EqualTo(timeStamp.ToJSONString()));
-            Assert.That(entity.LastUpdatedDate, Is.EqualTo(timeStamp.ToJSONString()));
+            Assert.That(entity.CreationDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
+            Assert.That(entity.LastUpdatedDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
         }
 
         [Test]
@@ -219,8 +246,8 @@ namespace LagoVista.Core.Tests.Mapping
             Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
             Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
             Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Frnks Fish"));
-            Assert.That(entity.CreationDate, Is.EqualTo(timeStamp.ToJSONString()));
-            Assert.That(entity.LastUpdatedDate, Is.EqualTo(timeStamp.ToJSONString()));
+            Assert.That(entity.CreationDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
+            Assert.That(entity.LastUpdatedDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
         }
 
         [Test]

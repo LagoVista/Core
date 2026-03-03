@@ -29,8 +29,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string NextRowKey { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public CalendarDate? StartDate { get; set; }
+        public CalendarDate? EndDate { get; set; }
         public string GroupBy { get; set; }
         public string GroupByType { get; set; }
         public int GroupBySize { get; set; }

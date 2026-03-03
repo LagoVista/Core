@@ -1,3 +1,4 @@
+using LagoVista.Core;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
@@ -9,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LagoVista.Models
 {
     [Table("AppUser", Schema="dbo")]
-    public class AppUserDTO : IEntityHeader
+    public class AppUserDTO : IEntityHeader, IEntityHeaderFactory
     {
         public string Id { get => AppUserId; set => AppUserId = value; }
         public string Text { get => FullName; set => FullName = value; }

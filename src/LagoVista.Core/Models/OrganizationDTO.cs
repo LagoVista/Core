@@ -2,6 +2,7 @@
 // ContentHash: e4b5345b334d8680ed116b0c76b29eaa80bb2484731f7bea69c54a68fb61f1f9
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
@@ -14,7 +15,7 @@ using System.Text;
 namespace LagoVista.Models
 {
     [Table("Org", Schema = "dbo")]
-    public class OrganizationDTO : IEntityHeader
+    public class OrganizationDTO : IEntityHeader, IEntityHeaderFactory
     {
         public string Id { get => OrgId; set => OrgId = value; }
         public string Text { get => OrgName; set => OrgName = value; }

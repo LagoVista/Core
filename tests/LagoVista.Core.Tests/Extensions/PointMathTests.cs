@@ -23,8 +23,8 @@ namespace LagoVista.Core.Tests.Extensions
             var p2 = new Point2D<float>(4.5f, 4.5f);
 
             var result = p2 - p1;
-            Assert.AreEqual(2.1, result.X);
-            Assert.AreEqual(2.8, result.Y);
+            Assert.AreEqual(2.1, result.X, 0.01);
+            Assert.AreEqual(2.8, result.Y, 0.01);
         }
     }
 }

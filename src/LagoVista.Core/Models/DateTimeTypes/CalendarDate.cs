@@ -53,6 +53,42 @@ namespace LagoVista.Core
                 DateTimeStyles.None).Date;
         }
 
+        public int Year => ToDateTime().Year;
+        public int Month => ToDateTime().Month;
+        public int Day => ToDateTime().Day;
+
+        public static CalendarDate Today()
+        {
+            return new CalendarDate(DateTime.Today.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
+        public static CalendarDate StartOfMonth(int year, int month)
+        {
+            // DateTime ctor validates year/month (throws if invalid)
+            var dt = new DateTime(year, month, 1);
+            return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
+        public CalendarDate AddDays(int days)
+        {
+            var dt = ToDateTime().AddDays(days);
+            return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
+        public static CalendarDate EndOfMonth(int year, int month)
+        {
+            // DateTime ctor validates year/month (throws if invalid)
+            var dt = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+            return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
+        public static CalendarDate Create(int year, int month, int day)
+        {
+            // DateTime ctor validates year/month (throws if invalid)
+            var dt = new DateTime(year, month, day);
+            return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
         public override string ToString() => _value;
 
         public bool IsEmpty => string.IsNullOrEmpty(_value);
