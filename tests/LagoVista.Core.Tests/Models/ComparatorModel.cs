@@ -13,7 +13,7 @@ namespace LagoVista.Core.Tests.Models
 {
     public class ComparatorModelSimple : IIDEntity
     {
-        public String Id { get; set; }
+        public NormalizedId32 Id { get; set; }
 
 
         [FormField(LabelResource: ValidationResources.Names.FirstNameLabel, ResourceType: typeof(ValidationResources))]

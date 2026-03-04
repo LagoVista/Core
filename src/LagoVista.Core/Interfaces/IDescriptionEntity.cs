@@ -18,6 +18,6 @@ namespace LagoVista.Core.Interfaces
 
     public interface IIconEntity
     {
-        string Icon { get; set; }
+        LagoVistaIcon Icon { get; set; }
     }
 }

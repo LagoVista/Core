@@ -14,9 +14,9 @@ namespace LagoVista.Core.Models
     public class SummaryData : ISummaryData
     {
         [ListColumn(Visible: false, AiChatPrompt:"Do not display to the user unless they explicitly ask to see it")]
-        public String Id { get; set; }
+        public NormalizedId32 Id { get; set; }
 
-        public string Icon { get; set; } = "icon-ae-document";
+        public LagoVistaIcon Icon { get; set; } = "icon-ae-document";
    
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_IsPublic, ResourceType: typeof(LagoVistaCommonStrings))]
         public bool IsPublic { get; set; }
@@ -25,7 +25,7 @@ namespace LagoVista.Core.Models
         public String Name { get; set; }
 
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_Key, ResourceType: typeof(LagoVistaCommonStrings))]
-        public String Key { get; set; }
+        public LagoVistaKey Key { get; set; }
 
         [ListColumn(HeaderResource: Resources.LagoVistaCommonStrings.Names.Common_Description, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Description { get; set; }

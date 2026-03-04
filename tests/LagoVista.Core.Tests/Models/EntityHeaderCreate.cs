@@ -20,7 +20,7 @@ namespace LagoVista.Core.Tests.Models
         {
             public string Name { get; set; }
 
-            public string Id { get; set; }
+            public NormalizedId32 Id { get; set; }
         }
 
         [TestMethod]
@@ -28,13 +28,13 @@ namespace LagoVista.Core.Tests.Models
         {
             var eh = EntityHeader<MyClass>.Create(new MyClass()
             {
-                Id = "Kevin",
+                Id = "B23AA8D088034299A6CC14FF1D7C0527",
                 Name = "Wolf"
             });
 
             Assert.AreEqual("Kevin", eh.Id);
             Assert.AreEqual("Wolf", eh.Text);
-            Assert.AreEqual("Kevin", eh.Value.Id);
+            Assert.AreEqual("B23AA8D088034299A6CC14FF1D7C0527", eh.Value.Id.Value);
             Assert.AreEqual("Wolf", eh.Value.Name);
         }
 

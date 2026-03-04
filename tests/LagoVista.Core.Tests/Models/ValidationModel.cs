@@ -42,7 +42,7 @@ namespace LagoVista.Core.Tests.Models
 
     public class IdValidationModel : IIDEntity,IValidateable
     {
-        public string Id
+        public NormalizedId32 Id
         {
             get; set;
         }

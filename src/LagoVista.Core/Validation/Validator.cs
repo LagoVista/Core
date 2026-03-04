@@ -360,7 +360,7 @@ namespace LagoVista.Core.Validation
                     {
                         result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdNotNullOrEmpty, context);
                     }
-                    else if (!auditableModel.LastUpdatedBy.Id.SuccessfulId())
+                    else if (!auditableModel.LastUpdatedBy.Id.IsValidId())
                     {
                         result.AddSystemError(Resources.ValidationResource.LastUpdatedByIdInvalidFormat, context);
                     }
@@ -381,7 +381,7 @@ namespace LagoVista.Core.Validation
                     {
                         result.AddSystemError(Resources.ValidationResource.CreatedByIdNotNullOrEmpty, context);
                     }
-                    else if (!auditableModel.CreatedBy.Id.SuccessfulId())
+                    else if (!auditableModel.CreatedBy.Id.IsValidId())
                     {
                         result.AddSystemError(Resources.ValidationResource.CreatedByIdInvalidFormat, context);
                     }

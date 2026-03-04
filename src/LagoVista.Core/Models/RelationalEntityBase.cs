@@ -7,10 +7,10 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public class RelationalEntityBase 
+    public class RelationalEntityBase : IRelationalIDEntity
     {
         // This should NOT use our normalized Guid format, it's actually a GUID in the database.
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public GuidString36 Id { get; set; } = GuidString36.Factory();
 
         [MapTo(nameof(DbModelBase.Organization))]
         public EntityHeader OwnerOrganization { get; set; }

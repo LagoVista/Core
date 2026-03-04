@@ -10,6 +10,7 @@ namespace LagoVista.Core.Product
     {
         Task<ProductOffering> GetProductAsync(string orgNs, string productCategyKey, string productKey);
         Task<ProductOffering> GetProductAsync(string orgId, Guid productId);
+        Task<ProductOffering> GetSystemProductAsync(string catgkey, string productKey);
         Task<ListResponse<ProductOffering>> GetProductsAsync(string orgns, string categoryKey, ListRequest request);
      }
 }

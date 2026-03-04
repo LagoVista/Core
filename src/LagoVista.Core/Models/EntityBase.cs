@@ -16,7 +16,7 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public interface IEntityBase : INoSQLEntity, IOwnedEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
+    public interface IEntityBase : INoSQLEntity, IOwnedEntity, IIconEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
     {
 
     }
@@ -47,7 +47,7 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         [JsonProperty("id")]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Id, FieldType: FieldTypes.ReadonlyLabel, AiChatPrompt:"Do not show to the user unless they explicity ask to view it.", ResourceType: typeof(LagoVistaCommonStrings))]
-        public string Id { get; set; }
+        public NormalizedId32 Id { get; set; }
         public string DatabaseName { get; set; }
         public string EntityType { get; set; }  
 
@@ -62,12 +62,15 @@ namespace LagoVista.Core.Models
         {
             get => _name;
             set => Set(ref _name, value);   
-        }       
+        }
+
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
+        public LagoVistaIcon Icon { get; set; } = "none";
 
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, AiChatPrompt:"When isDraft is not TRUE, the key MUST NEVER be updated.", 
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
-        public virtual string Key { get; set; }
+        public virtual LagoVistaKey Key { get; set; }
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: LagoVistaCommonStrings.Names.Common_Category_Select, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, IsUserEditable: true)]
         public EntityHeader Category { get; set; }

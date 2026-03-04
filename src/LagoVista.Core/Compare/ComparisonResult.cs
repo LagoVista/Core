@@ -13,7 +13,7 @@ namespace LagoVista.Core.Compare
     public class AuditTrail : IIDEntity
     {
         [JsonProperty("id")]
-        public String Id { get; set; }
+        public NormalizedId32 Id { get; set; }
         public String DateStamp { get; set; }
         public String EntityName { get; set; }
         public String EntityId { get; set; }

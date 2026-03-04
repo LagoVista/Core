@@ -86,7 +86,7 @@ namespace LagoVista.Core.Tests.CloneableTests
             Assert.AreEqual(user2.Id, clone.Child2.GrandChild.CreatedBy.Id);
             Assert.AreEqual(user2.Id, clone.Child2.GrandChild.LastUpdatedBy.Id);
 
-            Assert.AreNotEqual(original.Child2.Id, clone.Child2.LastUpdatedBy.Id);
+            Assert.AreNotEqual(original.Child2.Id.Value, clone.Child2.LastUpdatedBy.Id);
             Assert.AreNotEqual(originalGrandChildId, clone.Child2.GrandChild.Id);
         }
     }

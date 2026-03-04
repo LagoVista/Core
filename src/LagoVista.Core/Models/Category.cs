@@ -30,8 +30,5 @@ namespace LagoVista.Core.Models
         }
 
         public string CategoryType { get; set; }
-
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
-        public string Icon { get; set; } = "icon-ae-book-1";
     }
 }

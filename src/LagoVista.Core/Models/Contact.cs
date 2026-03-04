@@ -112,10 +112,10 @@ namespace LagoVista.Core.Models
     {
         public Contact()
         {
-            Id = Guid.NewGuid().ToId();
+            Id = NormalizedId32.Factory();
         }
 
-        public string Id { get; set; }
+        public NormalizedId32 Id { get; set; }
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Contact_FirstName, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, FieldType: FieldTypes.Text)]
         public string FirstName { get; set; }

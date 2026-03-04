@@ -145,15 +145,15 @@ namespace LagoVista.Core.Tests.Validation
         [TestMethod]
         public void IdValidation_Valid()
         {
-            var jsonDate = Guid.NewGuid().ToId();
-            Assert.IsTrue(jsonDate.SuccessfulId());
+            var id32 = Guid.NewGuid().ToId();
+            Assert.IsTrue(id32.Value.IsValidId());
         }
 
         [TestMethod]
         public void IdValidation_Invalid()
         {
             var jsonDate = Guid.NewGuid().ToId() + "XYZ";
-            Assert.IsFalse(jsonDate.SuccessfulId());
+            Assert.IsFalse(jsonDate.IsValidId());
         }
 
         [TestMethod]

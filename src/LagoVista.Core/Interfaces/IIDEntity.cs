@@ -12,6 +12,11 @@ namespace LagoVista.Core.Interfaces
 {
     public interface IIDEntity
     {
-        string Id { get; set; }
+        NormalizedId32 Id { get; set; }
+    }
+
+    public interface IRelationalIDEntity
+    {
+        GuidString36 Id { get; set; }
     }
 }

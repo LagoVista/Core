@@ -8,6 +8,6 @@ namespace LagoVista.Core.Interfaces
 {
     public interface IKeyedEntity
     {
-        String Key { get; set; }
+        LagoVistaKey Key { get; set; }
     }
 }

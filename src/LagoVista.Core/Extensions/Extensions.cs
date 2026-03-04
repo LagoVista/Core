@@ -190,10 +190,7 @@ namespace LagoVista.Core
             }
         }
 
-        public static bool SuccessfulId(this string value)
-        {
-            return value.Length == 32;
-        }
+       
 
         public static bool IsValidId(this string id)
         {
@@ -405,7 +402,7 @@ namespace LagoVista.Core
             return true;
         }
 
-        public static string ToId(this Guid guid)
+        public static NormalizedId32 ToId(this Guid guid)
         {
             return guid.ToString().Replace("-", "").ToUpper();
         }
