@@ -16,6 +16,11 @@ namespace LagoVista.Core.AutoMapper.Converters
             if (st == typeof(string) && tt == typeof(Guid))
                 return true;
 
+            if (st == typeof(NormalizedId32) && tt == typeof(Guid))
+                return true;
+
+
+
             return false;
         }
 
@@ -46,6 +51,23 @@ namespace LagoVista.Core.AutoMapper.Converters
 
                 return parsed;
             }
+
+            if (sourceValue is NormalizedId32 ng && tt == typeof(Guid))
+            {
+                if (String.IsNullOrWhiteSpace(ng))
+                {
+                    if (IsNullable(targetType))
+                        return null;
+
+                    throw new InvalidOperationException("Cannot convert empty string to non-nullable Guid.");
+                }
+
+                if (!Guid.TryParse(ng.Value, out var parsed))
+                    throw new InvalidOperationException($"Could not convert string to Guid: '{ng.Value}'.");
+
+                return parsed;
+            }
+
 
             throw new InvalidOperationException($"Unsupported Guid conversion from {sourceValue.GetType().Name} to {targetType.Name}.");
         }

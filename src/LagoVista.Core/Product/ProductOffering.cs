@@ -6,9 +6,9 @@ namespace LagoVista.Core.Product
 {
     public class ProductOffering
     {
-        public Guid Id { get; set; }
-        public Guid ProductCategoryId { get; set; }
-        public string OrgId { get; set; }
+        public GuidString36 Id { get; set; }
+        public GuidString36 ProductCategoryId { get; set; }
+        public NormalizedId32 OrgId { get; set; }
 
         public string Name { get; set; }
         public string SummaryHtml { get; set; }

@@ -287,14 +287,31 @@ namespace LagoVista.Core.AutoMapper
            // Console.WriteLine($"{tag} {message}");
         }
 
+        private Type MapKnownTypes(Type t)
+        { 
+            if(t == typeof(LagoVistaKey))
+                return typeof(string);
+
+            if (t == typeof(LagoVistaIcon))
+                return typeof(string);
+
+            if (t == typeof(NormalizedId32))
+                return typeof(string);
+
+            if (t == typeof(GuidString36))
+                return typeof(Guid);
+
+            return t;
+        }
+
         private bool TryBuildAtomicStep(Type sourceType, Type targetType, PropertyInfo sprop,
             PropertyInfo tprop,  AtomicMapStepKind directKind, AtomicMapStepKind nullableKind,
             AtomicMapStepKind converterKind, List<string> errors, out AtomicMapStep step)
         {
             step = null;
 
-            var st = sprop.PropertyType;
-            var tt = tprop.PropertyType;
+            var st = MapKnownTypes(sprop.PropertyType);
+            var tt = MapKnownTypes(tprop.PropertyType);
 
             var targetMappingType = TargetTypes.FromProperty;
             if (tt.GetCustomAttribute<DateOnlydAttribute>() != null)

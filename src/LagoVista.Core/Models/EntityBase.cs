@@ -10,6 +10,7 @@ using LagoVista.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -21,8 +22,45 @@ namespace LagoVista.Core.Models
 
     }
 
-    public class EntityBase: ModelBase, IEntityBase
+    public class EntityBase : ModelBase, IEntityBase
     {
+        // Persisted Cosmos id field
+        [JsonProperty("id")]
+        [EditorBrowsable(EditorBrowsableState.Never)] 
+        public string StoredId { get; set; }
+
+        // You already have this
+        public string EntityType { get; set; }
+
+        // Canonical identity for the app/domain
+        [JsonIgnore] // optional; without it, Json.NET still won't serialize it unless asked, but I like being explicit
+        [CloneOptions(false)]
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Id, FieldType: FieldTypes.ReadonlyLabel, AiChatPrompt: "Do not show to the user unless they explicity ask to view it.", ResourceType: typeof(LagoVistaCommonStrings))]
+        public NormalizedId32 Id
+        {
+            get => GetCanonicalIdOrThrow();
+            set => StoredId = value.Value; // new writes store normalized
+        }
+
+        private NormalizedId32 GetCanonicalIdOrThrow()
+        {
+            if (StoredId == null) throw new ArgumentNullException(nameof(StoredId));
+
+            if (NormalizedId32.IsNormalizedId32(StoredId))
+                return new NormalizedId32(StoredId);
+
+            // Surgical legacy Product exception
+            if (AllowsLegacyGuidId(this.GetType()) && GuidString36.IsStrictLowerD(StoredId))
+            {
+                return new GuidString36(StoredId).ToNormalizedId32();
+            }
+
+            throw new FormatException(
+                $"Invalid Cosmos id '{StoredId}' for EntityType '{EntityType}'. Expected NormalizedId32" +
+                (string.Equals(EntityType, "ProductEntity", StringComparison.Ordinal) ? " or legacy GuidString36." : "."));
+        }
+
+        private static bool AllowsLegacyGuidId(Type t) => Attribute.IsDefined(t, typeof(AllowLegacyGuidDocumentIdAttribute), inherit: true);
 
         public EntityBase()
         {
@@ -44,13 +82,8 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         public EntityHeader OwnerUser { get; set; }
 
-        [CloneOptions(false)]
-        [JsonProperty("id")]
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Id, FieldType: FieldTypes.ReadonlyLabel, AiChatPrompt:"Do not show to the user unless they explicity ask to view it.", ResourceType: typeof(LagoVistaCommonStrings))]
-        public NormalizedId32 Id { get; set; }
         public string DatabaseName { get; set; }
-        public string EntityType { get; set; }  
-
+     
         [CloneOptions(false)]
         [JsonProperty(PropertyName = "_etag")]
         public string ETag { get; set; }
