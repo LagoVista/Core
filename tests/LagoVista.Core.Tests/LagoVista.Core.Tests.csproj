@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\src\LagoVista.Core.Networking\LagoVista.Core.Networking.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core.RetryProxy\LagoVista.Core.Retry.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.Core\LagoVista.Core.csproj" />
+    <ProjectReference Include="..\..\src\LagoVista.Crypto\LagoVista.Crypto.csproj" />
     <ProjectReference Include="..\..\src\LagoVista.PDFServices\LagoVista.PDFServices.csproj" />
     <ProjectReference Include="..\LagoVista.Core.TestBase\LagoVista.Core.TestBase.csproj" />
   </ItemGroup>
