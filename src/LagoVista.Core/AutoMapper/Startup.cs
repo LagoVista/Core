@@ -17,6 +17,7 @@ namespace LagoVista.Core.AutoMapper
             services.AddSingleton<IAtomicPlanBuilder, ReflectionAtomicPlanBuilder>();
             services.AddScoped<IEncryptionKeyProvider, EncryptionKeyProvider>();
             services.AddSingleton<ILagoVistaAutoMapper, LagoVistaAutoMapper>();
+            services.AddSingleton<IEncryptedMapperPlanner, EncryptedMapperPlanner>();
         }
     }
 }

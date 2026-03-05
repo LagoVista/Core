@@ -32,10 +32,10 @@ namespace LagoVista.Core.Tests.Mapping
         {
             _registry = ConvertersRegistration.DefaultConverterRegistery;
             _atomicBuilder = new ReflectionAtomicPlanBuilder(_registry);
-
+            var planner = new EncryptedMapperPlanner(_registry);    
             // EncryptedMapper uses its own converter registry for string <-> domain conversions.
             // Use the same default registry to keep behavior consistent.
-            _encryptedMapper = new EncryptedMapper(_keyProvider, _registry, new Encryptor());
+            _encryptedMapper = new EncryptedMapper(_keyProvider, planner, new Encryptor());
 
             _mapper = new LagoVistaAutoMapper(_encryptedMapper, _atomicBuilder, _registry);
         }
