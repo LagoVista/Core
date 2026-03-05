@@ -52,5 +52,64 @@ namespace LagoVista.Core.Tests.Crypto.Modern
             var env = "enc;v=2;alg=wrong;kv=1;aad=v1;data=AA;";
             Assert.Throws<FormatException>(() => codec.Parse(env));
         }
+
+        private static EnvelopeCodecV2 NewSut() => new EnvelopeCodecV2();
+
+        private static string BuildValidEnvelope()
+        {
+            var sut = NewSut();
+
+            var nonce12 = new byte[12];
+            var tag16 = new byte[16];
+            var ciphertext = Array.Empty<byte>();
+
+            // determinism not required, just valid shape
+            return sut.Build(kv: 1, nonce12: nonce12, ciphertext: ciphertext, tag16: tag16);
+        }
+
+        [Test]
+        public void Parse_WhenMissingKv_ThrowsFormatException()
+        {
+            var sut = NewSut();
+            var valid = BuildValidEnvelope();
+
+            // Remove "kv=1;" entirely
+            var broken = valid.Replace("kv=1;", "");
+
+            var ex = Assert.Throws<FormatException>(() => sut.Parse(broken));
+            Assert.That(ex.Message, Does.Contain("Missing kv."));
+        }
+
+        [Test]
+        public void Parse_WhenInvalidKv_ThrowsFormatException()
+        {
+            var sut = NewSut();
+            var valid = BuildValidEnvelope();
+
+            // kv must be > 0, so force kv=0
+            var broken = valid.Replace("kv=1;", "kv=0;");
+
+            var ex = Assert.Throws<FormatException>(() => sut.Parse(broken));
+            Assert.That(ex.Message, Does.Contain("Invalid kv."));
+        }
+
+        [Test]
+        public void Parse_WhenMissingData_ThrowsFormatException()
+        {
+            var sut = NewSut();
+            var valid = BuildValidEnvelope();
+
+            // Remove the whole "data=...;" segment
+            var dataIdx = valid.IndexOf("data=", StringComparison.Ordinal);
+            Assert.That(dataIdx, Is.GreaterThanOrEqualTo(0), "Sanity check: expected data= segment in valid envelope.");
+
+            var dataEnd = valid.IndexOf(';', dataIdx);
+            Assert.That(dataEnd, Is.GreaterThan(dataIdx), "Sanity check: expected ';' after data= segment.");
+
+            var broken = valid.Remove(dataIdx, (dataEnd - dataIdx) + 1);
+
+            var ex = Assert.Throws<FormatException>(() => sut.Parse(broken));
+            Assert.That(ex.Message, Does.Contain("Missing data."));
+        }
     }
 }

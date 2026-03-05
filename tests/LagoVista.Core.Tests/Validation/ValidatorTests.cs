@@ -170,10 +170,7 @@ namespace LagoVista.Core.Tests.Validation
         [TestMethod]
         public void IDEntityTest_Invalid()
         {
-            var idEntity = new Models.IdValidationModel
-            {
-                Id = null
-            };
+            var idEntity = new Models.IdValidationModel();
             var result = Validator.Validate(idEntity);
             Assert.IsFalse(result.Successful);
         }
@@ -192,19 +189,15 @@ namespace LagoVista.Core.Tests.Validation
         [TestMethod]
         public void IDEntityTest_ZeroId_Invalid()
         {
-            var idEntity = new Models.IdValidationModel
-            {
-                Id = "0"
-            };
-            var result = Validator.Validate(idEntity);
-            Assert.IsFalse(result.Successful);
+            var idEntity = new Models.IdValidationModel();
+            Assert.Throws<FormatException>(() => idEntity.Id = "0");
         }
 
         [TestMethod]
         public void AuditTest_Valid()
         {
             var auditEntity = GetValidAuditableModel();
-
+            auditEntity.Name = "FOO"; // just to make sure we're not getting a short-circuit on the null check for LastUpdatedDate
             var result = Validator.Validate(auditEntity);
             Assert.IsTrue(result.Successful, result.ErrorMessage);
         }
@@ -301,11 +294,7 @@ namespace LagoVista.Core.Tests.Validation
         public void AuditTest_MissingCreateDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
-            auditEntity.CreationDate = null;
-            var result = Validator.Validate(auditEntity);
-            Assert.IsFalse(result.Successful);
-            WriteResults(result);
-            Assert.AreEqual(LagoVista.Core.Resources.ValidationResource.CreationDateRequired, result.Errors.First().Message);
+            Assert.Throws<ArgumentNullException>(() => auditEntity.CreationDate = null);
         }
 
 
@@ -313,22 +302,15 @@ namespace LagoVista.Core.Tests.Validation
         public void AuditTest_MissingLastUpdatedDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
-            auditEntity.LastUpdatedDate = null;
-            var result = Validator.Validate(auditEntity);
-            Assert.IsFalse(result.Successful);
-            WriteResults(result);
-            Assert.AreEqual(LagoVista.Core.Resources.ValidationResource.LastUpdatedDateRequired, result.Errors.First().Message);
+            Assert.Throws<ArgumentNullException>(() => auditEntity.LastUpdatedDate = null);
         }
 
         [TestMethod]
         public void AuditTest_InvalidCreationDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
-            auditEntity.CreationDate += "INVALID";
-            var result = Validator.Validate(auditEntity);
-            Assert.IsFalse(result.Successful);
-            WriteResults(result);
-            Assert.AreEqual(LagoVista.Core.Resources.ValidationResource.CreationDateInvalidFormat + " " + auditEntity.CreationDate, result.Errors.First().Message);
+            auditEntity.Name = "FOO"; // just to make sure we're not getting a short-circuit on the null check for LastUpdatedDate
+            Assert.Throws<System.FormatException>(() => auditEntity.CreationDate += "INVALID");
         }
 
 
@@ -336,11 +318,8 @@ namespace LagoVista.Core.Tests.Validation
         public void AuditTest_InvalidLastUpdatedDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
-            auditEntity.LastUpdatedDate += "INVALID";
-            var result = Validator.Validate(auditEntity);
-            WriteResults(result);
-            Assert.IsFalse(result.Successful);
-            Assert.AreEqual(LagoVista.Core.Resources.ValidationResource.LastUpdateDateInvalidFormat + " " + auditEntity.LastUpdatedDate, result.Errors.First().Message);
+            auditEntity.Name = "FOO"; // just to make sure we're not getting a short-circuit on the null check for LastUpdatedDate
+            Assert.Throws<System.FormatException>(() => auditEntity.LastUpdatedDate += "INVALID");
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Interfaces.AutoMapper;
+﻿using LagoVista.Core.AutoMapper;
+using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace LagoVista.Core.AutoMapper.Converters
             if (!typeof(RelationalEntityBase).IsAssignableFrom(sourceType))
                 return false;
 
-            if ((targetType == typeof(Guid) || targetType != typeof(Guid?) || targetType == typeof(string)))
+            if (targetType == typeof(Guid) || targetType == typeof(Guid?) || targetType == typeof(string) || targetType == typeof(GuidString36) || targetType == typeof(GuidString36?)) 
                 return true;
 
             return false;

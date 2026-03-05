@@ -30,6 +30,8 @@ namespace LagoVista.Core.Validation
             }
         }
 
+       public ErrorMessage ErrorSummary { get; set; }
+
         public bool Successful { get { return Errors.Count == 0; } }
         public List<ErrorMessage> Warnings { get; protected set; }
         public List<ErrorMessage> Errors { get; protected set; }

@@ -20,7 +20,7 @@ namespace LagoVista.Core.AutoMapper
     /// - IgnoreOnMapToAttribute on the TARGET property skips recursion/validation for that property.
     /// - Cycles (repeated (sourceType,targetType) pairs) are treated as errors.
     /// </summary>
-    internal sealed class ReflectionMappingPlanGraphValidator
+    public sealed class ReflectionMappingPlanGraphValidator
     {
         private readonly IAtomicPlanBuilder _atomicBuilder;
 

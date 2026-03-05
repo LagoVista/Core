@@ -12,11 +12,11 @@ namespace LagoVista.Core.AutoMapper
             var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
 
             // decimal/double -> string
-            if (tt == typeof(string) && (st == typeof(decimal) || st == typeof(double)))
+            if (tt == typeof(string) && (st == typeof(decimal) || st == typeof(double) || st == typeof(Int32)))
                 return true;
 
             // string -> decimal/double
-            if (st == typeof(string) && (tt == typeof(decimal) || tt == typeof(double)))
+            if (st == typeof(string) && (tt == typeof(decimal) || tt == typeof(double) || tt == typeof(Int32)))
                 return true;
 
             return false;
@@ -36,6 +36,10 @@ namespace LagoVista.Core.AutoMapper
             if (sourceValue is double dbl && tt == typeof(string))
                 return dbl.ToString(CultureInfo.InvariantCulture);
 
+
+            if (sourceValue is Int32 i && tt == typeof(string))
+                return i.ToString(CultureInfo.InvariantCulture);
+
             // string -> numeric
             if (sourceValue is string s)
             {
@@ -52,6 +56,9 @@ namespace LagoVista.Core.AutoMapper
 
                 if (tt == typeof(double))
                     return double.Parse(s, NumberStyles.Any, CultureInfo.InvariantCulture);
+
+                if(tt == typeof(Int32))
+                    return Int32.Parse(s, NumberStyles.Any, CultureInfo.InvariantCulture);
             }
 
             throw new InvalidOperationException($"Unsupported numeric conversion from {sourceValue.GetType().Name} to {targetType.Name}.");

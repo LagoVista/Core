@@ -1,24 +1,32 @@
-﻿using LagoVista.Core.AutoMapper;
+﻿using LagoVista;
+using LagoVista.Core.Attributes;
+using LagoVista.Core.AutoMapper;
 using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
+using LagoVista.Core.Interfaces.Crypto;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.Crypto;
 using LagoVista.Core.Services;
 using LagoVista.Core.Tests.AutoMapper.TestModels;
 using LagoVista.Models;
 using NUnit.Framework;
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static LagoVista.Core.Models.AdaptiveCard.MSTeams;
 
 namespace LagoVista.Core.Tests.Mapping
 {
     [TestFixture]
     public sealed partial class LagoVistaAutoMapperV1Tests
     {
-        private static EntityHeader Org() { return new EntityHeader() { Id = "org-123" }; }
-        private static EntityHeader User() { return new EntityHeader() { Id = "user-456" }; }
+        // OrgId is NormalizedId32 (32 uppercase). This converts cleanly to GuidString36 inside mapper.
+        private static EntityHeader Org() => new EntityHeader { Id = "F47AC10B58CC4372A5670E02B2C3D479" };
+
+        // UserId is only used for logging/audit in secure storage in your setup, but must be non-null.
+        private static EntityHeader User() => new EntityHeader { Id = "3268E49D6F54499689F24DFABFE06C5F" };
 
         private readonly IEncryptionKeyProvider _keyProvider = new EncryptionKeyProvider(new FakeSecureStorage());
 
@@ -32,13 +40,23 @@ namespace LagoVista.Core.Tests.Mapping
         {
             _registry = ConvertersRegistration.DefaultConverterRegistery;
             _atomicBuilder = new ReflectionAtomicPlanBuilder(_registry);
-            var planner = new EncryptedMapperPlanner(_registry);    
-            // EncryptedMapper uses its own converter registry for string <-> domain conversions.
-            // Use the same default registry to keep behavior consistent.
-            _encryptedMapper = new EncryptedMapper(_keyProvider, planner, new Encryptor());
+
+            var planner = new EncryptedMapperPlanner(_registry);
+
+            // Test doubles for modern encryption + keyid building
+            var modernEncryption = new FakeModernEncryption();
+            var modernKeyIdBuilder = new FakeModernKeyIdBuilder();
+
+            _encryptedMapper = new EncryptedMapper(
+                _keyProvider,
+                planner,
+                new Encryptor(),
+                modernEncryption,
+                modernKeyIdBuilder);
 
             _mapper = new LagoVistaAutoMapper(_encryptedMapper, _atomicBuilder, _registry);
         }
+
 
         [Test]
         public async Task AppModels()
@@ -57,7 +75,7 @@ namespace LagoVista.Core.Tests.Mapping
         public void TestEHMapping()
         {
             try
-            { 
+            {
                 MappingVerifier.Verify<EntityHeaderPrimary, EntityHeaderDTO>(true);
                 MappingVerifier.Verify<EntityHeaderDTO, EntityHeaderPrimary>(true);
             }
@@ -111,7 +129,7 @@ namespace LagoVista.Core.Tests.Mapping
             var source = new ChildIdMappingSource();
             var id = GuidString36.Factory();
 
-            source.GrandChild = new GrandChild() { Id = id }; 
+            source.GrandChild = new GrandChild() { Id = id };
             var tgt = await _mapper.CreateAsync<ChildIdMappingSource, ChildIdMappingTarget>(source, Org(), User(), null, CancellationToken.None);
             Assert.That(tgt.GrandChildId, Is.EqualTo(id));
         }
@@ -144,7 +162,7 @@ namespace LagoVista.Core.Tests.Mapping
         public async Task ISO_DateTime_To_DTO_Test()
         {
             MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
-            var timeStamp = DateTime.UtcNow.ToJSONString();    
+            var timeStamp = DateTime.UtcNow.ToJSONString();
             var entity = new DateMapping() { TheDate = timeStamp };
             var dto = await _mapper.CreateAsync<DateMapping, DateMappingDTO>(entity, Org(), User());
             var jsonDate = dto.TheDate.ToJSONString();
@@ -156,7 +174,7 @@ namespace LagoVista.Core.Tests.Mapping
         {
             MappingVerifier.Verify<DateMappingDTO, DateMapping>(true);
             var timeStamp = DateTime.UtcNow;
-            var dto = new DateMappingDTO() { TheDate = timeStamp};
+            var dto = new DateMappingDTO() { TheDate = timeStamp };
             var entity = await _mapper.CreateAsync<DateMappingDTO, DateMapping>(dto, Org(), User());
             Assert.That(entity.TheDate, Is.EqualTo(new UtcTimestamp(timeStamp.ToJSONString())));
         }
@@ -199,7 +217,9 @@ namespace LagoVista.Core.Tests.Mapping
         {
             var timeStamp = DateTime.UtcNow;
 
-            var db = new DbModelBase() { Id = Guid.NewGuid(), 
+            var db = new DbModelBase()
+            {
+                Id = Guid.NewGuid(),
                 CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
                 LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
                 Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
@@ -208,13 +228,13 @@ namespace LagoVista.Core.Tests.Mapping
             };
 
             MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
-            var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), pln=>
-            {   
+            var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), pln =>
+            {
                 pln.IncludeChild(ch => ch.CreatedBy, s => s.CreatedByUser);
                 pln.IncludeChild(ch => ch.LastUpdatedBy, s => s.LastUpdatedByUser);
                 pln.IncludeChild(ch => ch.OwnerOrganization, s => s.Organization);
             },
-            null, CancellationToken.None );
+            null, CancellationToken.None);
 
 
             Assert.That(entity.Id.Value, Is.EqualTo(db.Id.ToString()));
@@ -270,8 +290,8 @@ namespace LagoVista.Core.Tests.Mapping
             MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
             var dto = await _mapper.CreateAsync<RelationalEntityBase, DbModelBase>(entity, Org(), User(), null, CancellationToken.None);
             Assert.That(dto.Id, Is.EqualTo(Guid.Parse(entity.Id)));
-            Assert.That(dto.CreatedById, Is.EqualTo("user-456"));
-            Assert.That(dto.OrganizationId, Is.EqualTo("org-123"));
+            Assert.That(dto.CreatedById, Is.EqualTo(User().Id));
+            Assert.That(dto.OrganizationId, Is.EqualTo(Org().Id));
             Assert.That(dto.CreationDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
             Assert.That(dto.LastUpdateDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
 
@@ -297,7 +317,7 @@ namespace LagoVista.Core.Tests.Mapping
             // Pre-encrypt a value into DTO to simulate DB storage.
             var domainIn = new Account() { Balance = 100.25 };
             await _mapper.MapAsync<Account, AccountDto>(domainIn, dto, Org(), User(), null, CancellationToken.None);
-
+            Console.WriteLine(dto.EncryptedBalance);
             // Now decrypt DTO -> domain
             var domainOut = await _mapper.CreateAsync<AccountDto, Account>(dto, Org(), User(), null, CancellationToken.None);
 
@@ -322,17 +342,17 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task EH_To_Name_and_Id()
         {
-            var eh = new EntityHeaderPrimary() { TheProperty = EntityHeader.Create("eh-123", "My Entity Header") };     
+            var eh = new EntityHeaderPrimary() { TheProperty = EntityHeader.Create("eh-123", "My Entity Header") };
             var dto = await _mapper.CreateAsync<EntityHeaderPrimary, EntityHeaderDTO>(eh, Org(), User(), null, CancellationToken.None);
             Assert.That(dto.Id, Is.EqualTo("eh-123"));
             Assert.That(dto.Text, Is.EqualTo("My Entity Header"));
-    }
+        }
 
         [Test]
         public async Task Name_and_Id_ToEH()
         {
             var dto = new EntityHeaderDTO() { Id = "MYID", Text = "The TextFor The Property" };
-            var eh   = await _mapper.CreateAsync<EntityHeaderDTO, EntityHeaderPrimary>(dto, Org(), User(), null, CancellationToken.None);
+            var eh = await _mapper.CreateAsync<EntityHeaderDTO, EntityHeaderPrimary>(dto, Org(), User(), null, CancellationToken.None);
             Assert.That(eh.TheProperty.Id, Is.EqualTo("MYID"));
             Assert.That(eh.TheProperty.Text, Is.EqualTo("The TextFor The Property"));
         }
@@ -369,6 +389,87 @@ namespace LagoVista.Core.Tests.Mapping
             var domainOut = await _mapper.CreateAsync<AccountDto, Account>(dto, Org(), User(), null, CancellationToken.None);
 
             Assert.That(domainOut.Balance, Is.EqualTo(domainIn.Balance).Within(0.0000001));
+        }
+
+        private sealed class FakeModernEncryption : IModernEncryption
+        {
+            // Minimal envelope: enc;v=2;alg=test;kv=1;aad=v1;data=<b64url>;
+            public Task<string> EncryptAsync(EncryptStringRequest request, CancellationToken ct = default)
+            {
+                if (request == null) throw new ArgumentNullException(nameof(request));
+                if (request.Plaintext == null) throw new ArgumentNullException(nameof(request.Plaintext));
+
+                var bytes = Encoding.UTF8.GetBytes(request.Plaintext);
+                var b64url = Base64UrlEncode(bytes);
+
+                var envelope = $"enc;v=2;alg=test;kv={request.Kv};aad=v1;data={b64url};";
+                return Task.FromResult(envelope);
+            }
+
+            public Task<string> DecryptAsync(DecryptStringRequest request, CancellationToken ct = default)
+            {
+                if (request == null) throw new ArgumentNullException(nameof(request));
+                if (string.IsNullOrWhiteSpace(request.Envelope)) throw new ArgumentNullException(nameof(request.Envelope));
+
+                var env = request.Envelope;
+
+                // extremely small parser: find "data=" and read to next ';'
+                var marker = "data=";
+                var idx = env.IndexOf(marker, StringComparison.Ordinal);
+                if (idx < 0) throw new FormatException("Envelope missing data= segment.");
+
+                idx += marker.Length;
+                var end = env.IndexOf(';', idx);
+                if (end < 0) end = env.Length;
+
+                var b64url = env.Substring(idx, end - idx);
+                var bytes = Base64UrlDecode(b64url);
+                var plaintext = Encoding.UTF8.GetString(bytes);
+
+                return Task.FromResult(plaintext);
+            }
+
+            private static string Base64UrlEncode(byte[] data)
+            {
+                var s = Convert.ToBase64String(data);
+                s = s.TrimEnd('=').Replace('+', '-').Replace('/', '_');
+                return s;
+            }
+
+            private static byte[] Base64UrlDecode(string s)
+            {
+                s = s.Replace('-', '+').Replace('_', '/');
+                switch (s.Length % 4)
+                {
+                    case 2: s += "=="; break;
+                    case 3: s += "="; break;
+                }
+                return Convert.FromBase64String(s);
+            }
+        }
+
+        private sealed class FakeModernKeyIdBuilder : IModernKeyIdBuilder
+        {
+            // NOTE: adjust signature if your interface differs.
+            public Task<string> BuildKeyIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class
+            {
+                if (dto == null) throw new ArgumentNullException(nameof(dto));
+                if (attr == null) throw new ArgumentNullException(nameof(attr));
+
+                // For tests we just use the DTO Id -> guid N (lower) and prefix with "account-"
+                // so it looks like a real v2 key id shape.
+                var idProp = typeof(TDto).GetProperty("Id");
+                if (idProp == null) throw new InvalidOperationException($"{typeof(TDto).Name} missing Id property.");
+
+                var idVal = idProp.GetValue(dto);
+                if (idVal is Guid g)
+                {
+                    var id32 = g.ToString("N").ToLowerInvariant();
+                    return Task.FromResult($"account-{id32}:v2");
+                }
+
+                throw new InvalidOperationException($"{typeof(TDto).Name}.Id must be Guid for this test builder.");
+            }
         }
     }
 }

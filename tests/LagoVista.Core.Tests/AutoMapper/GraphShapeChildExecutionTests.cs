@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace LagoVista.Core.Tests.AutoMapper
+namespace LagoVista.Core.Tests.Mapping
 {
     [TestFixture]
     public class GraphShapeChildExecutionTests

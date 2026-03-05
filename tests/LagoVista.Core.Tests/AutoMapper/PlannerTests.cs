@@ -2,16 +2,12 @@
 using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces.AutoMapper;
-using Microsoft.Win32;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static LagoVista.Core.Tests.AutoMapper.TestModels.PlannerModels;
 
-namespace LagoVista.Core.Tests.AutoMapper
+namespace LagoVista.Core.Tests.Mapping
 {
     [TestFixture]
     public class PlannerTests

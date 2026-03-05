@@ -26,7 +26,7 @@ namespace LagoVista.Core.Services.Crypto
             _resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
         }
 
-        public async Task<string> BuildKeyIdAsync(object dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default)
+        public async Task<string> BuildKeyIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
             if (attr == null) throw new ArgumentNullException(nameof(attr));

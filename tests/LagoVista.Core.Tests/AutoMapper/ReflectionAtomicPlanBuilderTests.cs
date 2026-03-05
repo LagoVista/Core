@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace LagoVista.Core.Tests.AutoMapper
+namespace LagoVista.Core.Tests.Mapping
 {
     [TestFixture]
     public class ReflectionAtomicPlanBuilderTests

@@ -143,7 +143,7 @@ namespace LagoVista.Core.Validation
 
             if (result.Errors.Any())
             {
-                result.Errors.Insert(0, new ErrorMessage() { Message = $"Validation Failed for {entity.GetType().Name}, invalid fields {String.Join(", ", result.Errors.Select(err => err.Message))} " });
+                result.ErrorSummary = new ErrorMessage() { Message = $"Validation Failed for {entity.GetType().Name}, invalid fields {String.Join(", ", result.Errors.Select(err => err.Message))} " };
             }
 
             return result;

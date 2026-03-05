@@ -1,13 +1,14 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.Crypto;
-using LagoVista.Crypto.Modern;
 using LagoVista.Core.Validation;
+using LagoVista.Crypto.Modern;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using static LagoVista.Core.Tests.Mapping.LagoVistaAutoMapperV1Tests;
 
@@ -64,6 +65,28 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var plaintext = await svc.DecryptAsync(decReq);
             Assert.That(plaintext, Is.EqualTo("142.44"));
+        }
+
+        [Test]
+        public void EncryptDecrypt_RoundTrip_Works2()
+        {
+            var sut = new AesGcmEncryptorNet9();
+
+            var key32 = RandomNumberGenerator.GetBytes(32);
+            var nonce12 = RandomNumberGenerator.GetBytes(12);
+            var aad = Encoding.UTF8.GetBytes("aad-v1");
+            var plaintext = Encoding.UTF8.GetBytes("hello secure world");
+
+            var ciphertext = new byte[plaintext.Length];
+            var tag16 = new byte[16];
+
+            sut.Encrypt(key32, nonce12, plaintext, aad, ciphertext, tag16);
+
+            Assert.That(ciphertext, Is.Not.EqualTo(plaintext)); // sanity: should differ for non-empty input
+
+            var roundTrip = sut.Decrypt(key32, nonce12, ciphertext, tag16, aad);
+
+            Assert.That(roundTrip, Is.EqualTo(plaintext));
         }
 
         [Test]
@@ -192,5 +215,104 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             Assert.ThrowsAsync<FormatException>(async () => await svc.DecryptAsync(req));
         }
+        
+        [Test]
+        public void Encrypt_WhenTagBufferWrongLength_Throws()
+        {
+            var sut = new AesGcmEncryptorNet9();
+
+            var key32 = RandomNumberGenerator.GetBytes(32);
+            var nonce12 = RandomNumberGenerator.GetBytes(12);
+            var aad = Array.Empty<byte>();
+            var plaintext = new byte[10];
+
+            var ciphertext = new byte[plaintext.Length];
+            var tagWrong = new byte[15]; // wrong
+
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                sut.Encrypt(key32, nonce12, plaintext, aad, ciphertext, tagWrong));
+
+            Assert.That(ex.ParamName, Is.EqualTo("tag16Out"));
+        }
+
+        [Test]
+        public void Decrypt_WhenKeyWrongLength_Throws()
+        {
+            var sut = new AesGcmEncryptorNet9();
+
+            var keyWrong = RandomNumberGenerator.GetBytes(31); // wrong
+            var nonce12 = RandomNumberGenerator.GetBytes(12);
+            var aad = Array.Empty<byte>();
+            var ciphertext = new byte[1];
+            var tag16 = new byte[16];
+
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                sut.Decrypt(keyWrong, nonce12, ciphertext, tag16, aad));
+
+            Assert.That(ex.ParamName, Is.EqualTo("key32"));
+        }
+
+
+
+
+        [Test]
+            public void Encrypt_WhenCiphertextBufferWrongSize_Throws()
+            {
+                var sut = new AesGcmEncryptorNet9();
+
+                var key32 = RandomNumberGenerator.GetBytes(32);
+                var nonce12 = RandomNumberGenerator.GetBytes(12);
+                var aad = Array.Empty<byte>();
+                var plaintext = new byte[10];
+
+                var ciphertextWrong = new byte[9]; // wrong
+                var tag16 = new byte[16];
+
+                var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                    sut.Encrypt(key32, nonce12, plaintext, aad, ciphertextWrong, tag16));
+
+                Assert.That(ex.ParamName, Is.EqualTo("ciphertextOut"));
+            }
+
+            [Test]
+            public void Decrypt_WhenNonceWrongLength_Throws()
+            {
+                var sut = new AesGcmEncryptorNet9();
+
+                var key32 = RandomNumberGenerator.GetBytes(32);
+                var nonceWrong = RandomNumberGenerator.GetBytes(11); // wrong
+                var aad = Array.Empty<byte>();
+                var ciphertext = new byte[1];
+                var tag16 = new byte[16];
+
+                var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                    sut.Decrypt(key32, nonceWrong, ciphertext, tag16, aad));
+
+                Assert.That(ex.ParamName, Is.EqualTo("nonce12"));
+            }
+
+            [Test]
+            public void Decrypt_WhenTagTampered_ThrowsCryptographicException()
+            {
+                var sut = new AesGcmEncryptorNet9();
+
+                var key32 = RandomNumberGenerator.GetBytes(32);
+                var nonce12 = RandomNumberGenerator.GetBytes(12);
+                var aad = Encoding.UTF8.GetBytes("aad-v1");
+                var plaintext = Encoding.UTF8.GetBytes("attack at dawn");
+
+                var ciphertext = new byte[plaintext.Length];
+                var tag16 = new byte[16];
+
+                sut.Encrypt(key32, nonce12, plaintext, aad, ciphertext, tag16);
+
+                // Tamper the tag (auth should fail)
+                tag16[0] ^= 0xFF;
+
+                Assert.Throws<AuthenticationTagMismatchException>(() =>
+                    sut.Decrypt(key32, nonce12, ciphertext, tag16, aad));
+            }
+        }
     }
-}
+
+
