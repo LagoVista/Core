@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.11.35312.102
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11430.68 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core", "src\LagoVista.Core\LagoVista.Core.csproj", "{ECA8DAC5-9324-4E0C-91BE-D222FEA186D3}"
 EndProject
@@ -48,6 +48,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core.Retry.Tests", "tests\LagoVista.Core.Retry.Tests\LagoVista.Core.Retry.Tests.csproj", "{571FA8BF-E894-49AA-90EB-427FBCF90886}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.TestBase", "tests\LagoVista.Core.TestBase\LagoVista.Core.TestBase.csproj", "{A7E4A189-83F8-438E-A770-74B10F25DA0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Crypto", "src\LagoVista.Crypto\LagoVista.Crypto.csproj", "{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +121,10 @@ Global
 		{A7E4A189-83F8-438E-A770-74B10F25DA0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7E4A189-83F8-438E-A770-74B10F25DA0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7E4A189-83F8-438E-A770-74B10F25DA0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{4BD0AEEC-76F1-4A93-A5E3-DCBF7191724B} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{571FA8BF-E894-49AA-90EB-427FBCF90886} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{A7E4A189-83F8-438E-A770-74B10F25DA0A} = {789A2940-98A7-4A45-B302-0FEE3151886E}
+		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E49F45F8-0C41-4A0A-A34E-D7A13852646B}
