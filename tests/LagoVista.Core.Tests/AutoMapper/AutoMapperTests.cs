@@ -3,6 +3,7 @@ using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
+using LagoVista.Core.Services;
 using LagoVista.Core.Tests.AutoMapper.TestModels;
 using LagoVista.Models;
 using NUnit.Framework;
@@ -108,9 +109,11 @@ namespace LagoVista.Core.Tests.Mapping
         public async Task MapstoChildIdTest()
         {
             var source = new ChildIdMappingSource();
-            source.GrandChild = new GrandChild() { Id = "grandchild-789" }; 
+            var id = GuidString36.Factory();
+
+            source.GrandChild = new GrandChild() { Id = id }; 
             var tgt = await _mapper.CreateAsync<ChildIdMappingSource, ChildIdMappingTarget>(source, Org(), User(), null, CancellationToken.None);
-            Assert.That(tgt.GrandChildId, Is.EqualTo("grandchild-789"));
+            Assert.That(tgt.GrandChildId, Is.EqualTo(id));
         }
 
         [Test]
@@ -214,7 +217,7 @@ namespace LagoVista.Core.Tests.Mapping
             null, CancellationToken.None );
 
 
-            Assert.That(entity.Id, Is.EqualTo(db.Id.ToString()));
+            Assert.That(entity.Id.Value, Is.EqualTo(db.Id.ToString()));
             Assert.That(entity.CreatedBy.Id, Is.EqualTo("user-123"));
             Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
             Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
@@ -241,7 +244,7 @@ namespace LagoVista.Core.Tests.Mapping
             MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
             var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), null, CancellationToken.None);
 
-            Assert.That(entity.Id, Is.EqualTo(db.Id.ToString()));
+            Assert.That(entity.Id.Value, Is.EqualTo(db.Id.ToString()));
             Assert.That(entity.CreatedBy.Id, Is.EqualTo("user-123"));
             Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
             Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));

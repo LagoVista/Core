@@ -37,7 +37,7 @@ namespace LagoVista.Core.Attributes
     /// Applied to the DTO type. Defines how to derive the secret id in KeyVault and where to get the scope id.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class ModernEncryptionKeyAttribute : Attribute
+    public sealed class ModernKeyIdAttribute : Attribute
     {
         /// <summary>
         /// Secret id template, e.g. "RateKey-{id}" or "ExpenseRecordKey-{orgId}-{id}".
@@ -67,7 +67,7 @@ namespace LagoVista.Core.Attributes
         /// </summary>
         public bool CreateIfMissing { get; set; } = true;
 
-        public ModernEncryptionKeyAttribute(string secretIdFormat)
+        public ModernKeyIdAttribute(string secretIdFormat)
         {
             KeyIdFormat = secretIdFormat ?? throw new ArgumentNullException(nameof(secretIdFormat));
         }

@@ -17,7 +17,7 @@ namespace LagoVista.Core.Tests.AutoMapper.TestModels
 
     public class ChildIdMappingTarget
     {
-        public string GrandChildId { get; set; }
+        public GuidString36 GrandChildId { get; set; }
     }   
 
     public class GrandChild : RelationalEntityBase

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Crypto</id>
-    <version>3.0.3213.1333</version>
+    <version>3.0.3214.1109</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,18 +12,17 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT RPC</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 3/4/2026 6:33:37 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/5/2026 4:09:41 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <group targetFramework="netstandard2.1">
-        <dependency id="Newtonsoft.Json" version="13.0.3" />
-        <dependency id="LagoVista.Core" version="3.0.3213.1333" />
+      <group targetFramework="Net9.0">
+        <dependency id="LagoVista.Core" version="3.0.3214.1109" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\net9\LagoVista.Crypto.dll" target="lib\net9.0\LagoVista.Crypto.dll" />
-    <file src="bin\release\net9\LagoVista.Crypto.pdb" target="lib\net9.0\LagoVista.Crypto.pdb" />
+    <file src="bin\release\Net9.0\LagoVista.Crypto.dll" target="lib\Net9.0\LagoVista.Crypto.dll" />
+    <file src="bin\release\Net9.0\LagoVista.Crypto.pdb" target="lib\Net9.0\LagoVista.Crypto.pdb" />
   </files>
 </package>

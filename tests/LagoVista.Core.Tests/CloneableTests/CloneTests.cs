@@ -69,7 +69,7 @@ namespace LagoVista.Core.Tests.CloneableTests
             original.Children1.Add(new ChildModel1() { Prop1 = "a", Prop2 = "b", Prop3 = "c" });
             original.Children1.Add(new ChildModel1() { Prop1 = "d", Prop2 = "e", Prop3 = "f" });
 
-            var clone = await original.CloneAsync(user2, org2, "DiffObject", "DIffKey");
+            var clone = await original.CloneAsync(user2, org2, "DiffObject", "diffkey");
 
             Assert.AreEqual("p1", clone.Child1.Prop1);
             Assert.AreEqual("p2", clone.Child1.Prop2);

@@ -2,6 +2,7 @@
 using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
+using LagoVista.Core.Services;
 
 namespace LagoVista.Core.AutoMapper
 {
@@ -14,7 +15,7 @@ namespace LagoVista.Core.AutoMapper
             services.AddSingleton<IEncryptedMapper, EncryptedMapper>();
             services.AddSingleton<IEncryptor, Encryptor>();
             services.AddSingleton<IAtomicPlanBuilder, ReflectionAtomicPlanBuilder>();
-            services.AddSingleton<IEncryptionKeyProvider, EncryptionKeyProvider>();
+            services.AddScoped<IEncryptionKeyProvider, EncryptionKeyProvider>();
             services.AddSingleton<ILagoVistaAutoMapper, LagoVistaAutoMapper>();
         }
     }

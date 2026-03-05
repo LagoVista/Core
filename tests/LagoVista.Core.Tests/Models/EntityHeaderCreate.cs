@@ -32,7 +32,7 @@ namespace LagoVista.Core.Tests.Models
                 Name = "Wolf"
             });
 
-            Assert.AreEqual("Kevin", eh.Id);
+            Assert.AreEqual("B23AA8D088034299A6CC14FF1D7C0527", eh.Id);
             Assert.AreEqual("Wolf", eh.Text);
             Assert.AreEqual("B23AA8D088034299A6CC14FF1D7C0527", eh.Value.Id.Value);
             Assert.AreEqual("Wolf", eh.Value.Name);
