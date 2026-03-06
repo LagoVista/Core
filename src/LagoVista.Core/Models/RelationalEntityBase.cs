@@ -21,7 +21,7 @@ namespace LagoVista.Core.Models
         [MapTo(nameof(DbModelBase.LastUpdatedByUser))]
         public EntityHeader LastUpdatedBy { get; set; }
         public UtcTimestamp CreationDate { get; set; }
-        [MapTo(nameof(DbModelBase.LastUpdateDate))]
+        [MapTo(nameof(DbModelBase.LastUpdatedDate))]
         public UtcTimestamp LastUpdatedDate { get; set; }
     }
 }

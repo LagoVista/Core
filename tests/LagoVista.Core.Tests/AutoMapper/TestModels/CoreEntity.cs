@@ -19,7 +19,7 @@ namespace LagoVista.Core.Tests.AutoMapper.TestModels
         
         public string CreationDate { get; set; }
 
-        [MapTo(nameof(DbModelBase.LastUpdateDate))]
+        [MapTo(nameof(DbModelBase.LastUpdatedDate))]
         public string LastUpdatedDate { get; set; }
     }
 

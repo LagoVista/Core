@@ -132,7 +132,6 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         public UtcTimestamp CreationDate { get; set; }
 
-        [MapTo(nameof(DbModelBase.LastUpdateDate))]
         [CloneOptions(false)]
         public UtcTimestamp LastUpdatedDate { get; set; }
         [CloneOptions(false)]

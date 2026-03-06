@@ -223,7 +223,7 @@ namespace LagoVista.Core.Tests.Mapping
                 CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
                 LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
                 Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
-                LastUpdateDate = timeStamp,
+                LastUpdatedDate = timeStamp,
                 CreationDate = timeStamp
             };
 
@@ -257,7 +257,7 @@ namespace LagoVista.Core.Tests.Mapping
                 CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
                 LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
                 Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
-                LastUpdateDate = timeStamp,
+                LastUpdatedDate = timeStamp,
                 CreationDate = timeStamp
             };
 
@@ -293,7 +293,7 @@ namespace LagoVista.Core.Tests.Mapping
             Assert.That(dto.CreatedById, Is.EqualTo(User().Id));
             Assert.That(dto.OrganizationId, Is.EqualTo(Org().Id));
             Assert.That(dto.CreationDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
-            Assert.That(dto.LastUpdateDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
+            Assert.That(dto.LastUpdatedDate, Is.EqualTo(timeStamp).Within(TimeSpan.FromSeconds(1)));
 
         }
 

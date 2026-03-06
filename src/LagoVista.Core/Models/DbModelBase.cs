@@ -33,9 +33,8 @@ namespace LagoVista.Models
         [Required]
         public DateTime CreationDate { get; set; }
 
-        [MapTo("LastUpdatedDate")]
         [Required]
-        public DateTime LastUpdateDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
 
         [MapTo("CreatedBy")]
         [IgnoreOnMapTo]
@@ -54,7 +53,7 @@ namespace LagoVista.Models
             var result = new LagoVista.Core.Validation.ValidationResult();
             if (Id == Guid.Empty) Id = Guid.NewGuid();
             if (CreationDate == default) CreationDate = DateTime.UtcNow;
-            if (LastUpdateDate == default) LastUpdateDate = DateTime.UtcNow;
+            if (LastUpdatedDate == default) LastUpdatedDate = DateTime.UtcNow;
             if (!CreatedById.IsValidId()) result.AddSystemError("Invalid Created By Id");
             if (!LastUpdatedById.IsValidId()) result.AddSystemError("Invalid Created By Id");
             return result;
@@ -66,7 +65,7 @@ namespace LagoVista.Models
             CreatedById = entity.CreatedBy.Id;
             LastUpdatedById = entity.LastUpdatedBy.Id;
             CreationDate = DateTime.Parse(entity.CreationDate);
-            LastUpdateDate = DateTime.Parse(entity.LastUpdatedDate);
+            LastUpdatedDate = DateTime.Parse(entity.LastUpdatedDate);
         }
     }
 }
