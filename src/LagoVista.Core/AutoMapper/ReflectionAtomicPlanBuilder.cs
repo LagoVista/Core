@@ -183,7 +183,7 @@ namespace LagoVista.Core.AutoMapper
                     if (tprop.GetCustomAttribute<ManualMappingAttribute>() != null)
                         continue;
 
-                    if (TryBuildAtomicStep(sourceType, targetType, sprop, tprop, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, errors, out var step))
+                    if (TryBuildAtomicStep(sourceType, targetType, sprop, tprop, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.MapToFanoutAssign, AtomicMapStepKind.ConverterAssign, errors, out var step))
                     {
                         steps.Add(step);
 

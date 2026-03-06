@@ -10,18 +10,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace LagoVista.Models
 {
     [Table("AppUser", Schema="dbo")]
-    public class AppUserDTO : IEntityHeader, IEntityHeaderFactory
+    public class AppUserDTO : IEntityHeaderFactory
     {
-        public string Id { get => AppUserId; set => AppUserId = value; }
-        public string Text { get => FullName; set => FullName = value; }
-
-
-        [MapTo("Id")]
+        // Don't be tempted to convert this to NormalizeId32, this is the database side that has to be a string.
         [Key]
         public string AppUserId { get; set; }
         [Required]
         public string Email { get; set; }
-        [MapTo("Text")]
         [Required]
         public string FullName { get; set; }
         [Required]

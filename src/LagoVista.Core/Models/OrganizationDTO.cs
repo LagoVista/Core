@@ -15,12 +15,10 @@ using System.Text;
 namespace LagoVista.Models
 {
     [Table("Org", Schema = "dbo")]
-    public class OrganizationDTO : IEntityHeader, IEntityHeaderFactory
+    public class OrganizationDTO : IEntityHeaderFactory
     {
-        public string Id { get => OrgId; set => OrgId = value; }
-        public string Text { get => OrgName; set => OrgName = value; }
 
-
+        // Don't be tempted to convert this to NormalizeId32, this is the database side that has to be a string.
         [MapTo("Id")]
         [Key]
         public string OrgId { get; set; }

@@ -23,12 +23,15 @@ namespace LagoVista.Core.AutoMapper.Converters
             var st = Nullable.GetUnderlyingType(sourceType) ?? sourceType;
             var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
 
-            if (tt != typeof(EntityHeader))
+            if (tt != typeof(EntityHeader) &&
+                (!tt.IsGenericType || tt.GetGenericTypeDefinition() != typeof(EntityHeader<>)))
+            {
                 return false;
+            }
 
             // Only convert if the source type has a public instance method:
             // EntityHeader ToEntityHeader()
-            return GetToEntityHeaderMethod(st) != null;
+            return typeof(IEntityHeaderFactory).IsAssignableFrom(st) || GetToEntityHeaderMethod(st) != null;
         }
 
         public object Convert(object sourceValue, Type targetType)
@@ -65,15 +68,13 @@ namespace LagoVista.Core.AutoMapper.Converters
 
         private MethodInfo GetToEntityHeaderMethod(Type sourceType)
         {
-            MethodInfo method;
-
-            if (_methodCache.TryGetValue(sourceType, out method))
+            if (_methodCache.TryGetValue(sourceType, out var method))
                 return method;
 
             method = FindToEntityHeaderMethod(sourceType);
 
-            // We cache even null results to avoid repeated reflection
-            _methodCache[sourceType] = method;
+            if (method != null)
+                _methodCache[sourceType] = method;
 
             return method;
         }

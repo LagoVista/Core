@@ -1,6 +1,7 @@
 ﻿// File: tests/LagoVista.Core.Tests/AutoMapper/Converters/ToEntityHeaderConverterTests.cs
 using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.Models;
+using LagoVista.Models;
 using NUnit.Framework;
 using System;
 
@@ -69,6 +70,13 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         }
 
         [Test]
+        public void CanConvert_GenericEntityHeader()
+        {
+            var c = new ToEntityHeaderConverter();
+            Assert.That(c.CanConvert(typeof(EntityHeaderHolder), typeof(EntityHeader<string>)), Is.True);
+        }
+
+        [Test]
         public void Convert_Throws_WhenNoMethod()
         {
             var c = new ToEntityHeaderConverter();
@@ -93,6 +101,72 @@ namespace LagoVista.Core.Tests.Mapping.Converters
             var c = new ToEntityHeaderConverter();
             var result = c.Convert(new HasToEntityHeader_ReturnsNull(), typeof(EntityHeader));
             Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void CanConvert_Should_Return_True_For_IEntityHeaderFactory_To_EntityHeader()
+        {
+            var converter = new ToEntityHeaderConverter();
+
+            var canConvert = converter.CanConvert(typeof(AppUserDTO), typeof(EntityHeader));
+
+            Assert.That(canConvert, Is.True);
+        }
+
+        [Test]
+        public void Convert_Should_Map_AppUserDTO_To_EntityHeader()
+        {
+            var converter = new ToEntityHeaderConverter();
+
+            var source = new AppUserDTO
+            {
+                AppUserId = "D7A50FB68C3A44A0A8F3B21723BF65C1",
+                FullName = "Tracey Marcey"
+            };
+
+            var result = converter.Convert(source, typeof(EntityHeader));
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<EntityHeader>());
+
+            var eh = (EntityHeader)result;
+
+            Assert.That(eh.Id, Is.EqualTo("D7A50FB68C3A44A0A8F3B21723BF65C1"));
+            Assert.That(eh.Text, Is.EqualTo("Tracey Marcey"));
+        }
+
+        [Test]
+        public void Convert_Should_Return_Null_When_Source_Is_Null()
+        {
+            var converter = new ToEntityHeaderConverter();
+
+            var result = converter.Convert(null, typeof(EntityHeader));
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void CanConvert_Should_Return_False_For_Non_EntityHeader_Target()
+        {
+            var converter = new ToEntityHeaderConverter();
+
+            var canConvert = converter.CanConvert(typeof(AppUserDTO), typeof(string));
+
+            Assert.That(canConvert, Is.False);
+        }
+
+        internal class EntityHeaderHolder : IEntityHeaderFactory
+        {
+            public string AppUserId { get; set; }
+            public string FullName { get; set; }
+            public EntityHeader ToEntityHeader()
+            {
+                return new EntityHeader
+                {
+                    Id = AppUserId,
+                    Text = FullName
+                };
+            }
         }
     }
 }

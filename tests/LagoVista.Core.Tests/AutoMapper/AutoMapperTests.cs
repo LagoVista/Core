@@ -59,11 +59,38 @@ namespace LagoVista.Core.Tests.Mapping
 
 
         [Test]
-        public async Task AppModels()
+        public async Task Map_Core_To_DbModel()
         {
             try
             {
                 MappingVerifier.Verify<CoreEntity, DbModelBase>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
+        [Test]
+        public async Task Map_Relational_To_DbModel()
+        {
+            try
+            {
+                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
+
+
+        [Test]
+        public async Task Map_Map_DbModel_To_DbCoreEntity()
+        {
+            try
+            {
                 MappingVerifier.Verify<DbModelBase, CoreEntity>(true);
             }
             catch (Exception ex)
@@ -71,6 +98,23 @@ namespace LagoVista.Core.Tests.Mapping
                 Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
         }
+
+        [Test]
+        public async Task Map_DbModel_To_DbRelationBase()
+        {
+            try
+            {
+                MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
+
+
+
+
         [Test]
         public void TestEHMapping()
         {
@@ -99,6 +143,7 @@ namespace LagoVista.Core.Tests.Mapping
                 Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
             }
         }
+
 
 
         [Test]
@@ -150,10 +195,10 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task TestCoreMapping_Reverse()
         {
-            var dto = new SimpleWithEHDto() { Name = "Test", ChildForEH = new SimpleWithEHDtoChild() { Id = "eh-001", Key = "key-001", Name = "Entity Header Name" } };
+            var dto = new SimpleWithEHDto() { Name = "Test", ChildForEH = new SimpleWithEHDtoChild() { Id = "D7A50FB68C3A44A0A8F3B21723BF65C1", Key = "key-001", Name = "Entity Header Name" } };
             var entity = await _mapper.CreateAsync<SimpleWithEHDto, SimpleWithEH>(dto, Org(), User());
 
-            Assert.That(entity.EntityEH.Id, Is.EqualTo("eh-001"));
+            Assert.That(entity.EntityEH.Id, Is.EqualTo("D7A50FB68C3A44A0A8F3B21723BF65C1"));
             Assert.That(entity.EntityEH.Key, Is.EqualTo("key-001"));
             Assert.That(entity.EntityEH.Text, Is.EqualTo("Entity Header Name"));
         }
@@ -220,28 +265,25 @@ namespace LagoVista.Core.Tests.Mapping
             var db = new DbModelBase()
             {
                 Id = Guid.NewGuid(),
-                CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
-                LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
-                Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
+                CreatedByUser = new AppUserDTO() { AppUserId = "D7A50FB68C3A44A0A8F3B21723BF65C1", FullName = "Tracey Marcey" },
+                LastUpdatedByUser = new AppUserDTO() { AppUserId = "D7A50FB68C3A44A0A8F3B21723BF65C1", FullName = "Tracey Marcey" },
+                Organization = new OrganizationDTO() { OrgId = "C00BB11B54234CD78566F46306B8A9E2", OrgName = "Franks Fish" },
                 LastUpdatedDate = timeStamp,
                 CreationDate = timeStamp
             };
 
             MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
-            var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), pln =>
-            {
-                pln.IncludeChild(ch => ch.CreatedBy, s => s.CreatedByUser);
-                pln.IncludeChild(ch => ch.LastUpdatedBy, s => s.LastUpdatedByUser);
-                pln.IncludeChild(ch => ch.OwnerOrganization, s => s.Organization);
-            },
-            null, CancellationToken.None);
+            var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), null, CancellationToken.None);
 
+            Assert.That(entity.CreatedBy, Is.Not.Null);
+            Assert.That(entity.LastUpdatedBy, Is.Not.Null);
+            Assert.That(entity.OwnerOrganization, Is.Not.Null);
 
             Assert.That(entity.Id.Value, Is.EqualTo(db.Id.ToString()));
-            Assert.That(entity.CreatedBy.Id, Is.EqualTo("user-123"));
+            Assert.That(entity.CreatedBy.Id, Is.EqualTo("D7A50FB68C3A44A0A8F3B21723BF65C1"));
             Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
-            Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
-            Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Frnks Fish"));
+            Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("C00BB11B54234CD78566F46306B8A9E2"));
+            Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Franks Fish"));
             Assert.That(entity.CreationDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
             Assert.That(entity.LastUpdatedDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
         }
@@ -254,9 +296,9 @@ namespace LagoVista.Core.Tests.Mapping
             var db = new DbModelBase()
             {
                 Id = Guid.NewGuid(),
-                CreatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
-                LastUpdatedByUser = new AppUserDTO() { AppUserId = "user-123", FullName = "Tracey Marcey" },
-                Organization = new OrganizationDTO() { OrgId = "org-456", OrgName = "Frnks Fish" },
+                CreatedByUser = new AppUserDTO() { AppUserId = "D7A50FB68C3A44A0A8F3B21723BF65C1", FullName = "Tracey Marcey" },
+                LastUpdatedByUser = new AppUserDTO() { AppUserId = "D7A50FB68C3A44A0A8F3B21723BF65C1", FullName = "Tracey Marcey" },
+                Organization = new OrganizationDTO() { OrgId = "C00BB11B54234CD78566F46306B8A9E2", OrgName = "Franks Fish" },
                 LastUpdatedDate = timeStamp,
                 CreationDate = timeStamp
             };
@@ -265,10 +307,10 @@ namespace LagoVista.Core.Tests.Mapping
             var entity = await _mapper.CreateAsync<DbModelBase, RelationalEntityBase>(db, Org(), User(), null, CancellationToken.None);
 
             Assert.That(entity.Id.Value, Is.EqualTo(db.Id.ToString()));
-            Assert.That(entity.CreatedBy.Id, Is.EqualTo("user-123"));
+            Assert.That(entity.CreatedBy.Id, Is.EqualTo("D7A50FB68C3A44A0A8F3B21723BF65C1"));
             Assert.That(entity.CreatedBy.Text, Is.EqualTo("Tracey Marcey"));
-            Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("org-456"));
-            Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Frnks Fish"));
+            Assert.That(entity.OwnerOrganization.Id, Is.EqualTo("C00BB11B54234CD78566F46306B8A9E2"));
+            Assert.That(entity.OwnerOrganization.Text, Is.EqualTo("Franks Fish"));
             Assert.That(entity.CreationDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
             Assert.That(entity.LastUpdatedDate.Value, Is.EqualTo(timeStamp.ToJSONString()));
         }
@@ -342,9 +384,9 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task EH_To_Name_and_Id()
         {
-            var eh = new EntityHeaderPrimary() { TheProperty = EntityHeader.Create("eh-123", "My Entity Header") };
+            var eh = new EntityHeaderPrimary() { TheProperty = EntityHeader.Create("D7A50FB68C3A44A0A8F3B21723BF65C1", "My Entity Header") };
             var dto = await _mapper.CreateAsync<EntityHeaderPrimary, EntityHeaderDTO>(eh, Org(), User(), null, CancellationToken.None);
-            Assert.That(dto.Id, Is.EqualTo("eh-123"));
+            Assert.That(dto.Id, Is.EqualTo("D7A50FB68C3A44A0A8F3B21723BF65C1"));
             Assert.That(dto.Text, Is.EqualTo("My Entity Header"));
         }
 
