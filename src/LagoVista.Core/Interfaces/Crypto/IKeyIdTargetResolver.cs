@@ -23,6 +23,6 @@ namespace LagoVista.Core.Interfaces.Crypto
         ///
         /// MUST throw if the targetPath is unsupported, fkValue is empty, or the target cannot be resolved.
         /// </summary>
-        Task<Guid> ResolveGuidAsync(string targetPath, Guid fkValue, EntityHeader org, EntityHeader user, CancellationToken ct = default);
+        Task<Guid> ResolveIdAsync(string targetPath, Guid fkValue, EntityHeader org, EntityHeader user, CancellationToken ct = default);
     }
 }

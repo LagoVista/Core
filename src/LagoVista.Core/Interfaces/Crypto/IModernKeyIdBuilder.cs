@@ -16,6 +16,6 @@ namespace LagoVista.Core.Interfaces.Crypto
     /// </summary>
     public interface IModernKeyIdBuilder
     {
-        Task<string> BuildKeyIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class;
+        Task<string> BuildKeyGuiIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class;
     }
 }

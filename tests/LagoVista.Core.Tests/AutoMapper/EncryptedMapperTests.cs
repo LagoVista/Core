@@ -96,7 +96,7 @@ namespace LagoVista.Core.Tests.Mapping
             public readonly List<(Type DtoType, string Format)> Seen = new();
             public string NextKeyId { get; set; } = "ModernKey-123";
 
-            public Task<string> BuildKeyIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default)
+            public Task<string> BuildKeyGuiIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default)
                 where TDto : class
             {
                 Calls++;

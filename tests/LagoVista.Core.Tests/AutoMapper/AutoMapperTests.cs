@@ -493,7 +493,7 @@ namespace LagoVista.Core.Tests.Mapping
         private sealed class FakeModernKeyIdBuilder : IModernKeyIdBuilder
         {
             // NOTE: adjust signature if your interface differs.
-            public Task<string> BuildKeyIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class
+            public Task<string> BuildKeyGuiIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class
             {
                 if (dto == null) throw new ArgumentNullException(nameof(dto));
                 if (attr == null) throw new ArgumentNullException(nameof(attr));

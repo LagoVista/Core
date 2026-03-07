@@ -87,7 +87,7 @@ namespace LagoVista.Core.AutoMapper
                             ?? throw new InvalidOperationException(
                                 $"DTO type {typeof(TDto).Name} must have [ModernKeyId(...)] attribute for modern encryption.");
 
-                        modernKeyId = await _modernKeyIdBuilder.BuildKeyIdAsync(dto, modernAttr, org, user, ct).ConfigureAwait(false);
+                        modernKeyId = await _modernKeyIdBuilder.BuildKeyGuiIdAsync(dto, modernAttr, org, user, ct).ConfigureAwait(false);
                     }
 
                     var req = new DecryptStringRequest
@@ -139,7 +139,7 @@ namespace LagoVista.Core.AutoMapper
             var modernAttr = typeof(TDto).GetCustomAttribute<ModernKeyIdAttribute>()
                 ?? throw new InvalidOperationException($"DTO type {typeof(TDto).Name} must have [ModernKeyId(...)] attribute for modern encryption.");
 
-            var modernKeyId = await _modernKeyIdBuilder.BuildKeyIdAsync(dto, modernAttr, org, user, ct).ConfigureAwait(false);
+            var modernKeyId = await _modernKeyIdBuilder.BuildKeyGuiIdAsync(dto, modernAttr, org, user, ct).ConfigureAwait(false);
 
             var orgId36 = CoerceOrgIdToGuidString36(org.Id, "org.Id");
             var recId36 = CoerceDtoIdToGuidString36(dto);

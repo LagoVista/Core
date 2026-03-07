@@ -4,6 +4,7 @@ using LagoVista.Core.Models;
 using System;
 using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace LagoVista.Core.Services.Crypto
             _resolver = resolver ?? throw new ArgumentNullException(nameof(resolver));
         }
 
-        public async Task<string> BuildKeyIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class
+        public async Task<string> BuildKeyGuiIdAsync<TDto>(TDto dto, ModernKeyIdAttribute attr, EntityHeader org, EntityHeader user, CancellationToken ct = default) where TDto : class
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
             if (attr == null) throw new ArgumentNullException(nameof(attr));
@@ -45,12 +46,13 @@ namespace LagoVista.Core.Services.Crypto
                 // Attempt fallback
                 if (!string.IsNullOrWhiteSpace(attr.FallbackFkProperty))
                 {
-                    var fkGuid = ResolveGuidProperty(dto, attr.FallbackFkProperty);
+                    var fkGuid = ResolveIdProperty(dto, attr.FallbackFkProperty);
                     var targetPath = !string.IsNullOrWhiteSpace(attr.FallbackTargetPath)
                         ? attr.FallbackTargetPath
                         : attr.IdPath;
 
-                    idGuid = await _resolver.ResolveGuidAsync(targetPath, fkGuid, org, user, ct).ConfigureAwait(false);
+                    var g = await _resolver.ResolveIdAsync(targetPath, fkGuid, org, user, ct).ConfigureAwait(false);
+                    idGuid = g.ToId();
                 }
                 else
                 {
@@ -72,9 +74,9 @@ namespace LagoVista.Core.Services.Crypto
             return keyId;
         }
 
-        private static bool TryResolveGuidFromPath(object root, string path, out Guid guid)
+        private static bool TryResolveGuidFromPath(object root, string path, out String  idField)
         {
-            guid = default;
+            idField = default;
 
             if (string.IsNullOrWhiteSpace(path))
                 return false;
@@ -107,8 +109,12 @@ namespace LagoVista.Core.Services.Crypto
 
             if (current is Guid g)
             {
-                guid = g;
-                return guid != Guid.Empty;
+                var guid = g;
+                if (guid == Guid.Empty)
+                    return false;
+
+                idField = guid.ToId();
+                return true;
             }
 
             // If the final value is a nullable Guid
@@ -118,16 +124,35 @@ namespace LagoVista.Core.Services.Crypto
                 // boxed nullable may come through as Guid already, but just in case
                 if (current is Guid ng)
                 {
-                    guid = ng;
-                    return guid != Guid.Empty;
+                    var guid = ng;
+                    if (guid == Guid.Empty)
+                        return false;
+
+                    idField = guid.ToId();
+                    return true;
+                }
+            }
+
+            if (current is NormalizedId32 n)
+            {
+                idField = n.ToString().ToLowerInvariant();
+                return true;
+            }
+
+            if(current is string s)
+            {
+                if(Regex.Match(s, "^[A-F0-9]{32}$").Success)
+                {
+                    idField = s.Trim().ToLowerInvariant();
+                    return true;
                 }
             }
 
             throw new InvalidOperationException(
-                $"Modern KeyId derivation misconfigured: path '{path}' resolved to type '{currentType.Name}' but expected a Guid.");
+                $"Modern KeyId derivation misconfigured: path '{path}' resolved to type '{currentType.Name}' but expected a String, Normalized32Guid or Guid.");
         }
 
-        private static Guid ResolveGuidProperty(object root, string propertyName)
+        private static Guid ResolveIdProperty(object root, string propertyName)
         {
             if (string.IsNullOrWhiteSpace(propertyName))
                 throw new ArgumentNullException(nameof(propertyName));
