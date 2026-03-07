@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public sealed class MapValueConverterRegistry : IMapValueConverterRegistry
     {
         private List<IMapValueConverter> _converters;

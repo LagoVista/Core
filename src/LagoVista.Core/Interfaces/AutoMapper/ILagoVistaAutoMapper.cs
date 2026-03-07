@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
+﻿
+using LagoVista.Core.AutoMapper;
 using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;

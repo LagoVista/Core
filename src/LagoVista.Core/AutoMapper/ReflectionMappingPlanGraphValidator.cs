@@ -1,5 +1,4 @@
 using LagoVista.Core.Attributes;
-using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +19,7 @@ namespace LagoVista.Core.AutoMapper
     /// - IgnoreOnMapToAttribute on the TARGET property skips recursion/validation for that property.
     /// - Cycles (repeated (sourceType,targetType) pairs) are treated as errors.
     /// </summary>
+    [CriticalCoverage]
     public sealed class ReflectionMappingPlanGraphValidator
     {
         private readonly IAtomicPlanBuilder _atomicBuilder;

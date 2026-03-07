@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public sealed class MappingPlanBuildException : Exception
     {
         public IReadOnlyList<string> Errors { get; }

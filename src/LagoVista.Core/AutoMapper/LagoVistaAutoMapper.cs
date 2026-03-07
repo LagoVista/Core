@@ -1,8 +1,6 @@
 using LagoVista.Core.Attributes;
-using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
-using LagoVista.Core.Validation;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -14,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.AutoMapper
 {
+
+    [CriticalCoverage]
     public sealed class LagoVistaAutoMapper : ILagoVistaAutoMapper
     {
         private readonly IEncryptedMapper _encryptedMapper;

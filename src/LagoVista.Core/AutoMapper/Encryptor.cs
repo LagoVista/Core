@@ -6,6 +6,7 @@ using System.Text;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public class Encryptor : IEncryptor
     {
         public string Decrypt(string salt, string ciphertext, string key)

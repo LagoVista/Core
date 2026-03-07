@@ -18,6 +18,7 @@ namespace LagoVista.Core.Services
     /// Cache key is the provided secretId. In your system secretId already includes ":kv:<int>",
     /// so kv is naturally part of the cache key.
     /// </summary>
+    [CriticalCoverage]
     public sealed class EncryptionKeyProvider : IEncryptionKeyProvider
     {
         private readonly ISecureStorage _secureStorage;

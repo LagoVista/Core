@@ -3,6 +3,7 @@ using System;
 
 namespace LagoVista.Core.AutoMapper.Converters
 {
+    [CriticalCoverage]
     public sealed class GuidStringConverter : IMapValueConverter
     {
         public bool CanConvert(Type sourceType, Type targetType)

@@ -4,6 +4,7 @@ using System;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public sealed class EntityHeaderIdConverter : IMapValueConverter
     {
         public bool CanConvert(Type sourceType, Type targetType)

@@ -21,6 +21,7 @@ namespace LagoVista.Core.AutoMapper
     ///
     /// Legacy encryptor/key-provider remain for backward compatibility during migration.
     /// </summary>
+    [CriticalCoverage]
     public sealed class EncryptedMapper : IEncryptedMapper
     {
         private const string ModernEnvelopePrefix = "enc;";

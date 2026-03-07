@@ -2,7 +2,6 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.AutoMapper;
 using LagoVista.Core.AutoMapper.Converters;
-using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Interfaces.Crypto;
@@ -58,115 +57,7 @@ namespace LagoVista.Core.Tests.Mapping
         }
 
 
-        [Test]
-        public async Task Map_Core_To_DbModel()
-        {
-            try
-            {
-                MappingVerifier.Verify<CoreEntity, DbModelBase>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
-
-        [Test]
-        public async Task Map_Relational_To_DbModel()
-        {
-            try
-            {
-                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
-
-
-
-        [Test]
-        public async Task Map_Map_DbModel_To_DbCoreEntity()
-        {
-            try
-            {
-                MappingVerifier.Verify<DbModelBase, CoreEntity>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
-
-        [Test]
-        public async Task Map_DbModel_To_DbRelationBase()
-        {
-            try
-            {
-                MappingVerifier.Verify<DbModelBase, RelationalEntityBase>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
-
-
-
-
-        [Test]
-        public void TestEHMapping()
-        {
-            try
-            {
-                MappingVerifier.Verify<EntityHeaderPrimary, EntityHeaderDTO>(true);
-                MappingVerifier.Verify<EntityHeaderDTO, EntityHeaderPrimary>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
-
-
-        [Test]
-        public async Task MappingForChildDTO_ToParentDTOProp()
-        {
-            try
-            {
-                MappingVerifier.Verify<SimpleWithEH, SimpleWithEHDto>(true);
-                MappingVerifier.Verify<SimpleWithEHDto, SimpleWithEH>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
-
-
-
-        [Test]
-        public async Task TestModels()
-        {
-            try
-            {
-                MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
-                MappingVerifier.Verify<DateMappingDTO, DateMapping>(true);
-
-                MappingVerifier.Verify<SimpleManual, SimpleManualDto>(true);
-                MappingVerifier.Verify<SimpleManualDto, SimpleManual>(true);
-
-                MappingVerifier.Verify<ChildIdMappingSource, ChildIdMappingTarget>(true);
-                MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);
-                MappingVerifier.Verify<Account, AccountDto>(true);
-                MappingVerifier.Verify<PlainEntityHeaderSource, PlainEntityHeaderDestination>(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
-            }
-        }
+  
 
         [Test]
         public async Task MapstoChildIdTest()

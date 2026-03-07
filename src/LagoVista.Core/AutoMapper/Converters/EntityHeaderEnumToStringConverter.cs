@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace LagoVista.Core.AutoMapper.Converters
 {
+    [CriticalCoverage]
     public sealed class EntityHeaderEnumToStringConverter : IMapValueConverter
     {
         private readonly ConcurrentDictionary<Type, object> _enumMaps =

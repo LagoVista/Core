@@ -9,6 +9,7 @@ using System.Text;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public static class MappingVerifier
     {
         public sealed class MappingVerificationException : Exception

@@ -18,11 +18,12 @@ namespace LagoVista.Core.AutoMapper.Converters
 		public string Name { get; }
 	}
 
-	/// <summary>
-	/// Bidirectional converter for EntityHeader <-> (string id) and EntityHeader <-> (RelationalIdName).
-	/// Assumes IDs are always strings for this mapping family.
-	/// </summary>
-	public sealed class EntityHeaderRelationalConverter : IMapValueConverter
+    [CriticalCoverage]
+    /// <summary>
+    /// Bidirectional converter for EntityHeader <-> (string id) and EntityHeader <-> (RelationalIdName).
+    /// Assumes IDs are always strings for this mapping family.
+    /// </summary>
+    public sealed class EntityHeaderRelationalConverter : IMapValueConverter
 	{
 		public bool CanConvert(Type sourceType, Type targetType)
 		{

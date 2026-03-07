@@ -12,6 +12,9 @@ namespace LagoVista.Core.AutoMapper
     /// <summary>
     /// Builds and caches encryption mapping plans per (Domain, DTO) pair.
     /// </summary>
+    /// 
+    [CriticalCoverage]
+
     public sealed class EncryptedMapperPlanner : IEncryptedMapperPlanner
     {
         private static readonly ConcurrentDictionary<(Type Domain, Type Dto), object> _plans =

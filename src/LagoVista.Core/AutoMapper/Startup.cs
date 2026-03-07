@@ -1,5 +1,4 @@
 ﻿using LagoVista.Core.AutoMapper.Converters;
-using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Services;

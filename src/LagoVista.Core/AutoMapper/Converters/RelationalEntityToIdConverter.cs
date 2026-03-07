@@ -7,6 +7,7 @@ using System.Text;
 
 namespace LagoVista.Core.AutoMapper.Converters
 {
+    [CriticalCoverage]
     public class RelationalEntityToIdConverter : IMapValueConverter
     {
         public bool CanConvert(Type sourceType, Type targetType)

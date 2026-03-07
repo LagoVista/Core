@@ -4,6 +4,7 @@ using System.Globalization;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public sealed class NumericStringConverter : IMapValueConverter
     {
         public bool CanConvert(Type sourceType, Type targetType)

@@ -1,5 +1,4 @@
 ﻿using LagoVista.Core.AutoMapper;
-using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Models;
 using LagoVista.Core.Validation;
 using NUnit.Framework;

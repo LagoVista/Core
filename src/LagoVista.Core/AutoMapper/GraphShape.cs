@@ -6,6 +6,7 @@ using System.Text;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public sealed class GraphShape<TSource, TTarget>
     {
         private readonly List<ChildEdge> _steps = new List<ChildEdge>();

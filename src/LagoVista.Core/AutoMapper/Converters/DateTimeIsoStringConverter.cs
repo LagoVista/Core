@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace LagoVista.Core.AutoMapper.Converters
 {
+    [CriticalCoverage]
     public sealed class DateTimeIsoStringConverter : IMapValueConverter
     {
         public bool CanConvert(Type sourceType, Type targetType)

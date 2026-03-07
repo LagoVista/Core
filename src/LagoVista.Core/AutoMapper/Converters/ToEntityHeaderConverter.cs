@@ -10,6 +10,7 @@ namespace LagoVista.Core.AutoMapper.Converters
     using System.Collections.Concurrent;
     using System.Reflection;
 
+    [CriticalCoverage]
     public sealed class ToEntityHeaderConverter : IMapValueConverter
     {
         private static readonly ConcurrentDictionary<Type, MethodInfo> _methodCache =

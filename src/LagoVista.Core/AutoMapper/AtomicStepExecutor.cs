@@ -9,6 +9,7 @@ namespace LagoVista.Core.AutoMapper
     /// Executes AtomicMapStep records for a single source/target object pair.
     /// Child recursion is handled separately (ChildSteps).
     /// </summary>
+    [CriticalCoverage]
     public sealed class AtomicStepExecutor
     {
         private readonly IMapValueConverterRegistry _converters;

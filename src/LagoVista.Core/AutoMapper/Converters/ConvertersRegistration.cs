@@ -3,7 +3,7 @@ using LagoVista.Core.Interfaces.AutoMapper;
 
 namespace LagoVista.Core.AutoMapper.Converters
 {
-
+    [CriticalCoverage]
     public static class ConvertersRegistration
     {
         public static void ConfigureServices(IServiceCollection services)

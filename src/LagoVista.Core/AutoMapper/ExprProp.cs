@@ -6,6 +6,7 @@ using System.Text;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public static class ExprProp
     {
         public static PropertyInfo Get<TObj, TProp>(Expression<Func<TObj, TProp>> expr)

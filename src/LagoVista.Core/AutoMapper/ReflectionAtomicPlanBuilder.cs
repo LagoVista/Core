@@ -1,5 +1,4 @@
 using LagoVista.Core.Attributes;
-using LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
@@ -19,6 +18,7 @@ namespace LagoVista.Core.AutoMapper
     /// Strict mode: if a conversion is required and no converter exists, we accumulate
     /// errors and throw MappingPlanBuildException.
     /// </summary>
+    [CriticalCoverage]
     public sealed class ReflectionAtomicPlanBuilder : IAtomicPlanBuilder
     {
         private readonly IMapValueConverterRegistry _converters;

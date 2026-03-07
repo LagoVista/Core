@@ -4,6 +4,7 @@ using System.Reflection;
 
 namespace LagoVista.Core.AutoMapper
 {
+    [CriticalCoverage]
     public abstract class MappingPlan
     {
         public abstract Type SourceType { get; }
@@ -13,6 +14,7 @@ namespace LagoVista.Core.AutoMapper
         public IReadOnlyList<IChildMapStep> ChildSteps { get; protected set; } = Array.Empty<IChildMapStep>();
     }
 
+    [CriticalCoverage]
     public sealed class MappingPlan<TSource, TTarget> : MappingPlan
     {
         public override Type SourceType => typeof(TSource);
@@ -25,6 +27,7 @@ namespace LagoVista.Core.AutoMapper
         }
     }
 
+    [CriticalCoverage]
     public sealed class AtomicMapStep
     {
         public AtomicMapStep(
@@ -97,6 +100,7 @@ namespace LagoVista.Core.AutoMapper
         EntityHeaderValue
     }
 
+    [CriticalCoverage]
     public sealed class ChildEdge : IChildMapStep
     {
         public ChildMapStepKind Kind { get; }

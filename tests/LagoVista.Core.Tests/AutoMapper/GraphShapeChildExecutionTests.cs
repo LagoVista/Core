@@ -57,7 +57,7 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task WhenNoShapeConfigured_DoesNotMapChildren()
         {
-            var atomicBuilder = new Mock<LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper.IAtomicPlanBuilder>();
+            var atomicBuilder = new Mock<IAtomicPlanBuilder>();
             atomicBuilder
                 .Setup(b => b.BuildAtomicSteps(It.IsAny<Type>(), It.IsAny<Type>()))
                 .Returns((Type s, Type t) => InvokeResult<IReadOnlyList<AtomicMapStep>>.Create(BuildDirectSteps(s, t)));
@@ -78,7 +78,7 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task WhenShapeConfigured_MapsObjectListAndEntityHeaderValue_SummaryOnly()
         {
-            var atomicBuilder = new Mock<LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper.IAtomicPlanBuilder>();
+            var atomicBuilder = new Mock<IAtomicPlanBuilder>();
             atomicBuilder
                 .Setup(b => b.BuildAtomicSteps(It.IsAny<Type>(), It.IsAny<Type>()))
                 .Returns((Type s, Type t) => InvokeResult<IReadOnlyList<AtomicMapStep>>.Create(BuildDirectSteps(s, t)));
@@ -133,7 +133,7 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public async Task WhenEntityHeaderValueHasChildren_MapsValue()
         {
-            var atomicBuilder = new Mock<LagoVista.Core.AutoMapper.LagoVista.Core.AutoMapper.IAtomicPlanBuilder>();
+            var atomicBuilder = new Mock<IAtomicPlanBuilder>();
             atomicBuilder
                 .Setup(b => b.BuildAtomicSteps(It.IsAny<Type>(), It.IsAny<Type>()))
                 .Returns((Type s, Type t) => InvokeResult<IReadOnlyList<AtomicMapStep>>.Create(BuildDirectSteps(s, t)));
