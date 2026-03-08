@@ -2,7 +2,7 @@
 using LagoVista.Core.Models;
 using System;
 
-namespace LagoVista.Core.AutoMapper
+namespace LagoVista.Core.AutoMapper.Converters
 {
     [CriticalCoverage]
     public sealed class EntityHeaderIdConverter : IMapValueConverter

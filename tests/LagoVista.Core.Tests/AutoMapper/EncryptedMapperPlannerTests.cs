@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Attributes;
 using LagoVista.Core.AutoMapper;
+using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Models;
 using NUnit.Framework;

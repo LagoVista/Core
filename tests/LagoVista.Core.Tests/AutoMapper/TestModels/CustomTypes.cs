@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Tests.AutoMapper.TestModels
 {
-    public class SourceWithNullableGuid
+    public class SourceWithNullableGuidString36
     {
         public GuidString36? Prop1 { get; set; }
     }

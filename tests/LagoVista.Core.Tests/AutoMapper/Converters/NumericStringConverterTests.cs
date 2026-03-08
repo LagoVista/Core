@@ -1,5 +1,6 @@
 ﻿// File: tests/LagoVista.Core.Tests/AutoMapper/NumericStringConverterTests.cs
 using LagoVista.Core.AutoMapper;
+using LagoVista.Core.AutoMapper.Converters;
 using NUnit.Framework;
 using System;
 

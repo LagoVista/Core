@@ -90,6 +90,15 @@ namespace LagoVista
         }
 
         /// <summary>
+        /// Direct mapping from Guid
+        /// </summary>
+        /// <param name="guid"></param>
+        public GuidString36(Guid guid)
+        {
+            _value = guid.ToString("D").ToLowerInvariant();
+        }
+
+        /// <summary>
         /// Returns the canonical GUID string representation.
         /// </summary>
         public override string ToString() => _value;

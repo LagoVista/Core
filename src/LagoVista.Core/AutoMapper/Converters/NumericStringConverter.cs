@@ -1,8 +1,8 @@
-﻿using LagoVista.Core.Interfaces.AutoMapper;
+﻿ using LagoVista.Core.Interfaces.AutoMapper;
 using System;
 using System.Globalization;
 
-namespace LagoVista.Core.AutoMapper
+namespace LagoVista.Core.AutoMapper.Converters
 {
     [CriticalCoverage]
     public sealed class NumericStringConverter : IMapValueConverter

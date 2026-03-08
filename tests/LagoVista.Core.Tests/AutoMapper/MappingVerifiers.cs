@@ -2,6 +2,7 @@
 using LagoVista.Core.AutoMapper;
 using LagoVista.Core.Models;
 using LagoVista.Core.Tests.AutoMapper.TestModels;
+using LagoVista.Core.Tests.Mapping;
 using LagoVista.Models;
 using NUnit.Framework;
 using System;
@@ -106,7 +107,7 @@ namespace LagoVista.Core.Tests.AutoMapper
         {
             try
             {
-                MappingVerifier.Verify<SourceWithNullableGuid, TargetWithNullableGuid>(true);
+                MappingVerifier.Verify<SourceWithNullableGuidString36, TargetWithNullableGuid>(true);
             }
             catch (Exception ex)
             {
@@ -120,7 +121,7 @@ namespace LagoVista.Core.Tests.AutoMapper
         {
             try
             {
-                MappingVerifier.Verify<TargetWithNullableGuid, SourceWithNullableGuid>(true);
+                MappingVerifier.Verify<TargetWithNullableGuid, SourceWithNullableGuidString36>(true);
             }
             catch (Exception ex)
             {
@@ -150,39 +151,5 @@ namespace LagoVista.Core.Tests.AutoMapper
             }
         }
 
-        private sealed class PlainSource
-        {
-            public string name { get; set; }
-            public string EXTERNALPROVIDERID { get; set; }
-            public string ShouldNotCopy { get; set; }
-        }
-
-        private sealed class PlainEntityHeaderSource
-        {
-            [MapTo("Id")]
-            [IgnoreOnMapTo]
-            public EntityHeader<PlainSource> Source { get; set; }
-        }
-
-        private sealed class PlainEntityHeaderDestination
-        {
-            public string Id { get; set; }
-        }
-
-
-        private sealed class AccountDto
-        {
-            public Guid Id { get; set; }
-
-            public string EncryptedBalance { get; set; }
-        }
-
-        private sealed class Account
-        {
-            public string Id { get; set; }
-
-            [EncryptedField(nameof(AccountDto.EncryptedBalance), SaltProperty = nameof(AccountDto.Id), SkipIfEmpty = true)]
-            public double Balance { get; set; }
-        }
     }
 }

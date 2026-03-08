@@ -308,6 +308,45 @@ namespace LagoVista.Core.Tests.Mapping
         }
 
         [Test]
+        public async Task Map_NullableGuidString36_NullableGuid_With_Value()
+        {
+            var g = GuidString36.Factory();
+            var src = new SourceWithNullableGuidString36() {  Prop1 = g };
+            await _mapper.CreateAsync<SourceWithNullableGuidString36, TargetWithNullableGuid>(src, Org(), User());
+            Assert.That(src.Prop1.HasValue, Is.True);
+            Assert.That(src.Prop1, Is.EqualTo(g));
+        }
+
+
+        [Test]
+        public async Task Map_NullableGuidString36_NullableGuid_Without_Value()
+        {
+            var src = new SourceWithNullableGuidString36() { Prop1 = null };
+            await _mapper.CreateAsync<SourceWithNullableGuidString36, TargetWithNullableGuid>(src, Org(), User());
+            Assert.That(src.Prop1.HasValue, Is.False);
+        }
+
+        [Test]
+        public async Task Map_NullableGuid_NullableGuidString36_With_Value()
+        {
+            var g = Guid.NewGuid();
+            var src = new TargetWithNullableGuid() { Prop1 = g };
+            await _mapper.CreateAsync<TargetWithNullableGuid, SourceWithNullableGuidString36>(src, Org(), User());
+            Assert.That(src.Prop1.HasValue, Is.True);
+            Assert.That(src.Prop1, Is.EqualTo(g));
+        }
+
+
+        [Test]
+        public async Task Map_NullableGuid_NullableGuidString36_Without_Value()
+        {
+            var src = new TargetWithNullableGuid() { Prop1 = null };
+            await _mapper.CreateAsync<TargetWithNullableGuid, SourceWithNullableGuidString36>(src, Org(), User());
+            Assert.That(src.Prop1.HasValue, Is.False);
+        }
+
+
+        [Test]
         public async Task EndToEnd_Double_ToString_ToEncryptedString_ThenBackToDouble_Works()
         {
             var dto = new AccountDto() { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), EncryptedBalance = null };

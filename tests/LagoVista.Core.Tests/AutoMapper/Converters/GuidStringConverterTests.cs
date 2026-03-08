@@ -11,7 +11,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void CanConvert_SupportedPairs_ReturnTrue_AndUnsupported_ReturnFalse()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             Assert.That(sut.CanConvert(typeof(Guid), typeof(string)), Is.True);
             Assert.That(sut.CanConvert(typeof(string), typeof(Guid)), Is.True);
@@ -24,7 +24,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_NullSource_ReturnsNull()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             var result = sut.Convert(null, typeof(string));
 
@@ -34,7 +34,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_GuidToString_UsesDFormat()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
             var g = Guid.Parse("3f2504e0-4f89-11d3-9a0c-0305e82c3301");
 
             var result = sut.Convert(g, typeof(string));
@@ -45,7 +45,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_StringToGuid_Whitespace_ToNullableGuid_ReturnsNull()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             var result = sut.Convert("   ", typeof(Guid?));
 
@@ -55,7 +55,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_StringToGuid_Whitespace_ToNonNullableGuid_Throws()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             Assert.Throws<InvalidOperationException>(() =>
                 sut.Convert("   ", typeof(Guid)));
@@ -64,7 +64,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_StringToGuid_Invalid_Throws()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             Assert.Throws<InvalidOperationException>(() =>
                 sut.Convert("not-a-guid", typeof(Guid)));
@@ -73,7 +73,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_StringToGuid_Valid_Parses()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
             var s = "6f9619ff-8b86-d011-b42d-00c04fc964ff";
 
             var result = sut.Convert(s, typeof(Guid));
@@ -84,7 +84,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_NormalizedId32_Whitespace_ToNullableGuid_ReturnsNull()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             // Valid NormalizedId32 must be 32 chars A-Z/0-9. We'll use all zeros.
             // But to test "whitespace", we need a NormalizedId32 whose underlying string is whitespace.
@@ -96,7 +96,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_NormalizedId32_InvalidHex_Throws()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             // This is a valid NormalizedId32 format (32 chars A-Z/0-9) but NOT valid hex (contains 'Z').
             var bad = new NormalizedId32("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
@@ -108,7 +108,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_NormalizedId32_ValidHex_ParsesToGuid()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             // This is valid hex and valid NormalizedId32.
             var n = new NormalizedId32("3F2504E04F8911D39A0C0305E82C3301");
@@ -121,7 +121,7 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         [Test]
         public void Convert_UnsupportedConversion_Throws()
         {
-            var sut = new GuidStringConverter();
+            var sut = new GuidTranslateConverters();
 
             Assert.Throws<InvalidOperationException>(() =>
                 sut.Convert(123, typeof(Guid)));

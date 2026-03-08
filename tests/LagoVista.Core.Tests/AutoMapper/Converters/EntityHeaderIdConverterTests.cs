@@ -1,5 +1,6 @@
 ﻿// File: tests/LagoVista.Core.Tests/AutoMapper/EntityHeaderIdConverterTests.cs
 using LagoVista.Core.AutoMapper;
+using LagoVista.Core.AutoMapper.Converters;
 using LagoVista.Core.Models;
 using NUnit.Framework;
 using System;

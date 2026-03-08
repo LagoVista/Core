@@ -4,7 +4,7 @@ using System;
 namespace LagoVista.Core.AutoMapper.Converters
 {
     [CriticalCoverage]
-    public sealed class GuidStringConverter : IMapValueConverter
+    public sealed class GuidTranslateConverters : IMapValueConverter
     {
         public bool CanConvert(Type sourceType, Type targetType)
         {
@@ -20,7 +20,11 @@ namespace LagoVista.Core.AutoMapper.Converters
             if (st == typeof(NormalizedId32) && tt == typeof(Guid))
                 return true;
 
+            if (st == typeof(GuidString36) && tt == typeof(Guid))
+                return true;
 
+            if (st == typeof(Guid) && tt == typeof(GuidString36))
+                return true;
 
             return false;
         }
@@ -31,10 +35,19 @@ namespace LagoVista.Core.AutoMapper.Converters
                 return null;
 
             var tt = Nullable.GetUnderlyingType(targetType) ?? targetType;
+            var st = Nullable.GetUnderlyingType(sourceValue.GetType()) ?? sourceValue.GetType();
 
             // Guid -> string
             if (sourceValue is Guid g && tt == typeof(string))
                 return g.ToString("D");
+
+            if (st == typeof(GuidString36) && tt == typeof(Guid))
+            {
+                return ((GuidString36)sourceValue).ToGuid();
+            }
+
+            if(sourceValue is Guid g2 && tt == typeof(GuidString36))
+                return new GuidString36(g2);
 
             // string -> Guid / Guid?
             if (sourceValue is string s && tt == typeof(Guid))
