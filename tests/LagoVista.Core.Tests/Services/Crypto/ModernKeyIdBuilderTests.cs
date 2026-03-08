@@ -107,7 +107,7 @@ namespace LagoVista.Core.Tests.Services.Crypto
         }
 
         [Test]
-        public async Task Should_Throw_If_Invalid_String_Idy()
+        public async Task Should_Throw_If_Invalid_String()
         {
             var resolver = new FakeResolver();
             var builder = new ModernKeyIdBuilder(resolver);
@@ -123,6 +123,25 @@ namespace LagoVista.Core.Tests.Services.Crypto
 
             Assert.That(async () => await builder.BuildKeyGuiIdAsync(dto, attr, org, user), Throws.Exception.TypeOf<InvalidOperationException>());
         }
+
+        [Test]
+        public async Task Should_Throw_If_Invalid_String_Null()
+        {
+            var resolver = new FakeResolver();
+            var builder = new ModernKeyIdBuilder(resolver);
+
+            var dto = new InvoiceDto { StrPropertyId = null };
+            var attr = new ModernKeyIdAttribute("user-{id}:v2")
+            {
+                IdPath = "StrPropertyId"
+            };
+
+            var org = EntityHeader.Create(Guid.Parse("9a7b3301-2c03-0c9a-d311-894fe04f2504").ToId(), "Org");
+            var user = EntityHeader.Create(Guid.Parse("2f1c4e5a-6b7c-8d9e-a0b1-c2d3e4f50617").ToId(), "User");
+
+            Assert.That(async () => await builder.BuildKeyGuiIdAsync(dto, attr, org, user), Throws.Exception.TypeOf<InvalidOperationException>());
+        }
+
 
         [Test]
         public async Task Should_Build_KeyId_From_Navigation_Path_When_Present()

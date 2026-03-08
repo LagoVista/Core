@@ -133,6 +133,7 @@ namespace LagoVista.Core.Services.Crypto
                 }
             }
 
+
             if (current is NormalizedId32 n)
             {
                 idField = n.ToString().ToLowerInvariant();
@@ -145,6 +146,14 @@ namespace LagoVista.Core.Services.Crypto
                 {
                     idField = s.Trim().ToLowerInvariant();
                     return true;
+                }
+                else if(String.IsNullOrEmpty(s))
+                {
+                    throw new InvalidOperationException($"Modern KeyId derivation misconfigured: path '{path}' value is null or empty.");
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Modern KeyId derivation misconfigured: path '{path}' did not confirm to NormalizedGuid32 format value is {s}.");
                 }
             }
 

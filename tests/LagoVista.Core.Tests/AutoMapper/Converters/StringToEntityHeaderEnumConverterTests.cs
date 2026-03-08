@@ -28,7 +28,12 @@ namespace LagoVista.Core.Tests.Mapping.Converters
             One,
             [EnumLabel("dup", ValidationResources.Names.EnumTwo, typeof(ValidationResources))]
             Two,
+        }
 
+        private enum EnumWithoutLabels
+        {
+            Value1,
+            Value2,
         }
 
         [Test]
@@ -76,6 +81,23 @@ namespace LagoVista.Core.Tests.Mapping.Converters
         }
 
         [Test]
+        public void Convert_To_And_Back()
+        {
+            var toConverter = new EntityHeaderEnumToStringConverter();  
+            var backConverter = new StringToEntityHeaderEnumConverter();
+
+            var eh = EntityHeader<LabeledEnum>.Create(LabeledEnum.Beta);
+
+            var halfWay = toConverter.Convert(eh, typeof(string));
+            Console.Write(halfWay);
+
+            var result = backConverter.Convert(halfWay, typeof(EntityHeader<LabeledEnum>)); 
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<EntityHeader<LabeledEnum>>());
+            Assert.That(((EntityHeader<LabeledEnum>)result).Value, Is.EqualTo(LabeledEnum.Beta));
+        }
+
+        [Test]
         public void Convert_WhenCodeWhitespace_ReturnsNull()
         {
             var sut = new StringToEntityHeaderEnumConverter();
@@ -98,6 +120,21 @@ namespace LagoVista.Core.Tests.Mapping.Converters
             var eh = (EntityHeader<LabeledEnum>)result;
             Assert.That(eh.Value, Is.EqualTo(LabeledEnum.Alpha));
         }
+
+        [Test]
+        public void Convert_WhenKnownCode_ReturnsEntityHeaderWithEnumValue_Case_Insensitive()
+        {
+            var sut = new StringToEntityHeaderEnumConverter();
+
+            var result = sut.Convert("AlPhA", typeof(EntityHeader<LabeledEnum>));
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.InstanceOf<EntityHeader<LabeledEnum>>());
+
+            var eh = (EntityHeader<LabeledEnum>)result;
+            Assert.That(eh.Value, Is.EqualTo(LabeledEnum.Alpha));
+        }
+
 
         [Test]
         public void Convert_WhenKnownCodeDifferentCase_StillMapsBecauseIgnoreCase()

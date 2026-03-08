@@ -64,8 +64,8 @@ namespace LagoVista.Core.AutoMapper
             where TTarget : class
             where TSource : class
         {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (target == null) throw new ArgumentNullException(nameof(target));
+            if (source == null) throw new ArgumentNullException($"{nameof(source)} of type {typeof(TSource).Name}");
+            if (target == null) throw new ArgumentNullException($"{nameof(target)} of type {typeof(TTarget).Name}");
             if (org == null) throw new ArgumentNullException(nameof(org));
             if (user == null) throw new ArgumentNullException(nameof(user));
 
