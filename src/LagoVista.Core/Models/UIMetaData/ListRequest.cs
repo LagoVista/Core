@@ -74,6 +74,8 @@ namespace LagoVista.Core.Models.UIMetaData
             };
         }
 
+        public static ListRequest All {  get => CreateForAll(); }
+
         public static ListRequest Create(int pageIndex = 1, int pageSize = ListRequest.MaxPageSize)
         {
             return new ListRequest()

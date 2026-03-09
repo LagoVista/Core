@@ -58,6 +58,12 @@ namespace LagoVista.Core
             return DateTime.SpecifyKind(dt, DateTimeKind.Utc);
         }
 
+        public static UtcTimestamp Now
+        {
+            get => new UtcTimestamp(DateTime.UtcNow.ToString(CanonicalFormat, CultureInfo.InvariantCulture));   
+        }
+
+        [Obsolete("Use UtcTimestamp.Now instead.")]
         public static UtcTimestamp Factory()
         {
             return new UtcTimestamp(DateTime.UtcNow.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
