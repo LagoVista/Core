@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.AI.Models;
+using LagoVista.Core.Models.ML;
 using System;
 
 namespace LagoVista
@@ -97,6 +98,13 @@ namespace LagoVista
         {
             _value = guid.ToString("D").ToLowerInvariant();
         }
+
+        /// <summary>
+        /// Create from Guid.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public static GuidString36 FromGuid(Guid guid) => new GuidString36(guid);   
 
         /// <summary>
         /// Returns the canonical GUID string representation.
