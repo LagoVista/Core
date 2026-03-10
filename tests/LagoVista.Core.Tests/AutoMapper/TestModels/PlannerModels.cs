@@ -26,4 +26,9 @@ namespace LagoVista.Core.Tests.AutoMapper.TestModels
         }
 
     }
+
+   public class PlainSourceWithNullableNormalizedString32
+    {
+        public NormalizedId32? NullableId { get; set; }
+    }
 }

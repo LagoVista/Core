@@ -15,5 +15,10 @@ namespace LagoVista.Core.Tests.Mapping
             [IgnoreOnMapTo]
             public string ShouldNotCopy { get; set; }
         }
+
+        public class PlainTargetWithNullableStringId
+        {
+            public string NullableId { get; set; }
+        }
     }
 }

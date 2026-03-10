@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using static LagoVista.Core.Tests.Mapping.LagoVistaAutoMapperV1Tests;
 
 namespace LagoVista.Core.Tests.AutoMapper
 {
@@ -71,6 +72,20 @@ namespace LagoVista.Core.Tests.AutoMapper
         }
 
 
+
+        [Test]
+        public void TestNullableNormalizedString32()
+        {
+            try
+            {
+                MappingVerifier.Verify<PlainSourceWithNullableNormalizedString32, PlainTargetWithNullableStringId>(true);
+                MappingVerifier.Verify<PlainTargetWithNullableStringId, PlainSourceWithNullableNormalizedString32>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
 
 
         [Test]

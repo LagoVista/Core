@@ -116,6 +116,48 @@ namespace LagoVista.Core.Tests.Mapping
         }
 
         [Test]
+        public async Task NullableNormalizedId_To_String_Not_Null()
+        {
+            var id = NormalizedId32.Factory();
+
+            var src = new PlainSourceWithNullableNormalizedString32() { NullableId = id};
+            var mapped = await _mapper.CreateAsync<PlainSourceWithNullableNormalizedString32, PlainTargetWithNullableStringId>(src, Org(), User());
+            Assert.That(mapped.NullableId , Is.EqualTo(id.Value));
+        }
+
+
+        [Test]
+        public async Task String_To_NullableNormalizedId_Not_Null()
+        {
+            var id = NormalizedId32.Factory().ToString();
+
+            var src = new PlainTargetWithNullableStringId() { NullableId = id };
+            var mapped = await _mapper.CreateAsync<PlainTargetWithNullableStringId, PlainSourceWithNullableNormalizedString32>(src, Org(), User());
+            Assert.That(mapped.NullableId.ToString(), Is.EqualTo(id));
+        }
+
+
+        [Test]
+        public async Task NullableNormalizedId_To_String_Null()
+        {
+
+            var src = new PlainSourceWithNullableNormalizedString32() { NullableId = null };
+            var mapped = await _mapper.CreateAsync<PlainSourceWithNullableNormalizedString32, PlainTargetWithNullableStringId>(src, Org(), User());
+            Assert.That(mapped.NullableId, Is.Null);
+        }
+
+
+        [Test]
+        public async Task String_To_NullableNormalizedId_Null()
+        {
+
+            var src = new PlainTargetWithNullableStringId() { NullableId =null };
+            var mapped = await _mapper.CreateAsync<PlainTargetWithNullableStringId, PlainSourceWithNullableNormalizedString32>(src, Org(), User());
+            Assert.That(mapped.NullableId, Is.Null);
+        }
+
+
+        [Test]
         public async Task ISO_DateOnly_To_DTO_Test()
         {
             MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
