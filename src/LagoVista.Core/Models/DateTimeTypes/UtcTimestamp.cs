@@ -58,6 +58,24 @@ namespace LagoVista.Core
             return DateTime.SpecifyKind(dt, DateTimeKind.Utc);
         }
 
+        public UtcTimestamp Add(TimeSpan timeSpan)
+        {
+            var dt = ToDateTimeUtc().Add(timeSpan);
+            return new UtcTimestamp(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
+        public UtcTimestamp AddDays(double days)
+        {
+            var dt = ToDateTimeUtc().AddDays(days);
+            return new UtcTimestamp(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
+        public CalendarDate ToCalendarDate()
+        {
+            var dt = ToDateTimeUtc();
+            return new CalendarDate(dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+        }
+
         public static UtcTimestamp Now
         {
             get => new UtcTimestamp(DateTime.UtcNow.ToString(CanonicalFormat, CultureInfo.InvariantCulture));   
@@ -85,8 +103,6 @@ namespace LagoVista.Core
 #else
         public static explicit operator UtcTimestamp(string value) => new UtcTimestamp(value);
 #endif
-
-
 
         public static bool TryCreate(string value, out UtcTimestamp result)
         {
