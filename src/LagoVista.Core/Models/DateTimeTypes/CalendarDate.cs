@@ -7,7 +7,7 @@ namespace LagoVista.Core
     using System;
     using System.Globalization;
 
-    public struct CalendarDate : IEquatable<CalendarDate>
+public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>, IComparable
     {
         private static readonly string[] AcceptedFormats = new[]
         {
@@ -96,6 +96,14 @@ namespace LagoVista.Core
         public bool Equals(CalendarDate other) => string.Equals(_value, other._value, StringComparison.Ordinal);
         public override bool Equals(object obj) => obj is CalendarDate other && Equals(other);
         public override int GetHashCode() => _value?.GetHashCode() ?? 0;
+
+        public int CompareTo(CalendarDate other) => ToDateTime().CompareTo(other.ToDateTime());
+
+        public int CompareTo(object obj)
+        {
+            if (!(obj is CalendarDate other)) throw new ArgumentException("Object is not a CalendarDate", nameof(obj));
+            return CompareTo(other);
+        }
 
         public static implicit operator string(CalendarDate date) => date._value;
 
