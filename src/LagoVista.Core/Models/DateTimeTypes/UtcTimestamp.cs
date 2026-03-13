@@ -7,7 +7,7 @@ namespace LagoVista.Core
     using System;
     using System.Globalization;
 
-    public struct UtcTimestamp : IEquatable<UtcTimestamp>
+public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>, IComparable
     {
         private static readonly string[] AcceptedFormats = new[]
         {
@@ -93,6 +93,14 @@ namespace LagoVista.Core
         public bool Equals(UtcTimestamp other) => string.Equals(_value, other._value, StringComparison.Ordinal);
         public override bool Equals(object obj) => obj is UtcTimestamp other && Equals(other);
         public override int GetHashCode() => _value?.GetHashCode() ?? 0;
+
+        public int CompareTo(UtcTimestamp other) => ToDateTimeUtc().CompareTo(other.ToDateTimeUtc());
+
+        public int CompareTo(object obj)
+        {
+            if (!(obj is UtcTimestamp other)) throw new ArgumentException("Object is not a UtcTimestamp", nameof(obj));
+            return CompareTo(other);
+        }
 
         public bool IsEmpty => string.IsNullOrEmpty(_value);
 

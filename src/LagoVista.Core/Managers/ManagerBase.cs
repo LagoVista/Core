@@ -102,7 +102,7 @@ namespace LagoVista.Core.Managers
 
         protected bool HasRole(CoreSecurityRoles coreRole)
         {
-            return true;
+            return _security.UserHasCoreRole(coreRole);
         }
 
         protected void AssertRole(string roleName)

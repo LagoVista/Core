@@ -7,6 +7,7 @@ using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static LagoVista.Core.Managers.ManagerBase;
 using static LagoVista.Core.Models.AuthorizeResult;
 
 namespace LagoVista.Core.Interfaces
@@ -26,7 +27,9 @@ namespace LagoVista.Core.Interfaces
         Task LogEntityActionAsync(String id, string entityType, string accessType, EntityHeader org, EntityHeader user);
 
         Task<List<EntityHeader>> GetUserRolesAsync(string userId, string orgId);
-    
+
+        bool UserHasCoreRole(CoreSecurityRoles role);  
+
         Task<bool> DoesUserHaveRoleAsync(string userId, string orgId, string roleName);
     }
 }

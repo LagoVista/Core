@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Crypto</id>
-    <version>3.0.3216.1237</version>
+    <version>3.0.3222.1831</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,11 +12,11 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT RPC</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 3/7/2026 5:37:06 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/13/2026 10:31:42 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="Net9.0">
-        <dependency id="LagoVista.Core" version="3.0.3216.1237" />
+        <dependency id="LagoVista.Core" version="3.0.3222.1831" />
       </group>
     </dependencies>
   </metadata>

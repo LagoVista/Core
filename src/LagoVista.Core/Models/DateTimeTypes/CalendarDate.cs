@@ -88,6 +88,12 @@ public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>
             var dt = new DateTime(year, month, day);
             return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
         }
+        public static bool operator >(CalendarDate left, CalendarDate right) => left.CompareTo(right) > 0;
+        public static bool operator <(CalendarDate left, CalendarDate right) => left.CompareTo(right) < 0;
+        public static bool operator >=(CalendarDate left, CalendarDate right) => left.CompareTo(right) >= 0;
+        public static bool operator <=(CalendarDate left, CalendarDate right) => left.CompareTo(right) <= 0;
+        public static bool operator ==(CalendarDate left, CalendarDate right) => left.Equals(right);
+        public static bool operator !=(CalendarDate left, CalendarDate right) => !left.Equals(right);
 
         public override string ToString() => _value;
 
