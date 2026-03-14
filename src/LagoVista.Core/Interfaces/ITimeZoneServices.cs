@@ -1,7 +1,4 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: c6adf4d2574b12f093a045b22c8a392dd60bd2ef67752b3d3a05e51302225458
-// IndexVersion: 2
-// --- END CODE INDEX META ---
+using LagoVista.Core.Models.DateTimeTypes;
 using LagoVista.Core.Models.UIMetaData;
 using System;
 using System.Collections.Generic;
@@ -13,6 +10,8 @@ namespace LagoVista.Core.Interfaces
     {
         List<TimeZoneInfo> GetTimeZones();
         TimeZoneInfo GetTimeZoneById(string id);
+        TimeZoneInfo GetTimeZoneByIntId(int intId);
         List<EnumDescription> GetTimeZoneEnumOptions();
-}
+        TimeZoneReference GetTimeZoneReferenceByIntId(int intId);
+    }
 }
