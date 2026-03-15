@@ -88,6 +88,57 @@ public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>
             var dt = new DateTime(year, month, day);
             return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
         }
+
+
+        public CalendarDate StartOfThisMonth
+        {
+            get
+            {
+                return CalendarDate.StartOfMonth(this.Year, this.Month); 
+            }
+        }
+
+        public CalendarDate EndOfThisMonth
+        {
+            get
+            {
+                return CalendarDate.EndOfMonth(this.Year, this.Month);
+            }
+        }
+
+        public CalendarDate StartOfNextMonth
+        { 
+            get
+            {
+
+                if (this.Month == 12)
+                    return CalendarDate.StartOfMonth(this.Year + 1, 1);
+
+                return CalendarDate.StartOfMonth(this.Year, this.Month + 1);
+            }
+        }
+
+        public CalendarDate SameMonthNextYearStart
+        {
+            get
+            {
+                return CalendarDate.StartOfMonth(this.Year + 1, this.Month);
+            }
+        }
+
+        public int DaysUntilInclusive(CalendarDate end)
+        {
+            return InclusiveDayCount(this, end);
+        }
+
+        public static int InclusiveDayCount(CalendarDate start, CalendarDate end)
+        {
+            if (end < start)
+                throw new ArgumentException("End date must be greater than or equal to start date.", nameof(end));
+
+            return (end.ToDateTime() - start.ToDateTime()).Days + 1;
+        }
+
         public static bool operator >(CalendarDate left, CalendarDate right) => left.CompareTo(right) > 0;
         public static bool operator <(CalendarDate left, CalendarDate right) => left.CompareTo(right) < 0;
         public static bool operator >=(CalendarDate left, CalendarDate right) => left.CompareTo(right) >= 0;

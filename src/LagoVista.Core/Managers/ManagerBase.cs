@@ -97,7 +97,10 @@ namespace LagoVista.Core.Managers
 
         protected void AssertRole(CoreSecurityRoles coreRole)
         {
-            
+           if(!_security.UserHasCoreRole(coreRole))
+            {
+                throw new UnauthorizedAccessException($"User Must Have {coreRole} Role to Perform This Action");
+            }
         }
 
         protected bool HasRole(CoreSecurityRoles coreRole)
