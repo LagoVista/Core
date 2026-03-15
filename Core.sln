@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.2.11430.68 d18.0
+VisualStudioVersion = 18.2.11430.68
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LagoVista.Core", "src\LagoVista.Core\LagoVista.Core.csproj", "{ECA8DAC5-9324-4E0C-91BE-D222FEA186D3}"
 EndProject
@@ -50,6 +50,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.TestBase", "tests\LagoVista.Core.TestBase\LagoVista.Core.TestBase.csproj", "{A7E4A189-83F8-438E-A770-74B10F25DA0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Crypto", "src\LagoVista.Crypto\LagoVista.Crypto.csproj", "{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.MessageQueue.Rabbit", "src\LagoVista.MessageQueue.Rabbit\LagoVista.MessageQueue.Rabbit.csproj", "{212F8AFF-E78E-6BCB-2775-128738AC999D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.MessageQueueTests", "tests\LagoVista.MessageQueueTests\LagoVista.MessageQueueTests.csproj", "{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +129,14 @@ Global
 		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{212F8AFF-E78E-6BCB-2775-128738AC999D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{212F8AFF-E78E-6BCB-2775-128738AC999D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{212F8AFF-E78E-6BCB-2775-128738AC999D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{212F8AFF-E78E-6BCB-2775-128738AC999D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,6 +159,8 @@ Global
 		{571FA8BF-E894-49AA-90EB-427FBCF90886} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{A7E4A189-83F8-438E-A770-74B10F25DA0A} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
+		{212F8AFF-E78E-6BCB-2775-128738AC999D} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
+		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E49F45F8-0C41-4A0A-A34E-D7A13852646B}

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>LagoVista.Core.Rpc.Client.ServiceBus</id>
+    <id>LagoVista.MessageQueue.Rabbit</id>
     <version>3.0.3224.1039</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>https://www.nuviot.com</projectUrl>
     <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
-    <description>ServiceBus Implementation of RPC Client Functionality and Interfaces for Building Apps with the LagoVista IoT and Devices Framework</description>
+    <description>Rabbit MQ implementation of the LagoVista message queue system</description>
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT RPC Client ServiceBus</tags>
     <icon>LagoVistaIcon.png</icon>
@@ -16,16 +16,15 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="Azure.Messaging.ServiceBus" version="7.20.1" />
-        <dependency id="LagoVista.Core.Rpc.Client" version="3.0.3224.1039" />
-        <dependency id="LagoVista.Core.Rpc" version="3.0.3224.1039" />
+        <dependency id="RabbitMQ.Client" version="7.2.1" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.13" />
         <dependency id="LagoVista.Core" version="3.0.3224.1039" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Rpc.Client.ServiceBus.dll" target="lib\netstandard2.1\LagoVista.Core.Rpc.Client.ServiceBus.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Rpc.Client.ServiceBus.pdb" target="lib\netstandard2.1\LagoVista.Core.Rpc.Client.ServiceBus.pdb" />
+    <file src="bin\release\netstandard2.1\LagoVista.MessageQueue.Rabbit.dll" target="lib\netstandard2.1\LagoVista.MessageQueue.Rabbit.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.MessageQueue.Rabbit.pdb" target="lib\netstandard2.1\LagoVista.MessageQueue.Rabbit.pdb" />
   </files>
 </package>

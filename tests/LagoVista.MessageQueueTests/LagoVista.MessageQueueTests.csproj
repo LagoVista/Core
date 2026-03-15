@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Testcontainers.RabbitMq" Version="4.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+   <ProjectReference Include="..\..\src\LagoVista.MessageQueue.Rabbit\LagoVista.MessageQueue.Rabbit.csproj" />
+   <ProjectReference Include="..\LagoVista.Core.TestBase\LagoVista.Core.TestBase.csproj" />
+  </ItemGroup>
+
+</Project>
