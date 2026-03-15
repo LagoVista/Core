@@ -10,6 +10,7 @@ namespace LagoVista.Core.Interfaces
     {
         List<TimeZoneInfo> GetTimeZones();
         TimeZoneInfo GetTimeZoneById(string id);
+        TimeZoneReference GetTimeZoneReferenceById(string id);
         TimeZoneInfo GetTimeZoneByIntId(int intId);
         List<EnumDescription> GetTimeZoneEnumOptions();
         TimeZoneReference GetTimeZoneReferenceByIntId(int intId);

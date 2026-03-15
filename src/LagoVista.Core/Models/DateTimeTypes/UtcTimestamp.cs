@@ -47,6 +47,19 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
             _value = dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture);
         }
 
+        public static UtcTimestamp FromDateTime(DateTime value)
+        {
+            var utcValue = value.Kind switch
+            {
+                DateTimeKind.Utc => value,
+                DateTimeKind.Local => value.ToUniversalTime(),
+                DateTimeKind.Unspecified => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+                _ => value.ToUniversalTime()
+            };
+
+            return new UtcTimestamp(utcValue.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
+        }
+
         public DateTime ToDateTimeUtc()
         {
             var dt = DateTime.ParseExact(

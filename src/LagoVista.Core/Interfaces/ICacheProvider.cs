@@ -23,5 +23,8 @@ namespace LagoVista.Core.Interfaces
         Task<IDictionary<string, string>> GetManyAsync(IEnumerable<string> keys);
         Task<long> GetLongAsync(string key);
         Task<long> IncrementAsync(string key);
+        Task<bool> AttemptAcquireLockAsync(string key, string token, TimeSpan? expires = null);
+        Task<bool> ExtendLockAsync(string key, string token, TimeSpan? expires = null);
+        Task<bool> ReleaseLockAsync(string key, string toke);
     }
 }
