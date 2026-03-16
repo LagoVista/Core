@@ -294,7 +294,7 @@ namespace LagoVista.Core.Tests.Validation
         public void AuditTest_MissingCreateDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
-            Assert.Throws<ArgumentNullException>(() => auditEntity.CreationDate = null);
+            Assert.Throws<ArgumentNullException>(() => auditEntity.CreationDate = default);
         }
 
 

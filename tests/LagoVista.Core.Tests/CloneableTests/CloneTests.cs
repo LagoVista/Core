@@ -22,7 +22,7 @@ namespace LagoVista.Core.Tests.CloneableTests
             original.OwnerOrganization = EntityHeader.Create(Guid.NewGuid().ToId(), "owner org");
             original.LastUpdatedBy = EntityHeader.Create(Guid.NewGuid().ToId(), "owner org");
             original.CreatedBy = original.LastUpdatedBy;
-            original.CreationDate = DateTime.UtcNow.AddDays(-5).ToJSONString();
+            original.CreationDate = UtcTimestamp.Now.AddDays(-5);
             original.LastUpdatedDate = original.CreationDate;
             original.IsPublic = false;
             original.Name = "orig name";

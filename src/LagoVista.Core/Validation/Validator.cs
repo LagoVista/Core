@@ -325,7 +325,7 @@ namespace LagoVista.Core.Validation
                 {
                     if (DateTime.TryParse(auditableModel.CreationDate, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
                     {
-                        auditableModel.CreationDate = dateTime.ToJSONString();
+                        auditableModel.CreationDate = UtcTimestamp.FromDateTime(dateTime);
                     }
                     else
                     {
@@ -342,7 +342,7 @@ namespace LagoVista.Core.Validation
                 {
                     if (DateTime.TryParse(auditableModel.LastUpdatedDate, CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime dateTime))
                     {
-                        auditableModel.LastUpdatedDate = dateTime.ToJSONString();
+                        auditableModel.LastUpdatedDate = UtcTimestamp.FromDateTime(dateTime);
                     }
                     else
                     {

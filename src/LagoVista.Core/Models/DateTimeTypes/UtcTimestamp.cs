@@ -120,6 +120,7 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
         public static implicit operator string(UtcTimestamp ts) => ts._value;
 
 #if MIGRATION_IMPLICIT_WIRE_TYPES
+        [Obsolete("Implicit conversion from string to UtcTimestamp is error-prone, especially with nulls and ternary expressions. Use UtcTimestamp.Parse, UtcTimestamp.TryCreate, or an explicit cast instead.")]
         public static implicit operator UtcTimestamp(string value) => new UtcTimestamp(value);
 #else
         public static explicit operator UtcTimestamp(string value) => new UtcTimestamp(value);

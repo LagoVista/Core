@@ -706,7 +706,7 @@ namespace LagoVista.Core
                 throw new InvalidOperationException("Must provide a valid user instance to assign to auditable fields.");
             }
 
-            entity.CreationDate = DateTime.UtcNow.ToJSONString();
+            entity.CreationDate = UtcTimestamp.Now;
             entity.CreatedBy = new EntityHeader()
             {
                 Id = user.Id,
@@ -739,7 +739,7 @@ namespace LagoVista.Core
 
         public static void SetLastUpdatedFields(this IAuditableEntity entity, IEntityHeader user)
         {
-            entity.LastUpdatedDate = DateTime.UtcNow.ToJSONString();
+            entity.LastUpdatedDate = UtcTimestamp.Now;
             entity.LastUpdatedBy = new EntityHeader()
             {
                 Id = user.Id,

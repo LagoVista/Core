@@ -98,7 +98,7 @@ namespace LagoVista.Core.Tests.Mapping
         public async Task ISO_DateTime_To_DTO_Test()
         {
             MappingVerifier.Verify<DateMapping, DateMappingDTO>(true);
-            var timeStamp = DateTime.UtcNow.ToJSONString();
+            var timeStamp = UtcTimestamp.Now;
             var entity = new DateMapping() { TheDate = timeStamp };
             var dto = await _mapper.CreateAsync<DateMapping, DateMappingDTO>(entity, Org(), User());
             var jsonDate = dto.TheDate.ToJSONString();

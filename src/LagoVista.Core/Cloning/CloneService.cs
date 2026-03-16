@@ -31,7 +31,7 @@ namespace LagoVista.Core.Cloning
             cloned.OwnerOrganization = org;
             cloned.CreatedBy = user;
             cloned.LastUpdatedBy = user;
-            cloned.CreationDate = DateTime.UtcNow.ToJSONString();
+            cloned.CreationDate = UtcTimestamp.Now;
             cloned.Name = name;
             cloned.Key = key;
             cloned.OriginalId = originalId;
@@ -125,7 +125,7 @@ namespace LagoVista.Core.Cloning
 
             if (value is IAuditableEntity auditedEntity)
             {
-                var now = DateTime.UtcNow.ToJSONString();
+                var now = UtcTimestamp.Now;
                 auditedEntity.LastUpdatedBy = user;
                 auditedEntity.CreatedBy = user;
                 auditedEntity.LastUpdatedDate = now;

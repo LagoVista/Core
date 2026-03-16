@@ -52,7 +52,7 @@ namespace LagoVista.Core.Managers
 
         protected void SetCreatedBy(IAuditableEntity entity, IEntityHeader user)
         {
-            var date = DateTime.Now.ToJSONString();
+            var date = UtcTimestamp.Now;
             entity.CreatedBy = EntityHeader.Create(user.Id, user.Text);
             entity.LastUpdatedBy = EntityHeader.Create(user.Id, user.Text);
             entity.CreationDate = date;
@@ -61,7 +61,7 @@ namespace LagoVista.Core.Managers
 
         protected void SetLastUpdated(IAuditableEntity entity, IEntityHeader user)
         {
-            var date = DateTime.Now.ToJSONString();
+            var date = UtcTimestamp.Now;
             entity.LastUpdatedBy = EntityHeader.Create(user.Id, user.Text);
             entity.LastUpdatedDate = date;
         }
