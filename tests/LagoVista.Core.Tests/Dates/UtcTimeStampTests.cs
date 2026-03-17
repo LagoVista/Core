@@ -27,6 +27,7 @@ namespace LagoVista.Core.Tests.Dates
 
 
         [Test]
+        [Obsolete]
         public void Should_Assign_To_Nullable_In_True_Ternary_Expression()
         {
             var simple = new Simple();
@@ -38,7 +39,7 @@ namespace LagoVista.Core.Tests.Dates
         public void Should_Assign_To_Nullable_In_False_Ternary_Expression()
         {
             var simple = new Simple();
-            simple.Timestamp = false ? UtcTimestamp.Now : null;
+            simple.Timestamp = false ? UtcTimestamp.Now : (UtcTimestamp?)null;
             Assert.That(!simple.Timestamp.HasValue);
         }
 

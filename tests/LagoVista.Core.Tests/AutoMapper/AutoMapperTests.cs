@@ -258,8 +258,8 @@ namespace LagoVista.Core.Tests.Mapping
                 CreatedBy = User(),
                 LastUpdatedBy = User(),
                 OwnerOrganization = Org(),
-                LastUpdatedDate = timeStamp.ToJSONString(),
-                CreationDate = timeStamp.ToJSONString()
+                LastUpdatedDate = UtcTimestamp.Now,
+                CreationDate = UtcTimestamp.Now
             };
 
             MappingVerifier.Verify<RelationalEntityBase, DbModelBase>(true);

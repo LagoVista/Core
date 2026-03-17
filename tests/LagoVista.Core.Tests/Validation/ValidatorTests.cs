@@ -299,13 +299,15 @@ namespace LagoVista.Core.Tests.Validation
 
 
         [TestMethod]
+        [Obsolete]
         public void AuditTest_MissingLastUpdatedDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
-            Assert.Throws<ArgumentNullException>(() => auditEntity.LastUpdatedDate = null);
+            Assert.Throws<ArgumentNullException>(() => auditEntity.LastUpdatedDate = (UtcTimestamp)null);
         }
 
         [TestMethod]
+        [Obsolete]
         public void AuditTest_InvalidCreationDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();
@@ -315,6 +317,7 @@ namespace LagoVista.Core.Tests.Validation
 
 
         [TestMethod]
+        [Obsolete]
         public void AuditTest_InvalidLastUpdatedDate_Invalid()
         {
             var auditEntity = GetValidAuditableModel();

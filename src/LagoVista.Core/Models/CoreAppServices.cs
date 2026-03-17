@@ -6,7 +6,7 @@ namespace LagoVista.Core.Models
 {
     public class CoreAppServices : ICoreAppServices
     {
-        public CoreAppServices(ILogger logger, ISerialNumberManager serialNumberManager, ISystemUsers systemUsers, IAppConfig appConfig, INotificationPublisher notificationPublisher, ICoreEmailServices emailServices,
+        public CoreAppServices(ILogger logger, ISerialNumberManager serialNumberManager, ISystemUsers systemUsers, IAppConfig appConfig, IClock clock, INotificationPublisher notificationPublisher, ICoreEmailServices emailServices,
                                 ISecureStorage secureStorage, IDependencyManager dependencyManager, ISecurity security)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -18,6 +18,7 @@ namespace LagoVista.Core.Models
             EmailServices = emailServices ?? throw new ArgumentNullException(nameof(emailServices));
             SecureStorage = secureStorage ?? throw new ArgumentNullException(nameof(secureStorage));
             SerialNumberManager = serialNumberManager ?? throw new ArgumentNullException(nameof(serialNumberManager));
+            Clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         public ISerialNumberManager SerialNumberManager { get; }
@@ -29,5 +30,6 @@ namespace LagoVista.Core.Models
         public IAppConfig AppConfig { get; }
         public IDependencyManager DependencyManager { get; }
         public ISecurity Security { get; }
+        public IClock Clock { get; }
     }
 }

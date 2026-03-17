@@ -16,5 +16,6 @@ namespace LagoVista.Core.Interfaces
         IDependencyManager DependencyManager { get; }
         ISecurity Security { get; }
         ISerialNumberManager SerialNumberManager { get; }
+        IClock Clock { get; }
     }
 }

@@ -21,6 +21,7 @@ namespace LagoVista.Core.Managers
         readonly IAppConfig _appConfig;
         readonly IDependencyManager _dependencyManager;
         readonly ISecurity _security;
+        readonly IClock _clock;
 
         public enum CoreSecurityRoles
         {
@@ -45,10 +46,13 @@ namespace LagoVista.Core.Managers
             _logger = services.Logger ?? throw new ArgumentNullException(nameof(services.Logger));
             _dependencyManager = services.DependencyManager ?? throw new ArgumentNullException(nameof(services.DependencyManager));
             _security = services.Security ?? throw new ArgumentNullException(nameof(services.Security));
+            _clock = services.Clock ?? throw new ArgumentNullException(nameof(services.Clock));
         }
 
         public IAppConfig AppConfig { get { return _appConfig; } }
         public ILogger Logger { get { return _logger; } }
+
+        public IClock Clock { get { return _clock; } }
 
         protected void SetCreatedBy(IAuditableEntity entity, IEntityHeader user)
         {

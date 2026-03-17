@@ -9,6 +9,7 @@ namespace LagoVista.Core
         {
             AutoMapper.Startup.ConfigureServices(services);
             services.AddSingleton<ICoreAppServices, CoreAppServices>();
+            services.AddSingleton<IClock, LagoVistaClock>();
         }
     }
 }

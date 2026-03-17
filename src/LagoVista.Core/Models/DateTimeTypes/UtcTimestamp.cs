@@ -47,6 +47,8 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
             _value = dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture);
         }
 
+        public static UtcTimestamp Parse(string value) => new UtcTimestamp(value);
+
         public static UtcTimestamp FromDateTime(DateTime value)
         {
             var utcValue = value.Kind switch
