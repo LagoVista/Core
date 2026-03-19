@@ -4,6 +4,7 @@ using System.Text;
 
 namespace LagoVista.Core
 {
+    using Newtonsoft.Json;
     using System;
     using System.Globalization;
 
@@ -89,7 +90,7 @@ public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>
             return new CalendarDate(dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
         }
 
-
+        [JsonIgnore]
         public CalendarDate StartOfThisMonth
         {
             get
@@ -98,6 +99,7 @@ public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>
             }
         }
 
+        [JsonIgnore]
         public CalendarDate EndOfThisMonth
         {
             get
@@ -106,6 +108,7 @@ public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>
             }
         }
 
+        [JsonIgnore]
         public CalendarDate StartOfNextMonth
         { 
             get
@@ -118,6 +121,7 @@ public struct CalendarDate : IEquatable<CalendarDate>, IComparable<CalendarDate>
             }
         }
 
+        [JsonIgnore]
         public CalendarDate SameMonthNextYearStart
         {
             get

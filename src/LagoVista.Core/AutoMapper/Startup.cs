@@ -2,6 +2,7 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Interfaces.AutoMapper;
 using LagoVista.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LagoVista.Core.AutoMapper
 {

@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Crypto.Modern;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LagoVista.Crypto
 {

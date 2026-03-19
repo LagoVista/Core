@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LagoVista.Core
 {

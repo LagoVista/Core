@@ -272,6 +272,8 @@ namespace LagoVista
             return false;
         }
 
+        public static GuidString36 Parse(string value) => new GuidString36(value);
+
         /// <summary>
         /// Determines whether a string matches the strict lowercase GUID "D" format.
         /// </summary>
