@@ -3,6 +3,8 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Models.UIMetaData;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,4 +75,16 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public List<EntitySummary> EntitySummaries { get { return _entitySummaries; } }
     }
+}
+
+
+namespace LagoVista.DependencyInjection
+{
+    public static class MetaDatHelperExtensions
+    {
+        public static void AddMetaDataHelper<TMetaDataClassType>(this IServiceCollection services)
+        {
+            MetaDataHelper.Instance.RegisterAssembly(typeof(TMetaDataClassType).Assembly);
+        }
+    }   
 }
