@@ -14,5 +14,6 @@ namespace LagoVista.Core.Repos
         Task<OrganizationDTO> GetOrganizationAsync(string id, EntityHeader org, EntityHeader user);
         Task UpdateOrganizationAsync(OrganizationDTO organization, EntityHeader org, EntityHeader user);
         Task DeleteOrganizationAsync(string id, EntityHeader org, EntityHeader user);
+        Task<bool> DoesOrgHaveBillingRecords(NormalizedId32 orgId, EntityHeader org, EntityHeader user);
     }
 }

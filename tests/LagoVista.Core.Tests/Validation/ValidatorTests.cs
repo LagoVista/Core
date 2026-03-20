@@ -290,13 +290,6 @@ namespace LagoVista.Core.Tests.Validation
             Assert.AreEqual(LagoVista.Core.Resources.ValidationResource.LastUpdatedByTextNotNullOrEmpty, result.Errors.First().Message);
         }
 
-        [TestMethod]
-        public void AuditTest_MissingCreateDate_Invalid()
-        {
-            var auditEntity = GetValidAuditableModel();
-            Assert.Throws<ArgumentNullException>(() => auditEntity.CreationDate = default);
-        }
-
 
         [TestMethod]
         [Obsolete]

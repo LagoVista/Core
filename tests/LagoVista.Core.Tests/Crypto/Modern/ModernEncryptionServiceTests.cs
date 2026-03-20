@@ -25,9 +25,7 @@ namespace LagoVista.Crypto.Tests.Modern
                 aadBuilder: new AadBuilderV1(),
                 envelopeCodec: new EnvelopeCodecV2(),
                 keyMaterialStore: store,
-                aead: new AesGcmEncryptorNet9(),
-                org: OrgEH(),
-                user: UserEH());
+                aead: new AesGcmEncryptorNet9());
         }
 
         [Test]

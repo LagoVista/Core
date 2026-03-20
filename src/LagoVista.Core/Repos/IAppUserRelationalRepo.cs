@@ -14,5 +14,6 @@ namespace LagoVista.Core.Repos
         Task<AppUserDTO> GetAppUserAsync(string id, EntityHeader org, EntityHeader user);
         Task UpdateAppUserAsync(AppUserDTO user, EntityHeader org, EntityHeader updatedByUser);
         Task DeleteAppUserAsync(string id, EntityHeader org, EntityHeader user);
+        Task<List<EntityHeader>> GetBillingContactOrgsForUserAsync(NormalizedId32 userId, EntityHeader org, EntityHeader user);
     }
 }

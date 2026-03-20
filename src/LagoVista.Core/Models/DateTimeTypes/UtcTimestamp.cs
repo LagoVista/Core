@@ -4,10 +4,13 @@ using System.Text;
 
 namespace LagoVista.Core
 {
+    using Newtonsoft.Json;
     using System;
+    using System.Diagnostics;
     using System.Globalization;
 
-public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>, IComparable
+    [JsonConverter(typeof(UtcTimestampJsonConverter))]
+    public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>, IComparable
     {
         private static readonly string[] AcceptedFormats = new[]
         {
@@ -22,6 +25,18 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
 
         public string Value => _value;
 
+        public UtcTimestamp(DateTime value)
+        {
+            var utcValue = value.Kind switch
+            {
+                DateTimeKind.Utc => value,
+                DateTimeKind.Local => value.ToUniversalTime(),
+                DateTimeKind.Unspecified => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+                _ => value.ToUniversalTime()
+            };
+            _value = utcValue.ToString(CanonicalFormat, CultureInfo.InvariantCulture);
+        }
+
         public UtcTimestamp(string value)
         {
             if (value == null)
@@ -31,20 +46,32 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
                 throw new FormatException("UtcTimestamp must end with 'Z'.");
 
             DateTime dt;
-            if (!DateTime.TryParseExact(
+            if (DateTime.TryParseExact(
                     value,
                     AcceptedFormats,
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
                     out dt))
             {
-                throw new FormatException(
-                    $"Invalid UtcTimestamp: '{value}'. Expected ISO8601 UTC ending with 'Z'. " +
-                    $"Accepted patterns: yyyy-MM-ddTHH:mmZ | yyyy-MM-ddTHH:mm:ssZ | yyyy-MM-ddTHH:mm:ss.fffZ.");
+                dt = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+                _value = dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture);
+                return;
             }
 
-            dt = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
-            _value = dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture);
+            if (DateTime.TryParseExact(value,
+                "M/d/yyyy h:mm:ss tt",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                out dt))
+            {
+                dt = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+                _value = dt.ToString(CanonicalFormat, CultureInfo.InvariantCulture);
+                return;
+            }
+
+            throw new FormatException(
+                $"Invalid UtcTimestamp: '{value}'. Expected ISO8601 UTC ending with 'Z'. " +
+                $"Accepted patterns: yyyy-MM-ddTHH:mmZ | yyyy-MM-ddTHH:mm:ssZ | yyyy-MM-ddTHH:mm:ss.fffZ.");
         }
 
         public static UtcTimestamp Parse(string value) => new UtcTimestamp(value);
@@ -93,7 +120,7 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
 
         public static UtcTimestamp Now
         {
-            get => new UtcTimestamp(DateTime.UtcNow.ToString(CanonicalFormat, CultureInfo.InvariantCulture));   
+            get => new UtcTimestamp(DateTime.UtcNow.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
         }
 
         [Obsolete("Use UtcTimestamp.Now instead.")]
@@ -101,7 +128,7 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
         {
             return new UtcTimestamp(DateTime.UtcNow.ToString(CanonicalFormat, CultureInfo.InvariantCulture));
         }
-        
+
 
         public override string ToString() => _value;
 
@@ -140,6 +167,76 @@ public struct UtcTimestamp : IEquatable<UtcTimestamp>, IComparable<UtcTimestamp>
                 result = default(UtcTimestamp);
                 return false;
             }
+        }
+    }
+
+    public class UtcTimestampJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            var targetType = Nullable.GetUnderlyingType(objectType) ?? objectType;
+            var isUtc = targetType == typeof(UtcTimestamp);
+            if (isUtc)
+                Debugger.Break();
+
+            Debug.WriteLine($"objectType: {objectType.FullName}");
+            Debug.WriteLine($"targetType: {targetType.FullName}");
+            Debug.WriteLine($"targetAsm : {targetType.AssemblyQualifiedName}");
+            Debug.WriteLine($"utcType   : {typeof(UtcTimestamp).AssemblyQualifiedName}");
+            Debug.WriteLine($"equal     : {targetType == typeof(UtcTimestamp)}");
+
+            return isUtc;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var isNullable = Nullable.GetUnderlyingType(objectType) != null;
+
+            if (reader.TokenType == JsonToken.Null)
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException($"Cannot convert null value to {objectType.Name}.");
+            }
+
+            if (reader.TokenType == JsonToken.Date)
+            {
+                if (reader.Value is DateTime dt)
+                    return UtcTimestamp.FromDateTime(dt.ToUniversalTime());
+
+                if (reader.Value is DateTimeOffset dto)
+                    return UtcTimestamp.FromDateTime(dto.UtcDateTime);
+            }
+
+            if (reader.TokenType == JsonToken.String)
+            {
+                var str = reader.Value?.ToString();
+
+                if (String.IsNullOrWhiteSpace(str))
+                {
+                    if (isNullable)
+                        return null;
+
+                    throw new JsonSerializationException($"Cannot convert empty string to {objectType.Name}.");
+                }
+
+                return UtcTimestamp.Parse(str);
+            }
+
+            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing {objectType.Name}.");
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            var ts = (UtcTimestamp)value;
+            writer.WriteValue(ts.ToString());
         }
     }
 }

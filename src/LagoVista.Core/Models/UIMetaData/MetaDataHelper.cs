@@ -27,6 +27,9 @@ namespace LagoVista.Core.Models.UIMetaData
         {
             foreach (var type in assembly.DefinedTypes)
             {
+                if (type == typeof(EntityDescription))
+                    continue;
+
                 var attr = type.GetCustomAttributes<DomainDescriptorAttribute>().FirstOrDefault();
 
                 foreach (var property in type.DeclaredProperties)

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core</id>
-    <version>3.0.3228.1635</version>
+    <version>3.0.3229.1717</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,12 +12,13 @@
     <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
-    <releaseNotes>Build Date: 3/19/2026 8:35:50 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/20/2026 9:17:16 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
         <dependency id="Newtonsoft.Json" version="13.0.3" />
+        <dependency id="Microsoft.Extensions.DependencyInjection" version="9.0.13" />
       </group>
     </dependencies>
   </metadata>

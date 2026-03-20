@@ -21,14 +21,14 @@ namespace LagoVista.Core.Tests.Crypto.Modern
         private static EntityHeader UserHeader => EntityHeader.Create(Guid.NewGuid().ToString(), "user");
 
 
-        private static IModernEncryption BuildService(ISecureStorage secureStorage, EntityHeader org, EntityHeader user)
+        private static IModernEncryption BuildService(ISecureStorage secureStorage)
         {
             var aad = new AadBuilderV1();
             var env = new EnvelopeCodecV2();
             var store = new SecureStorageKeyMaterialStore(secureStorage);
             var aead = new AesGcmEncryptorNet9();
 
-            return new ModernEncryptionService(aad, env, store, aead, org, user);
+            return new ModernEncryptionService(aad, env, store, aead);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var org = OrgHeader;
             var user = UserHeader;
-            var svc = BuildService(secureStorage, org, user);
+            var svc = BuildService(secureStorage);
 
             var req = new EncryptStringRequest
             {
@@ -48,7 +48,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 FieldName = "EncryptedBalance",
                 KeyId = "account-0123456789abcdef0123456789abcdef:v2",
                 Kv = 1,
-                Plaintext = "142.44"
+                Plaintext = "142.44",
+                Org = org,
+                User = user,
             };
 
             var envelope = await svc.EncryptAsync(req);
@@ -60,7 +62,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 RecId = req.RecId,
                 FieldName = req.FieldName,
                 KeyId = req.KeyId,
-                Envelope = envelope
+                Envelope = envelope,
+                Org = org,
+                User = user,
             };
 
             var plaintext = await svc.DecryptAsync(decReq);
@@ -97,7 +101,7 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var org = OrgHeader;
             var user = UserHeader;
-            var svc = BuildService(secureStorage, org, user);
+            var svc = BuildService(secureStorage);
 
             var req = new EncryptStringRequest
             {
@@ -106,7 +110,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 FieldName = "EncryptedBalance",
                 KeyId = "account-0123456789abcdef0123456789abcdef:v2",
                 Kv = 1,
-                Plaintext = "142.44"
+                Plaintext = "142.44",
+                Org = org,
+                User = user,
             };
 
             var e1 = await svc.EncryptAsync(req);
@@ -123,7 +129,7 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var org = OrgHeader;
             var user = UserHeader;
-            var svc = BuildService(secureStorage, org, user);
+            var svc = BuildService(secureStorage);
 
             var req = new EncryptStringRequest
             {
@@ -132,7 +138,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 FieldName = "EncryptedBalance",
                 KeyId = "account-0123456789abcdef0123456789abcdef:v2",
                 Kv = 1,
-                Plaintext = "142.44"
+                Plaintext = "142.44",
+                Org = org,
+                User = user,
             };
 
             var envelope = await svc.EncryptAsync(req);
@@ -143,7 +151,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 RecId = req.RecId,
                 FieldName = "EncryptedOnlineBalance", // different => AAD mismatch
                 KeyId = req.KeyId,
-                Envelope = envelope
+                Envelope = envelope,
+                Org = org,
+                User = user,
             };
 
             Assert.ThrowsAsync<AuthenticationTagMismatchException>(async () => await svc.DecryptAsync(bad));
@@ -157,7 +167,7 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var org = OrgHeader;
             var user = UserHeader;
-            var svc = BuildService(secureStorage, org, user);
+            var svc = BuildService(secureStorage);
 
             var req = new EncryptStringRequest
             {
@@ -166,7 +176,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 FieldName = "EncryptedBalance",
                 KeyId = "account-0123456789abcdef0123456789abcdef:v2",
                 Kv = 1,
-                Plaintext = "   "
+                Plaintext = "   ",
+                Org = org,
+                User = user,
             };
 
             Assert.ThrowsAsync<ArgumentNullException>(async () => await svc.EncryptAsync(req));
@@ -180,7 +192,7 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var org = OrgHeader;
             var user = UserHeader;
-            var svc = BuildService(secureStorage, org, user);
+            var svc = BuildService(secureStorage);
 
             var req = new DecryptStringRequest
             {
@@ -188,7 +200,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 RecId = GuidString36.Factory(),
                 FieldName = "EncryptedBalance",
                 KeyId = "account-0123456789abcdef0123456789abcdef:v2",
-                Envelope = ""
+                Envelope = "",
+                Org = org,
+                User = user,
             };
 
             Assert.ThrowsAsync<ArgumentNullException>(async () => await svc.DecryptAsync(req));
@@ -202,7 +216,7 @@ namespace LagoVista.Core.Tests.Crypto.Modern
 
             var org = OrgHeader;
             var user = UserHeader;
-            var svc = BuildService(secureStorage, org, user);
+            var svc = BuildService(secureStorage);
 
             var req = new DecryptStringRequest
             {
@@ -210,7 +224,9 @@ namespace LagoVista.Core.Tests.Crypto.Modern
                 RecId = GuidString36.Factory(),
                 FieldName = "EncryptedBalance",
                 KeyId = "account-0123456789abcdef0123456789abcdef:v2",
-                Envelope = "legacybase64=="
+                Envelope = "legacybase64==",
+                Org = org,
+                User = user,
             };
 
             Assert.ThrowsAsync<FormatException>(async () => await svc.DecryptAsync(req));

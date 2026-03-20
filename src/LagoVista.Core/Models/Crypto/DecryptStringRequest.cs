@@ -9,6 +9,7 @@ namespace LagoVista.Core.Models.Crypto
     public sealed class DecryptStringRequest
     {
         public GuidString36 OrgId { get; set; }
+
         public GuidString36 RecId { get; set; }
 
         /// <summary>
@@ -26,5 +27,8 @@ namespace LagoVista.Core.Models.Crypto
         /// Must be the modern format (enc;v=2;...).
         /// </summary>
         public string Envelope { get; set; }
+
+        public EntityHeader Org { get; set; }
+        public EntityHeader User { get; set; }  
     }
 }

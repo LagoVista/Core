@@ -30,5 +30,8 @@ namespace LagoVista.Core.Models.Crypto
         /// Plaintext string to encrypt.
         /// </summary>
         public string Plaintext { get; set; }
+    
+        public EntityHeader Org { get; set; }
+        public EntityHeader User { get; set; }
     }
 }

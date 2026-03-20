@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
-namespace LagoVista
+namespace LagoVista.Core
 {
-    /// <summary>
-    /// Represents a strict LagoVista document key.
-    ///
-    /// Rules:
-    /// - 3–64 characters
-    /// - lowercase letters (a-z) and digits (0-9) only
-    /// - must start with a lowercase letter
-    /// </summary>
+    [TypeConverter(typeof(LagoVistaKeyTypeConverter))]
+    [JsonConverter(typeof(LagoVistaKeyJsonConverter))]
     public readonly struct LagoVistaKey : IEquatable<LagoVistaKey>
     {
         private readonly string _value;
@@ -68,7 +66,6 @@ namespace LagoVista
             if (length < 3 || length > 64)
                 return false;
 
-            // First character must be lowercase letter
             var first = value[0];
             if (first < 'a' || first > 'z')
                 return false;
@@ -85,6 +82,92 @@ namespace LagoVista
             }
 
             return true;
+        }
+
+        public static LagoVistaKey Parse(string value)
+        {
+            return new LagoVistaKey(value);
+        }
+    }
+
+    public class LagoVistaKeyTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+                throw new NotSupportedException("Cannot convert null to LagoVistaKey.");
+
+            if (value is string str)
+                return new LagoVistaKey(str);
+
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string) && value is LagoVistaKey key)
+                return key.Value;
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class LagoVistaKeyJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            var targetType = Nullable.GetUnderlyingType(objectType) ?? objectType;
+            return targetType == typeof(LagoVistaKey);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var isNullable = Nullable.GetUnderlyingType(objectType) != null;
+
+            if (reader.TokenType == JsonToken.Null)
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException($"Cannot convert null value to {nameof(LagoVistaKey)}.");
+            }
+
+            if (reader.TokenType != JsonToken.String)
+                throw new JsonSerializationException(
+                    $"Unexpected token {reader.TokenType} when parsing {nameof(LagoVistaKey)}. Expected String.");
+
+            var value = reader.Value?.ToString();
+
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException($"Cannot convert empty value to {nameof(LagoVistaKey)}.");
+            }
+
+            return new LagoVistaKey(value);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            writer.WriteValue(((LagoVistaKey)value).Value);
         }
     }
 }

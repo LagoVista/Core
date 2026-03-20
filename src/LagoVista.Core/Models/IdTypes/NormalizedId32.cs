@@ -1,5 +1,8 @@
 ﻿using LagoVista.Core;
+using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace LagoVista
@@ -44,6 +47,8 @@ namespace LagoVista
     /// </list>
     /// </para>
     /// </remarks>
+    [TypeConverter(typeof(NormalizedId32TypeConverter))]
+    [JsonConverter(typeof(NormalizedId32JsonConverter))]
     public readonly struct NormalizedId32 : IEquatable<NormalizedId32>
     {
         private readonly string _value;
@@ -136,6 +141,11 @@ namespace LagoVista
             return false;
         }
 
+        public static NormalizedId32 Parse(string value)
+        {
+            return new NormalizedId32(value);
+        }
+
         /// <summary>
         /// Converts this normalized identifier to a <see cref="GuidString36"/>.
         /// </summary>
@@ -178,6 +188,86 @@ namespace LagoVista
             }
 
             return true;
+        }
+    }
+
+    public class NormalizedId32TypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+                throw new NotSupportedException("Cannot convert null to NormalizedId32.");
+
+            if (value is string str)
+                return new NormalizedId32(str);
+
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string) && value is NormalizedId32 id)
+                return id.Value;
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class NormalizedId32JsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            var targetType = Nullable.GetUnderlyingType(objectType) ?? objectType;
+            return targetType == typeof(NormalizedId32);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var isNullable = Nullable.GetUnderlyingType(objectType) != null;
+
+            if (reader.TokenType == JsonToken.Null)
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException("Cannot convert null value to NormalizedId32.");
+            }
+
+            if (reader.TokenType != JsonToken.String)
+                throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing NormalizedId32. Expected String.");
+
+            var value = reader.Value?.ToString();
+
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException("Cannot convert empty value to NormalizedId32.");
+            }
+
+            return new NormalizedId32(value);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            writer.WriteValue(((NormalizedId32)value).Value);
         }
     }
 }

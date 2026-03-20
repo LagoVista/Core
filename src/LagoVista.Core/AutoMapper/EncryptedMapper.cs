@@ -62,6 +62,7 @@ namespace LagoVista.Core.AutoMapper
             if (org == null) throw new ArgumentNullException(nameof(org));
             if (user == null) throw new ArgumentNullException(nameof(user));
 
+
             var plan = _planner.GetOrBuildPlan<TDomain, TDto>();
 
             // Only compute modern KeyId if we encounter any modern envelopes.
@@ -94,6 +95,8 @@ namespace LagoVista.Core.AutoMapper
                     var req = new DecryptStringRequest
                     {
                         OrgId = orgId36,
+                        Org = org,
+                        User = user,
                         RecId = recId36,
                         FieldName = f.CiphertextPropertyName.ToLowerInvariant(),
                         KeyId = modernKeyId,
@@ -154,6 +157,8 @@ namespace LagoVista.Core.AutoMapper
                 var req = new EncryptStringRequest
                 {
                     OrgId = orgId36,
+                    Org = org,
+                    User = user,
                     RecId = recId36,
                     FieldName = f.CiphertextPropertyName.ToLowerInvariant(),
                     KeyId = modernKeyId,

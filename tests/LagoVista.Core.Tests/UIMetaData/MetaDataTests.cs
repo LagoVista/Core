@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LagoVista.Models;
 
 namespace LagoVista.Core.Tests.UIMetaData
 {
@@ -18,6 +19,12 @@ namespace LagoVista.Core.Tests.UIMetaData
         public void ShouldAddAssemblies()
         {
             MetaDataHelper.Instance.RegisterAssembly(this.GetType().Assembly);
+        }
+
+        [TestMethod]
+        public void ShouldAddCoreAssemblies()
+        {
+            MetaDataHelper.Instance.RegisterAssembly(typeof(AppUserDTO).Assembly);
         }
     }
 }

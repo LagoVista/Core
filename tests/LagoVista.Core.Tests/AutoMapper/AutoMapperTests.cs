@@ -102,7 +102,7 @@ namespace LagoVista.Core.Tests.Mapping
             var entity = new DateMapping() { TheDate = timeStamp };
             var dto = await _mapper.CreateAsync<DateMapping, DateMappingDTO>(entity, Org(), User());
             var jsonDate = dto.TheDate.ToJSONString();
-            Assert.That(jsonDate, Is.EqualTo(timeStamp));
+            Assert.That(jsonDate, Is.EqualTo(timeStamp.Value));
         }
 
         [Test]

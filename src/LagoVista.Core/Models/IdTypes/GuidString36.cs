@@ -1,6 +1,9 @@
 ﻿using LagoVista.Core.AI.Models;
 using LagoVista.Core.Models.ML;
+using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace LagoVista
 {
@@ -47,6 +50,8 @@ namespace LagoVista
     /// as strings but must remain strictly validated and convertible to <see cref="Guid"/>.
     /// </para>
     /// </remarks>
+    [TypeConverter(typeof(GuidString36TypeConverter))]
+    [JsonConverter(typeof(GuidString36JsonConverter))]
     public readonly struct GuidString36 : IEquatable<GuidString36>
     {
         private readonly string _value;
@@ -83,10 +88,7 @@ namespace LagoVista
                 throw new FormatException(
                     $"Invalid GuidString36: '{value}'. Expected lowercase GUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.");
 
-            // Ensure the string represents a valid GUID
             var guid = Guid.ParseExact(value, "D");
-
-            // Canonicalize to strict lowercase
             _value = guid.ToString("D").ToLowerInvariant();
         }
 
@@ -104,7 +106,7 @@ namespace LagoVista
         /// </summary>
         /// <param name="guid"></param>
         /// <returns></returns>
-        public static GuidString36 FromGuid(Guid guid) => new GuidString36(guid);   
+        public static GuidString36 FromGuid(Guid guid) => new GuidString36(guid);
 
         /// <summary>
         /// Returns the canonical GUID string representation.
@@ -120,7 +122,7 @@ namespace LagoVista
             return Guid.ParseExact(_value, "D");
         }
 
-        public Guid DbId { get => ToGuid(); }
+        public Guid DbId => ToGuid();
 
         /// <inheritdoc/>
         public bool Equals(GuidString36 other) =>
@@ -218,21 +220,18 @@ namespace LagoVista
         /// Implicitly converts a string to <see cref="GuidString36"/>.
         /// Intended for migration scenarios only.
         /// </summary>
-        public static implicit operator GuidString36(string value) =>
-            new GuidString36(value);
+        public static implicit operator GuidString36(string value) => new GuidString36(value);
 #else
         /// <summary>
         /// Explicitly converts a string to <see cref="GuidString36"/>.
         /// </summary>
-        public static explicit operator GuidString36(string value) =>
-            new GuidString36(value);
+        public static explicit operator GuidString36(string value) => new GuidString36(value);
 #endif
 
         /// <summary>
         /// Explicitly converts a <see cref="GuidString36"/> to a <see cref="Guid"/>.
         /// </summary>
-        public static explicit operator Guid(GuidString36 id) =>
-            id.ToGuid();
+        public static explicit operator Guid(GuidString36 id) => id.ToGuid();
 
         /// <summary>
         /// Converts this GUID into a <see cref="NormalizedId32"/> representation.
@@ -264,7 +263,6 @@ namespace LagoVista
                 }
                 catch
                 {
-                    // Extremely unlikely: string matched pattern but was not a real GUID
                 }
             }
 
@@ -298,6 +296,107 @@ namespace LagoVista
             }
 
             return true;
+        }
+    }
+
+    public class GuidString36TypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string) || sourceType == typeof(Guid) || base.CanConvertFrom(context, sourceType);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string) || destinationType == typeof(Guid) || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+                throw new NotSupportedException("Cannot convert null to GuidString36.");
+
+            if (value is string str)
+                return new GuidString36(str);
+
+            if (value is Guid guid)
+                return new GuidString36(guid);
+
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (value is GuidString36 id)
+            {
+                if (destinationType == typeof(string))
+                    return id.Value;
+
+                if (destinationType == typeof(Guid))
+                    return id.ToGuid();
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class GuidString36JsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            var targetType = Nullable.GetUnderlyingType(objectType) ?? objectType;
+            return targetType == typeof(GuidString36);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var isNullable = Nullable.GetUnderlyingType(objectType) != null;
+
+            if (reader.TokenType == JsonToken.Null)
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException("Cannot convert null value to GuidString36.");
+            }
+
+            if (reader.TokenType == JsonToken.String)
+            {
+                var value = reader.Value?.ToString();
+
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    if (isNullable)
+                        return null;
+
+                    throw new JsonSerializationException("Cannot convert empty value to GuidString36.");
+                }
+
+                return new GuidString36(value);
+            }
+
+            if (reader.TokenType == JsonToken.String)
+            {
+                var value = reader.Value?.ToString();
+
+                if (String.IsNullOrWhiteSpace(value))
+                    throw new JsonSerializationException("Cannot convert empty value to GuidString36.");
+
+                return new GuidString36(value);
+            }
+
+            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing GuidString36. Expected String or Guid.");
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            writer.WriteValue(((GuidString36)value).Value);
         }
     }
 }

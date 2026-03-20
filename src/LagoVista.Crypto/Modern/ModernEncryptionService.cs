@@ -1,5 +1,4 @@
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models;
 using LagoVista.Core.Models.Crypto;
 using System;
 using System.Security.Cryptography;
@@ -20,24 +19,16 @@ namespace LagoVista.Crypto.Modern
         private readonly IKeyMaterialStore _keyMaterialStore;
         private readonly IAeadEncryptor _aead;
 
-        // These are required for ISecureStorage calls
-        private readonly EntityHeader _org;
-        private readonly EntityHeader _user;
-
         public ModernEncryptionService(
             IAadBuilder aadBuilder,
             IEnvelopeCodec envelopeCodec,
             IKeyMaterialStore keyMaterialStore,
-            IAeadEncryptor aead,
-            EntityHeader org,
-            EntityHeader user)
+            IAeadEncryptor aead)
         {
             _aadBuilder = aadBuilder ?? throw new ArgumentNullException(nameof(aadBuilder));
             _envelopeCodec = envelopeCodec ?? throw new ArgumentNullException(nameof(envelopeCodec));
             _keyMaterialStore = keyMaterialStore ?? throw new ArgumentNullException(nameof(keyMaterialStore));
             _aead = aead ?? throw new ArgumentNullException(nameof(aead));
-            _org = org ?? throw new ArgumentNullException(nameof(org));
-            _user = user ?? throw new ArgumentNullException(nameof(user));
         }
 
         public async Task<string> EncryptAsync(EncryptStringRequest request, CancellationToken ct = default)
@@ -52,7 +43,7 @@ namespace LagoVista.Crypto.Modern
             var fieldLower = request.FieldName.ToLowerInvariant();
 
             var aad = _aadBuilder.BuildAadV1(request.OrgId, request.RecId, fieldLower, request.KeyId);
-            var key32 = await _keyMaterialStore.GetOrCreateKey32Async(_org, _user, request.KeyId, request.Kv, ct);
+            var key32 = await _keyMaterialStore.GetOrCreateKey32Async(request.Org, request.User, request.KeyId, request.Kv, ct);
 
             var nonce = new byte[12];
             RandomNumberGenerator.Fill(nonce);
@@ -79,7 +70,7 @@ namespace LagoVista.Crypto.Modern
             var parts = _envelopeCodec.Parse(request.Envelope);
 
             var aad = _aadBuilder.BuildAadV1(request.OrgId, request.RecId, fieldLower, request.KeyId);
-            var key32 = await _keyMaterialStore.GetOrCreateKey32Async(_org, _user, request.KeyId, parts.Kv, ct);
+            var key32 = await _keyMaterialStore.GetOrCreateKey32Async(request.Org, request.User, request.KeyId, parts.Kv, ct);
 
             var plaintextBytes = _aead.Decrypt(key32, parts.Nonce, parts.Ciphertext, parts.Tag, aad);
             return Encoding.UTF8.GetString(plaintextBytes);
