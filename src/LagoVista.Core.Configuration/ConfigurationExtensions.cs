@@ -36,7 +36,21 @@ namespace LagoVista
             return value;
         }
 
-        public static IConnectionSettings CreateDBStorageSettings(this IConfigurationRoot configuration, string sectionName, ILogger logger)
+        public static string Require(this IConfiguration section, string key)
+        {
+            ArgumentNullException.ThrowIfNull(section);
+            ArgumentNullException.ThrowIfNull(key);
+
+            var value = section[key];
+            if (string.IsNullOrWhiteSpace(value))
+                throw new InvalidOperationException(
+                    $"Missing required configuration value 'Root:{key}'.");
+
+            return value;
+        }
+
+
+        public static IConnectionSettings CreateDBStorageSettings(this IConfiguration configuration, string sectionName)
         {
             var section = configuration.GetRequiredSection(sectionName);
 
@@ -48,7 +62,23 @@ namespace LagoVista
             };
         }
 
-        public static IConnectionSettings CreateTableStorageSettings(this IConfigurationRoot configuration, string sectionName, ILogger logger)
+        public static IConnectionSettings GetRabbitMQSettings(this IConfiguration configuration, string sectionKey)
+        {
+            ArgumentNullException.ThrowIfNull(configuration);
+            ArgumentNullException.ThrowIfNull(sectionKey);
+
+            var section = configuration.GetRequiredSection(sectionKey);
+
+            return new ConnectionSettings
+            {
+                Uri = section.Require("Uri"),
+                UserName = section.Require("UserId"),
+                Password = section.Require("Password"),
+                ResourceName = section.Require("Queue")
+            };
+        }
+
+        public static IConnectionSettings CreateTableStorageSettings(this IConfiguration configuration, string sectionName)
         {
             var section = configuration.GetRequiredSection(sectionName);
             return new ConnectionSettings()
@@ -58,14 +88,14 @@ namespace LagoVista
             };
         }
 
-        public static IConnectionSettings CreateDefaultDBStorageSettings(this IConfigurationRoot configuration, ILogger logger)
+        public static IConnectionSettings CreateDefaultDBStorageSettings(this IConfiguration configuration)
         {
-            return configuration.CreateDBStorageSettings("DefaultDocDBStorage", logger);
+            return configuration.CreateDBStorageSettings("DefaultDocDBStorage");
         }
 
-        public static IConnectionSettings CreateDefaultTableStorageSettings(this IConfigurationRoot configuration, ILogger logger)
+        public static IConnectionSettings CreateDefaultTableStorageSettings(this IConfiguration configuration)
         {
-            return configuration.CreateTableStorageSettings("DefaultTableStorage", logger);
+            return configuration.CreateTableStorageSettings("DefaultTableStorage");
         }
     }
 }

@@ -10,6 +10,11 @@ namespace LagoVista
             Error = errorCode;
         }
 
+        public InvalidConfigurationException(string message) : base(message)
+        {
+            Error = new Error() { Message = message };
+        }
+
         public InvalidConfigurationException(Error errorCode, string details) : base(errorCode.Message)
         {
             Error = errorCode;

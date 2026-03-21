@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc.Server.ServiceBus</id>
-    <version>3.0.3229.1717</version>
+    <version>3.0.3230.1347</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,20 +12,20 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT RPC Client ServiceBus</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 3/20/2026 9:17:16 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/21/2026 5:47:27 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <group targetFramework="netstandard2.1">
+      <group targetFramework="net9.0">
         <dependency id="Azure.Messaging.ServiceBus" version="7.20.1" />
-        <dependency id="LagoVista.Core.Rpc.Server" version="3.0.3229.1717" />
-        <dependency id="LagoVista.Core.Rpc" version="3.0.3229.1717" />
-        <dependency id="LagoVista.Core" version="3.0.3229.1717" />
+        <dependency id="LagoVista.Core.Rpc.Server" version="3.0.3230.1347" />
+        <dependency id="LagoVista.Core.Rpc" version="3.0.3230.1347" />
+        <dependency id="LagoVista.Core" version="3.0.3230.1347" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Rpc.Server.ServiceBus.dll" target="lib\netstandard2.1\LagoVista.Core.Rpc.Server.ServiceBus.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Rpc.Server.ServiceBus.pdb" target="lib\netstandard2.1\LagoVista.Core.Rpc.Server.ServiceBus.pdb" />
+    <file src="bin\release\net9.0\LagoVista.Core.Rpc.Server.ServiceBus.dll" target="lib\net9.0\LagoVista.Core.Rpc.Server.ServiceBus.dll" />
+    <file src="bin\release\net9.0\LagoVista.Core.Rpc.Server.ServiceBus.pdb" target="lib\net9.0\LagoVista.Core.Rpc.Server.ServiceBus.pdb" />
   </files>
 </package>

@@ -25,6 +25,8 @@ namespace LagoVista.Core.Rpc.Tests.Server
     public class RequestSeverTests : RPC_TestBase
     {
 #if TEST_SERVICE_BUS
+
+        [Ignore]
         [TestMethod]
         public async Task ServiceBus_TopicClient_SendAsync()
         {

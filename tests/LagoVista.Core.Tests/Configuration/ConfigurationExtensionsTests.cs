@@ -130,7 +130,7 @@ namespace LagoVista.Core.Tests.Configuration
                 ("DocDb:AccessKey", "access-key"),
                 ("DocDb:DbName", "billing"));
 
-            var result = configuration.CreateDBStorageSettings("DocDb", null);
+            var result = configuration.CreateDBStorageSettings("DocDb");
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Uri, Is.EqualTo("https://cosmos.example.com"));
@@ -145,7 +145,7 @@ namespace LagoVista.Core.Tests.Configuration
                 ("DocDb:AccessKey", "access-key"),
                 ("DocDb:DbName", "billing"));
 
-            Assert.That(() => configuration.CreateDBStorageSettings("DocDb", null),
+            Assert.That(() => configuration.CreateDBStorageSettings("DocDb"),
                 Throws.TypeOf<InvalidOperationException>()
                     .With.Message.EqualTo("Missing required configuration value 'DocDb:Endpoint'."));
         }
@@ -157,7 +157,7 @@ namespace LagoVista.Core.Tests.Configuration
                 ("TableStorage:Name", "storage-account"),
                 ("TableStorage:AccessKey", "table-key"));
 
-            var result = configuration.CreateTableStorageSettings("TableStorage", null);
+            var result = configuration.CreateTableStorageSettings("TableStorage");
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.AccountId, Is.EqualTo("storage-account"));
@@ -169,7 +169,7 @@ namespace LagoVista.Core.Tests.Configuration
         {
             var configuration = BuildConfiguration(("TableStorage:AccessKey", "table-key"));
 
-            Assert.That(() => configuration.CreateTableStorageSettings("TableStorage", null),
+            Assert.That(() => configuration.CreateTableStorageSettings("TableStorage"),
                 Throws.TypeOf<InvalidOperationException>()
                     .With.Message.EqualTo("Missing required configuration value 'TableStorage:Name'."));
         }
@@ -183,7 +183,7 @@ namespace LagoVista.Core.Tests.Configuration
                 ("DefaultDocDBStorage:DbName", "somedb"),
                 ("DefaultDocDBStorage:AccessKey", "docdb-key"));
 
-            var result = configuration.CreateDefaultDBStorageSettings(null);
+            var result = configuration.CreateDefaultDBStorageSettings();
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Uri, Is.EqualTo("docdb-account"));
@@ -199,7 +199,7 @@ namespace LagoVista.Core.Tests.Configuration
                 ("DefaultTableStorage:Name", "default-table-account"),
                 ("DefaultTableStorage:AccessKey", "default-table-key"));
 
-            var result = configuration.CreateDefaultTableStorageSettings(null);
+            var result = configuration.CreateDefaultTableStorageSettings();
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.AccountId, Is.EqualTo("default-table-account"));
