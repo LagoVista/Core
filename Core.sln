@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.MessageQueue.Rabb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.MessageQueueTests", "tests\LagoVista.MessageQueueTests\LagoVista.MessageQueueTests.csproj", "{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Configuration", "src\LagoVista.Core.Configuration\LagoVista.Core.Configuration.csproj", "{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -154,6 +160,7 @@ Global
 		{0AEEF6ED-0C9E-C1DB-F1CC-86657B712ADB} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{212F8AFF-E78E-6BCB-2775-128738AC999D} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A} = {789A2940-98A7-4A45-B302-0FEE3151886E}
+		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E49F45F8-0C41-4A0A-A34E-D7A13852646B}

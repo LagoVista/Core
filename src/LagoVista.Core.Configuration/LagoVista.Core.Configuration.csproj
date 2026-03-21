@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.13" />
+  </ItemGroup>
+
+</Project>
