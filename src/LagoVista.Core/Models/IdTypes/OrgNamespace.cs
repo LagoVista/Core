@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace LagoVista.Core
+namespace LagoVista
 {
     /// <summary>
     /// Represents a tenant/organization namespace.

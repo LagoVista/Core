@@ -384,6 +384,7 @@ namespace LagoVista
 
                 return new GuidString36(value);
             }
+            else;
 
             throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing GuidString36. Expected String or Guid.");
         }

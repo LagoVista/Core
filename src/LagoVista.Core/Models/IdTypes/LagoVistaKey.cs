@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace LagoVista.Core
+namespace LagoVista
 {
     [TypeConverter(typeof(LagoVistaKeyTypeConverter))]
     [JsonConverter(typeof(LagoVistaKeyJsonConverter))]
@@ -22,7 +22,7 @@ namespace LagoVista.Core
             if (!IsValid(value))
                 throw new FormatException(
                     $"Invalid LagoVistaKey: '{value}'. " +
-                    "Must be 3–64 chars, lowercase a-z and 0-9 only, and start with a letter.");
+                    "Must be 3–64 chars, lowercase a-z and 0-9 only, and start with a letter.  It may also be a legacy generated key from an id");
 
             _value = value;
         }
@@ -60,8 +60,11 @@ namespace LagoVista.Core
 
         public static bool IsValid(string value)
         {
-            if (value == null) return false;
+            return IsStrictBusinessKey(value) || IsLegacyNormalizedGuidLikeKey(value);
+        }
 
+        private static bool IsStrictBusinessKey(string value)
+        {
             var length = value.Length;
             if (length < 3 || length > 64)
                 return false;
@@ -73,7 +76,24 @@ namespace LagoVista.Core
             for (var i = 1; i < length; i++)
             {
                 var c = value[i];
+                var isLower = c >= 'a' && c <= 'z';
+                var isDigit = c >= '0' && c <= '9';
 
+                if (!isLower && !isDigit)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsLegacyNormalizedGuidLikeKey(string value)
+        {
+            if (value.Length != 32)
+                return false;
+
+            for (var i = 0; i < value.Length; i++)
+            {
+                var c = value[i];
                 var isLower = c >= 'a' && c <= 'z';
                 var isDigit = c >= '0' && c <= '9';
 
@@ -139,12 +159,11 @@ namespace LagoVista.Core
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException($"Cannot convert null value to {nameof(LagoVistaKey)}.");
+                throw new JsonSerializationException($"Cannot convert null value to LagoVistaKey at path '{reader.Path}'.");
             }
 
             if (reader.TokenType != JsonToken.String)
-                throw new JsonSerializationException(
-                    $"Unexpected token {reader.TokenType} when parsing {nameof(LagoVistaKey)}. Expected String.");
+                throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing LagoVistaKey at path '{reader.Path}'. Expected String.");
 
             var value = reader.Value?.ToString();
 
@@ -153,7 +172,7 @@ namespace LagoVista.Core
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException($"Cannot convert empty value to {nameof(LagoVistaKey)}.");
+                throw new JsonSerializationException($"Cannot convert empty value to LagoVistaKey at path '{reader.Path}'.");
             }
 
             return new LagoVistaKey(value);

@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace LagoVista.Core
+namespace LagoVista
 {
     /// <summary>
     /// Bridge ID that normalizes to GuidString36 (relational).

@@ -1,5 +1,7 @@
-﻿
+﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace LagoVista
 {
@@ -9,6 +11,8 @@ namespace LagoVista
     /// Currently behaves as a strict non-empty string.
     /// Future versions may support richer icon metadata.
     /// </summary>
+    [TypeConverter(typeof(LagoVistaIconTypeConverter))]
+    [JsonConverter(typeof(LagoVistaIconJsonConverter))]
     public readonly struct LagoVistaIcon : IEquatable<LagoVistaIcon>
     {
         private readonly string _value;
@@ -55,6 +59,91 @@ namespace LagoVista
 
             result = default;
             return false;
+        }
+
+        public static LagoVistaIcon Parse(string value)
+        {
+            return new LagoVistaIcon(value);
+        }
+    }
+
+    public class LagoVistaIconTypeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+                throw new NotSupportedException("Cannot convert null to LagoVistaIcon.");
+
+            if (value is string str)
+                return new LagoVistaIcon(str);
+
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string) && value is LagoVistaIcon icon)
+                return icon.Value;
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+
+    public class LagoVistaIconJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            var targetType = Nullable.GetUnderlyingType(objectType) ?? objectType;
+            return targetType == typeof(LagoVistaIcon);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var isNullable = Nullable.GetUnderlyingType(objectType) != null;
+
+            if (reader.TokenType == JsonToken.Null)
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException("Cannot convert null value to LagoVistaIcon.");
+            }
+
+            if (reader.TokenType != JsonToken.String)
+                throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing LagoVistaIcon. Expected String.");
+
+            var value = reader.Value?.ToString();
+
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                if (isNullable)
+                    return null;
+
+                throw new JsonSerializationException("Cannot convert empty value to LagoVistaIcon.");
+            }
+
+            return new LagoVistaIcon(value);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            writer.WriteValue(((LagoVistaIcon)value).Value);
         }
     }
 }

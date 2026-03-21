@@ -177,6 +177,12 @@ namespace LagoVista
         /// </returns>
         public static bool IsNormalizedId32(string value)
         {
+            if (value.StartsWith("userfavorites") || value.StartsWith("mostrecentlyused"))
+            {
+                // Surgical legacy for user favorites and MRU lists that were stored with a prefix and a GUID-based suffix.
+                return true;
+            }
+
             if (value == null || value.Length != 32) return false;
 
             for (var i = 0; i < value.Length; i++)
@@ -186,6 +192,7 @@ namespace LagoVista
                 var isUpper = c >= 'A' && c <= 'Z';
                 if (!isDigit && !isUpper) return false;
             }
+
 
             return true;
         }
