@@ -6,7 +6,6 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.PlatformSupport;
 using Microsoft.Extensions.Configuration;
 using System;
-using static System.Collections.Specialized.BitVector32;
 
 namespace LagoVista.Core.Rpc.Settings
 {
