@@ -80,47 +80,55 @@ namespace LagoVista.Core.AutoMapper
                 if (f.SkipIfEmpty && string.IsNullOrEmpty(ciphertext))
                     continue;
 
-                // Modern envelope path
-                if (ciphertext.StartsWith(ModernEnvelopePrefix, StringComparison.Ordinal))
+                try
                 {
-                    if (modernKeyId == null)
+         
+                    // Modern envelope path
+                    if (ciphertext.StartsWith(ModernEnvelopePrefix, StringComparison.Ordinal))
                     {
-                        var modernAttr = typeof(TDto).GetCustomAttribute<ModernKeyIdAttribute>()
-                            ?? throw new InvalidOperationException(
-                                $"DTO type {typeof(TDto).Name} must have [ModernKeyId(...)] attribute for modern encryption.");
+                        if (modernKeyId == null)
+                        {
+                            var modernAttr = typeof(TDto).GetCustomAttribute<ModernKeyIdAttribute>()
+                                ?? throw new InvalidOperationException(
+                                    $"DTO type {typeof(TDto).Name} must have [ModernKeyId(...)] attribute for modern encryption.");
 
-                        modernKeyId = await _modernKeyIdBuilder.BuildKeyGuiIdAsync(dto, modernAttr, org, user, ct).ConfigureAwait(false);
+                            modernKeyId = await _modernKeyIdBuilder.BuildKeyGuiIdAsync(dto, modernAttr, org, user, ct).ConfigureAwait(false);
+                        }
+
+                        var req = new DecryptStringRequest
+                        {
+                            OrgId = orgId36,
+                            Org = org,
+                            User = user,
+                            RecId = recId36,
+                            FieldName = f.CiphertextPropertyName.ToLowerInvariant(),
+                            KeyId = modernKeyId,
+                            Envelope = ciphertext
+                        };
+
+                        var plaintext = await _modernEncryption.DecryptAsync(req, ct).ConfigureAwait(false);
+                        f.SetPlaintext(domain, plaintext);
+                        continue;
                     }
 
-                    var req = new DecryptStringRequest
+                    // Legacy path
+                    if (legacyKey == null)
                     {
-                        OrgId = orgId36,
-                        Org = org,
-                        User = user,
-                        RecId = recId36,
-                        FieldName = f.CiphertextPropertyName.ToLowerInvariant(),
-                        KeyId = modernKeyId,
-                        Envelope = ciphertext
-                    };
+                        var legacySecretId = plan.BuildSecretId(dto, org);
+                        legacyKey = await _keyProvider.GetKeyAsync(legacySecretId, org, user, plan.CreateIfMissing, ct).ConfigureAwait(false);
+                    }
 
-                    var plaintext = await _modernEncryption.DecryptAsync(req, ct).ConfigureAwait(false);
-                    f.SetPlaintext(domain, plaintext);
-                    continue;
+                    var salt = f.GetSalt(dto);
+                    if (string.IsNullOrWhiteSpace(salt))
+                        throw new InvalidOperationException($"Salt resolved empty for DTO {typeof(TDto).Name}.{f.SaltPropertyName}.");
+
+                    var legacyPlaintext = _encryptor.Decrypt(salt, ciphertext, legacyKey);
+                    f.SetPlaintext(domain, legacyPlaintext);
                 }
-
-                // Legacy path
-                if (legacyKey == null)
+                catch (Exception ex)
                 {
-                    var legacySecretId = plan.BuildSecretId(dto, org);
-                    legacyKey = await _keyProvider.GetKeyAsync(legacySecretId, org, user, plan.CreateIfMissing, ct).ConfigureAwait(false);
+                    Console.WriteLine($"{this.Tag()} - Field: {typeof(TDto).Name}.{f.CiphertextPropertyName}, {modernKeyId}, {ciphertext} {ex.Message}");
                 }
-
-                var salt = f.GetSalt(dto);
-                if (string.IsNullOrWhiteSpace(salt))
-                    throw new InvalidOperationException($"Salt resolved empty for DTO {typeof(TDto).Name}.{f.SaltPropertyName}.");
-
-                var legacyPlaintext = _encryptor.Decrypt(salt, ciphertext, legacyKey);
-                f.SetPlaintext(domain, legacyPlaintext);
             }
         }
 
