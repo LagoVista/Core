@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Testcontainers.RabbitMq" Version="4.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.13" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
   </ItemGroup>
 

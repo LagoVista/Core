@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
-    <version>3.0.3233.0601</version>
+    <version>3.0.3233.1629</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,12 +12,12 @@
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT Diagnostics Console</tags>
     <icon>LagoVistaIcon.png</icon>
-    <releaseNotes>Build Date: 3/24/2026 10:01:04 AM UTC</releaseNotes>
+    <releaseNotes>Build Date: 3/24/2026 8:29:21 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="System.Reflection.DispatchProxy" version="4.7.1" />
-        <dependency id="LagoVista.Core" version="3.0.3233.0601" />
+        <dependency id="LagoVista.Core" version="3.0.3233.1629" />
       </group>
     </dependencies>
   </metadata>
