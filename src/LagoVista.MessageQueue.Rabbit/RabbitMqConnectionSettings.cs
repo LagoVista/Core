@@ -5,9 +5,17 @@ using System.Collections.Generic;
 
 namespace LagoVista.MessageQueue.Rabbit
 {
+    public enum RabbitMqConnectionType
+    {
+        Subscriber,
+        Publisher,
+
+    }
+
     public class RabbitMqConnectionSettings
     {
         public string Name { get; set; }
+        public RabbitMqConnectionType ConnectionType { get; set; }
         public string HostName { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }

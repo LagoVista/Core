@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Configuration;
+using LagoVista.Core.Models;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
@@ -12,6 +13,12 @@ namespace LagoVista.Core.Tests.Configuration
     [TestFixture]
     public class RabbitMqConfigurationExtensionsTests
     {
+        [SetUp]
+        public void SetUp()
+        {
+            ConfigurationDiagnostics.Reset();
+        }
+
         [Test]
         public void GetRabbitMQSettings_Should_Throw_When_Configuration_Is_Null()
         {
@@ -27,7 +34,7 @@ namespace LagoVista.Core.Tests.Configuration
             var configuration = BuildConfiguration();
 
             Assert.That(() => configuration.GetRabbitMQSettings(null),
-                Throws.TypeOf<ArgumentNullException>());
+                Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -48,9 +55,9 @@ namespace LagoVista.Core.Tests.Configuration
                 ("RabbitPlaidSub:Password", "super-secret"),
                 ("RabbitPlaidSub:Queue", "plaid-ingest"));
 
-            Assert.That(() => configuration.GetRabbitMQSettings("RabbitPlaidSub"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'RabbitPlaidSub:Uri'."));
+            configuration.GetRabbitMQSettings("RabbitPlaidSub");
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => ent.Path == "RabbitPlaidSub:Uri" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -60,10 +67,10 @@ namespace LagoVista.Core.Tests.Configuration
                 ("RabbitPlaidSub:Uri", "amqp://rabbitmq"),
                 ("RabbitPlaidSub:Password", "super-secret"),
                 ("RabbitPlaidSub:Queue", "plaid-ingest"));
-
-            Assert.That(() => configuration.GetRabbitMQSettings("RabbitPlaidSub"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'RabbitPlaidSub:UserId'."));
+            
+            configuration.GetRabbitMQSettings("RabbitPlaidSub");
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => ent.Path == "RabbitPlaidSub:UserId" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -74,9 +81,9 @@ namespace LagoVista.Core.Tests.Configuration
                 ("RabbitPlaidSub:UserId", "plaid-user"),
                 ("RabbitPlaidSub:Queue", "plaid-ingest"));
 
-            Assert.That(() => configuration.GetRabbitMQSettings("RabbitPlaidSub"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'RabbitPlaidSub:Password'."));
+            configuration.GetRabbitMQSettings("RabbitPlaidSub");
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => ent.Path == "RabbitPlaidSub:Password" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -87,9 +94,9 @@ namespace LagoVista.Core.Tests.Configuration
                 ("RabbitPlaidSub:UserId", "plaid-user"),
                 ("RabbitPlaidSub:Password", "super-secret"));
 
-            Assert.That(() => configuration.GetRabbitMQSettings("RabbitPlaidSub"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'RabbitPlaidSub:Queue'."));
+            configuration.GetRabbitMQSettings("RabbitPlaidSub");
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => ent.Path == "RabbitPlaidSub:Queue" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -120,9 +127,9 @@ namespace LagoVista.Core.Tests.Configuration
                 ("RabbitPlaidSub:Password", "   "),
                 ("RabbitPlaidSub:Queue", "plaid-ingest"));
 
-            Assert.That(() => configuration.GetRabbitMQSettings("RabbitPlaidSub"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'RabbitPlaidSub:Password'."));
+            configuration.GetRabbitMQSettings("RabbitPlaidSub");
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => ent.Path == "RabbitPlaidSub:Password" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         private static IConfigurationRoot BuildConfiguration(params (string Key, string Value)[] values)

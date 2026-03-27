@@ -109,7 +109,7 @@ namespace LagoVista.Core.Tests.Mapping
                     child.IncludeChild(p => p.GrandChild1, s => s.GrandChild1);
                 });
 
-                // No nested children => Value should NOT be mapped.
+                // No nested children => Path should NOT be mapped.
                 plan.IncludeEntityHeaderValue(p => p.Child2, s => s.Child2);
 
                 plan.IncludeList(p => p.Child3, s => s.Child3);

@@ -1,6 +1,10 @@
-﻿using LagoVista.Core.Interfaces;
+﻿// ================================
+// File: ./src/[YourExistingProject]/ConfigurationExtensions.cs
+// =======
+// =========================
+using LagoVista.Core.Configuration;
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
-using LagoVista.Core.PlatformSupport;
 using Microsoft.Extensions.Configuration;
 using System;
 
@@ -8,15 +12,18 @@ namespace LagoVista
 {
     public static class ConfigurationExtensions
     {
+
+
         public static TConnection Set<TConnection>(this IConfiguration configuration, string sectionName, Action<IConfigurationSection, TConnection> configure) where TConnection : new()
         {
-            ArgumentNullException.ThrowIfNull(configuration);
-            ArgumentNullException.ThrowIfNull(sectionName);
-            ArgumentNullException.ThrowIfNull(configure);
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (String.IsNullOrEmpty(sectionName)) throw new ArgumentException(nameof(sectionName));
 
             var section = configuration.GetSection(sectionName);
             if (!section.Exists())
-                throw new InvalidOperationException($"Missing configuration section '{sectionName}'.");
+            {
+                    throw new InvalidOperationException($"Missing configuration section '{sectionName}'.");
+            }
 
             var connection = new TConnection();
             configure(section, connection);
@@ -25,30 +32,77 @@ namespace LagoVista
 
         public static string Require(this IConfigurationSection section, string key)
         {
-            ArgumentNullException.ThrowIfNull(section);
-            ArgumentNullException.ThrowIfNull(key);
+            if (section == null) throw new ArgumentNullException(nameof(section));
+            if (String.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
+
+            var path = $"{section.Path}:{key}";
 
             var value = section[key];
             if (string.IsNullOrWhiteSpace(value))
-                throw new InvalidOperationException(
-                    $"Missing required configuration value '{section.Path}:{key}'.");
+            {
+                ConfigurationDiagnostics.AddRegisteredConfiguration(path, keyPresent: value != null, valuePresent: false);
+            }
+            else
+                ConfigurationDiagnostics.AddRegisteredConfiguration(path);
 
             return value;
         }
 
         public static string Require(this IConfiguration section, string key)
         {
-            ArgumentNullException.ThrowIfNull(section);
-            ArgumentNullException.ThrowIfNull(key);
+            if (section == null) throw new ArgumentNullException(nameof(section));
+            if (String.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
+
+            var path = $"{key}";
 
             var value = section[key];
             if (string.IsNullOrWhiteSpace(value))
-                throw new InvalidOperationException(
-                    $"Missing required configuration value 'Root:{key}'.");
+            {
+                ConfigurationDiagnostics.AddRegisteredConfiguration(path, keyPresent: value != null, valuePresent: false);
+            }
+            else
+                ConfigurationDiagnostics.AddRegisteredConfiguration(path);
 
             return value;
         }
 
+        public static string Optional(this IConfigurationSection section, string key, string fallback = null)
+        {
+            if (section == null) throw new ArgumentNullException(nameof(section));
+            if (String.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
+
+            var path = $"{section.Path}:{key}";
+
+            var value = section[key];
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                ConfigurationDiagnostics.AddOptionalConfiguration(path, keyPresent: value != null, valuePresent: false);
+                return fallback;
+            }
+            else
+                ConfigurationDiagnostics.AddOptionalConfiguration(path);
+
+            return value;
+        }
+
+        public static string Optional(this IConfiguration section, string key, string fallback = null)
+        {
+            if (section == null) throw new ArgumentNullException(nameof(section));
+            if(String.IsNullOrEmpty(key)) throw new ArgumentException(nameof(key));
+
+            var path = $"{key}";
+
+            var value = section[key];
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                ConfigurationDiagnostics.AddOptionalConfiguration(path, keyPresent: value != null, valuePresent: false);
+                return fallback;
+            }
+            else
+                ConfigurationDiagnostics.AddOptionalConfiguration(path);
+
+            return value;
+        }
 
         public static IConnectionSettings CreateDBStorageSettings(this IConfiguration configuration, string sectionName)
         {
@@ -64,8 +118,9 @@ namespace LagoVista
 
         public static IConnectionSettings GetRabbitMQSettings(this IConfiguration configuration, string sectionKey)
         {
-            ArgumentNullException.ThrowIfNull(configuration);
-            ArgumentNullException.ThrowIfNull(sectionKey);
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (String.IsNullOrEmpty(sectionKey)) throw new ArgumentException(nameof(sectionKey));
+
 
             var section = configuration.GetRequiredSection(sectionKey);
 

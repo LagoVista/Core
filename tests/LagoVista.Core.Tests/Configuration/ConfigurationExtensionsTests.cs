@@ -1,8 +1,11 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Configuration;
+using LagoVista.Core.Models;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +15,13 @@ namespace LagoVista.Core.Tests.Configuration
     [TestFixture]
     public class ConfigurationExtensionsTests
     {
+        [SetUp]
+        public void SetUp() 
+        {
+            ConfigurationDiagnostics.Reset();
+        }
+
+
         [Test]
         public void Set_Should_Throw_When_Configuration_Is_Null()
         {
@@ -27,7 +37,7 @@ namespace LagoVista.Core.Tests.Configuration
             var configuration = BuildConfiguration();
 
             Assert.That(() => configuration.Set<ConnectionSettings>(null, (section, connection) => { }),
-                Throws.TypeOf<ArgumentNullException>());
+                Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -36,7 +46,7 @@ namespace LagoVista.Core.Tests.Configuration
             var configuration = BuildConfiguration();
 
             Assert.That(() => configuration.Set<ConnectionSettings>("Plaid", null),
-                Throws.TypeOf<ArgumentNullException>());
+                Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
@@ -86,7 +96,7 @@ namespace LagoVista.Core.Tests.Configuration
             var section = configuration.GetRequiredSection("Plaid");
 
             Assert.That(() => section.Require(null),
-                Throws.TypeOf<ArgumentNullException>());
+                Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -94,10 +104,10 @@ namespace LagoVista.Core.Tests.Configuration
         {
             var configuration = BuildConfiguration(("Plaid:Uri", "https://plaid.example.com"));
             var section = configuration.GetRequiredSection("Plaid");
-
-            Assert.That(() => section.Require("Secret"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'Plaid:Secret'."));
+            section.Require("Secret");
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => !ent.ValuePresent).Count() > 0);
+            Assert.That(missingEntries.Where(ent => ent.Path == "Plaid:Secret" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -106,9 +116,34 @@ namespace LagoVista.Core.Tests.Configuration
             var configuration = BuildConfiguration(("Plaid:Secret", "   "));
             var section = configuration.GetRequiredSection("Plaid");
 
-            Assert.That(() => section.Require("Secret"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'Plaid:Secret'."));
+            section.Require("Secret");
+
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => !ent.ValuePresent).Count() > 0);
+            Assert.That(missingEntries.Where(ent => ent.Path == "Plaid:Secret" && !ent.ValuePresent).Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Require_Should_Build_Two_Level_Path_Whitespace()
+        {
+            var data = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["top:child:value"] = "hello world"
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(data)
+                .Build();
+
+            var parent = configuration.GetRequiredSection("top");
+            var child = parent.GetRequiredSection("child");
+            var childValue = child.Require("value");
+
+            var entries = ConfigurationDiagnostics.GetEntries();
+
+            Assert.That(entries.Count, Is.EqualTo(1));
+            Assert.That(entries[0].Path, Is.EqualTo("top:child:value"));
+            Assert.That(childValue, Is.EqualTo("hello world"));
         }
 
         [Test]
@@ -145,9 +180,11 @@ namespace LagoVista.Core.Tests.Configuration
                 ("DocDb:AccessKey", "access-key"),
                 ("DocDb:DbName", "billing"));
 
-            Assert.That(() => configuration.CreateDBStorageSettings("DocDb"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'DocDb:Endpoint'."));
+            configuration.CreateDBStorageSettings("DocDb");
+
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => !ent.ValuePresent).Count() > 0);
+            Assert.That(missingEntries.Where(ent => ent.Path == "DocDb:Endpoint" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -168,10 +205,11 @@ namespace LagoVista.Core.Tests.Configuration
         public void CreateTableStorageSettings_Should_Throw_When_Name_Is_Missing()
         {
             var configuration = BuildConfiguration(("TableStorage:AccessKey", "table-key"));
+            var result = configuration.CreateTableStorageSettings("TableStorage");
 
-            Assert.That(() => configuration.CreateTableStorageSettings("TableStorage"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Missing required configuration value 'TableStorage:Name'."));
+            var missingEntries = ConfigurationDiagnostics.GetEntries();
+            Assert.That(missingEntries.Where(ent => !ent.ValuePresent).Count() > 0);
+            Assert.That(missingEntries.Where( ent => ent.Path == "TableStorage:Name" && !ent.ValuePresent).Count(), Is.EqualTo(1));
         }
 
         [Test]

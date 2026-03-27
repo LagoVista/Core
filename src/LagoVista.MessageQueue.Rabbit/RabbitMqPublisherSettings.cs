@@ -10,29 +10,43 @@ namespace LagoVista.MessageQueue.Rabbit
         public string UserName { get; set; }
         public string Password { get; set; }
         public string VirtualHost { get; set; } = "/";
+        public string ExchangeName { get; set; }
+        public string RouteKey { get; set; }
+
+
         public int Port { get; set; } = 5672;
         public bool UseSsl { get; set; }
         public int TimeoutInSeconds { get; set; } = 30;
         public bool AutomaticRecoveryEnabled { get; set; } = true;
         public bool TopologyRecoveryEnabled { get; set; } = true;
-        public string ExchangeName { get; set; }
-        public string RouteKey { get; set; }
         public string ContentType { get; set; } = "application/json";
         public bool Persistent { get; set; } = true;
 
         public static RabbitMqPublisherSettings Read(IConfiguration configuration, string sectionName)
         {
-
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-            if (String.IsNullOrEmpty(sectionName)) throw new ArgumentNullException(nameof(sectionName));
+            if (String.IsNullOrWhiteSpace(sectionName)) throw new ArgumentException(nameof(sectionName));
 
             var section = configuration.GetRequiredSection(sectionName);
-            var settings = section.Get<RabbitMqPublisherSettings>();
-            if (settings == null)
-                throw new InvalidOperationException($"Could not bind RabbitMQ publisher settings from section '{sectionName}'.");
 
-            settings.Validate(sectionName);
-            return settings;
+            //TODO There is probably another round of validating the settings for valid content for Rabbit but not today.
+            return new RabbitMqPublisherSettings()
+            {
+                Name = section.Require("Name"),
+                HostName = section.Require("HostName"),
+                UserName = section.Require("UserName"),
+                Password = section.Require("Password"),
+                RouteKey = section.Require("RouteKey"),
+                VirtualHost = section.Optional("VirtualHost", "/"),
+                Port = Convert.ToInt32(section.Optional("Port", "5672")),
+                UseSsl = section.Optional("UseSsl", "false").ToLower() == "true",
+                ExchangeName = section.Require("ExchangeName"),
+                TimeoutInSeconds = Convert.ToInt32(section.Optional("TimeoutInSeconds", "30")),
+                AutomaticRecoveryEnabled = section.Optional("AutomaticRecoveryEnabled", "true").ToLower() == "true",
+                TopologyRecoveryEnabled = section.Optional("TopologyRecoveryEnabled", "true").ToLower() == "true",
+                Persistent = section.Optional("Persistent", "true").ToLower() == "true",
+                ContentType = section.Optional("ContentType", "application/json")
+            };
         }
 
         public RabbitMqConnectionSettings ToConnectionSettings()

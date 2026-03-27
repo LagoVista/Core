@@ -23,7 +23,7 @@ namespace LagoVista.Crypto
 
 namespace LagoVista.DependencyInjection
 {
-    public static class BillingModule
+    public static class CryptoModule
     {
         public static void AddModernCrypto(this IServiceCollection services, ILogger logger)
         {
