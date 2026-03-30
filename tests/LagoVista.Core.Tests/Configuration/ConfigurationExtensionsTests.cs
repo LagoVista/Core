@@ -126,7 +126,7 @@ namespace LagoVista.Core.Tests.Configuration
         [Test]
         public void Require_Should_Build_Two_Level_Path_Whitespace()
         {
-            var data = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+            var data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 ["top:child:value"] = "hello world"
             };

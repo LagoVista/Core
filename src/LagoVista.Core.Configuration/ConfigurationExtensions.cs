@@ -1,8 +1,4 @@
-﻿// ================================
-// File: ./src/[YourExistingProject]/ConfigurationExtensions.cs
-// =======
-// =========================
-using LagoVista.Core.Configuration;
+﻿using LagoVista.Core.Configuration;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +18,7 @@ namespace LagoVista
             var section = configuration.GetSection(sectionName);
             if (!section.Exists())
             {
-                    throw new InvalidOperationException($"Missing configuration section '{sectionName}'.");
+                throw new InvalidOperationException($"Missing configuration section '{sectionName}'.");
             }
 
             var connection = new TConnection();
@@ -106,7 +102,7 @@ namespace LagoVista
 
         public static IConnectionSettings CreateDBStorageSettings(this IConfiguration configuration, string sectionName)
         {
-            var section = configuration.GetRequiredSection(sectionName);
+            var section = configuration.GetSection(sectionName);
 
             return new ConnectionSettings()
             {
@@ -122,7 +118,7 @@ namespace LagoVista
             if (String.IsNullOrEmpty(sectionKey)) throw new ArgumentException(nameof(sectionKey));
 
 
-            var section = configuration.GetRequiredSection(sectionKey);
+            var section = configuration.GetSection(sectionKey);
 
             return new ConnectionSettings
             {
@@ -135,7 +131,7 @@ namespace LagoVista
 
         public static IConnectionSettings CreateTableStorageSettings(this IConfiguration configuration, string sectionName)
         {
-            var section = configuration.GetRequiredSection(sectionName);
+            var section = configuration.GetSection(sectionName);
             return new ConnectionSettings()
             {
                 AccountId = section.Require("Name"),

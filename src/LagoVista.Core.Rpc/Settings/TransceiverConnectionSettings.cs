@@ -64,7 +64,7 @@ namespace LagoVista.Core.Rpc.Settings
 
         public TransceiverConnectionSettings(IConfiguration configuration)
         {
-            var rpcAdminSection = configuration.GetRequiredSection("RpcAdmin");
+            var rpcAdminSection = configuration.GetSection("RpcAdmin");
             RpcAdmin = new LagoVista.Core.Models.ConnectionSettings()
             {
                 AccountId = rpcAdminSection.Require("Endpoint"),
@@ -72,7 +72,7 @@ namespace LagoVista.Core.Rpc.Settings
                 AccessKey = rpcAdminSection.Require("SharedAccessKey"),
             };
 
-            var rpcClientTransmitterSection = configuration.GetRequiredSection("RpcClientTransmitter");
+            var rpcClientTransmitterSection = configuration.GetSection("RpcClientTransmitter");
             RpcClientTransmitter = new LagoVista.Core.Models.ConnectionSettings()
             {
                 AccountId = rpcClientTransmitterSection.Require("Endpoint"),
@@ -82,7 +82,7 @@ namespace LagoVista.Core.Rpc.Settings
                 TimeoutInSeconds = Convert.ToInt32(rpcClientTransmitterSection.Require("TimeoutInSeconds"))
             };
 
-            var rpcClientReceiverSection = configuration.GetRequiredSection("RpcClientReceiver");
+            var rpcClientReceiverSection = configuration.GetSection("RpcClientReceiver");
             RpcClientReceiver = new LagoVista.Core.Models.ConnectionSettings()
             {
                 AccountId = rpcClientReceiverSection.Require("Endpoint"),
@@ -92,7 +92,7 @@ namespace LagoVista.Core.Rpc.Settings
                 Uri = rpcClientReceiverSection.Require("SubscriptionPath"),
             };
 
-            var rpcServerTransmitterSection = configuration.GetRequiredSection("RpcServerTransmitter");
+            var rpcServerTransmitterSection = configuration.GetSection("RpcServerTransmitter");
             RpcServerTransmitter = new LagoVista.Core.Models.ConnectionSettings()
             {
                 AccountId = rpcServerTransmitterSection.Require("Endpoint"),
@@ -100,8 +100,7 @@ namespace LagoVista.Core.Rpc.Settings
                 AccessKey = rpcServerTransmitterSection.Require("SharedAccessKey"),
             };
 
-
-            var rpcServerReceiverSection = configuration.GetRequiredSection("RpcServerReceiver");
+            var rpcServerReceiverSection = configuration.GetSection("RpcServerReceiver");
             RpcServerReceiver = new LagoVista.Core.Models.ConnectionSettings()
             {
                 AccountId = rpcServerReceiverSection.Require("Endpoint"),

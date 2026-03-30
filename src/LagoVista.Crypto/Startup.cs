@@ -13,10 +13,10 @@ namespace LagoVista.Crypto
         {
             services.AddSingleton<IAadBuilder, AadBuilderV1>();
             services.AddSingleton<IEnvelopeCodec, EnvelopeCodecV2>();
-            services.AddSingleton<IKeyMaterialStore, SecureStorageKeyMaterialStore>();
+            services.AddScoped<IKeyMaterialStore, SecureStorageKeyMaterialStore>();
             services.AddSingleton<IAeadEncryptor, AesGcmEncryptorNet9>();
-            services.AddSingleton<IModernKeyIdBuilder, ModernKeyIdBuilder>();
-            services.AddSingleton<IModernEncryption, ModernEncryptionService>();
+            services.AddScoped<IModernKeyIdBuilder, ModernKeyIdBuilder>();
+            services.AddScoped<IModernEncryption, ModernEncryptionService>();
         }
     }
 }

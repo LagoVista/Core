@@ -11,7 +11,7 @@ namespace LagoVista.Core
         public static void ConfigureServices(IServiceCollection services)
         {
             AutoMapper.Startup.ConfigureServices(services);
-            services.AddSingleton<ICoreAppServices, CoreAppServices>();
+            services.AddScoped<ICoreAppServices, CoreAppServices>();
             services.AddSingleton<IClock, LagoVistaClock>();
         }
     }

@@ -27,7 +27,7 @@ namespace LagoVista.MessageQueue.Rabbit
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             if (String.IsNullOrWhiteSpace(sectionName)) throw new ArgumentException(nameof(sectionName));
 
-            var section = configuration.GetRequiredSection(sectionName);
+            var section = configuration.GetSection(sectionName);
 
             //TODO There is probably another round of validating the settings for valid content for Rabbit but not today.
             return new RabbitMqPublisherSettings()
@@ -70,6 +70,7 @@ namespace LagoVista.MessageQueue.Rabbit
 
         public void Validate(string sectionName)
         {
+            /* we validate presence on section.Require, we can add more validation here if we want to validate content but for now we will just validate presence of required settings.
             if (String.IsNullOrWhiteSpace(HostName)) throw new InvalidOperationException($"RabbitMQ publisher section '{sectionName}' requires HostName.");
             if (String.IsNullOrWhiteSpace(UserName)) throw new InvalidOperationException($"RabbitMQ publisher section '{sectionName}' requires UserName.");
             if (String.IsNullOrWhiteSpace(Password)) throw new InvalidOperationException($"RabbitMQ publisher section '{sectionName}' requires Password.");
@@ -77,6 +78,7 @@ namespace LagoVista.MessageQueue.Rabbit
             if (Port <= 0) throw new InvalidOperationException($"RabbitMQ publisher section '{sectionName}' requires a valid Port.");
             if (String.IsNullOrWhiteSpace(ExchangeName)) throw new InvalidOperationException($"RabbitMQ publisher section '{sectionName}' requires ExchangeName.");
             if (String.IsNullOrWhiteSpace(RouteKey)) throw new InvalidOperationException($"RabbitMQ publisher section '{sectionName}' requires RouteKey.");
+            */
         }
     }
 }
