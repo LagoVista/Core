@@ -13,6 +13,9 @@ namespace LagoVista.Core.Configuration
         void Populate();
         IReadOnlyList<ConfigurationDiagnosticContext> GetDiagnostics();
         void ThrowIfMissingRequired();
+        IReadOnlyList<ConfigurationDiagnosticContext> Errors { get; }
+        IReadOnlyList<ConfigurationDiagnosticContext> Warnings { get; }
+        bool IsValid { get; }
     }
 
     public sealed class ConfigurationDiagnosticsService : IConfigurationDiagnosticsService
@@ -67,6 +70,12 @@ namespace LagoVista.Core.Configuration
                 }
             }
         }
+
+        public bool IsValid => !GetDiagnostics().Any(x => !x.Optional && !x.ValuePresent);
+    
+        public IReadOnlyList<ConfigurationDiagnosticContext> Errors => GetDiagnostics().Where(x => !x.Optional && !x.ValuePresent).ToList();
+        public IReadOnlyList<ConfigurationDiagnosticContext> Warnings  => GetDiagnostics().Where(x => x.Optional && !x.ValuePresent).ToList();
+
 
         public IReadOnlyList<ConfigurationDiagnosticContext> GetDiagnostics()
         {
