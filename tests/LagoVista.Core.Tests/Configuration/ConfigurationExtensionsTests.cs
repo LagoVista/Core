@@ -81,6 +81,32 @@ namespace LagoVista.Core.Tests.Configuration
         }
 
         [Test]
+        public void Set_Should_Create_Connection_And_Configure_From_Section_With_Optional_Value()
+        {
+            var configuration = BuildConfiguration(
+                ("Plaid:Uri", "https://plaid.example.com"),
+                ("Plaid:ClientId", "client-123"),
+                ("Plaid:VirtualHost", "vhost"),
+                ("Plaid:Secret", "secret-xyz"));
+
+            var result = configuration.Set<ConnectionSettings>("Plaid", (section, connection) =>
+            {
+                connection.Uri = section.Require("Uri");
+                connection.AccountId = section.Require("ClientId");
+                connection.AccessKey = section.Require("Secret");
+                connection.ResourceName = section.Optional("VirtualHost", "default-host");
+                connection.Port = section.Optional("Port", "5672");
+            });
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Uri, Is.EqualTo("https://plaid.example.com"));
+            Assert.That(result.AccountId, Is.EqualTo("client-123"));
+            Assert.That(result.AccessKey, Is.EqualTo("secret-xyz"));
+            Assert.That(result.ResourceName, Is.EqualTo("vhost"));
+            Assert.That(result.Port, Is.EqualTo("5672"));
+        }
+
+        [Test]
         public void Require_Should_Throw_When_Section_Is_Null()
         {
             IConfigurationSection section = null;

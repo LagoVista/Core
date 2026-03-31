@@ -42,11 +42,8 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         private async Task CreateTopicAsync(string entityPath)
         {
-            if (_topicConstructorSettings == null)
-            {
-                throw new ArgumentNullException(nameof(_topicConstructorSettings));
-            }
-
+            if (_topicConstructorSettings == null) throw new ArgumentNullException(nameof(_topicConstructorSettings));
+            
             var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
             _logger.Trace($"Request Server Connection String {connstr}");
 

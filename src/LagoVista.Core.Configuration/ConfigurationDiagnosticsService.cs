@@ -14,6 +14,7 @@ namespace LagoVista.Core.Configuration
         IReadOnlyList<ConfigurationDiagnosticContext> GetDiagnostics();
         void ThrowIfMissingRequired();
         IReadOnlyList<ConfigurationDiagnosticContext> Errors { get; }
+        List<string> Exceptions { get; }
         IReadOnlyList<ConfigurationDiagnosticContext> Warnings { get; }
         bool IsValid { get; }
     }
@@ -22,15 +23,17 @@ namespace LagoVista.Core.Configuration
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ServiceRegistrationSnapshot _snapshot;
-
+   
         public ConfigurationDiagnosticsService(IServiceProvider serviceProvider, ServiceRegistrationSnapshot snapshot)
         {
             _serviceProvider = serviceProvider;
             _snapshot = snapshot;
-        }
+        }   
 
         public void Populate()
         {
+            Console.WriteLine($"Evaluating: {_snapshot.Entries.Count} classes");
+
             foreach (var entry in _snapshot.Entries)
             {
                 var implementationType = entry.ImplementationType;
@@ -59,9 +62,19 @@ namespace LagoVista.Core.Configuration
                 {
                     ConfigurationDiagnostics.CurrentClassName = implementationType.FullName ?? implementationType.Name;
                     _ = _serviceProvider.GetService(entry.ServiceType);
+
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"Resolved: {ConfigurationDiagnostics.CurrentClassName}");
+                    Console.ResetColor();
+
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error while resolving {ConfigurationDiagnostics.CurrentClassName}: {ex.Message}");
+                    Console.ResetColor();
+                    Exceptions.Add($"Class: {ConfigurationDiagnostics.CurrentClassName} - {ex.Message}");
                     // first cut: swallow and let the diagnostics collector tell the story
                 }
                 finally
@@ -75,6 +88,7 @@ namespace LagoVista.Core.Configuration
     
         public IReadOnlyList<ConfigurationDiagnosticContext> Errors => GetDiagnostics().Where(x => !x.Optional && !x.ValuePresent).ToList();
         public IReadOnlyList<ConfigurationDiagnosticContext> Warnings  => GetDiagnostics().Where(x => x.Optional && !x.ValuePresent).ToList();
+        public List<string> Exceptions { get; } = new List<string>();   
 
 
         public IReadOnlyList<ConfigurationDiagnosticContext> GetDiagnostics()
