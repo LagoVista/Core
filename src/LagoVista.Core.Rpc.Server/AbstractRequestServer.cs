@@ -2,6 +2,7 @@
 // ContentHash: 27d4b532d71ba8a7478bc635ddc87a53b3ddd0e277200f8dd197603df35c6bb9
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Models.Dignostics;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
@@ -24,6 +25,8 @@ namespace LagoVista.Core.Rpc.Server
         }
         
         public bool IsRunning { get; private set; } = false;
+
+        public abstract string Name { get; }
 
         public async Task StartAsync(ITransceiverConnectionSettings connectionSettings)
         {
@@ -75,5 +78,7 @@ namespace LagoVista.Core.Rpc.Server
             return Task.FromResult(default(object));
         }
 
+        public abstract HostedServiceDiagnosticSnapshot GetSnapshot();
+      
     }
 }

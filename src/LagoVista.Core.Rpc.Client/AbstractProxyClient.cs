@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.Dignostics;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Client
 {
-    public abstract class AbstractProxyClient : ITransceiver
+    public abstract class AbstractProxyClient : ITransceiver, IHostedServiceDiagnostics
     {
         #region Fields
         private readonly IAsyncCoupler<IMessage> _asyncCoupler;
@@ -32,6 +33,8 @@ namespace LagoVista.Core.Rpc.Client
         #endregion
 
         #region rpc Receiver Methods
+
+        public string Name => $"RPCProxyClient";
 
         /// <summary>
         /// receives responses from the server
@@ -57,9 +60,22 @@ namespace LagoVista.Core.Rpc.Client
                 return;
             }
 
-            await CustomStartAsync();
-            IsRunning = true;
-        }
+            try
+            {
+                await CustomStartAsync();
+                IsRunning = true;
+                _snapShot.Status = HostedServiceDiagnosticStatus.Running;
+                _snapShot.StartedUtc = DateTime.UtcNow;
+                _snapShot.LastActivity = "Started listening";
+                _snapShot.LastActivityUtc = DateTime.UtcNow;
+            }
+            catch (Exception ex)
+            {
+                _snapShot.LastError = ex.Message;
+                _snapShot.LastErrorUtc = DateTime.UtcNow;
+                _snapShot.Status = HostedServiceDiagnosticStatus.Error;
+            }
+         }
 
         protected abstract Task CustomStartAsync();
 
@@ -88,5 +104,12 @@ namespace LagoVista.Core.Rpc.Client
         protected abstract Task<InvokeResult> CustomTransmitMessageAsync(IMessage message);
 
         #endregion
+
+        protected HostedServiceDiagnosticSnapshot _snapShot = new HostedServiceDiagnosticSnapshot();
+
+        public HostedServiceDiagnosticSnapshot GetSnapshot()
+        {
+            return _snapShot;
+        }
     }
 }

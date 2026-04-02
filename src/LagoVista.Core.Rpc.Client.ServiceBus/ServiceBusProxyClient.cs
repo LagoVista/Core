@@ -5,6 +5,7 @@
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.Dignostics;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
@@ -38,6 +39,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         private string _topicPath;
         private string _subscriptionPath;
 
+        
         #endregion
 
         private async Task CreateTopicAsync(string entityPath)
@@ -91,7 +93,6 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SourceEntityPath - ResourceName
             // SubscriptionPath - Uri
 
-           
             var endPoint = $"sb://{_subscriberSettings.AccountId}.servicebus.windows.net";
             _topicPath = _subscriberSettings.ResourceName;
             _subscriptionPath = _subscriberSettings.Uri;
@@ -122,12 +123,17 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
      
             _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription"));
 
+            _snapShot.LastError = arg.Exception.Message;
+            _snapShot.LastErrorUtc = DateTime.UtcNow;
+
             //todo: ML - replace sample code from SbListener with appropriate error handling.
             // await StateChanged(Deployment.Admin.Models.PipelineModuleStatus.FatalError);
             //SendNotification(Runtime.Core.Services.Targets.WebSocket, $"Exception Starting Service Bus Listener at : {_listenerConfiguration.HostName}/{_listenerConfiguration.Queue} {ex.Exception.Message}");
             //LogException("AzureServiceBusListener_Listen", ex.Exception);
             return Task.FromResult<object>(null);
         }
+
+        int processCount = 0;
 
         private async Task _processor_ProcessMessageAsync(ProcessMessageEventArgs arg)
         {
@@ -149,11 +155,15 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                     decompressorStream.CopyTo(decompressedStream);
                     if ((await ReceiveAsync(new Response(decompressedStream.ToArray()))).Successful)
                     {
+                        _snapShot.LastActivity = $"Successfully Processed Message. CorrelationId: {arg.Message.CorrelationId} Total Count: {++processCount}";
+                        _snapShot.LastActivityUtc = DateTime.UtcNow;
                         await arg.CompleteMessageAsync(arg.Message);
                         _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[ServiceBusPRoxyClient__SuccessProcessed] cid: {arg.Message.CorrelationId} aid: {_asyncCoupler.InstanceId}, subject: {arg.Message.Subject}", _asyncCoupler.InstanceId.ToKVP("aid"));
                     }
                     else
                     {
+                        _snapShot.LastError = $"Message Not Processed by Coupler. CorrelationId: {arg.Message.CorrelationId}";
+                        _snapShot.LastErrorUtc = DateTime.UtcNow;
                         await arg.AbandonMessageAsync(arg.Message);
                         _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[ServiceBusPRoxyClient__DidNotProcess] cid: {arg.Message.CorrelationId} aid: {_asyncCoupler.InstanceId}, subject: {arg.Message.Subject}", _asyncCoupler.InstanceId.ToKVP("aid"));
                     }
@@ -161,6 +171,10 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
             catch (Exception ex)
             {
+
+                _snapShot.LastError = $"Error processing message. {ex.Message}";
+                _snapShot.LastErrorUtc = DateTime.UtcNow;
+
                 await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
                 _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription")) ;
                 throw;
@@ -218,6 +232,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
         }
 
+    
         #endregion
     }
 }

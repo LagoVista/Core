@@ -72,6 +72,7 @@ namespace LagoVista
             var value = section[key];
             if (string.IsNullOrWhiteSpace(value))
             {
+                Console.WriteLine($"Optional configuration '{path}' is missing or empty. Using fallback value of {fallback}.");
                 ConfigurationDiagnostics.AddOptionalConfiguration(path, keyPresent: value != null, valuePresent: false);
                 return fallback;
             }

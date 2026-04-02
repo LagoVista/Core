@@ -37,7 +37,7 @@ namespace LagoVista.MessageQueue.Rabbit
                 UserName = section.Require("UserName"),
                 Password = section.Require("Password"),
                 RouteKey = section.Require("RouteKey"),
-                VirtualHost = section.Optional("VirtualHost", "/"),
+                VirtualHost = section.Require("VirtualHost"),
                 Port = Convert.ToInt32(section.Optional("Port", "5672")),
                 UseSsl = section.Optional("UseSsl", "false").ToLower() == "true",
                 ExchangeName = section.Require("ExchangeName"),

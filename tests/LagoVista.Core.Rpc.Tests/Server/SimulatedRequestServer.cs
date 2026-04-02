@@ -2,6 +2,7 @@
 // ContentHash: 62a318980b889b05355846ce736bf5f775a0572c3ca0a1cb20d184c94acbffb0
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.Models.Dignostics;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Server;
@@ -23,6 +24,13 @@ namespace LagoVista.Core.Rpc.Tests.Server
             QueueSimulator queue) : base(requestBroker, logger)
         {
             _queue = queue ?? throw new ArgumentNullException(nameof(queue));
+        }
+
+        public override string Name => "SimulatedRequestServer";
+
+        public override HostedServiceDiagnosticSnapshot GetSnapshot()
+        {
+            return new HostedServiceDiagnosticSnapshot();
         }
 
         protected override void ConfigureSettings(ITransceiverConnectionSettings settings)

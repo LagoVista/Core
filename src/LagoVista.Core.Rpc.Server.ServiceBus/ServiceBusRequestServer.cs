@@ -5,6 +5,7 @@
 using Azure;
 using Azure.Messaging.ServiceBus;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.Dignostics;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;
@@ -34,6 +35,8 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
         private ServiceBusClient _processorClient;
         private ServiceBusProcessor _processor;
+
+        public override string Name => "ServiceBusRequestServer";
 
         #endregion
 
@@ -124,11 +127,17 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
 
+            _snapshot.StartedUtc = DateTime.UtcNow;
+            _snapshot.Status = HostedServiceDiagnosticStatus.Running;
+
             Console.WriteLine($"[Starting] ServiceBusRequestServer - {_subscriberSettings.AccountId} - topic: {topic}, subs: {subscrption}");
             await _processor.StartProcessingAsync();
             Console.WriteLine($"[Started] ServiceBusRequestServer - {_subscriberSettings.AccountId} - topic: {topic}, subs: {subscrption}");
             if (_processorClient.IsClosed)
             {
+                _snapshot.Status = HostedServiceDiagnosticStatus.Error;
+                _snapshot.LastError = "Processor Client Not Open";
+                _snapshot.LastErrorUtc = DateTime.UtcNow;
                 throw new InvalidOperationException("Processor Client Not Open");
             }
         }
@@ -224,6 +233,13 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
 
                 await senderClient.DisposeAsync();
             }
+        }
+
+
+        HostedServiceDiagnosticSnapshot _snapshot = new HostedServiceDiagnosticSnapshot();
+        public override HostedServiceDiagnosticSnapshot GetSnapshot()
+        {
+            return _snapshot;
         }
     }
 }

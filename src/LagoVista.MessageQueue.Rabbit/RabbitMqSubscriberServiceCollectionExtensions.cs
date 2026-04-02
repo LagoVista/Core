@@ -1,3 +1,4 @@
+using LagoVista.Core.Interfaces;
 using LagoVista.Core.MessageQueue;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +60,9 @@ namespace LagoVista.MessageQueue.Rabbit
                     serviceProvider.GetRequiredService<IServiceScopeFactory>()));
 
             services.AddSingleton<IHostedService>(serviceProvider =>
+                serviceProvider.GetRequiredService<RabbitMqSubscriberHostedService<TMessage>>());
+
+            services.AddSingleton<IHostedServiceDiagnostics>(serviceProvider =>
                 serviceProvider.GetRequiredService<RabbitMqSubscriberHostedService<TMessage>>());
 
             return services;
