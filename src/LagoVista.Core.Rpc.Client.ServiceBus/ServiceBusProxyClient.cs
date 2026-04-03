@@ -40,13 +40,12 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
 
         
         #endregion
-
         private async Task CreateTopicAsync(string entityPath)
         {
             if (_topicConstructorSettings == null) throw new ArgumentNullException(nameof(_topicConstructorSettings));
             
-            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
-            _logger.Trace($"Request Server Connection String {connstr}");
+            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey.Substring(0,3)}**********;";
+            _logger.Trace($"Request Server Connection String {connstr} - {entityPath}");
 
             var client = new ServiceBusAdministrationClient(connstr);
             if (!await client.TopicExistsAsync(entityPath))
@@ -76,7 +75,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
             var transmitterSettings = settings.RpcClientTransmitter ?? throw new ArgumentNullException(nameof(settings.RpcClientTransmitter));
-            _transmitterConnectionSettings = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
+            _transmitterConnectionSettings = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey.Substring(0,3)}**********;";
             _serverTopicPrefix = transmitterSettings.ResourceName;
         }
 
@@ -96,8 +95,8 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _topicPath = _subscriberSettings.ResourceName;
             _subscriptionPath = _subscriberSettings.Uri;
 
-            _receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
-          
+            _receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey.Substring(0,3)}**********;";
+
             if (_topicConstructorSettings != null)
             {
                 await CreateTopicAsync(_topicPath);
@@ -194,8 +193,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _senderClient = new ServiceBusClient(_transmitterConnectionSettings, clientOptions);
             _sender = _senderClient.CreateSender(entityPath);
 
-            _logger.Trace($"[ServiceBusProxyClient__CustomTransmitMessageAsync] {entityPath}");
-            Console.WriteLine($"[SendingFromClient]: {entityPath}");
+            _logger.Trace($"{this.Tag} - Send to Entity path {entityPath}");
 
             try
             {
@@ -221,7 +219,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
             catch(Exception ex)
             {
-                _logger.AddException("[ServiceBusProxyClient__CustomTransmitMessageAsync]", ex, _transmitterConnectionSettings.ToKVP("txconnstr"), entityPath.ToKVP("entityPath"), message.ReplyPath.ToKVP("replyPath"));
+                _logger.AddException(this.Tag(), ex, _transmitterConnectionSettings.ToKVP("txconnstr"), entityPath.ToKVP("entityPath"), message.ReplyPath.ToKVP("replyPath"));
                 throw;
             }
             finally
