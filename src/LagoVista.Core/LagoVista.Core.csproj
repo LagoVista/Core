@@ -13,6 +13,11 @@
     <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="AutoMapper\Converters\EntityHeaderRelationalConverter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -48,8 +53,5 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Crypto\" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LagoVista.Core.Models.Dignostics
+namespace LagoVista.Core.Models.Diagnostics
 {
     public class HostedServiceDiagnosticDashboard
     {

@@ -32,8 +32,6 @@ namespace LagoVista.Core.Configuration
 
         public void Populate()
         {
-            Console.WriteLine($"Evaluating: {_snapshot.Entries.Count} classes");
-
             foreach (var entry in _snapshot.Entries)
             {
                 var implementationType = entry.ImplementationType;
@@ -62,12 +60,6 @@ namespace LagoVista.Core.Configuration
                 {
                     ConfigurationDiagnostics.CurrentClassName = implementationType.FullName ?? implementationType.Name;
                     _ = _serviceProvider.GetService(entry.ServiceType);
-
-
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Resolved: {ConfigurationDiagnostics.CurrentClassName}");
-                    Console.ResetColor();
-
                 }
                 catch (Exception ex)
                 {

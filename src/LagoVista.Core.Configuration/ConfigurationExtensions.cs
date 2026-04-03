@@ -8,8 +8,6 @@ namespace LagoVista
 {
     public static class ConfigurationExtensions
     {
-
-
         public static TConnection Set<TConnection>(this IConfiguration configuration, string sectionName, Action<IConfigurationSection, TConnection> configure) where TConnection : new()
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -72,7 +70,6 @@ namespace LagoVista
             var value = section[key];
             if (string.IsNullOrWhiteSpace(value))
             {
-                Console.WriteLine($"Optional configuration '{path}' is missing or empty. Using fallback value of {fallback}.");
                 ConfigurationDiagnostics.AddOptionalConfiguration(path, keyPresent: value != null, valuePresent: false);
                 return fallback;
             }

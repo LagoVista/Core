@@ -1,7 +1,5 @@
-﻿using LagoVista.Core.Models.Dignostics;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using LagoVista.Core.Models.Diagnostics;
 
 namespace LagoVista.Core.Interfaces
 {

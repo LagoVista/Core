@@ -5,7 +5,7 @@
 using Azure;
 using Azure.Messaging.ServiceBus;
 using LagoVista.Core.Interfaces;
-using LagoVista.Core.Models.Dignostics;
+using LagoVista.Core.Models.Diagnostics;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Settings;

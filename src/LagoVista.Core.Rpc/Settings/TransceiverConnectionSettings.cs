@@ -64,7 +64,7 @@ namespace LagoVista.Core.Rpc.Settings
 
         public TransceiverConnectionSettings(IConfiguration configuration)
         {
-            var appKey = configuration.Require("AppKey");
+            var appKey = configuration["AppKey"];
 
             var rpcAdminSection = configuration.GetSection("RpcAdmin");
             RpcAdmin = new LagoVista.Core.Models.ConnectionSettings()

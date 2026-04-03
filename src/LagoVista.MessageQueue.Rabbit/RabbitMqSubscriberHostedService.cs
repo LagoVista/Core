@@ -1,7 +1,7 @@
 using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.MessageQueue;
-using LagoVista.Core.Models.Dignostics;
+using LagoVista.Core.Models.Diagnostics;
 using LagoVista.Core.PlatformSupport;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
