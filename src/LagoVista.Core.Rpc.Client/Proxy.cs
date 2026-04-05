@@ -83,12 +83,9 @@ namespace LagoVista.Core.Rpc.Client
                 throw new ArgumentNullException(nameof(request));
             }
 
-            _logger.AddCustomEvent(LogLevel.Message, $"[Proxy__InvokeRemoteMethodAsync]", $"[Proxy__InvokeRemoteMethodAsync] - cid: {request.CorrelationId}, aid: {_asyncCoupler.InstanceId}, Method Path: {request.DestinationPath}", _asyncCoupler.InstanceId.ToKVP("asyncCouplerId"));
+            _logger.AddCustomEvent(LogLevel.Message, this.Tag(), $"InnokeMethod", request.CorrelationId.ToKVP("cid"), request.DestinationPath.ToKVP("method"), _asyncCoupler.InstanceId.ToKVP("instanceId"));
 
-            var invokeResult = await _asyncCoupler.WaitOnAsync(
-                async () => await _client.TransmitAsync(request), 
-                request.CorrelationId, 
-                _requestTimeout);
+            var invokeResult = await _asyncCoupler.WaitOnAsync(async () => await _client.TransmitAsync(request), request.CorrelationId, _requestTimeout);
 
             if (invokeResult == null)
             {

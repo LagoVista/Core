@@ -7,7 +7,7 @@ namespace LagoVista.Core.Interfaces
         NormalizedId32 Id { get; set; }
         string Text { get; set; }
         string Name { get; set; }
-        OrgNamespace Namespace { get; set; }
+        OrgNamespace? Namespace { get; set; }
         EntityHeader LightLogo { get; set; }
         EntityHeader DarkLogo { get; set; }
         LagoVistaIcon Icon { get; set; }
