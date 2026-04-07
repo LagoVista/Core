@@ -91,9 +91,12 @@ namespace LagoVista
             if (value.Length != 32)
                 return false;
 
-            for (var i = 0; i < value.Length; i++)
-            {
-                var c = value[i];
+            var legacy = value.ToLower();
+            // Legacy keys are normalized guids, which are 32 chars of lowercase a-z and 0-9 only, with no dashes, including upper case letters.
+
+            for (var i = 0; i < legacy.Length; i++)
+            { 
+                var c = legacy[i];
                 var isLower = c >= 'a' && c <= 'z';
                 var isDigit = c >= '0' && c <= '9';
 

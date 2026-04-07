@@ -65,7 +65,9 @@ namespace LagoVista.Core.AutoMapper
 
             var converter = GetConverter(converterType);
             if (converter == null)
-                return false;
+            {
+                throw new Exception("Could not find target converter of type "   + converterType.FullName);
+            }
 
             // Optional safety: ensure the converter claims it can do this
             if (!converter.CanConvert(sourceValue.GetType(), targetType))

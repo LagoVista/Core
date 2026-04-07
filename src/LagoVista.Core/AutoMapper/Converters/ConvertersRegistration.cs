@@ -18,7 +18,8 @@ namespace LagoVista.Core.AutoMapper.Converters
             services.AddSingleton<IMapValueConverter, EntityHeaderEnumToStringConverter>();
             services.AddSingleton<IMapValueConverter, StringToEntityHeaderEnumConverter>();
             services.AddSingleton<IMapValueConverter, IdTranslateConverters>();
-            services.AddSingleton<IMapValueConverter, EntityHeaderEnumToStringConverter>();
+            services.AddSingleton<IMapValueConverter, EntityHeaderTextConverter>();
+
             services.AddSingleton<IMapValueConverterRegistry, MapValueConverterRegistry>();
         }
 

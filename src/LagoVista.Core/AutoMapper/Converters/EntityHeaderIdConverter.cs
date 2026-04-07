@@ -99,8 +99,8 @@ namespace LagoVista.Core.AutoMapper.Converters
 
             if (!typeof(EntityHeader).IsAssignableFrom(st))
                 return false;
-
-            return tt == typeof(string);
+          
+            return (tt == typeof(string));
         }
 
         public object Convert(object sourceValue, Type targetType)

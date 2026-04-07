@@ -74,6 +74,7 @@ namespace LagoVista.Core.Models
             Key = entity.Key;
             LastUpdatedDate = entity.LastUpdatedDate;
             Stars = entity.Stars;
+            Icon = entity.Icon;
             IsDraft = entity.IsDraft;
             RatingsCount = entity.RatingsCount;
             var discussableEntity = entity as IDiscussableEntity;

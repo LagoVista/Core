@@ -29,6 +29,18 @@ namespace LagoVista.Core.AutoMapper
             _converters = converters ?? throw new ArgumentNullException(nameof(converters));
         }
 
+        static int GetInheritanceDepth(Type? type)
+        {
+            var depth = 0;
+            while (type != null)
+            {
+                depth++;
+                type = type.BaseType;
+            }
+
+            return depth;
+        }
+
         public InvokeResult<IReadOnlyList<AtomicMapStep>> BuildAtomicSteps(Type sourceType, Type targetType)
         {
             if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
@@ -49,7 +61,13 @@ namespace LagoVista.Core.AutoMapper
                 .Where(p => p.GetIndexParameters().Length == 0)
                 .ToArray();
 
-            var sourceLookup = sourceProps.ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
+            var sourceLookup = sourceProps
+                .GroupBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(p => GetInheritanceDepth(p.DeclaringType)).First(),
+                    StringComparer.OrdinalIgnoreCase);
+
             var targetLookup = targetProps.ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 
             var mappedTargets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
