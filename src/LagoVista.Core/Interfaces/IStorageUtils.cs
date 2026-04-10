@@ -7,6 +7,7 @@ using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
@@ -27,5 +28,6 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult> SetCategoryAsync(string id, EntityHeader category, EntityHeader org, EntityHeader user);
         Task<EntityGraph> GetEntityGraphAsync(string id, EntityHeader org, EntityHeader user, string name = null);
         Task<InvokeResult> SetEntityPublicAsync(string id, EntityHeader org, EntityHeader user);
+        Task<string> GetJsonByIdAsync(string id, CancellationToken ct = default);
     }
 }

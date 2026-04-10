@@ -19,6 +19,10 @@ namespace LagoVista
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
+            var first = value[0];
+            if (first >= '0' && first <= '9')
+                value = $"a{value}";
+           
             if (!IsValid(value))
                 throw new FormatException(
                     $"Invalid LagoVistaKey: '{value}'. " +
