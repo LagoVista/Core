@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
@@ -29,5 +30,6 @@ namespace LagoVista.Core.Interfaces
         Task<EntityGraph> GetEntityGraphAsync(string id, EntityHeader org, EntityHeader user, string name = null);
         Task<InvokeResult> SetEntityPublicAsync(string id, EntityHeader org, EntityHeader user);
         Task<string> GetJsonByIdAsync(string id, CancellationToken ct = default);
+        Task<List<EntityHeader>> GetEntitiesByTypeAsync(string orgId, string entityType);
     }
 }

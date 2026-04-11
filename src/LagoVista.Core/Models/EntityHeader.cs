@@ -1,7 +1,3 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 24d256677c79cef8010f254ac140cb2cc290a822e9e3510b3a5d4e54938e7c4c
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using System;
 using LagoVista.Core.Interfaces;
 using System.Reflection;
@@ -41,21 +37,27 @@ namespace LagoVista.Core.Models
             }
         }
 
+        [AiSchemaIgnore]
         [JsonProperty("_t")]
         public string Indexer
         {
             get; set;
         } = "eh";
 
+        [AiSchemaIgnore]
         public bool? Resolved { get; set; }
 
+        [AiSchemaIgnore]
         public bool IsPublic { get; set; }
 
+        [AiSchemaIgnore]
         public string EntityType{ get;set;}
 
+        [AiSchemaIgnore]
         public string OwnerOrgId { get; set; }
 
         private string _key;
+        [AiSchemaIgnore]
         public String Key
         {
             get => _key;

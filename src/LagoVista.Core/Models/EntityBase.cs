@@ -25,14 +25,17 @@ namespace LagoVista.Core.Models
     public class EntityBase : ModelBase, IEntityBase
     {
         // Persisted Cosmos id field
+        [AiSchemaIgnore]
         [JsonProperty("id")]
         [EditorBrowsable(EditorBrowsableState.Never)] 
         public string StoredId { get; set; }
 
+        [AiSchemaIgnore]
         // You already have this
         public string EntityType { get; set; }
 
         // Canonical identity for the app/domain
+        [AiSchemaIgnore]
         [JsonIgnore] // optional; without it, Json.NET still won't serialize it unless asked, but I like being explicit
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Id, FieldType: FieldTypes.ReadonlyLabel, AiChatPrompt: "Do not show to the user unless they explicity ask to view it.", ResourceType: typeof(LagoVistaCommonStrings))]
@@ -69,26 +72,33 @@ namespace LagoVista.Core.Models
             RevisionTimeStamp = DateTime.UtcNow.ToJSONString();
         }
 
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_IsPublic, ResourceType: typeof(LagoVistaCommonStrings), FieldType:FieldTypes.CheckBox, IsUserEditable: true)]
         public bool IsPublic { get; set; }
-
+        [AiSchemaIgnore]
         public EntityHeader PublicPromotedBy { get; set; }
+        [AiSchemaIgnore]
         public string PublicPromotionDate { get; set; }
 
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         public EntityHeader OwnerOrganization { get; set; }
 
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         public EntityHeader OwnerUser { get; set; }
 
+        [AiSchemaIgnore]
         public string DatabaseName { get; set; }
-     
+
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         [JsonProperty(PropertyName = "_etag")]
         public string ETag { get; set; }
 
         private string _name;
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Name, FieldType: FieldTypes.Text, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true, IsUserEditable: true)]
         public virtual string Name
@@ -97,65 +107,93 @@ namespace LagoVista.Core.Models
             set => Set(ref _name, value);   
         }
 
+        [AiSchemaIgnore]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Icon, FieldType: FieldTypes.Icon, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
         public LagoVistaIcon Icon { get; set; } = "none";
 
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Key, HelpResource: LagoVistaCommonStrings.Names.Common_Key_Help, FieldType: FieldTypes.Key, AiChatPrompt:"When isDraft is not TRUE, the key MUST NEVER be updated.", 
             RegExValidationMessageResource: LagoVistaCommonStrings.Names.Common_Key_Validation, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: true)]
         public virtual LagoVistaKey Key { get; set; }
 
+        [AiSchemaIgnore]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: LagoVistaCommonStrings.Names.Common_Category_Select, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, IsUserEditable: true)]
         public EntityHeader Category { get; set; }
+
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]
         public string Description { get; set; }
 
-        public List<EntityHeader> AISessions { get; set; } = new List<EntityHeader>();   
+        [AiSchemaIgnore]
+        public List<EntityHeader> AISessions { get; set; } = new List<EntityHeader>();
 
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         public List<EntityChangeSet> AuditHistory { get; set; } = new List<EntityChangeSet>();
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public bool? IsDeleted { get; set; } = false;
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public EntityHeader DeletedBy { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public UtcTimestamp? DeletionDate { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public bool IsDeprecated { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public EntityHeader DeprecatedBy { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public UtcTimestamp? DeprecationDate { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public string DeprecationNotes { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public UtcTimestamp CreationDate { get; set; }
 
+        [AiSchemaIgnore]
         [CloneOptions(false)]
         public UtcTimestamp LastUpdatedDate { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public EntityHeader CreatedBy { get; set; }
         [CloneOptions(false)]
+        [AiSchemaIgnore]
         public EntityHeader LastUpdatedBy { get; set; }
 
+        [AiSchemaIgnore]
         public EntityHeader ClonedFromId { get; set; }
+        [AiSchemaIgnore]
         public EntityHeader ClonedFromOrg { get; set; }
+        [AiSchemaIgnore]
         public EntityHeader ClonedRevision { get; set; }
 
+        [AiSchemaIgnore]
         public string Sha256Hex {get; set;}
 
+        [AiSchemaIgnore]
         public bool IsDraft { get; set; } = false;
 
+        [AiSchemaIgnore]
         public int Revision { get; set; }
+        [AiSchemaIgnore]
         public string RevisionTimeStamp { get; set; }
 
+        [AiSchemaIgnore]
         public List<Label> Labels { get; set; } = new List<Label>();
 
 
+        [AiSchemaIgnore]
         public double? Stars { get; set; }
+        [AiSchemaIgnore]
         public int RatingsCount { get; set; }
 
+        [AiSchemaIgnore]
         public List<EntityRating> Ratings { get; set; } = new List<EntityRating>();
 
 
