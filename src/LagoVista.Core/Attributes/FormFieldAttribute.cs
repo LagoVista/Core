@@ -84,7 +84,8 @@ namespace LagoVista.Core.Attributes
         ContactPicker,
         FontAwesomeIconPicker,
         StringList,
-        EntithHeaderPickerDropDown
+        EntithHeaderPickerDropDown,
+        CronBuilder,
     }
 
     public enum NamespaceTypes
