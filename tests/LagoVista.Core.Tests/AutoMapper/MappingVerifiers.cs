@@ -43,7 +43,32 @@ namespace LagoVista.Core.Tests.AutoMapper
             }
         }
 
+        [Test]
+        public async Task Map_To_Inherit_With_NewProperty()
+        {
+            try
+            {
+                MappingVerifier.Verify<SourceInheritsDerived, TargetInheritsBase>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
 
+
+        [Test]
+        public async Task Map_From_Inherit_With_NewProperty()
+        {
+            try
+            {
+                MappingVerifier.Verify<TargetInheritsBase, SourceInheritsDerived>(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Mapping verification threw an exception: {ex.Message.Replace("\n", Environment.NewLine)}");
+            }
+        }
 
         [Test]
         public async Task Map_Map_DbModel_To_DbCoreEntity()

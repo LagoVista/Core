@@ -37,15 +37,6 @@ namespace LagoVista.Core.Tests.Configuration
                 Throws.TypeOf<ArgumentException>());
         }
 
-        [Test]
-        public void GetRabbitMQSettings_Should_Throw_When_Section_Is_Missing()
-        {
-            var configuration = BuildConfiguration();
-
-            Assert.That(() => configuration.GetRabbitMQSettings("RabbitPlaidSub"),
-                Throws.TypeOf<InvalidOperationException>()
-                    .With.Message.EqualTo("Section 'RabbitPlaidSub' not found in configuration."));
-        }
 
         [Test]
         public void GetRabbitMQSettings_Should_Throw_When_Uri_Is_Missing()

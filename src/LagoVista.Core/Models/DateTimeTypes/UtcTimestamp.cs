@@ -4,6 +4,7 @@ using System.Text;
 
 namespace LagoVista.Core
 {
+    using LagoVista.Core.Models;
     using Newtonsoft.Json;
     using System;
     using System.Diagnostics;
@@ -194,10 +195,16 @@ namespace LagoVista.Core
 
             if (reader.TokenType == JsonToken.Null)
             {
+                if(reader.Path.EndsWith(nameof(EntityBase.CreationDate)) ||
+                   reader.Path.EndsWith(nameof(EntityBase.LastUpdatedDate)))
+                {
+                    return UtcTimestamp.FromDateTime(new DateTime(2017,5,17));
+                }
+
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException($"Cannot convert null value to {objectType.Name}.");
+                throw new JsonSerializationException($"Cannot convert null value to {objectType.Name}, path: {reader.Path}.");
             }
 
             if (reader.TokenType == JsonToken.Date)
@@ -218,13 +225,13 @@ namespace LagoVista.Core
                     if (isNullable)
                         return null;
 
-                    throw new JsonSerializationException($"Cannot convert empty string to {objectType.Name}.");
+                    throw new JsonSerializationException($"Cannot convert empty string to {objectType.Name}, path: {reader.Path}..");
                 }
 
                 return UtcTimestamp.Parse(str);
             }
 
-            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing {objectType.Name}.");
+            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing {objectType.Name}, path: {reader.Path}.");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

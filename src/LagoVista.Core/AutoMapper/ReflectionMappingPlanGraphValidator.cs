@@ -63,17 +63,8 @@ namespace LagoVista.Core.AutoMapper
                         errors.Add($"{path}: {err}");
                 }
 
-                var sourceProps = sourceType
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(p => p.CanRead)
-                    .Where(p => p.GetIndexParameters().Length == 0)
-                    .ToArray();
-
-                var targetProps = targetType
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(p => p.CanWrite)
-                    .Where(p => p.GetIndexParameters().Length == 0)
-                    .ToArray();
+                var sourceProps = GetEffectiveProperties(sourceType, requireRead: true, requireWrite: false);
+                var targetProps = GetEffectiveProperties(targetType, requireRead: false, requireWrite: true);
 
                 var sourceLookup = sourceProps.ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 
@@ -280,6 +271,31 @@ namespace LagoVista.Core.AutoMapper
                 yield return pair;
         }
 
+        private static PropertyInfo[] GetEffectiveProperties(Type type, bool requireRead, bool requireWrite)
+        {
+            return type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => (!requireRead || p.CanRead) && (!requireWrite || p.CanWrite))
+                .Where(p => p.GetIndexParameters().Length == 0)
+                .GroupBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g
+                    .OrderByDescending(p => GetInheritanceDepth(p.DeclaringType))
+                    .First())
+                .ToArray();
+        }
+
+        private static int GetInheritanceDepth(Type type)
+        {
+            var depth = 0;
+            while (type != null)
+            {
+                depth++;
+                type = type.BaseType;
+            }
+
+            return depth;
+        }
+
         private IEnumerable<MappingPair> EnumeratePairsImpl(
             Type sourceType,
             Type targetType,
@@ -300,17 +316,8 @@ namespace LagoVista.Core.AutoMapper
                 // - for each mapped property, call TryGetChildEdgeTypes(...)
                 // - if it returns a child kind + child types, recurse
 
-                var sourceProps = sourceType
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(p => p.CanRead)
-                    .Where(p => p.GetIndexParameters().Length == 0)
-                    .ToArray();
-
-                var targetProps = targetType
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(p => p.CanWrite)
-                    .Where(p => p.GetIndexParameters().Length == 0)
-                    .ToArray();
+                var sourceProps = GetEffectiveProperties(sourceType, requireRead: true, requireWrite: false);
+                var targetProps = GetEffectiveProperties(targetType, requireRead: false, requireWrite: true);
 
                 var sourceLookup = sourceProps.ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 

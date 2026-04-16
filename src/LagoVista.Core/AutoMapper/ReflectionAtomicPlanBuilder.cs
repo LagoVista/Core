@@ -48,18 +48,9 @@ namespace LagoVista.Core.AutoMapper
 
             var errors = new List<string>();
             var steps = new List<AtomicMapStep>();
+            var sourceProps = GetEffectiveProperties(sourceType, requireRead: true, requireWrite: false);
+            var targetProps = GetEffectiveProperties(targetType, requireRead: false, requireWrite: true);
 
-            var sourceProps = sourceType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead)
-                .Where(p => p.GetIndexParameters().Length == 0)
-                .ToArray();
-
-            var targetProps = targetType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanWrite)
-                .Where(p => p.GetIndexParameters().Length == 0)
-                .ToArray();
 
             var sourceLookup = sourceProps
                 .GroupBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
@@ -370,6 +361,20 @@ namespace LagoVista.Core.AutoMapper
             errors.Add($"No converter registered for {sourceType.Name}.{sprop.Name} ({st.Name}) -> {targetType.Name}.{tprop.Name} ({tt.Name}).");
             return false;
         }
+
+        private static PropertyInfo[] GetEffectiveProperties(Type type, bool requireRead, bool requireWrite)
+        {
+            return type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => (!requireRead || p.CanRead) && (!requireWrite || p.CanWrite))
+                .Where(p => p.GetIndexParameters().Length == 0)
+                .GroupBy(p => p.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(g => g
+                    .OrderByDescending(p => GetInheritanceDepth(p.DeclaringType))
+                    .First())
+                .ToArray();
+        }
+
 
         private static bool IsChildEdge(Type sourcePropType, Type targetPropType)
         {

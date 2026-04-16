@@ -23,6 +23,7 @@ namespace LagoVista
             if (first >= '0' && first <= '9')
                 value = $"a{value}";
            
+
             if (!IsValid(value))
                 throw new FormatException(
                     $"Invalid LagoVistaKey: '{value}'. " +
@@ -70,7 +71,7 @@ namespace LagoVista
         private static bool IsStrictBusinessKey(string value)
         {
             var length = value.Length;
-            if (length < 3 || length > 64)
+            if (length < 2 || length > 64)
                 return false;
 
             var first = value[0];

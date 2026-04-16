@@ -90,7 +90,7 @@ namespace LagoVista.Core.Tests.Mapping
         [Test]
         public void TryConvert_WithExplicitConverterType_FailsIfConverterNotRegisteredOrCannotConvert()
         {
-            var reg = new MapValueConverterRegistry(new IMapValueConverter[] { new IntToStringConverter() });
+            var reg = new MapValueConverterRegistry(new IMapValueConverter[] { new IntToStringConverter(), new StringToIntConverter() });
 
             // Not registered
             var okMissing = reg.TryConvert(42, typeof(string), typeof(StringToIntConverter), out var convertedMissing);

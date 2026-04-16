@@ -14,6 +14,6 @@ namespace LagoVista.Core.Interfaces
 
         EntityHeader LockedBy { get; set; }
 
-        UtcTimestamp LockedDateStamp { get; set; }
+        UtcTimestamp? LockedDateStamp { get; set; }
     }
 }
