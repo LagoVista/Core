@@ -122,6 +122,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         public string SourceSystem { get; set; }
         public string SourceObjectId { get; set; }
+
+        public string VirtualTeamMemberId { get; set; }
+        public string EssentialJobActivityId { get; set; }
+        public string ArtifactTypeId { get; set; }
+        public string ArtifactId { get; set; }
     }
 
     public sealed class RagVectorPayloadExtra
@@ -281,12 +286,6 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 result.AddWarning("IndexedUtc was default; set to current UTC time.");
             }
 
-            if (Meta.IndexedUtc == default)
-            {
-                Meta.IndexedUtc = DateTime.UtcNow;
-                result.AddWarning("IndexedUtc was default; set to current UTC time.");
-            }
-
             // Always keep IndexedUnix in sync
             Meta.IndexedUnix = new DateTimeOffset(Meta.IndexedUtc).ToUnixTimeSeconds();
 
@@ -368,6 +367,12 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 // Domain classification
                 Add(nameof(RagVectorPayloadMeta.BusinessDomainKey), Meta.BusinessDomainKey);
                 Add(nameof(RagVectorPayloadMeta.BusinessDomainArea), Meta.BusinessDomainArea);
+
+                //
+                Add(nameof(RagVectorPayloadMeta.VirtualTeamMemberId), Meta.VirtualTeamMemberId);
+                Add(nameof(RagVectorPayloadMeta.EssentialJobActivityId), Meta.EssentialJobActivityId);
+                Add(nameof(RagVectorPayloadMeta.ArtifactTypeId), Meta.ArtifactTypeId);
+                Add(nameof(RagVectorPayloadMeta.ArtifactId), Meta.ArtifactId);
 
                 // System classification
                 Add(nameof(RagVectorPayloadMeta.SysDomain), Meta.SysDomain);
@@ -712,6 +717,13 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.BusinessDomainKey = GetString(M, nameof(RagVectorPayloadMeta.BusinessDomainKey));
             payload.Meta.BusinessDomainArea = GetString(M, nameof(RagVectorPayloadMeta.BusinessDomainArea));
 
+
+            payload.Meta.VirtualTeamMemberId = GetString(M, nameof(RagVectorPayloadMeta.VirtualTeamMemberId));
+            payload.Meta.EssentialJobActivityId = GetString(M, nameof(RagVectorPayloadMeta.EssentialJobActivityId));
+            payload.Meta.ArtifactTypeId = GetString(M, nameof(RagVectorPayloadMeta.ArtifactTypeId));
+            payload.Meta.ArtifactId = GetString(M, nameof(RagVectorPayloadMeta.ArtifactId));
+
+
             payload.Meta.SysDomain = GetString(M, nameof(RagVectorPayloadMeta.SysDomain));
             payload.Meta.SysLayer = GetString(M, nameof(RagVectorPayloadMeta.SysLayer));
             payload.Meta.SysRole = GetString(M, nameof(RagVectorPayloadMeta.SysRole));
@@ -828,6 +840,10 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.UpdatedUnix)), QdrantPayloadIndexKind.Integer),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.HasIssues)), QdrantPayloadIndexKind.Boolean),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.Deleted)), QdrantPayloadIndexKind.Boolean),
+
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.VirtualTeamMemberId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.EssentialJobActivityId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ArtifactTypeId)), QdrantPayloadIndexKind.Keyword),
             };
     
         public static RagVectorPayload FromEntity(IEntityBase entity)
