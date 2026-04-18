@@ -184,9 +184,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
     /// </summary>
     public sealed class RagVectorPayload
     {
-        public const string BucketMeta = "meta";
-        public const string BucketExtra = "extra";
-        public const string BucketLenses = "lenses";
+        public const string BucketMeta = "Meta";
+        public const string BucketExtra = "Extra";
+        public const string BucketLenses = "Lenses";
 
         public RagVectorPayloadMeta Meta { get; set; } = new RagVectorPayloadMeta();
         public RagVectorPayloadExtra Extra { get; set; } = new RagVectorPayloadExtra();
@@ -802,6 +802,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             // Tenant / isolation
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.OrgNamespace)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ProjectId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.OrgId)), QdrantPayloadIndexKind.Keyword),
 
             // Document identity / chunk addressing
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.DocId)), QdrantPayloadIndexKind.Keyword),
@@ -826,6 +827,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.IndexedUnix)), QdrantPayloadIndexKind.Integer),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.UpdatedUnix)), QdrantPayloadIndexKind.Integer),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.HasIssues)), QdrantPayloadIndexKind.Boolean),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.Deleted)), QdrantPayloadIndexKind.Boolean),
             };
     
         public static RagVectorPayload FromEntity(IEntityBase entity)

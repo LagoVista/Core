@@ -22,7 +22,8 @@ namespace LagoVista
             var first = value[0];
             if (first >= '0' && first <= '9')
                 value = $"a{value}";
-           
+
+            value = value.ToLower();
 
             if (!IsValid(value))
                 throw new FormatException(

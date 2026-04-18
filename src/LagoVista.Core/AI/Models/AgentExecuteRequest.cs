@@ -39,6 +39,8 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         public string AgentPersonaId { get; set; }
 
+        public string VirtualTeamMemberId { get; set; }
+
         /// <summary>
         /// Identifies the session ("room") in which execution occurs.
         /// Required for all requests.

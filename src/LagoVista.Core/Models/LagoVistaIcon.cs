@@ -22,7 +22,7 @@ namespace LagoVista
         public LagoVistaIcon(string value)
         {
             if (value == null)
-                throw new ArgumentNullException(nameof(value));
+                value = "icon-fo-gears-2";
 
             if (string.IsNullOrWhiteSpace(value))
                 throw new FormatException("LagoVistaIcon cannot be empty or whitespace.");
@@ -82,7 +82,7 @@ namespace LagoVista
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value == null)
-                throw new NotSupportedException("Cannot convert null to LagoVistaIcon.");
+                value = "icon-fo-gears-2";
 
             if (value is string str)
                 return new LagoVistaIcon(str);
@@ -116,7 +116,7 @@ namespace LagoVista
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException("Cannot convert null value to LagoVistaIcon.");
+                return new LagoVistaIcon("icon-fo-gears-2");
             }
 
             if (reader.TokenType != JsonToken.String)
@@ -129,7 +129,7 @@ namespace LagoVista
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException("Cannot convert empty value to LagoVistaIcon.");
+                return new LagoVistaIcon("icon-fo-gears-2");
             }
 
             return new LagoVistaIcon(value);
