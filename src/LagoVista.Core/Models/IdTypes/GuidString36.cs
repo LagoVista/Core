@@ -357,7 +357,7 @@ namespace LagoVista
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException("Cannot convert null value to GuidString36.");
+                throw new JsonSerializationException($"Cannot convert null value to GuidString36 - Path: '{reader.Path}'.");
             }
 
             if (reader.TokenType == JsonToken.String)
@@ -369,7 +369,7 @@ namespace LagoVista
                     if (isNullable)
                         return null;
 
-                    throw new JsonSerializationException("Cannot convert empty value to GuidString36.");
+                    throw new JsonSerializationException("Cannot convert empty value to GuidString36 - Path: '{reader.Path}'.");
                 }
 
                 return new GuidString36(value);
@@ -380,12 +380,12 @@ namespace LagoVista
                 var value = reader.Value?.ToString();
 
                 if (String.IsNullOrWhiteSpace(value))
-                    throw new JsonSerializationException("Cannot convert empty value to GuidString36.");
+                    throw new JsonSerializationException($"Cannot convert empty value to GuidString36 - Path: '{reader.Path}'.");
 
                 return new GuidString36(value);
             }
 
-            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing GuidString36. Expected String or Guid.");
+            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing GuidString36. Expected String or Guid - Path: '{reader.Path}'.");
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
