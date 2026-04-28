@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,7 @@ namespace LagoVista.Core
             AutoMapper.Startup.ConfigureServices(services);
             services.AddScoped<ICoreAppServices, CoreAppServices>();
             services.AddSingleton<IClock, LagoVistaClock>();
+            services.AddSingleton<IEntityTypeResolver>(MetaDataHelper.Instance);
         }
     }
 }

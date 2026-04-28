@@ -12,7 +12,13 @@ using System.Reflection;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
-    public class MetaDataHelper
+    public interface IEntityTypeResolver
+    {
+        Type GetEntityType(string entityType);
+        bool TryGetEntityType(string entityType, out Type modelType);
+    }
+
+    public class MetaDataHelper : IEntityTypeResolver
     {
         static MetaDataHelper _instance = new MetaDataHelper();
         public static MetaDataHelper Instance { get { return _instance; } }
@@ -22,6 +28,7 @@ namespace LagoVista.Core.Models.UIMetaData
 
         private List<EntityDescription> _entities = new List<EntityDescription>();
         private List<EntitySummary> _entitySummaries = new List<EntitySummary>();
+        private readonly Dictionary<string, Type> _entityTypesByName = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
         public void RegisterAssembly(Assembly assembly)
         {
@@ -57,19 +64,56 @@ namespace LagoVista.Core.Models.UIMetaData
                 var attr = type.GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
                 if (attr != null)
                 {
-                    var entityDescription = EntityDescription.Create(type.AsType(), attr);
+                    var modelType = type.AsType();
+
+                    if (_entityTypesByName.TryGetValue(type.Name, out var existingType))
+                    {
+                        throw new InvalidOperationException(
+                            $"Duplicate entity type [{type.Name}] found. Existing type: [{existingType.FullName}], duplicate type: [{modelType.FullName}]. EntityType values must be globally unique.");
+                    }
+
+                    _entityTypesByName.Add(type.Name, modelType);
+
+                    var entityDescription = EntityDescription.Create(modelType, attr);
                     if (!_domains.ContainsKey(entityDescription.DomainName))
                         throw new NullReferenceException($"Could not find {entityDescription.DomainName} domain from {type.FullName}");
 
                     entityDescription.Domain = _domains[entityDescription.DomainName];
-                  
+
                     _entities.Add(entityDescription);
+
                     var summary = EntitySummary.CreateFromAttribute(type, attr);
                     summary.ShortClassName = type.Name;
                     _entitySummaries.Add(summary);
                 }
             }
             _assemblies.Add(assembly);
+        }
+
+        public Type GetEntityType(string entityType)
+        {
+            if (String.IsNullOrWhiteSpace(entityType))
+                throw new ArgumentNullException(nameof(entityType));
+
+            if (!_entityTypesByName.TryGetValue(entityType, out var modelType))
+                throw new KeyNotFoundException($"Could not find entity type [{entityType}].");
+
+            return modelType;
+        }
+
+        public bool TryGetEntityType(string entityType, out Type modelType)
+        {
+            modelType = null;
+
+            if (String.IsNullOrWhiteSpace(entityType))
+                return false;
+
+            return _entityTypesByName.TryGetValue(entityType, out modelType);
+        }
+
+        public IReadOnlyList<string> EntityTypeNames
+        {
+            get { return _entityTypesByName.Keys.OrderBy(key => key).ToList(); }
         }
 
         public List<DomainDescription> Domains { get { return _domains.Values.ToList(); } }

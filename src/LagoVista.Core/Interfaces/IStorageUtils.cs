@@ -5,6 +5,7 @@
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Validation;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,5 +32,6 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult> SetEntityPublicAsync(string id, EntityHeader org, EntityHeader user);
         Task<string> GetJsonByIdAsync(string id, CancellationToken ct = default);
         Task<List<EntityHeader>> GetEntitiesByTypeAsync(string orgId, string entityType);
+        Task<JObject> GetJobjectByIdAsync(string id, CancellationToken ct = default);
     }
 }
