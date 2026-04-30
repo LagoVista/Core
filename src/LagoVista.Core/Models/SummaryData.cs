@@ -7,6 +7,7 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Resources;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LagoVista.Core.Models
@@ -47,6 +48,8 @@ namespace LagoVista.Core.Models
         public double? Stars { get; set; }
         public int RatingsCount { get; set; }
 
+        public List<string> Labels { get; set; }
+
         public string LastUpdatedDate { get; set; }
 
         public EnumDescription CreateEnumDescription()
@@ -72,6 +75,7 @@ namespace LagoVista.Core.Models
             IsDeleted = entity.IsDeleted;
             Name = entity.Name;
             Key = entity.Key;
+            Labels = entity.Labels?.Select(lbl => lbl.Tag).ToList();
             LastUpdatedDate = entity.LastUpdatedDate;
             Stars = entity.Stars;
             Icon = entity.Icon;

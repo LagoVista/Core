@@ -15,5 +15,6 @@ namespace LagoVista.Core.Interfaces
         Task<InvokeResult<LabelSet>> AddLabelAsync(Label label, EntityHeader org, EntityHeader user);
         Task<InvokeResult<LabelSet>> UpdateLabelAsync(Label label, EntityHeader org, EntityHeader user);
         Task<ListResponse<LabeledEntity>> GetLabeledEntitiesAsync(string labelId, ListRequest listRequest, EntityHeader org, EntityHeader user);
+        Task<ListResponse<LabeledEntity>> GetLabeledEntitiesAsync(string labelId, string entityType, ListRequest listRequest, EntityHeader org, EntityHeader user);
     }
 }
