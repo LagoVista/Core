@@ -125,7 +125,7 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("chapters")]
         public List<EntityHeader> Chapters { get; set; } = new List<EntityHeader>();
 
-        public AgentChapterChangeContext ChangeContext { get; set; }
+        public AgentAuthoringTurnResult Authoring { get; set; }
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

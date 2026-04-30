@@ -117,8 +117,6 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         public string Language { get; set; }
 
-        public AgentChapterAuthoringRequest Authoring { get; set; }
-
         /// <summary>
         /// Tool execution results submitted by the client for continuation.
         /// Required (non-empty) on Tool Continuation Submissions.
@@ -131,6 +129,8 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         [JsonIgnore]
         public bool IsToolContinuation => ToolResults != null && ToolResults.Count > 0;
+
+        public AgentAuthoringTurnContext Authoring { get; set; }
 
         /// <summary>
         /// Minimal, opinionated validation per AGN-034.

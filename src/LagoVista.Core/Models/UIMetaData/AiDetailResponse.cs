@@ -202,7 +202,7 @@ namespace LagoVista.Core.Models.AIMetaData
 
             if (field.Options != null && field.Options.Count > 0)
             {
-                desc.AiChatPrompt += "When assinging property on entity, MUST use format {\"id\":<id>,\"key\":<key>,\"text\":<text>}.";
+                desc.AiChatPrompt += "When assigning this property on the entity, MUST use format {\"id\":<id>,\"key\":<key>,\"text\":<text>}."; ;
                 desc.Options = field.Options.Select(opt => new AiOption
                 {
                     Id = opt.Id,
