@@ -32,11 +32,17 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.AISessions)}",
                 $"/{nameof(IEntityBase.Sha256Hex)}",
                 $"/{nameof(IEntityBase.PublicPromotedBy)}",
+                $"/{nameof(IEntityBase.DeletedBy)}",
+                $"/{nameof(IEntityBase.DeletionDate)}",
+                $"/{nameof(IEntityBase.DeprecatedBy)}",
+                $"/{nameof(IEntityBase.DeprecationDate)}",
+                $"/{nameof(IEntityBase.DeprecationNotes)}",
                 $"/{nameof(IEntityBase.PublicPromotionDate)}",
                 $"/_etag",
                 $"/_rid",
                 $"/_self",
                 $"/_ts",
+                $"/_attachments",
             };
 
         public static string CalculateHash(JToken token)
@@ -46,69 +52,6 @@ namespace LagoVista
             return Sha256Hex(json);
         }
 
-        public static JToken NormalizeForHash(JToken token, bool dropNullsAndDefaults)
-        {
-            if (token == null) return JValue.CreateNull();
-
-            // Work on a clone (no side effects)
-            var working = token.DeepClone();
-
-            // 1) remove volatile nodes
-            foreach (var p in ExcludedNodes.Where(x => !string.IsNullOrWhiteSpace(x)))
-                RemoveAtPointer(working, p);
-
-            // 2) optionally drop nulls/defaults from raw JSON so it matches object serialization
-            if (dropNullsAndDefaults)
-                working = StripNullAndDefaultValues(working);
-
-            // 3) sort object properties
-            return Canonicalize(working);
-        }
-
-
-        private static JToken StripNullAndDefaultValues(JToken token)
-        {
-            if (token is JObject obj)
-            {
-                var props = obj.Properties().ToList();
-                foreach (var p in props)
-                {
-                    var normalized = StripNullAndDefaultValues(p.Value);
-
-                    // drop nulls
-                    if (normalized.Type == JTokenType.Null)
-                    {
-                        p.Remove();
-                        continue;
-                    }
-
-                    // drop "default" primitives (optional; only if you truly want to mimic DefaultValueHandling.Ignore)
-                    if (normalized is JValue v)
-                    {
-                        if (v.Type == JTokenType.Boolean && v.Value is bool b && b == false)
-                        {
-                            // remove false booleans IF you consider them "default"
-                            // Comment this out if false is meaningful in your domain
-                            // p.Remove();
-                        }
-                    }
-
-                    p.Value = normalized;
-                }
-
-                return obj;
-            }
-
-            if (token is JArray arr)
-            {
-                for (int i = 0; i < arr.Count; i++)
-                    arr[i] = StripNullAndDefaultValues(arr[i]);
-
-                return arr;
-            }
-
-            return token;
-        }
 
 
         public static void SetHash(this IEntityBase value)
@@ -129,7 +72,7 @@ namespace LagoVista
                 // Stable, minimal representation
                 Formatting = Formatting.None,
                 NullValueHandling = NullValueHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Include,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
 
@@ -147,6 +90,60 @@ namespace LagoVista
             }
         }
 
+        public static JToken NormalizeForHash(JToken token, bool dropNulls)
+        {
+            if (token == null) return JValue.CreateNull();
+
+            var working = token.DeepClone();
+
+            foreach (var p in ExcludedNodes.Where(x => !string.IsNullOrWhiteSpace(x)))
+            {
+                RemoveAtPointer(working, p);
+            }
+
+            if (dropNulls)
+            {
+                working = StripNullValues(working);
+            }
+
+            return Canonicalize(working);
+        }
+
+        private static JToken StripNullValues(JToken token)
+        {
+            if (token is JObject obj)
+            {
+                var props = obj.Properties().ToList();
+
+                foreach (var p in props)
+                {
+                    var normalized = StripNullValues(p.Value);
+
+                    if (normalized.Type == JTokenType.Null)
+                    {
+                        p.Remove();
+                        continue;
+                    }
+
+                    p.Value = normalized;
+                }
+
+                return obj;
+            }
+
+            if (token is JArray arr)
+            {
+                for (var i = 0; i < arr.Count; i++)
+                {
+                    arr[i] = StripNullValues(arr[i]);
+                }
+
+                return arr;
+            }
+
+            return token;
+        }
+
 
         /// <summary>
         /// Canonicalizes a JToken by sorting all JObject properties (recursively).
@@ -158,12 +155,32 @@ namespace LagoVista
 
             if (token is JObject obj)
             {
-                var props = obj.Properties()
-                    .OrderBy(p => p.Name, StringComparer.Ordinal)
-                    .Select(p => new JProperty(p.Name, Canonicalize(p.Value)));
+                var normalizedProps = obj.Properties()
+                    .Select(p => new
+                    {
+                        OriginalName = p.Name,
+                        NormalizedName = ToCamelCase(p.Name),
+                        Value = Canonicalize(p.Value)
+                    })
+                    .ToList();
+
+                var duplicate = normalizedProps
+                    .GroupBy(p => p.NormalizedName, StringComparer.Ordinal)
+                    .FirstOrDefault(g => g.Count() > 1);
+
+                if (duplicate != null)
+                {
+                    var names = string.Join(", ", duplicate.Select(p => p.OriginalName));
+                    throw new InvalidOperationException($"JSON contains duplicate property names after camel-case normalization: {names}");
+                }
 
                 var sorted = new JObject();
-                foreach (var p in props) sorted.Add(p);
+
+                foreach (var p in normalizedProps.OrderBy(p => p.NormalizedName, StringComparer.Ordinal))
+                {
+                    sorted.Add(new JProperty(p.NormalizedName, p.Value));
+                }
+
                 return sorted;
             }
 
@@ -171,12 +188,30 @@ namespace LagoVista
             {
                 var newArr = new JArray();
                 foreach (var item in arr)
+                {
                     newArr.Add(Canonicalize(item));
+                }
+
                 return newArr;
             }
 
-            // JValue, etc.
             return token.DeepClone();
+        }
+
+        private static string ToCamelCase(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return name;
+
+            // Preserve Cosmos/system/meta fields like _etag, _rid, _self, _ts, _attachments, _t
+            if (name[0] == '_') return name;
+
+            // Already camelCase
+            if (char.IsLower(name[0])) return name;
+
+            // Simple PascalCase -> camelCase
+            if (name.Length == 1) return name.ToLowerInvariant();
+
+            return char.ToLowerInvariant(name[0]) + name.Substring(1);
         }
 
         /// <summary>

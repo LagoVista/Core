@@ -1,0 +1,182 @@
+{
+  "Purpose": "Guide strategy for engaging and growing a specific account",
+  "Product": null,
+  "CanonicalEntity": null,
+  "Status": {
+    "HasValue": true,
+    "Value": 0,
+    "Id": "draft",
+    "Text": "Draft",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": null,
+    "OwnerOrgId": null,
+    "Key": "draft"
+  },
+  "SampleArtifactDocument": null,
+  "GoodArtifactCriteria": null,
+  "BadArtifactCriteria": null,
+  "Instructions": "Identify stakeholders, goals, and risks\nDefine engagement and expansion strategy\nUpdate continuously",
+  "AcceptanceCriteria": null,
+  "Constraints": null,
+  "OutputTemplate": null,
+  "OutputType": {
+    "HasValue": true,
+    "Value": 0,
+    "Id": "structureddata",
+    "Text": "Structured Data",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": null,
+    "OwnerOrgId": null,
+    "Key": "structureddata"
+  },
+  "OutputEntityTypeName": null,
+  "HumanReadableFormat": {
+    "HasValue": true,
+    "Value": 0,
+    "Id": "html",
+    "Text": "HTML",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": null,
+    "OwnerOrgId": null,
+    "Key": "html"
+  },
+  "RequiresHumanReview": false,
+  "Tla": "ACP",
+  "EntityMapping": null,
+  "AutoApproveConfidenceThreshold": null,
+  "id": "A8032C06172A48E5BA01B5F49089B7CD",
+  "EntityType": "ArtifactSpecification",
+  "IsPublic": false,
+  "PublicPromotedBy": null,
+  "PublicPromotionDate": null,
+  "OwnerOrganization": {
+    "Id": "9E0CEDDB947541EC8890DA69B29899B6",
+    "Text": "Safety Alerting (Corp)",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": null,
+    "OwnerOrgId": null,
+    "Key": null
+  },
+  "OwnerUser": null,
+  "DatabaseName": "nuviot",
+  "_etag": "\"e80505f1-0000-0500-0000-69f51f300000\"",
+  "Name": "ACP - Account Profile",
+  "Icon": "icon-fo-ml-workbench",
+  "Key": "accountplan",
+  "Category": {
+    "Id": "sales",
+    "Text": "Sales",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": null,
+    "OwnerOrgId": null,
+    "Key": "sales"
+  },
+  "Description": "A strategic plan for managing and growing a specific customer or prospect account.",
+  "AISessions": [],
+  "AuditHistory": [
+    {
+      "ChangedBy": {
+        "Id": "542491B9060D4ABEA75351F5EB3462AC",
+        "Text": "Jennifer Hassenstab",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "a542491b9060d4abea75351f5eb3462ac"
+      },
+      "ChangeDate": "2026-04-22T12:38:02.621Z",
+      "Changes": [
+        {
+          "Field": "Name",
+          "OldValue": "Account Plan",
+          "NewValue": "ACP - Account Plan",
+          "Notes": null
+        }
+      ]
+    },
+    {
+      "ChangedBy": {
+        "Id": "542491B9060D4ABEA75351F5EB3462AC",
+        "Text": "Jennifer Hassenstab",
+        "_t": "eh",
+        "Resolved": null,
+        "IsPublic": false,
+        "EntityType": "AppUser",
+        "OwnerOrgId": null,
+        "Key": "a542491b9060d4abea75351f5eb3462ac"
+      },
+      "ChangeDate": "2026-04-22T16:27:26.867Z",
+      "Changes": [
+        {
+          "Field": "Name",
+          "OldValue": "ACP - Account Plan",
+          "NewValue": "ACP - Account Profile",
+          "Notes": null
+        }
+      ]
+    }
+  ],
+  "IsDeleted": false,
+  "DeletedBy": null,
+  "DeletionDate": null,
+  "IsDeprecated": false,
+  "DeprecatedBy": null,
+  "DeprecationDate": null,
+  "DeprecationNotes": null,
+  "CreationDate": "2026-04-20T12:14:00.424Z",
+  "LastUpdatedDate": "2026-05-01T21:46:24.859Z",
+  "CreatedBy": {
+    "Id": "542491B9060D4ABEA75351F5EB3462AC",
+    "Text": "Jennifer Hassenstab",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": "AppUser",
+    "OwnerOrgId": null,
+    "Key": "a542491b9060d4abea75351f5eb3462ac"
+  },
+  "LastUpdatedBy": {
+    "Id": "CC648B3B51164A8296EB7092F312D5CB",
+    "Text": "Kevin Wolf",
+    "_t": "eh",
+    "Resolved": null,
+    "IsPublic": false,
+    "EntityType": "AppUser",
+    "OwnerOrgId": null,
+    "Key": "cc648b3b51164a8296eb7092f312d5cb"
+  },
+  "ClonedFromId": null,
+  "ClonedFromOrg": null,
+  "ClonedRevision": null,
+  "Sha256Hex": "e20e53a46c3b4355fc61979721642c270555f925cb903ac89aa9af163189c3cb",
+  "IsDraft": false,
+  "Revision": 5,
+  "RevisionTimeStamp": "2026-05-01T18:33:41.49Z",
+  "Labels": [
+    {
+      "Id": "7DF7BA79530F457C9435C1157CBACDC",
+      "Text": "Sales",
+      "Description": "sales",
+      "ForegroundColor": "#ffffff",
+      "BackgroundColor": "#69d115"
+    }
+  ],
+  "Stars": null,
+  "RatingsCount": 0,
+  "Ratings": [],
+  "_rid": "0hUQANwtAwDU1AAAAAAAAA==",
+  "_self": "dbs/0hUQAA==/colls/0hUQANwtAwA=/docs/0hUQANwtAwDU1AAAAAAAAA==/",
+  "_attachments": "attachments/",
+  "_ts": 1777671984
+}

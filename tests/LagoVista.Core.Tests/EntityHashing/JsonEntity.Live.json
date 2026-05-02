@@ -1,0 +1,178 @@
+{
+  "purpose": "Maintain all known accounts and update status.",
+  "product": null,
+  "canonicalEntity": null,
+  "status": {
+    "hasValue": true,
+    "value": 0,
+    "id": "draft",
+    "text": "Draft",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "draft"
+  },
+  "sampleArtifactDocument": null,
+  "goodArtifactCriteria": null,
+  "badArtifactCriteria": null,
+  "instructions": "Aggregate accounts from all sources\nDeduplicate and normalize data\nKeep updated",
+  "acceptanceCriteria": null,
+  "constraints": null,
+  "outputTemplate": null,
+  "outputType": {
+    "hasValue": true,
+    "value": 0,
+    "id": "structureddata",
+    "text": "Structured Data",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "structureddata"
+  },
+  "outputEntityTypeName": null,
+  "humanReadableFormat": {
+    "hasValue": true,
+    "value": 0,
+    "id": "html",
+    "text": "HTML",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "html"
+  },
+  "requiresHumanReview": false,
+  "tla": "ACL",
+  "entityMapping": null,
+  "autoApproveConfidenceThreshold": null,
+  "id": "37214A90BF7F4F1B920A566603C06D79",
+  "entityType": "ArtifactSpecification",
+  "isPublic": false,
+  "publicPromotedBy": null,
+  "publicPromotionDate": null,
+  "ownerOrganization": {
+    "id": "AA2C78499D0140A5A9CE4B7581EF9691",
+    "text": "Software Logistics",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": null
+  },
+  "ownerUser": null,
+  "databaseName": "nuviot",
+  "_etag": "\"e405e4fb-0000-0500-0000-69f4f0470000\"",
+  "name": "ACL - Target Account List",
+  "icon": "icon-fo-ml-workbench",
+  "key": "accountlist",
+  "category": {
+    "id": "sales",
+    "text": "Sales",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "sales"
+  },
+  "description": "The complete list of accounts within the system\n\nFrom Clean Up: Target accounts (companies)\nPriority score / tier (A, B, C)\nSegment (linked to ICP)\nAssigned owner (sales rep)\nStatus (targeted, engaged, active, dormant)\nKey notes / signals",
+  "aiSessions": [],
+  "auditHistory": [
+    {
+      "changedBy": {
+        "id": "542491B9060D4ABEA75351F5EB3462AC",
+        "text": "Jennifer Hassenstab",
+        "_t": "eh",
+        "resolved": null,
+        "isPublic": false,
+        "entityType": "AppUser",
+        "ownerOrgId": null,
+        "key": "a542491b9060d4abea75351f5eb3462ac"
+      },
+      "changeDate": "2026-04-22T12:37:50.217Z",
+      "changes": [
+        {
+          "field": "Name",
+          "oldValue": "Account List",
+          "newValue": "ACL - Account List",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "changedBy": {
+        "id": "542491B9060D4ABEA75351F5EB3462AC",
+        "text": "Jennifer Hassenstab",
+        "_t": "eh",
+        "resolved": null,
+        "isPublic": false,
+        "entityType": "AppUser",
+        "ownerOrgId": null,
+        "key": "a542491b9060d4abea75351f5eb3462ac"
+      },
+      "changeDate": "2026-04-22T14:57:42.535Z",
+      "changes": [
+        {
+          "field": "Name",
+          "oldValue": "ACL - Account List",
+          "newValue": "ACL - Target Account List",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "isDeleted": false,
+  "deletedBy": null,
+  "deletionDate": null,
+  "isDeprecated": false,
+  "deprecatedBy": null,
+  "deprecationDate": null,
+  "deprecationNotes": null,
+  "creationDate": "2026-04-20T12:20:22.609Z",
+  "lastUpdatedDate": "2026-05-01T18:26:14.103Z",
+  "createdBy": {
+    "id": "542491B9060D4ABEA75351F5EB3462AC",
+    "text": "Jennifer Hassenstab",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": "AppUser",
+    "ownerOrgId": null,
+    "key": "a542491b9060d4abea75351f5eb3462ac"
+  },
+  "lastUpdatedBy": {
+    "id": "CC648B3B51164A8296EB7092F312D5CB",
+    "text": "Kevin Wolf",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": "AppUser",
+    "ownerOrgId": null,
+    "key": "cc648b3b51164a8296eb7092f312d5cb"
+  },
+  "clonedFromId": null,
+  "clonedFromOrg": null,
+  "clonedRevision": null,
+  "sha256Hex": "2b635ec4c289f2251f7fa5f5a40bb36d8d00b39176fd87e33a6dc33344c23645",
+  "isDraft": false,
+  "revision": 8,
+  "revisionTimeStamp": "2026-05-01T18:26:14.116Z",
+  "labels": [
+    {
+      "id": "7DF7BA79530F457C9435C1157CBACDC",
+      "text": "Sales",
+      "description": "sales",
+      "foregroundColor": "#ffffff",
+      "backgroundColor": "#69d115"
+    }
+  ],
+  "stars": null,
+  "ratingsCount": 0,
+  "ratings": []
+}

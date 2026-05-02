@@ -1,0 +1,178 @@
+{
+  "purpose": "Guide strategy for engaging and growing a specific account",
+  "product": null,
+  "canonicalEntity": null,
+  "status": {
+    "hasValue": true,
+    "value": 0,
+    "id": "draft",
+    "text": "Draft",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "draft"
+  },
+  "sampleArtifactDocument": null,
+  "goodArtifactCriteria": null,
+  "badArtifactCriteria": null,
+  "instructions": "Identify stakeholders, goals, and risks\nDefine engagement and expansion strategy\nUpdate continuously",
+  "acceptanceCriteria": null,
+  "constraints": null,
+  "outputTemplate": null,
+  "outputType": {
+    "hasValue": true,
+    "value": 0,
+    "id": "structureddata",
+    "text": "Structured Data",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "structureddata"
+  },
+  "outputEntityTypeName": null,
+  "humanReadableFormat": {
+    "hasValue": true,
+    "value": 0,
+    "id": "html",
+    "text": "HTML",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "html"
+  },
+  "requiresHumanReview": false,
+  "tla": "ACP",
+  "entityMapping": null,
+  "autoApproveConfidenceThreshold": null,
+  "id": "A8032C06172A48E5BA01B5F49089B7CD",
+  "entityType": "ArtifactSpecification",
+  "isPublic": false,
+  "publicPromotedBy": null,
+  "publicPromotionDate": null,
+  "ownerOrganization": {
+    "id": "C8AD4589F26842E7A1AEFBAEFC979C9B",
+    "text": "Software Logistics",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": "Organization",
+    "ownerOrgId": null,
+    "key": "sftlog"
+  },
+  "ownerUser": null,
+  "databaseName": "dev",
+  "_etag": "\"88070357-0000-0500-0000-69f4f2050000\"",
+  "name": "ACP - Account Profile",
+  "icon": "icon-fo-ml-workbench",
+  "key": "accountplan",
+  "category": {
+    "id": "sales",
+    "text": "Sales",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": null,
+    "ownerOrgId": null,
+    "key": "sales"
+  },
+  "description": "A strategic plan for managing and growing a specific customer or prospect account.",
+  "aiSessions": [],
+  "auditHistory": [
+    {
+      "changedBy": {
+        "id": "542491B9060D4ABEA75351F5EB3462AC",
+        "text": "Jennifer Hassenstab",
+        "_t": "eh",
+        "resolved": null,
+        "isPublic": false,
+        "entityType": "AppUser",
+        "ownerOrgId": null,
+        "key": "a542491b9060d4abea75351f5eb3462ac"
+      },
+      "changeDate": "2026-04-22T12:38:02.621Z",
+      "changes": [
+        {
+          "field": "Name",
+          "oldValue": "Account Plan",
+          "newValue": "ACP - Account Plan",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "changedBy": {
+        "id": "542491B9060D4ABEA75351F5EB3462AC",
+        "text": "Jennifer Hassenstab",
+        "_t": "eh",
+        "resolved": null,
+        "isPublic": false,
+        "entityType": "AppUser",
+        "ownerOrgId": null,
+        "key": "a542491b9060d4abea75351f5eb3462ac"
+      },
+      "changeDate": "2026-04-22T16:27:26.867Z",
+      "changes": [
+        {
+          "field": "Name",
+          "oldValue": "ACP - Account Plan",
+          "newValue": "ACP - Account Profile",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "isDeleted": false,
+  "deletedBy": null,
+  "deletionDate": null,
+  "isDeprecated": false,
+  "deprecatedBy": null,
+  "deprecationDate": null,
+  "deprecationNotes": null,
+  "creationDate": "2026-04-20T12:14:00.424Z",
+  "lastUpdatedDate": "2026-05-01T21:55:10.560Z",
+  "createdBy": {
+    "id": "542491B9060D4ABEA75351F5EB3462AC",
+    "text": "Jennifer Hassenstab",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": "AppUser",
+    "ownerOrgId": null,
+    "key": "a542491b9060d4abea75351f5eb3462ac"
+  },
+  "lastUpdatedBy": {
+    "id": "0C1AD6B8E40845C390725733635B354E",
+    "text": "Kevin Wolf (SLSYS)",
+    "_t": "eh",
+    "resolved": null,
+    "isPublic": false,
+    "entityType": "AppUser",
+    "ownerOrgId": null,
+    "key": "a0c1ad6b8e40845c390725733635b354e"
+  },
+  "clonedFromId": null,
+  "clonedFromOrg": null,
+  "clonedRevision": null,
+  "sha256Hex": "823513c807596c11e2b62884e1b2ab50e8ac57ecf5c85aadb4940c7eb53695ee",
+  "isDraft": false,
+  "revision": 6,
+  "revisionTimeStamp": "2026-05-01T21:55:10.645Z",
+  "labels": [
+    {
+      "id": "7DF7BA79530F457C9435C1157CBACDC",
+      "text": "Sales",
+      "description": "sales",
+      "foregroundColor": "#ffffff",
+      "backgroundColor": "#69d115"
+    }
+  ],
+  "stars": null,
+  "ratingsCount": 0,
+  "ratings": []
+}

@@ -7,13 +7,38 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="EntityHashing\ACP.Cosmos.Prod.json" />
+    <None Remove="EntityHashing\ACP.Dev.json" />
+    <None Remove="EntityHashing\ACP.Prod.json" />
+    <None Remove="EntityHashing\JsonEntity.Cosmos.JObject.json" />
+    <None Remove="EntityHashing\JsonEntity.Dev.json" />
+    <None Remove="EntityHashing\JsonEntity.Live.json" />
     <None Remove="ServicesAgreement.htm" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ServicesAgreement.htm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="EntityHashing\ACP.Cosmos.Prod.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityHashing\ACP.Dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityHashing\ACP.Dev.Entity.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityHashing\ACP.Prod.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityHashing\JsonEntity.Cosmos.JObject.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityHashing\JsonEntity.Dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EntityHashing\JsonEntity.Live.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
@@ -39,6 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="LagoVista.AI.Models">
+      <HintPath>..\..\..\ai.MachineLearning\src\LagoVista.AI.Models\bin\Release\netstandard2.0\LagoVista.AI.Models.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">
