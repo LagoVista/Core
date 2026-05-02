@@ -875,7 +875,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.Subtype = entity.EntityType;
             payload.Meta.SubtypeFlavor = "ModelContents";
             payload.Meta.ProjectId = "default";
-            payload.Meta.OrgId = entity.OwnerOrganization.Id;
+            payload.Meta.OrgId = entity.EntityType == "Organization" ? entity.Id.ToString() : entity.OwnerOrganization.Id.ToString();
             return payload;
         }
     }

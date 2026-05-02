@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LagoVista.Core;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -168,7 +169,7 @@ namespace LagoVista
                 if (isNullable)
                     return null;
 
-                throw new JsonSerializationException($"Cannot convert null value to LagoVistaKey at path '{reader.Path}'.");
+                return Guid.NewGuid().ToId().ToString().ToLower();
             }
 
             if (reader.TokenType != JsonToken.String)

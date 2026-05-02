@@ -20,13 +20,17 @@ namespace LagoVista.Models
 
         // Don't be tempted to convert this to NormalizeId32, this is the database side that has to be a string.
         [MapTo("Id")]
+        [MapFrom("Id")]
         [Key]
         public string OrgId { get; set; }
-        [MapTo("Text")]
+        [MapTo("Name")]
+        [MapFrom("Name")]
         [Required]
         public string OrgName { get; set; }
+        [MapFrom("BillingContact")]
         [Required]
         public string OrgBillingContactId { get; set; }
+        [MapFrom("OrgStatus")]
         [Required]
         public string Status { get; set; }
         [Required]
