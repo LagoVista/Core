@@ -48,7 +48,7 @@ namespace LagoVista.Core.Models
         public double? Stars { get; set; }
         public int RatingsCount { get; set; }
 
-        public List<EntityHeader> Labels { get; set; }
+        public List<Label> Labels { get; set; }
 
         public string LastUpdatedDate { get; set; }
 
@@ -75,7 +75,7 @@ namespace LagoVista.Core.Models
             IsDeleted = entity.IsDeleted;
             Name = entity.Name;
             Key = entity.Key;
-            Labels = entity.Labels.Select(lbl => new EntityHeader { Id = lbl.Id, Text = lbl.Text }).ToList();
+            Labels = entity.Labels;
             LastUpdatedDate = entity.LastUpdatedDate;
             Stars = entity.Stars;
             Icon = entity.Icon;

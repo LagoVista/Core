@@ -17,7 +17,7 @@ using System.Text;
 
 namespace LagoVista.Core.Models
 {
-    public interface IEntityBase : INoSQLEntity, IOwnedEntity, IIconEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
+    public interface IEntityBase : INoSQLEntity, IDiscussableEntity, IOwnedEntity, IIconEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
     {
 
     }
@@ -196,6 +196,7 @@ namespace LagoVista.Core.Models
         [AiSchemaIgnore]
         public List<EntityRating> Ratings { get; set; } = new List<EntityRating>();
 
+        public List<Discussion> Discussions { get; set; } = new List<Discussion>();
 
         public EntityHeader ToEntityHeader()
         {

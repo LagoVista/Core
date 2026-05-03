@@ -29,7 +29,7 @@ namespace LagoVista.Core.AutoMapper
             _converters = converters ?? throw new ArgumentNullException(nameof(converters));
         }
 
-        static int GetInheritanceDepth(Type? type)
+        static int GetInheritanceDepth(Type type)
         {
             var depth = 0;
             while (type != null)
