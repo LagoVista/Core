@@ -35,11 +35,18 @@ namespace LagoVista.Core.AI.Models
         public string RoleId { get; set; }
 
         /// <summary>
+        /// Mode key to be used on ininialziation if present.
+        /// </summary>
+        public string ModeKey { get; set; }
+
+        /// <summary>
         /// If this is set or changed, a persona should be loaded. 
         /// </summary>
         public string AgentPersonaId { get; set; }
 
         public string VirtualTeamMemberId { get; set; }
+
+        public string VtmMeetingId { get; set; }
 
         /// <summary>
         /// Identifies the session ("room") in which execution occurs.

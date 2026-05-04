@@ -125,7 +125,12 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("chapters")]
         public List<EntityHeader> Chapters { get; set; } = new List<EntityHeader>();
 
+
+        [JsonProperty("authoring")]
         public AgentAuthoringTurnResult Authoring { get; set; }
+
+        [JsonProperty("clientDirectives")]
+        public List<AgentClientDirective> ClientDirectives { get; set; } = new List<AgentClientDirective>();
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -348,5 +353,18 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
         public string Details { get; set; }
+    }
+
+
+    public sealed class AgentClientDirective
+    {
+        [JsonProperty("action")]
+        public string Action { get; set; }
+
+        [JsonProperty("args")]
+        public Dictionary<string, string> Args { get; set; } = new Dictionary<string, string>();
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
     }
 }

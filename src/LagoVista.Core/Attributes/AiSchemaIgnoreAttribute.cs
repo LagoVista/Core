@@ -25,5 +25,13 @@ namespace LagoVista.Core.Attributes
 
         public AiSchemaContext Contexts { get; }
     }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class AiSchemaAttribute : Attribute
+    {
+        public bool IsRequired { get; set; }
+        public string DefaultValue { get; set; }
+        public string Description { get; set; }
+    }
 }
 
