@@ -131,6 +131,9 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("clientDirectives")]
         public List<AgentClientDirective> ClientDirectives { get; set; } = new List<AgentClientDirective>();
+
+        [JsonProperty("vtmMeetingId")]
+        public string VtmMeetingId { get; set; }
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
