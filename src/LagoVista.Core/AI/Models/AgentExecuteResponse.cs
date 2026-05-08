@@ -134,6 +134,8 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("vtmMeetingId")]
         public string VtmMeetingId { get; set; }
+
+        public SopAgentExecutionResponse SopExecution { get; set; }
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -369,5 +371,26 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("message")]
         public string Message { get; set; }
+    }
+
+    public sealed class SopAgentExecutionResponse
+    {
+        public string ExecutionRunId { get; set; }
+
+        public string ContextMode { get; set; }
+
+        public string Status { get; set; }
+
+        public string AgentSessionTurnId { get; set; }
+
+        public EntityHeader OutputArtifact { get; set; }
+
+        public string FailureReason { get; set; }
+
+        public string BlockReason { get; set; }
+
+        public string Summary { get; set; }
+        public string ActionRequired { get; set; }
+        public string WhyItMatters { get; set; }
     }
 }

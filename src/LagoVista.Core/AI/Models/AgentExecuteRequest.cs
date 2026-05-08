@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using LagoVista.Core.Models;
 using Newtonsoft.Json;
 
 namespace LagoVista.Core.AI.Models
@@ -130,6 +131,11 @@ namespace LagoVista.Core.AI.Models
         /// Forbidden on User Turn Requests.
         /// </summary>
         public List<ToolResultSubmission> ToolResults { get; set; } = new List<ToolResultSubmission>();
+
+        public SopAgentExecutionRequest SopExecution { get; set; }
+
+        [JsonIgnore]
+        public bool IsSopExecution => SopExecution != null;
 
         /// <summary>
         /// Convenience helper (not required by AGN-034). Use to route validation.
@@ -367,6 +373,29 @@ namespace LagoVista.Core.AI.Models
 
             foreach (var c in Conditions)
                 c.Validate();
+        }
+    }
+
+    public sealed class SopAgentExecutionRequest
+    {
+        public string ExecutionRunId { get; set; }
+        public string WorkItemId { get; set; }
+        public string ContextMode { get; set; }
+        public string SystemPrompt { get; set; }
+
+        public List<EntityHeader> Tools { get; set; } = new List<EntityHeader>();
+
+        public void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(ExecutionRunId))
+            {
+                throw new InvalidOperationException("SopExecution.ExecutionRunId is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(ContextMode))
+            {
+                throw new InvalidOperationException("SopExecution.ContextMode is required.");
+            }
         }
     }
 
