@@ -66,11 +66,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="LagoVista.AI.Models">
-      <HintPath>..\..\..\ai.MachineLearning\src\LagoVista.AI.Models\bin\Release\netstandard2.0\LagoVista.AI.Models.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="T4ResourceGenerator.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

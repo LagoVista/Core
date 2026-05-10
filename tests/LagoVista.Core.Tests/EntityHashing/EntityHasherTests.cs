@@ -90,20 +90,5 @@ namespace LagoVista.Core.Tests.EntityHashing
             Assert.That(hashAcpDev, Is.EqualTo(hashAcpProd));
 
         }
-
-        [Test]
-        public void MatchACP_Cosmos_Dev()
-        {
-
-            var acpProdJson = System.IO.File.ReadAllText("EntityHashing/ACP.Cosmos.Prod.json");
-            var art = JsonConvert.DeserializeObject<LagoVista.AI.Models.ArtifactSpecification>(acpProdJson);
-
-            art.SetHash();
-
-            var acpDevJSON = System.IO.File.ReadAllText("EntityHashing/ACP.Dev.json");
-            var hashAcpDev = LagoVista.EntityHasher.CalculateHash(Newtonsoft.Json.Linq.JToken.Parse(acpDevJSON));
-            Console.WriteLine(hashAcpDev + "\r\n" + art.Sha256Hex);
-            Assert.That(hashAcpDev, Is.EqualTo(art.Sha256Hex));
-        }
     }
 }
