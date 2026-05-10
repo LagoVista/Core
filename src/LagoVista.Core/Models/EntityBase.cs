@@ -19,7 +19,7 @@ namespace LagoVista.Core.Models
 {
     public interface IEntityBase : INoSQLEntity, IDiscussableEntity, IOwnedEntity, IIconEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
     {
-
+        bool ShouldVectorIndex { get; set; }
     }
 
     public class EntityBase : ModelBase, IEntityBase
@@ -96,6 +96,9 @@ namespace LagoVista.Core.Models
         [CloneOptions(false)]
         [JsonProperty(PropertyName = "_etag")]
         public string ETag { get; set; }
+
+        [JsonIgnore]
+        public bool ShouldVectorIndex { get; set; }
 
         private string _name;
         [AiSchemaIgnore]

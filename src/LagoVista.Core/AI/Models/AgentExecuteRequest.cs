@@ -376,8 +376,17 @@ namespace LagoVista.Core.AI.Models
         }
     }
 
+    public enum SopAgentExecutiontState
+    {
+        CreatingArtifact,
+        ArtifactCreationCalled,
+        SopCompletionToolCalled,
+    }
+
     public sealed class SopAgentExecutionRequest
     {
+        public SopAgentExecutiontState State { get; set; } = SopAgentExecutiontState.CreatingArtifact;
+
         public string ExecutionRunId { get; set; }
         public string WorkItemId { get; set; }
         public string ContextMode { get; set; }
