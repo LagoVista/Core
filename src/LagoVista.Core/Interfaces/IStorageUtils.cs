@@ -33,5 +33,7 @@ namespace LagoVista.Core.Interfaces
         Task<string> GetJsonByIdAsync(string id, CancellationToken ct = default);
         Task<List<EntityHeader>> GetEntitiesByTypeAsync(string orgId, string entityType);
         Task<JObject> GetJobjectByIdAsync(string id, CancellationToken ct = default);
+
+        Task<InvokeResult> AttachAiEntitySessionAsync(string entityId, string entityType, EntityHeader session, string sessionType, string sessionTypeKey, EntityHeader org, EntityHeader user);
     }
 }

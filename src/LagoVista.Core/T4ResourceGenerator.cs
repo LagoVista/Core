@@ -1,4 +1,4 @@
-﻿/*2/11/2026 9:06:41 AM*/
+﻿/*5/11/2026 5:51:01 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1129,6 +1129,18 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:DiscussionResponse_Title
 
 		public static string DiscussionResponse_Title { get { return GetResourceString("DiscussionResponse_Title"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepStatus_Completed
+
+		public static string EntityChecklistStepStatus_Completed { get { return GetResourceString("EntityChecklistStepStatus_Completed"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepStatus_InProgress
+
+		public static string EntityChecklistStepStatus_InProgress { get { return GetResourceString("EntityChecklistStepStatus_InProgress"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepStatus_NeedsAttention
+
+		public static string EntityChecklistStepStatus_NeedsAttention { get { return GetResourceString("EntityChecklistStepStatus_NeedsAttention"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepStatus_NotStarted
+
+		public static string EntityChecklistStepStatus_NotStarted { get { return GetResourceString("EntityChecklistStepStatus_NotStarted"); } }
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
@@ -1365,6 +1377,10 @@ namespace LagoVista.Core.Resources
 			public const string Discussion_Title = "Discussion_Title";
 			public const string DiscussionResponse_Help = "DiscussionResponse_Help";
 			public const string DiscussionResponse_Title = "DiscussionResponse_Title";
+			public const string EntityChecklistStepStatus_Completed = "EntityChecklistStepStatus_Completed";
+			public const string EntityChecklistStepStatus_InProgress = "EntityChecklistStepStatus_InProgress";
+			public const string EntityChecklistStepStatus_NeedsAttention = "EntityChecklistStepStatus_NeedsAttention";
+			public const string EntityChecklistStepStatus_NotStarted = "EntityChecklistStepStatus_NotStarted";
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string ListResponse_Category = "ListResponse_Category";
 			public const string ListResponse_Deleted = "ListResponse_Deleted";

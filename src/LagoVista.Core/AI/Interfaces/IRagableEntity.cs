@@ -22,6 +22,6 @@ namespace LagoVista.Core.AI.Interfaces
 
     public interface IAISessionTracker
     {
-        List<EntityHeader> AISessions { get; }
+        List<AiEntitySession> AiEntitySessions { get; }
     }
 }

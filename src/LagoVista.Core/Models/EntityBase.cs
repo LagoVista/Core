@@ -81,6 +81,9 @@ namespace LagoVista.Core.Models
         [AiSchemaIgnore]
         public string PublicPromotionDate { get; set; }
 
+
+        public List<EntityChecklistStatus> ChecklistStatus { get; set; } = new List<EntityChecklistStatus>();
+
         [AiSchemaIgnore]
         [CloneOptions(false)]
         public EntityHeader OwnerOrganization { get; set; }
@@ -129,7 +132,7 @@ namespace LagoVista.Core.Models
         public string Description { get; set; }
 
         [AiSchemaIgnore]
-        public List<EntityHeader> AISessions { get; set; } = new List<EntityHeader>();
+        public List<AiEntitySession> AiEntitySessions { get; set; } = new List<AiEntitySession>();
 
         [AiSchemaIgnore]
         [CloneOptions(false)]

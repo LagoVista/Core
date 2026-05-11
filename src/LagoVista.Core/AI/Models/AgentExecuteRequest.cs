@@ -61,6 +61,13 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         public string TurnId { get; set; }
 
+
+
+        public string SessionType { get; set; }
+        public string SessionTypeKey { get; set; }
+        public string BoundEntityType { get; set; }
+        public EntityHeader BoundEntity { get; set; }
+
         /// <summary>
         /// Delivery preference only. Defaults to false when omitted.
         /// If true, the client MUST support streamed handling.

@@ -513,4 +513,17 @@
   <data name="Common_IsDraft" xml:space="preserve">
     <value>Is Draft</value>
   </data>
+  <data name="EntityChecklistStepStatus_NotStarted" xml:space="preserve">
+  <value>Not Started</value>
+</data>
+  <data name="EntityChecklistStepStatus_InProgress" xml:space="preserve">
+  <value>In Progress</value>
+</data>
+  <data name="EntityChecklistStepStatus_NeedsAttention" xml:space="preserve">
+  <value>Needs Attention</value>
+</data>
+  <data name="EntityChecklistStepStatus_Completed" xml:space="preserve">
+  <value>Completed</value>
+</data>
+
 </root>
