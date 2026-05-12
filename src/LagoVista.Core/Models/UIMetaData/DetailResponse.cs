@@ -33,6 +33,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldsAdvanced { get; set; }
         public List<string> FormFieldsAdvancedCol2 { get; set; }
         public List<string> FormInlineFields{ get; set; }
+
+        public List<EntityChecklistStep> ChecklistSteps { get; set; }
         public List<string> FormFieldsSimple { get; set; }
         public List<string> FormFieldsBottom { get; set; }
         public List<string> FormFieldsTabs { get; set; }
@@ -114,6 +116,11 @@ namespace LagoVista.Core.Models.UIMetaData
                 {
                     response.FormFieldsAdvancedCol2 = (model as IFormDescriptorAdvancedCol2).GetAdvancedFieldsCol2().Select(fld => fld.CamelCase()).ToList();
                 }
+            }
+
+            if (model is IFormCheckListSteps)
+            {
+                response.ChecklistSteps = (model as IFormCheckListSteps).GetCheckListSteps();
             }
 
             if (model is IFormDescriptorSimple)

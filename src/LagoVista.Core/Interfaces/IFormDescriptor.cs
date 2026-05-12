@@ -42,6 +42,11 @@ namespace LagoVista.Core.Interfaces
         List<string> GetInlineFields();
     }
 
+    public interface IFormCheckListSteps
+    {
+        List<EntityChecklistStep> GetCheckListSteps();
+    }
+
     public interface IFormMobileFields
     {
         List<string> GetMobileFields();

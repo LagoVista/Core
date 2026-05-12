@@ -1,4 +1,4 @@
-﻿/*5/11/2026 5:51:01 PM*/
+﻿/*5/12/2026 11:38:53 AM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1141,6 +1141,18 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:EntityChecklistStepStatus_NotStarted
 
 		public static string EntityChecklistStepStatus_NotStarted { get { return GetResourceString("EntityChecklistStepStatus_NotStarted"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepType_Create
+
+		public static string EntityChecklistStepType_Create { get { return GetResourceString("EntityChecklistStepType_Create"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepType_Improve
+
+		public static string EntityChecklistStepType_Improve { get { return GetResourceString("EntityChecklistStepType_Improve"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepType_Review
+
+		public static string EntityChecklistStepType_Review { get { return GetResourceString("EntityChecklistStepType_Review"); } }
+//Resources:LagoVistaCommonStrings:EntityChecklistStepType_Validate
+
+		public static string EntityChecklistStepType_Validate { get { return GetResourceString("EntityChecklistStepType_Validate"); } }
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
@@ -1381,6 +1393,10 @@ namespace LagoVista.Core.Resources
 			public const string EntityChecklistStepStatus_InProgress = "EntityChecklistStepStatus_InProgress";
 			public const string EntityChecklistStepStatus_NeedsAttention = "EntityChecklistStepStatus_NeedsAttention";
 			public const string EntityChecklistStepStatus_NotStarted = "EntityChecklistStepStatus_NotStarted";
+			public const string EntityChecklistStepType_Create = "EntityChecklistStepType_Create";
+			public const string EntityChecklistStepType_Improve = "EntityChecklistStepType_Improve";
+			public const string EntityChecklistStepType_Review = "EntityChecklistStepType_Review";
+			public const string EntityChecklistStepType_Validate = "EntityChecklistStepType_Validate";
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string ListResponse_Category = "ListResponse_Category";
 			public const string ListResponse_Deleted = "ListResponse_Deleted";

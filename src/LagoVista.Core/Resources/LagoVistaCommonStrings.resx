@@ -525,5 +525,16 @@
   <data name="EntityChecklistStepStatus_Completed" xml:space="preserve">
   <value>Completed</value>
 </data>
-
+  <data name="EntityChecklistStepType_Review" xml:space="preserve">
+  <value>Review</value>
+</data>
+  <data name="EntityChecklistStepType_Improve" xml:space="preserve">
+  <value>Improve</value>
+</data>
+  <data name="EntityChecklistStepType_Create" xml:space="preserve">
+  <value>Create</value>
+</data>
+  <data name="EntityChecklistStepType_Validate" xml:space="preserve">
+  <value>Validate</value>
+</data>
 </root>
