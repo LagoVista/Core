@@ -48,6 +48,11 @@ namespace LagoVista.Core.Models
         public double? Stars { get; set; }
         public int RatingsCount { get; set; }
 
+
+        public int? CheckListCompleted { get; set; }
+        public int? CheckListTotal { get; set; }
+
+
         public List<Label> Labels { get; set; }
 
         public string LastUpdatedDate { get; set; }
@@ -73,6 +78,12 @@ namespace LagoVista.Core.Models
             CategoryKey = entity.Category?.Key;
             IsPublic = entity.IsPublic;
             IsDeleted = entity.IsDeleted;
+            if(entity.ChecklistStatus.Any())
+            {
+                CheckListCompleted = entity.ChecklistStatus?.Where(chk => chk.Status.Value == EntityChecklistStepStatus.Completed).Count();
+                CheckListTotal = entity.ChecklistStatus?.Count;
+            }
+
             Name = entity.Name;
             Key = entity.Key;
             Labels = entity.Labels;

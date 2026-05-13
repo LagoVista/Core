@@ -66,4 +66,9 @@ namespace LagoVista.Core.Interfaces
     {
         List<FormAdditionalAction> GetAdditionalActions();
     }
+
+    public interface IEntityReadinessDescriptor
+    {
+        List<EntityReadinessCriterion> GetReadinessCriteria();
+    }
 }

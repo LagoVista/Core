@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using LagoVista.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace LagoVista.Core.AI.Models
 {
@@ -368,6 +369,9 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("args")]
         public Dictionary<string, string> Args { get; set; } = new Dictionary<string, string>();
+
+        [JsonProperty("payload")]
+        public JObject Payload { get; set; }
 
         [JsonProperty("message")]
         public string Message { get; set; }

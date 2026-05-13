@@ -537,4 +537,16 @@
   <data name="EntityChecklistStepType_Validate" xml:space="preserve">
   <value>Validate</value>
 </data>
+  <data name="EntityReadinessLevel_NotReviewed" xml:space="preserve">
+  <value>Not Reviewed</value>
+</data>
+  <data name="EntityReadinessLevel_NeedsWork" xml:space="preserve">
+  <value>Needs Work</value>
+</data>
+  <data name="EntityReadinessLevel_MostlyReady" xml:space="preserve">
+  <value>Mostly Ready</value>
+</data>
+  <data name="EntityReadinessLevel_Ready" xml:space="preserve">
+  <value>Ready</value>
+</data>
 </root>

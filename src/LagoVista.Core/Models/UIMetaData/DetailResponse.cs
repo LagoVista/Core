@@ -34,6 +34,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldsAdvancedCol2 { get; set; }
         public List<string> FormInlineFields{ get; set; }
 
+        public List<EntityReadinessCriterion> Criterion { get; set; }
         public List<EntityChecklistStep> ChecklistSteps { get; set; }
         public List<string> FormFieldsSimple { get; set; }
         public List<string> FormFieldsBottom { get; set; }
@@ -146,6 +147,15 @@ namespace LagoVista.Core.Models.UIMetaData
             if (model is IFormMobileFields)
             {
                 response.FormMobileFields = (model as IFormMobileFields).GetMobileFields().Select(fld => fld.CamelCase()).ToList();
+            }
+
+            if (model is IEntityReadinessDescriptor readinessDescriptor)
+            {
+                response.Criterion = EntityReadinessCriterion.Defaults()
+                    .Concat(readinessDescriptor.GetReadinessCriteria())
+                    .GroupBy(criterion => criterion.Key)
+                    .Select(group => group.Last())
+                    .ToList();
             }
 
             if (model is IFormAdditionalActions)

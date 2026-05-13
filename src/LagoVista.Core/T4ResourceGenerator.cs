@@ -1,4 +1,4 @@
-﻿/*5/12/2026 11:38:53 AM*/
+﻿/*5/13/2026 3:09:24 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1153,6 +1153,18 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:EntityChecklistStepType_Validate
 
 		public static string EntityChecklistStepType_Validate { get { return GetResourceString("EntityChecklistStepType_Validate"); } }
+//Resources:LagoVistaCommonStrings:EntityReadinessLevel_MostlyReady
+
+		public static string EntityReadinessLevel_MostlyReady { get { return GetResourceString("EntityReadinessLevel_MostlyReady"); } }
+//Resources:LagoVistaCommonStrings:EntityReadinessLevel_NeedsWork
+
+		public static string EntityReadinessLevel_NeedsWork { get { return GetResourceString("EntityReadinessLevel_NeedsWork"); } }
+//Resources:LagoVistaCommonStrings:EntityReadinessLevel_NotReviewed
+
+		public static string EntityReadinessLevel_NotReviewed { get { return GetResourceString("EntityReadinessLevel_NotReviewed"); } }
+//Resources:LagoVistaCommonStrings:EntityReadinessLevel_Ready
+
+		public static string EntityReadinessLevel_Ready { get { return GetResourceString("EntityReadinessLevel_Ready"); } }
 //Resources:LagoVistaCommonStrings:ErrorMakingCall
 
 		public static string ErrorMakingCall { get { return GetResourceString("ErrorMakingCall"); } }
@@ -1397,6 +1409,10 @@ namespace LagoVista.Core.Resources
 			public const string EntityChecklistStepType_Improve = "EntityChecklistStepType_Improve";
 			public const string EntityChecklistStepType_Review = "EntityChecklistStepType_Review";
 			public const string EntityChecklistStepType_Validate = "EntityChecklistStepType_Validate";
+			public const string EntityReadinessLevel_MostlyReady = "EntityReadinessLevel_MostlyReady";
+			public const string EntityReadinessLevel_NeedsWork = "EntityReadinessLevel_NeedsWork";
+			public const string EntityReadinessLevel_NotReviewed = "EntityReadinessLevel_NotReviewed";
+			public const string EntityReadinessLevel_Ready = "EntityReadinessLevel_Ready";
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string ListResponse_Category = "ListResponse_Category";
 			public const string ListResponse_Deleted = "ListResponse_Deleted";
