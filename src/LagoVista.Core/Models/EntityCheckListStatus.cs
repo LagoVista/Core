@@ -98,6 +98,11 @@ namespace LagoVista.Core.Models
             return ForField(fieldName, EntityChecklistStepType.Validate, name, description, promptActionLabel, aiPrompt);
         }
 
+        public static EntityChecklistStep CreateChild(string collectionFieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null)
+        {
+            return ForField(collectionFieldName, EntityChecklistStepType.Create, name, description, promptActionLabel, aiPrompt);
+        }
+
         public static EntityChecklistStep Create(string key, string name, string description, string promptActionLabel = null, string aiPrompt = null)
         {
             if (String.IsNullOrWhiteSpace(key))

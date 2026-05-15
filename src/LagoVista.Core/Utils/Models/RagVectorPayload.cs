@@ -127,6 +127,12 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string EssentialJobActivityId { get; set; }
         public string ArtifactTypeId { get; set; }
         public string ArtifactId { get; set; }
+        public string MeetingWorkItemId { get; set; }
+        public bool IsSample { get; set; }
+        public string SampleKindId { get; set; }
+        public string VtmMeetingId { get; set; }
+        public string ScopeType { get; set; }
+        public string ScopeId { get; set; }
     }
 
     public sealed class RagVectorPayloadExtra
@@ -163,6 +169,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string HumanContentUrl { get; set; }
         public string IssuesContentUrl { get; set; }
 
+
         public int? StartLine { get; set; }
         public int? EndLine { get; set; }
 
@@ -171,6 +178,13 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
         public string RestGETUrl { get; set; }
         public string RestPUTUrl { get; set; }
+
+        public string SampleKindText { get; set; }
+        public string ArtifactTypeText { get; set; }
+        public string ArtifactText { get; set; }
+        public string VtmMeetingText { get; set; }
+        public string ScopeTypeText { get; set; }
+        public string ScopeText { get; set; }
 
     }
 
@@ -215,11 +229,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         {
             var result = new InvokeResult();
 
-            // --- Required identity ---
-            if (string.IsNullOrWhiteSpace(Meta.OrgNamespace))
+            if (string.IsNullOrWhiteSpace(Meta.OrgId))
             {
                 result.AddUserError("OrgId is required.");
             }
+
 
             if (string.IsNullOrWhiteSpace(Meta.ProjectId))
             {
@@ -371,8 +385,15 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 //
                 Add(nameof(RagVectorPayloadMeta.VirtualTeamMemberId), Meta.VirtualTeamMemberId);
                 Add(nameof(RagVectorPayloadMeta.EssentialJobActivityId), Meta.EssentialJobActivityId);
+
                 Add(nameof(RagVectorPayloadMeta.ArtifactTypeId), Meta.ArtifactTypeId);
                 Add(nameof(RagVectorPayloadMeta.ArtifactId), Meta.ArtifactId);
+                Add(nameof(RagVectorPayloadMeta.MeetingWorkItemId), Meta.MeetingWorkItemId);
+                Add(nameof(RagVectorPayloadMeta.VtmMeetingId), Meta.VtmMeetingId);
+                Add(nameof(RagVectorPayloadMeta.ScopeType), Meta.ScopeType);
+                Add(nameof(RagVectorPayloadMeta.ScopeId), Meta.ScopeId);
+                Add(nameof(RagVectorPayloadMeta.IsSample), Meta.IsSample); 
+                Add(nameof(RagVectorPayloadMeta.SampleKindId), Meta.SampleKindId);
 
                 // System classification
                 Add(nameof(RagVectorPayloadMeta.SysDomain), Meta.SysDomain);
@@ -450,6 +471,14 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.CommitSha), Extra.CommitSha);
                 Add(nameof(RagVectorPayloadExtra.StartLine), Extra.StartLine);
                 Add(nameof(RagVectorPayloadExtra.EndLine), Extra.EndLine);
+
+                Add(nameof(RagVectorPayloadExtra.SampleKindText), Extra.SampleKindText);
+                Add(nameof(RagVectorPayloadExtra.ArtifactTypeText), Extra.ArtifactTypeText);
+                Add(nameof(RagVectorPayloadExtra.ArtifactText), Extra.ArtifactText);
+                Add(nameof(RagVectorPayloadExtra.VtmMeetingText), Extra.VtmMeetingText);
+                Add(nameof(RagVectorPayloadExtra.ScopeTypeText), Extra.ScopeTypeText);
+                Add(nameof(RagVectorPayloadExtra.ScopeText), Extra.ScopeText);
+
 
                 Add(nameof(RagVectorPayloadExtra.Path), Extra.Path);
                 Add(nameof(RagVectorPayloadExtra.ModelContentUrl), Extra.ModelContentUrl);
@@ -722,6 +751,12 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.EssentialJobActivityId = GetString(M, nameof(RagVectorPayloadMeta.EssentialJobActivityId));
             payload.Meta.ArtifactTypeId = GetString(M, nameof(RagVectorPayloadMeta.ArtifactTypeId));
             payload.Meta.ArtifactId = GetString(M, nameof(RagVectorPayloadMeta.ArtifactId));
+            payload.Meta.MeetingWorkItemId = GetString(M, nameof(RagVectorPayloadMeta.MeetingWorkItemId));
+            payload.Meta.VtmMeetingId = GetString(M, nameof(RagVectorPayloadMeta.VtmMeetingId));
+            payload.Meta.ScopeType = GetString(M, nameof(RagVectorPayloadMeta.ScopeType));
+            payload.Meta.ScopeId = GetString(M, nameof(RagVectorPayloadMeta.ScopeId));
+            payload.Meta.SampleKindId = GetString(M, nameof(RagVectorPayloadMeta.SampleKindId));
+            payload.Meta.IsSample = GetBool(M, nameof(RagVectorPayloadMeta.IsSample));
 
 
             payload.Meta.SysDomain = GetString(M, nameof(RagVectorPayloadMeta.SysDomain));
@@ -790,11 +825,18 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Extra.StartLine = GetNullableInt(E, nameof(RagVectorPayloadExtra.StartLine));
             payload.Extra.EndLine = GetNullableInt(E, nameof(RagVectorPayloadExtra.EndLine));
 
+            payload.Extra.ArtifactTypeText = GetString(E, nameof(RagVectorPayloadExtra.ArtifactTypeText));
+            payload.Extra.ArtifactText = GetString(E, nameof(RagVectorPayloadExtra.ArtifactText));
+            payload.Extra.VtmMeetingText = GetString(E, nameof(RagVectorPayloadExtra.VtmMeetingText));
+            payload.Extra.ScopeTypeText = GetString(E, nameof(RagVectorPayloadExtra.ScopeTypeText));
+            payload.Extra.ScopeText = GetString(E, nameof(RagVectorPayloadExtra.ScopeText));
+            payload.Extra.SampleKindText = GetString(E, nameof(RagVectorPayloadExtra.SampleKindText));
 
             payload.Extra.Path = GetString(E, nameof(RagVectorPayloadExtra.Path));
             payload.Extra.HumanContentUrl = GetString(E, nameof(RagVectorPayloadExtra.HumanContentUrl));
             payload.Extra.ModelContentUrl = GetString(E, nameof(RagVectorPayloadExtra.ModelContentUrl));
             payload.Extra.IssuesContentUrl = GetString(E, nameof(RagVectorPayloadExtra.IssuesContentUrl));
+
 
 
             payload.Extra.EditorUrl = GetString(E, nameof(RagVectorPayloadExtra.EditorUrl));
@@ -843,7 +885,15 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.VirtualTeamMemberId)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.EssentialJobActivityId)), QdrantPayloadIndexKind.Keyword),
+
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.IsSample)), QdrantPayloadIndexKind.Boolean),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.SampleKindId)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ArtifactTypeId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ArtifactId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.MeetingWorkItemId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.VtmMeetingId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ScopeType)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ScopeId)), QdrantPayloadIndexKind.Keyword),
             };
     
         public static RagVectorPayload FromEntity(IEntityBase entity)
@@ -860,6 +910,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             if (!String.IsNullOrEmpty(entityDescription.PreviewUIUrl)) payload.Extra.PreviewUrl = entityDescription.PreviewUIUrl.Replace("{id}", entity.Id); 
             if(!String.IsNullOrEmpty(entityDescription.GetUrl)) payload.Extra.RestGETUrl = entityDescription.GetUrl.Replace("{id}", entity.Id);
             payload.Extra.RestPUTUrl =  entityDescription.UpdateUrl;
+
 
             payload.Meta.SectionKey = "main";
             payload.Meta.BusinessDomainArea = "EntityModel";
