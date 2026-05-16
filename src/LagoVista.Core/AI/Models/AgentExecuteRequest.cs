@@ -47,6 +47,11 @@ namespace LagoVista.Core.AI.Models
 
         public string VirtualTeamMemberId { get; set; }
 
+        /// <summary>
+        /// If this is set, we never send over the previous response id along with the request.  This means the model will have no short-term memory.
+        /// </summary>
+        public bool AlwaysUseNewLllmRequest { get; set; }
+
         public string VtmMeetingId { get; set; }
 
         /// <summary>
