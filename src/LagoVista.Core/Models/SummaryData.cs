@@ -52,6 +52,11 @@ namespace LagoVista.Core.Models
         public int? CheckListCompleted { get; set; }
         public int? CheckListTotal { get; set; }
 
+        public int? ReadienssStatusPercent { get; set; }
+        public int? ReadienssStatusConfidence { get; set; }
+        public string ReadienssReviewed { get; set; }
+
+
 
         public List<Label> Labels { get; set; }
 
@@ -82,6 +87,13 @@ namespace LagoVista.Core.Models
             {
                 CheckListCompleted = entity.ChecklistStatus?.Where(chk => chk.Status.Value == EntityChecklistStepStatus.Completed).Count();
                 CheckListTotal = entity.ChecklistStatus?.Count;
+            }
+
+            if(entity.ReadinessStatus != null)
+            {
+                ReadienssStatusPercent = Convert.ToInt32(entity.ReadinessStatus.Score);
+                ReadienssStatusConfidence = Convert.ToInt32(entity.ReadinessStatus.Confidence);
+                ReadienssReviewed = entity.ReadinessStatus.LastReviewedUtc;
             }
 
             Name = entity.Name;
