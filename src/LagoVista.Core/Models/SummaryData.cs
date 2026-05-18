@@ -57,6 +57,7 @@ namespace LagoVista.Core.Models
         public string ReadienssReviewed { get; set; }
 
 
+        public string ReadinessSummary { get; set; }
 
         public List<Label> Labels { get; set; }
 
@@ -83,10 +84,13 @@ namespace LagoVista.Core.Models
             CategoryKey = entity.Category?.Key;
             IsPublic = entity.IsPublic;
             IsDeleted = entity.IsDeleted;
-            if(entity.ChecklistStatus.Any())
+
+            var summary = string.Empty;
+            if (entity.ChecklistStatus.Any())
             {
-                CheckListCompleted = entity.ChecklistStatus?.Where(chk => chk.Status.Value == EntityChecklistStepStatus.Completed).Count();
-                CheckListTotal = entity.ChecklistStatus?.Count;
+                CheckListCompleted = entity.ChecklistStatus.Where(chk => chk.Status.Value == EntityChecklistStepStatus.Completed).Count();
+                CheckListTotal = entity.ChecklistStatus.Count;
+                summary = $"({CheckListCompleted}/{CheckListTotal}) {Convert.ToInt32(CheckListCompleted * 100 / CheckListTotal)}%";
             }
 
             if(entity.ReadinessStatus != null)
@@ -94,8 +98,11 @@ namespace LagoVista.Core.Models
                 ReadienssStatusPercent = Convert.ToInt32(entity.ReadinessStatus.Score);
                 ReadienssStatusConfidence = Convert.ToInt32(entity.ReadinessStatus.Confidence);
                 ReadienssReviewed = entity.ReadinessStatus.LastReviewedUtc;
+                summary = $"{summary} - {ReadienssStatusPercent}%";
             }
 
+
+            ReadinessSummary = summary ;
             Name = entity.Name;
             Key = entity.Key;
             Labels = entity.Labels;
