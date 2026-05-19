@@ -43,7 +43,7 @@ namespace LagoVista.Core.Rpc.Client
         {
             if (message == null)  throw new ArgumentNullException(nameof(message));
 
-            _logger.AddCustomEvent(LogLevel.Message, "[ServiceBusPRoxyClient__ProcessMessageAsync]", $"[AbstractProxyClient__ReceiveAsync] - cid: {message.CorrelationId} aid: {_asyncCoupler.InstanceId}", _asyncCoupler.InstanceId.ToKVP("aid"));
+            _logger.AddCustomEvent(LogLevel.Message, this.Tag(), $"cid: {message.CorrelationId} aid: {_asyncCoupler.InstanceId}", _asyncCoupler.InstanceId.ToKVP("aid"));
 
             return await _asyncCoupler.CompleteAsync(message.CorrelationId, message);
         }
@@ -71,6 +71,7 @@ namespace LagoVista.Core.Rpc.Client
             }
             catch (Exception ex)
             {
+                _logger.AddException(this.Tag(), ex);
                 _snapShot.LastError = ex.Message;
                 _snapShot.LastErrorUtc = DateTime.UtcNow;
                 _snapShot.Status = HostedServiceDiagnosticStatus.Error;

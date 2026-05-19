@@ -1,7 +1,3 @@
-// --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: 8b014889333eb635092c9c2855b2b8dd7dd848c93d37b746fe7c700f63f15c81
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using LagoVista.Core.Interfaces;
@@ -17,10 +13,6 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rpc.Client.ServiceBus
 {
-    /* 
-     * The client is the component that is actually making requests of a remote server (which happens
-     * to be some sort of IoT runtime instance)
-     */
     public sealed class ServiceBusProxyClient : AbstractProxyClient
     {
         #region Fields
@@ -44,10 +36,11 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
         {
             if (_topicConstructorSettings == null) throw new ArgumentNullException(nameof(_topicConstructorSettings));
             
-            var connstr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey.Substring(0,3)}**********;";
-            _logger.Trace($"Request Server Connection String {connstr} - {entityPath}");
+            var traceConnStr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey.Substring(0,3)}**********;";
+            _logger.Trace($"{this.Tag()} - Request Server Connection String {traceConnStr} - {entityPath}");
 
-            var client = new ServiceBusAdministrationClient(connstr);
+            var connStr = $"Endpoint=sb://{_topicConstructorSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_topicConstructorSettings.UserName};SharedAccessKey={_topicConstructorSettings.AccessKey};";
+            var client = new ServiceBusAdministrationClient(connStr);
             if (!await client.TopicExistsAsync(entityPath))
             {
                 await client.CreateTopicAsync(entityPath);
@@ -75,7 +68,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             // SharedAccessKey - AccessKey
             // DestinationEntityPath - ResourceName
             var transmitterSettings = settings.RpcClientTransmitter ?? throw new ArgumentNullException(nameof(settings.RpcClientTransmitter));
-            _transmitterConnectionSettings = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey.Substring(0,3)}**********;";
+            _transmitterConnectionSettings = $"Endpoint=sb://{transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={transmitterSettings.UserName};SharedAccessKey={transmitterSettings.AccessKey};";
             _serverTopicPrefix = transmitterSettings.ResourceName;
         }
 
@@ -95,7 +88,8 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _topicPath = _subscriberSettings.ResourceName;
             _subscriptionPath = _subscriberSettings.Uri;
 
-            _receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey.Substring(0,3)}**********;";
+            _receiverConnectionString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey};";
+            var logConnString = $"Endpoint={endPoint}/;SharedAccessKeyName={_subscriberSettings.UserName};SharedAccessKey={_subscriberSettings.AccessKey.Substring(0,3)}**********;";
 
             if (_topicConstructorSettings != null)
             {
@@ -111,15 +105,15 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             _processor.ProcessMessageAsync += _processor_ProcessMessageAsync;
             _processor.ProcessErrorAsync += _processor_ProcessErrorAsync;
 
-            _logger.Trace($"[ServiceBusProxyClient__CustomStartAsync__Starting] EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
+            _logger.Trace($"[ServiceBusProxyClient__CustomStartAsync__Starting] EndPoint: {logConnString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
             await _processor.StartProcessingAsync();
-            _logger.Trace($"[ServiceBusProxyClient__CustomStartAsync__Started]  EndPoint: {_receiverConnectionString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
+            _logger.Trace($"[ServiceBusProxyClient__CustomStartAsync__Started]  EndPoint: {logConnString} Topic: {_topicPath} Subscription: {_subscriptionPath}");
         }
 
         private Task _processor_ProcessErrorAsync(ProcessErrorEventArgs arg)
         {
      
-            _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription"));
+            _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", arg.Exception, _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription"));
 
             _snapShot.LastError = arg.Exception.Message;
             _snapShot.LastErrorUtc = DateTime.UtcNow;
@@ -174,7 +168,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
                 _snapShot.LastErrorUtc = DateTime.UtcNow;
 
                 await arg.DeadLetterMessageAsync(arg.Message, ex.Message);
-                _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex, _receiverConnectionString.ToKVP("rcvconnstr"), _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription")) ;
+                _logger.AddException("[ServiceBusProxyClient__ProcessErrorAsync]", ex,  _topicPath.ToKVP("topic"), _subscriptionPath.ToKVP("subscription")) ;
                 throw;
             }
         }
@@ -219,7 +213,7 @@ namespace LagoVista.Core.Rpc.Client.ServiceBus
             }
             catch(Exception ex)
             {
-                _logger.AddException(this.Tag(), ex, _transmitterConnectionSettings.ToKVP("txconnstr"), entityPath.ToKVP("entityPath"), message.ReplyPath.ToKVP("replyPath"));
+                _logger.AddException(this.Tag(), ex, entityPath.ToKVP("entityPath"), message.ReplyPath.ToKVP("replyPath"));
                 throw;
             }
             finally

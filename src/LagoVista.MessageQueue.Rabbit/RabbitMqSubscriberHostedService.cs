@@ -95,7 +95,7 @@ namespace LagoVista.MessageQueue.Rabbit
             }
             catch (Exception ex)
             {
-                _logger.AddException($"[RabbitMqSubscriberHostedService__ExecuteAsync__{nameof(RabbitMqSubscriberHostedService<TMessage>)}]", ex, _serviceName.ToKVP("serviceName"),
+                _logger.AddException($"[RabbitMqSubscriberHostedService__ExecuteAsync__{nameof(RabbitMqSubscriberHostedService<TMessage>)}]", ex, _settings.UserName.ToKVP("userName"), _settings.VirtualHost.ToKVP("vhost"), _serviceName.ToKVP("serviceName"),
                     route.QueueName.ToKVP("queueName"), route.DestinationName.ToKVP("destinationName"), route.RouteKey.ToKVP("routeKey"));
                 _snapShot.Status = HostedServiceDiagnosticStatus.Error;
                 _snapShot.LastError = ex.Message;
