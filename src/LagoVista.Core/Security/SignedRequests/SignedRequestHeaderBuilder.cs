@@ -29,14 +29,16 @@ namespace LagoVista.Core.Security
                 if (String.IsNullOrWhiteSpace(context.OrganizationId)) throw new InvalidOperationException("OrganizationId is required for runtime signed requests.");
                 if (String.IsNullOrWhiteSpace(context.UserId)) throw new InvalidOperationException("UserId is required for runtime signed requests.");
                 if (String.IsNullOrWhiteSpace(context.InstanceId)) throw new InvalidOperationException("InstanceId is required for runtime signed requests.");
+                if (String.IsNullOrWhiteSpace(context.Organization)) throw new InvalidOperationException("Organization is required for runtime signed requests.");
+                if (String.IsNullOrWhiteSpace(context.User)) throw new InvalidOperationException("User is required for runtime signed requests.");
+                if (String.IsNullOrWhiteSpace(context.Instance)) throw new InvalidOperationException("Instance is required for runtime signed requests.");
 
                 headers[SignedRequestHeaders.OrganizationId] = context.OrganizationId;
                 headers[SignedRequestHeaders.UserId] = context.UserId;
                 headers[SignedRequestHeaders.InstanceId] = context.InstanceId;
-
-                if (!String.IsNullOrWhiteSpace(context.Organization)) headers[SignedRequestHeaders.Organization] = context.Organization;
-                if (!String.IsNullOrWhiteSpace(context.User)) headers[SignedRequestHeaders.User] = context.User;
-                if (!String.IsNullOrWhiteSpace(context.Instance)) headers[SignedRequestHeaders.Instance] = context.Instance;
+                headers[SignedRequestHeaders.Organization] = context.Organization;
+                headers[SignedRequestHeaders.User] = context.User;
+                headers[SignedRequestHeaders.Instance] = context.Instance;
             }
 
             var bodySha256 = context.BodySha256;
