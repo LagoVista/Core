@@ -30,5 +30,7 @@ namespace LagoVista.Core.Rpc.Tests.Models
         public IConnectionSettings RpcServerTransmitter { get; }
 
         public IConnectionSettings RpcServerReceiver { get; }
+
+        public RcgServerKeys RpgServerKeys { get; }
     }
 }

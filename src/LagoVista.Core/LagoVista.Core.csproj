@@ -54,4 +54,7 @@
       <DependentUpon>T4ResourceGenerator.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Security\" />
+  </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.PlatformSupport;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -61,10 +62,14 @@ namespace LagoVista.Core.Rpc.Settings
         /// </summary>
         public IConnectionSettings RpcServerReceiver { get; }
 
+        public RcgServerKeys RpgServerKeys { get; }
+
 
         public TransceiverConnectionSettings(IConfiguration configuration)
         {
             var appKey = configuration["AppKey"];
+
+            RpgServerKeys = configuration.Map<RcgServerKeys>();
 
             var rpcAdminSection = configuration.GetSection("RpcAdmin");
             RpcAdmin = new LagoVista.Core.Models.ConnectionSettings()

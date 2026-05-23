@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Configuratio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RPC", "RPC", "{B9C8BF01-7FF0-4735-B94F-3863B02C02FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LagoVista.Core.Rcg.Client", "src\LagoVista.Core.Rcg.Client\LagoVista.Core.Rcg.Client.csproj", "{5FCD84E8-7AD9-4F2F-9103-93686DDB5AAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FCD84E8-7AD9-4F2F-9103-93686DDB5AAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FCD84E8-7AD9-4F2F-9103-93686DDB5AAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FCD84E8-7AD9-4F2F-9103-93686DDB5AAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FCD84E8-7AD9-4F2F-9103-93686DDB5AAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +170,7 @@ Global
 		{7DD6E93D-4369-F9B6-84C8-575DEC26CD0A} = {789A2940-98A7-4A45-B302-0FEE3151886E}
 		{4B1A3D50-6EE7-45CD-A9C8-278AED64659A} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
 		{B9C8BF01-7FF0-4735-B94F-3863B02C02FD} = {CEC21295-346D-4369-9511-FBB4BFFE1863}
+		{5FCD84E8-7AD9-4F2F-9103-93686DDB5AAF} = {B9C8BF01-7FF0-4735-B94F-3863B02C02FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E49F45F8-0C41-4A0A-A34E-D7A13852646B}

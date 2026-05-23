@@ -68,8 +68,6 @@ namespace LagoVista.Core.Rpc.Server.ServiceBus
             }
 
             _transmitterConnectionString = $"Endpoint=sb://{_transmitterSettings.AccountId}.servicebus.windows.net/;SharedAccessKeyName={_transmitterSettings.UserName};SharedAccessKey={_transmitterSettings.AccessKey};";
-            Console.WriteLine($"Subscriber Settings : {_subscriberConnectionString}");
-            Console.WriteLine($"Transmitter Settings: {_transmitterConnectionString}");
         }
 
         protected override void UpdateSettings(ITransceiverConnectionSettings connectionSettings)

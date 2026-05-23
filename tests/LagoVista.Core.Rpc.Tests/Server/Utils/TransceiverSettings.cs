@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.Rpc.Settings;
 
 namespace LagoVista.Core.Rpc.Tests.Server.Utils
@@ -18,5 +19,7 @@ namespace LagoVista.Core.Rpc.Tests.Server.Utils
         public IConnectionSettings RpcServerTransmitter { get; set; }
 
         public IConnectionSettings RpcServerReceiver { get; set; }
+
+        public RcgServerKeys RpgServerKeys { get; set;  }
     }
 }

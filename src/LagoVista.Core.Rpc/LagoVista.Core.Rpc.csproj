@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core.Configuration\LagoVista.Core.Configuration.csproj" />
+    <ProjectReference Include="..\LagoVista.Core.Rcg.Client\LagoVista.Core.Rcg.Client.csproj" />
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
   </ItemGroup>
 

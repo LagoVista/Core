@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>LagoVista.Core.Rcg.Client</id>
+    <version>3.0.3293.1734</version>
+    <authors>Software Logistics, LLC</authors>
+    <owners>Software Logistics, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://www.nuviot.com</projectUrl>
+    <iconUrl>http://bytemaster.blob.core.windows.net/icons/LagoVistaIcon.png</iconUrl>
+    <description>Common RPC Network Functionality and Interfaces for Building Apps with the LagoVista IoT and Devices Framework</description>
+    <copyright>Copyright Software Logistics - 2026</copyright>
+    <tags>HomeAutomation IoT RPC</tags>
+    <icon>LagoVistaIcon.png</icon>
+    <releaseNotes>Build Date: 5/23/2026 9:34:42 PM UTC</releaseNotes>
+    <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
+    <dependencies>
+      <group targetFramework="netstandard2.1">
+        <dependency id="LagoVista.Core.Configuration" version="3.0.3293.1734" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
+    <file src="bin\release\netstandard2.1\LagoVista.Core.Rcg.Client.dll" target="lib\netstandard2.1\LagoVista.Core.Rcg.Client.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.Core.Rcg.Client.pdb" target="lib\netstandard2.1\LagoVista.Core.Rcg.Client.pdb" />
+  </files>
+</package>

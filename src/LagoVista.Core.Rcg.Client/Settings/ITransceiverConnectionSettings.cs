@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 
 namespace LagoVista.Core.Rpc.Settings
 {
@@ -57,5 +58,7 @@ namespace LagoVista.Core.Rpc.Settings
         /// SubscriptionPath - Uri
         /// </summary>
         IConnectionSettings RpcServerReceiver { get; }
+
+        RcgServerKeys RpgServerKeys { get; }
     }
 }

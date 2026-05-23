@@ -3,6 +3,9 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 
 namespace LagoVista
 {
@@ -146,5 +149,72 @@ namespace LagoVista
         {
             return configuration.CreateTableStorageSettings("DefaultTableStorage");
         }
+
+        public static T Map<T>(this IConfiguration config) where T : class, new()
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
+
+            var instance = new T();
+
+            config.Map(instance);
+
+            return instance;
+        }
+
+        public static void Map<T>(this IConfiguration config, T instance) where T : class
+        {
+            if (config == null) throw new ArgumentNullException(nameof(config));
+            if (instance == null) throw new ArgumentNullException(nameof(instance));
+
+            var type = typeof(T);
+            var section = config.GetSection(type.Name);
+
+            var properties = type
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(prop => prop.CanWrite);
+
+            foreach (var property in properties)
+            {
+                var rawValue = section.Require(property.Name);
+                if (rawValue == null)
+                    continue;
+
+                var convertedValue = ConvertValue(rawValue, property.PropertyType);
+
+                property.SetValue(instance, convertedValue);
+            }
+        }
+
+        private static object ConvertValue(string value, Type targetType)
+        {
+            if (targetType == typeof(string))
+            {
+                return value;
+            }
+
+            var nullableType = Nullable.GetUnderlyingType(targetType);
+            if (nullableType != null)
+            {
+                return ConvertValue(value, nullableType);
+            }
+
+            if (targetType.IsEnum)
+            {
+                return Enum.Parse(targetType, value, ignoreCase: true);
+            }
+
+            if (targetType == typeof(Guid))
+            {
+                return Guid.Parse(value);
+            }
+
+            if (targetType == typeof(TimeSpan))
+            {
+                return TimeSpan.Parse(value, CultureInfo.InvariantCulture);
+            }
+
+            return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
+        }
+
     }
 }
