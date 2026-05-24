@@ -88,6 +88,8 @@ namespace LagoVista.Core.Rcg.Client.Services
                 using (var response = await _httpClient.SendAsync(request))
                 {
                     var responseText = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(responseText);
+
                     if (!response.IsSuccessStatusCode)
                     {
                         return InvokeResult<TResult>.FromError($"Remote Control Gateway returned HTTP {(int)response.StatusCode}: {responseText}");
@@ -98,8 +100,13 @@ namespace LagoVista.Core.Rcg.Client.Services
                         return InvokeResult<TResult>.FromError("Remote Control Gateway returned an empty response.");
                     }
 
-                    var result = JsonConvert.DeserializeObject<TResult>(responseText);
-                    return InvokeResult<TResult>.Create(result);
+                    var invokeResult = JsonConvert.DeserializeObject<InvokeResult<TResult>>(responseText);
+                    if (invokeResult == null)
+                    {
+                        return InvokeResult<TResult>.FromError("Remote Control Gateway response could not be deserialized.");
+                    }
+
+                    return invokeResult;
                 }
             }
         }
