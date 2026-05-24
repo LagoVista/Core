@@ -10,5 +10,7 @@ namespace LagoVista.Core.Rcg.Client.Interfaces
     {
         Task<InvokeResult<RemoteControlWelcome>> RequestChannelAsync(EntityHeader org, EntityHeader user);
         Task<InvokeResult<RcgRuntimeChannelConnection>> ConnectAsync(EntityHeader org, EntityHeader user, CancellationToken cancellationToken);
+        Task<InvokeResult> ListenAsync(RcgRuntimeChannelConnection connection, IRcgRuntimeCommandHandler handler, CancellationToken cancellationToken);
+        Task<InvokeResult> SendFrameAsync(RcgRuntimeChannelConnection connection, RemoteControlFrame frame, CancellationToken cancellationToken);
     }
 }

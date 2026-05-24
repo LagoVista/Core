@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Rcg.Client.Services
 {
-    public class RcgRuntimeChannelClient : IRcgRuntimeChannelClient
+    public partial class RcgRuntimeChannelClient : IRcgRuntimeChannelClient
     {
         private readonly RcgRuntimeChannelSettings _settings;
         private readonly HttpClient _httpClient;
@@ -61,7 +61,7 @@ namespace LagoVista.Core.Rcg.Client.Services
                 UserId = _settings.UserId,
                 User = user.Text,
                 InstanceId = _settings.TargetInstanceId,
-                Instance = _settings.TargetId
+                Instance = String.IsNullOrWhiteSpace(_settings.TargetId) ? _settings.TargetInstanceId : _settings.TargetId
             });
 
             using (var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/api/remote-control/sessions"))
@@ -95,14 +95,14 @@ namespace LagoVista.Core.Rcg.Client.Services
                         return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway welcome response could not be deserialized.");
                     }
 
-                    if (String.IsNullOrWhiteSpace(welcome.SessionToken))
-                    {
-                        return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway welcome response did not include a session token.");
-                    }
-
                     if (String.IsNullOrWhiteSpace(welcome.SessionId))
                     {
                         return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway welcome response did not include a session id.");
+                    }
+
+                    if (String.IsNullOrWhiteSpace(welcome.SessionToken))
+                    {
+                        return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway welcome response did not include a session token.");
                     }
 
                     if (String.IsNullOrWhiteSpace(welcome.StreamUrl))
@@ -158,9 +158,7 @@ namespace LagoVista.Core.Rcg.Client.Services
             }
 
             var queryPrefix = String.IsNullOrWhiteSpace(builder.Query) ? String.Empty : builder.Query.TrimStart('?') + "&";
-            builder.Query = queryPrefix +
-                "sessionId=" + Uri.EscapeDataString(welcome.SessionId) +
-                "&token=" + Uri.EscapeDataString(welcome.SessionToken);
+            builder.Query = queryPrefix + "sessionId=" + Uri.EscapeDataString(welcome.SessionId) + "&token=" + Uri.EscapeDataString(welcome.SessionToken);
 
             return builder.Uri;
         }
