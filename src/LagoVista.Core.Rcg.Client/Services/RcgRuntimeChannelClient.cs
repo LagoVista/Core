@@ -89,10 +89,21 @@ namespace LagoVista.Core.Rcg.Client.Services
                         return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway returned an empty welcome response.");
                     }
 
-                    var welcome = JsonConvert.DeserializeObject<RemoteControlWelcome>(responseText);
-                    if (welcome == null)
+                    var invokeResult = JsonConvert.DeserializeObject<InvokeResult<RemoteControlWelcome>>(responseText);
+                    if (invokeResult == null)
                     {
                         return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway welcome response could not be deserialized.");
+                    }
+
+                    if (!invokeResult.Successful)
+                    {
+                        return invokeResult;
+                    }
+
+                    var welcome = invokeResult.Result;
+                    if (welcome == null)
+                    {
+                        return InvokeResult<RemoteControlWelcome>.FromError("Remote Control Gateway welcome response did not include a result.");
                     }
 
                     if (String.IsNullOrWhiteSpace(welcome.SessionId))
@@ -125,6 +136,7 @@ namespace LagoVista.Core.Rcg.Client.Services
 
             var welcome = welcomeResult.Result;
             var socketUri = BuildSocketUri(welcome);
+            Console.WriteLine($"Connecting to remote control channel at {socketUri}...");
             var socket = new ClientWebSocket();
             await socket.ConnectAsync(socketUri, cancellationToken);
 
