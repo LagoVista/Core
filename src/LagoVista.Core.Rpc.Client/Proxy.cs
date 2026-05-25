@@ -2,12 +2,12 @@
 // ContentHash: 133b5c6037474b666177b477872da6b02a4697fefe43e3752e284261de35313e
 // IndexVersion: 2
 // --- END CODE INDEX META ---
-using LagoVista.Core.Interfaces;
+using LagoVista.Core;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Rpc.Attributes;
+using LagoVista.Core.Rpc.Client.Interfaces;
 using LagoVista.Core.Rpc.Messages;
 using LagoVista.Core.Rpc.Middleware;
-using LagoVista.Core.Rpc.Settings;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -21,57 +21,44 @@ namespace LagoVista.Core.Rpc.Client
     /// </remarks>
     public class Proxy : DispatchProxy
     {
+        private const string RemoteControlReplyPath = "rcg";
+
         private ILogger _logger;
-        private ITransceiver _client;
-        private ITransceiverConnectionSettings _connectionSettings;
+        private IRpcInvocationTransport _invocationTransport;
         private IProxySettings _proxySettings;
-        private IAsyncCoupler<IMessage> _asyncCoupler;
-        private string _replyPath;
         private TimeSpan _requestTimeout;
         private readonly static MethodInfo _fromResultMethodInfo = typeof(Task).GetMethod(nameof(Task.FromResult), BindingFlags.Static | BindingFlags.Public);
 
-        internal static TProxyInterface Create<TProxyInterface>(
-            ITransceiverConnectionSettings connectionSettings,
-            ITransceiver client,
-            IAsyncCoupler<IMessage> asyncCoupler,
-            ILogger logger,
-            IProxySettings proxySettings) where TProxyInterface : class
+        internal static TProxyInterface Create<TProxyInterface>(IRpcInvocationTransport invocationTransport, ILogger logger, IProxySettings proxySettings, TimeSpan requestTimeout) where TProxyInterface : class
         {
             var result = Create<TProxyInterface, Proxy>();
 
-            var proxy = (result as Proxy);
-            proxy._connectionSettings = connectionSettings ?? throw new ArgumentNullException(nameof(connectionSettings));
-            proxy._client = client ?? throw new ArgumentNullException(nameof(client));
-            proxy._asyncCoupler = asyncCoupler ?? throw new ArgumentNullException(nameof(asyncCoupler));
+            var proxy = result as Proxy;
+            proxy._invocationTransport = invocationTransport ?? throw new ArgumentNullException(nameof(invocationTransport));
             proxy._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             proxy._proxySettings = proxySettings ?? throw new ArgumentNullException(nameof(proxySettings));
-            if (string.IsNullOrEmpty(proxySettings.OrganizationId))
+
+            if (String.IsNullOrEmpty(proxySettings.OrganizationId))
             {
                 throw new ArgumentNullException(nameof(proxySettings.OrganizationId));
             }
 
-            if (string.IsNullOrEmpty(proxySettings.InstanceId) && String.IsNullOrEmpty(proxySettings.HostId))
+            if (String.IsNullOrEmpty(proxySettings.InstanceId) && String.IsNullOrEmpty(proxySettings.HostId))
             {
                 throw new ArgumentNullException($"{nameof(proxySettings.InstanceId)} and {nameof(proxySettings.HostId)}");
             }
 
-            if(!string.IsNullOrEmpty(proxySettings.InstanceId) && !String.IsNullOrEmpty(proxySettings.HostId))
+            if (!String.IsNullOrEmpty(proxySettings.InstanceId) && !String.IsNullOrEmpty(proxySettings.HostId))
             {
-                throw new InvalidOperationException("Most not provide both InstanceId and HostId on proxy settings.");
+                throw new InvalidOperationException("Must not provide both InstanceId and HostId on proxy settings.");
             }
 
-            if (string.IsNullOrEmpty(connectionSettings.RpcClientReceiver.ResourceName))
+            if (requestTimeout <= TimeSpan.Zero)
             {
-                throw new ArgumentNullException(nameof(connectionSettings.RpcClientReceiver.ResourceName));
+                throw new ArgumentException("timeout must be greater than zero", nameof(requestTimeout));
             }
 
-            proxy._replyPath = connectionSettings.RpcClientReceiver.ResourceName;
-            if (connectionSettings.RpcClientTransmitter.TimeoutInSeconds == 0)
-            {
-                throw new ArgumentException("timeout must be  greater than zero", nameof(connectionSettings.RpcClientReceiver.TimeoutInSeconds));
-            }
-
-            proxy._requestTimeout = TimeSpan.FromSeconds(connectionSettings.RpcClientTransmitter.TimeoutInSeconds);
+            proxy._requestTimeout = requestTimeout;
 
             return result;
         }
@@ -83,16 +70,15 @@ namespace LagoVista.Core.Rpc.Client
                 throw new ArgumentNullException(nameof(request));
             }
 
-            _logger.AddCustomEvent(LogLevel.Message, this.Tag(), $"InnokeMethod", request.CorrelationId.ToKVP("cid"), request.DestinationPath.ToKVP("method"), _asyncCoupler.InstanceId.ToKVP("instanceId"));
+            _logger.AddCustomEvent(LogLevel.Message, this.Tag(), "Invoke remote RPC method.", request.CorrelationId.ToKVP("CorrelationId"), request.DestinationPath.ToKVP("Method"), request.InstanceId.ToKVP("TargetInstanceId"));
 
-            var invokeResult = await _asyncCoupler.WaitOnAsync(async () => await _client.TransmitAsync(request), request.CorrelationId, _requestTimeout);
+            var invokeResult = await _invocationTransport.InvokeAsync(request, _requestTimeout);
 
             if (invokeResult == null)
             {
                 throw new NullReferenceException(nameof(invokeResult));
             }
 
-            // timeout is the only likely failure case
             if (!invokeResult.Successful)
             {
                 if (invokeResult.Errors == null)
@@ -105,10 +91,8 @@ namespace LagoVista.Core.Rpc.Client
                 {
                     throw new RpcException($"RPC for {request.DestinationPath} failed, {error.Message}");
                 }
-            }
-            else
-            {
-                _logger.AddCustomEvent(LogLevel.Message, $"[Proxy__InvokeRemoteMethodAsync]", $"[Proxy__InvokeRemoteMethodAsync] - cid: {request.CorrelationId}, aid: {_asyncCoupler.InstanceId}, Found: {request.DestinationPath}", _asyncCoupler.InstanceId.ToKVP("asyncCouplerId"));
+
+                throw new RpcException($"RPC for {request.DestinationPath} failed. No error message was provided.");
             }
 
             if (invokeResult.Result == null)
@@ -116,17 +100,18 @@ namespace LagoVista.Core.Rpc.Client
                 throw new NullReferenceException($"RPC for {request.DestinationPath} failed, {nameof(invokeResult)}.{nameof(invokeResult.Result)} is null.");
             }
 
-            return (IResponse)invokeResult.Result;
+            _logger.AddCustomEvent(LogLevel.Message, this.Tag(), "Remote RPC method completed.", request.CorrelationId.ToKVP("CorrelationId"), request.DestinationPath.ToKVP("Method"), request.InstanceId.ToKVP("TargetInstanceId"));
+
+            return invokeResult.Result;
         }
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             if (targetMethod.GetCustomAttribute<RpcIgnoreMethodAttribute>() != null)
             {
-                throw new NotSupportedException($"{nameof(Proxy)}.{nameof(Invoke)}: method not suported: {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
+                throw new NotSupportedException($"{nameof(Proxy)}.{nameof(Invoke)}: method not supported: {targetMethod.DeclaringType.FullName}.{targetMethod.Name}");
             }
 
-            // set ignored parmeters to null
             var parameters = targetMethod.GetParameters();
             for (var i = 0; i < parameters.Length; ++i)
             {
@@ -137,13 +122,10 @@ namespace LagoVista.Core.Rpc.Client
                 }
             }
 
-            // setup and transmit the request
-
             var resourceId = String.IsNullOrEmpty(_proxySettings.InstanceId) ? _proxySettings.HostId : _proxySettings.InstanceId;
-            var request = new Request(targetMethod, args, _proxySettings.OrganizationId, resourceId, _replyPath);
+            var request = new Request(targetMethod, args, _proxySettings.OrganizationId, resourceId, RemoteControlReplyPath);
             var responseTask = InvokeRemoteMethodAsync(request);
-            
-            // wait for response and handle exceptions
+
             responseTask.Wait(_requestTimeout.Add(TimeSpan.FromSeconds(30)));
             if (responseTask.Status == TaskStatus.Faulted && responseTask.Exception != null)
             {
@@ -154,7 +136,6 @@ namespace LagoVista.Core.Rpc.Client
                 throw new RpcException($"Proxy for {targetMethod.DeclaringType.FullName}.{targetMethod.Name} terminated with unexpected status: '{responseTask.Status}'.");
             }
 
-            // test response for server side exceptions
             var response = responseTask.Result;
             if (response == null)
             {
@@ -173,14 +154,13 @@ namespace LagoVista.Core.Rpc.Client
                 }
             }
 
-            // return response result to the proxy caller
             var taskFromResult = GetTaskFromResultMethod(targetMethod);
 
             var returnValue = response.ReturnValue;
 
-            if(returnValue != null && returnValue.GetType() == typeof(Int64))
+            if (returnValue != null && returnValue.GetType() == typeof(Int64))
             {
-                if(targetMethod.ReturnType == typeof(Int32))
+                if (targetMethod.ReturnType == typeof(Int32))
                 {
                     returnValue = Convert.ToInt32(returnValue);
                 }
@@ -194,11 +174,8 @@ namespace LagoVista.Core.Rpc.Client
                 }
             }
 
-            // if task from result method is null then this method didn't return an awaitable Task
-            return taskFromResult != null
-                ? taskFromResult.Invoke(null, new object[] { returnValue })
-                : returnValue;
-            }
+            return taskFromResult != null ? taskFromResult.Invoke(null, new object[] { returnValue }) : returnValue;
+        }
 
         private MethodInfo GetTaskFromResultMethod(MethodInfo targetMethod)
         {
@@ -206,13 +183,11 @@ namespace LagoVista.Core.Rpc.Client
             if (targetMethod.ReturnType.IsGenericType && targetMethod.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
             {
                 var genericArguments = targetMethod.ReturnType.GetGenericArguments();
-                taskFromResultMethod = genericArguments.Length > 0
-                    ? _fromResultMethodInfo.MakeGenericMethod(genericArguments)
-                    : _fromResultMethodInfo.MakeGenericMethod();
+                taskFromResultMethod = genericArguments.Length > 0 ? _fromResultMethodInfo.MakeGenericMethod(genericArguments) : _fromResultMethodInfo.MakeGenericMethod();
             }
-            else if(targetMethod.ReturnType == typeof(Task))
+            else if (targetMethod.ReturnType == typeof(Task))
             {
-                taskFromResultMethod = _fromResultMethodInfo.MakeGenericMethod(new Type[]{ typeof(object)});
+                taskFromResultMethod = _fromResultMethodInfo.MakeGenericMethod(new Type[] { typeof(object) });
             }
             return taskFromResultMethod;
         }
