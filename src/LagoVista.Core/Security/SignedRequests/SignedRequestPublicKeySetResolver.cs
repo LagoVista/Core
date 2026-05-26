@@ -2,7 +2,7 @@ using System;
 
 namespace LagoVista.Core.Security
 {
-    public class SignedRequestPublicKeySetResolver : ISignedRequestValidationKeyResolver
+    public class SignedRequestPublicKeySetResolver : ISignedRequestValidationKeyResolver, ISignedRequestPublicKeySetStore
     {
         private readonly object _syncRoot = new object();
         private SignedRequestPublicKeySet _keySet;
