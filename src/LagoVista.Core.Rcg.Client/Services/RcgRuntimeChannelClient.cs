@@ -51,7 +51,7 @@ namespace LagoVista.Core.Rcg.Client.Services
             var requestJson = JsonConvert.SerializeObject(request);
             var headers = _headerBuilder.BuildHeaders(new SignedRequestHeaderBuildContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
                 Key = _settings.RuntimeKey,
                 RequestId = Guid.NewGuid().ToId(),
                 DateUtc = DateTimeOffset.UtcNow,
