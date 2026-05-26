@@ -1,11 +1,6 @@
 // --- BEGIN CODE INDEX META (do not edit) ---
-// ContentHash: b8cd406a9045ebd2274e46a84aed75d22986e20172c036e36d0db62324e05fe9
-// IndexVersion: 2
-// --- END CODE INDEX META ---
 using LagoVista.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
@@ -41,6 +36,8 @@ namespace LagoVista.Core.Interfaces
         Inbox,
 
         Entity,
+
+        WebSocketServer,
     }
 
     public enum NotificationVerbosity
