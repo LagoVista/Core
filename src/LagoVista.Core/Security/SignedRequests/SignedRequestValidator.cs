@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace LagoVista.Core.Security
 {
@@ -49,22 +48,93 @@ namespace LagoVista.Core.Security
 
                 var canonicalSource = SignedRequestCanonicalizer.Build(canonicalContext);
 
-                if (ValidateWithKey(context.Key1, canonicalSource, authorization.Signature))
+                if (context.Profile == SignedRequestCanonicalProfile.ServiceHttpV1)
                 {
-                    return SignedRequestValidationResult.Success(requestId, "Key1");
+                    return ValidateServiceRequest(context, headers, requestId, canonicalSource, authorization.Signature);
                 }
 
-                if (ValidateWithKey(context.Key2, canonicalSource, authorization.Signature))
-                {
-                    return SignedRequestValidationResult.Success(requestId, "Key2");
-                }
-
-                return SignedRequestValidationResult.FromError("invalid_signature", "Signed request signature could not be validated.");
+                return ValidateRuntimeRequest(context, requestId, canonicalSource, authorization.Signature);
             }
             catch (Exception ex)
             {
                 return SignedRequestValidationResult.FromError("signed_request_validation_failed", ex.Message);
             }
+        }
+
+        private static SignedRequestValidationResult ValidateServiceRequest(SignedRequestValidationContext context, IReadOnlyDictionary<string, string> headers, string requestId, string canonicalSource, string signature)
+        {
+            if (context.ValidationKeyResolver == null)
+            {
+                return SignedRequestValidationResult.FromError("missing_validation_key_resolver", "ValidationKeyResolver is required for ServiceHttpV1 signed requests.");
+            }
+
+            var callerId = SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.CallerId);
+            var keyId = SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.SigningKeyId);
+            var algorithm = SignedRequestSignatureAlgorithms.Normalize(SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.SignatureAlgorithm));
+            var keyMaterialFormat = SignedRequestKeyMaterialFormats.Normalize(SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.KeyMaterialFormat));
+
+            if (algorithm != SignedRequestSignatureAlgorithms.RsaPssSha256)
+            {
+                return SignedRequestValidationResult.FromError("invalid_signature_algorithm", "ServiceHttpV1 signed requests must use rsa-pss-sha256.");
+            }
+
+            if (keyMaterialFormat != SignedRequestKeyMaterialFormats.RsaXml)
+            {
+                return SignedRequestValidationResult.FromError("invalid_key_material_format", "ServiceHttpV1 signed requests must use rsa-xml key material.");
+            }
+
+            var validationKey = context.ValidationKeyResolver.Resolve(callerId, keyId, algorithm);
+            if (validationKey == null)
+            {
+                return SignedRequestValidationResult.FromError("validation_key_not_found", "Signed request validation key could not be resolved.");
+            }
+
+            if (!String.Equals(validationKey.CallerId, callerId, StringComparison.OrdinalIgnoreCase))
+            {
+                return SignedRequestValidationResult.FromError("validation_key_caller_mismatch", "Signed request validation key caller does not match the request caller.");
+            }
+
+            if (!String.Equals(validationKey.KeyId, keyId, StringComparison.OrdinalIgnoreCase))
+            {
+                return SignedRequestValidationResult.FromError("validation_key_id_mismatch", "Signed request validation key id does not match the request key id.");
+            }
+
+            if (!String.Equals(SignedRequestSignatureAlgorithms.Normalize(validationKey.Algorithm), algorithm, StringComparison.OrdinalIgnoreCase))
+            {
+                return SignedRequestValidationResult.FromError("validation_key_algorithm_mismatch", "Signed request validation key algorithm does not match the request algorithm.");
+            }
+
+            if (!String.Equals(SignedRequestKeyMaterialFormats.Normalize(validationKey.KeyMaterialFormat), keyMaterialFormat, StringComparison.OrdinalIgnoreCase))
+            {
+                return SignedRequestValidationResult.FromError("validation_key_material_format_mismatch", "Signed request validation key material format does not match the request key material format.");
+            }
+
+            if (!SignedRequestValidationKeyStatuses.CanValidate(validationKey.Status))
+            {
+                return SignedRequestValidationResult.FromError("validation_key_not_active", $"Signed request validation key status '{validationKey.Status}' cannot validate requests.");
+            }
+
+            if (SignedRequestCrypto.Verify(algorithm, keyMaterialFormat, validationKey.PublicKeyMaterial, canonicalSource, signature))
+            {
+                return SignedRequestValidationResult.Success(requestId, "PublicKey", keyId, algorithm);
+            }
+
+            return SignedRequestValidationResult.FromError("invalid_signature", "Signed request signature could not be validated.");
+        }
+
+        private static SignedRequestValidationResult ValidateRuntimeRequest(SignedRequestValidationContext context, string requestId, string canonicalSource, string signature)
+        {
+            if (ValidateWithKey(context.Key1, canonicalSource, signature))
+            {
+                return SignedRequestValidationResult.Success(requestId, "Key1", String.Empty, SignedRequestSignatureAlgorithms.HmacSha256);
+            }
+
+            if (ValidateWithKey(context.Key2, canonicalSource, signature))
+            {
+                return SignedRequestValidationResult.Success(requestId, "Key2", String.Empty, SignedRequestSignatureAlgorithms.HmacSha256);
+            }
+
+            return SignedRequestValidationResult.FromError("invalid_signature", "Signed request signature could not be validated.");
         }
 
         private static SignedRequestValidationResult ValidateTimestamp(IReadOnlyDictionary<string, string> headers, TimeSpan maxClockSkew)
@@ -98,27 +168,7 @@ namespace LagoVista.Core.Security
                 return false;
             }
 
-            var actualSignature = SignedRequestSigner.ComputeSignature(key, canonicalSource);
-            var actualBytes = Encoding.UTF8.GetBytes(actualSignature);
-            var expectedBytes = Encoding.UTF8.GetBytes(expectedSignature);
-
-            return FixedTimeEquals(actualBytes, expectedBytes);
-        }
-
-        private static bool FixedTimeEquals(byte[] actualBytes, byte[] expectedBytes)
-        {
-            if (actualBytes == null) throw new ArgumentNullException(nameof(actualBytes));
-            if (expectedBytes == null) throw new ArgumentNullException(nameof(expectedBytes));
-
-            var difference = actualBytes.Length ^ expectedBytes.Length;
-            var length = Math.Min(actualBytes.Length, expectedBytes.Length);
-
-            for (var idx = 0; idx < length; ++idx)
-            {
-                difference |= actualBytes[idx] ^ expectedBytes[idx];
-            }
-
-            return difference == 0;
+            return SignedRequestCrypto.Verify(SignedRequestSignatureAlgorithms.HmacSha256, SignedRequestKeyMaterialFormats.Raw, key, canonicalSource, expectedSignature);
         }
     }
 }

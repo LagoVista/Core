@@ -6,6 +6,10 @@ namespace LagoVista.Core.Security
     {
         public SignedRequestCanonicalProfile Profile { get; set; }
         public string Key { get; set; }
+        public string PrivateKeyMaterial { get; set; }
+        public string SigningKeyId { get; set; }
+        public string SignatureAlgorithm { get; set; }
+        public string KeyMaterialFormat { get; set; }
         public string RequestId { get; set; }
         public DateTimeOffset DateUtc { get; set; }
         public string Version { get; set; }
@@ -24,6 +28,10 @@ namespace LagoVista.Core.Security
         public SignedRequestHeaderBuildContext()
         {
             Key = String.Empty;
+            PrivateKeyMaterial = String.Empty;
+            SigningKeyId = String.Empty;
+            SignatureAlgorithm = String.Empty;
+            KeyMaterialFormat = String.Empty;
             RequestId = String.Empty;
             DateUtc = DateTimeOffset.UtcNow;
             Version = "1";

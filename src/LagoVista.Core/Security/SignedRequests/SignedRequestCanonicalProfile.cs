@@ -2,7 +2,7 @@ namespace LagoVista.Core.Security
 {
     public enum SignedRequestCanonicalProfile
     {
-        RuntimeInstanceLegacy,
+        RuntimeInstanceV1,
         RuntimeInstanceHttpV1,
         ServiceHttpV1
     }

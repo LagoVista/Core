@@ -9,6 +9,9 @@ namespace LagoVista.Core.Security
         public const string RequestId = "X-Nuviot-Request-Id";
         public const string RuntimeRequestId = "X-Nuviot-Runtime-Request-Id";
         public const string CallerId = "X-Nuviot-Caller-Id";
+        public const string SigningKeyId = "X-Nuviot-Signing-Key-Id";
+        public const string SignatureAlgorithm = "X-Nuviot-Signature-Algorithm";
+        public const string KeyMaterialFormat = "X-Nuviot-Key-Material-Format";
         public const string Date = "X-Nuviot-Date";
         public const string Version = "X-Nuviot-Version";
         public const string BodySha256 = "X-Nuviot-Body-Sha256";
@@ -62,7 +65,7 @@ namespace LagoVista.Core.Security
 
         public static string GetRequestId(IReadOnlyDictionary<string, string> headers, SignedRequestCanonicalProfile profile)
         {
-            if (profile == SignedRequestCanonicalProfile.RuntimeInstanceLegacy || profile == SignedRequestCanonicalProfile.RuntimeInstanceHttpV1)
+            if (profile == SignedRequestCanonicalProfile.RuntimeInstanceV1 || profile == SignedRequestCanonicalProfile.RuntimeInstanceHttpV1)
             {
                 var runtimeRequestId = GetOptional(headers, RuntimeRequestId);
                 if (!String.IsNullOrWhiteSpace(runtimeRequestId))
@@ -79,7 +82,7 @@ namespace LagoVista.Core.Security
             if (headers == null) throw new ArgumentNullException(nameof(headers));
             if (String.IsNullOrWhiteSpace(requestId)) throw new ArgumentNullException(nameof(requestId));
 
-            if (profile == SignedRequestCanonicalProfile.RuntimeInstanceLegacy || profile == SignedRequestCanonicalProfile.RuntimeInstanceHttpV1)
+            if (profile == SignedRequestCanonicalProfile.RuntimeInstanceV1 || profile == SignedRequestCanonicalProfile.RuntimeInstanceHttpV1)
             {
                 headers[RuntimeRequestId] = requestId;
             }

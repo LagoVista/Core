@@ -9,6 +9,8 @@ namespace LagoVista.Core.Security
         public string ErrorCode { get; set; }
         public string ErrorMessage { get; set; }
         public string MatchedKeyName { get; set; }
+        public string MatchedKeyId { get; set; }
+        public string SignatureAlgorithm { get; set; }
 
         public SignedRequestValidationResult()
         {
@@ -16,6 +18,8 @@ namespace LagoVista.Core.Security
             ErrorCode = String.Empty;
             ErrorMessage = String.Empty;
             MatchedKeyName = String.Empty;
+            MatchedKeyId = String.Empty;
+            SignatureAlgorithm = String.Empty;
         }
 
         public static SignedRequestValidationResult Success(string requestId, string matchedKeyName)
@@ -25,6 +29,18 @@ namespace LagoVista.Core.Security
                 Successful = true,
                 RequestId = requestId,
                 MatchedKeyName = matchedKeyName
+            };
+        }
+
+        public static SignedRequestValidationResult Success(string requestId, string matchedKeyName, string matchedKeyId, string signatureAlgorithm)
+        {
+            return new SignedRequestValidationResult
+            {
+                Successful = true,
+                RequestId = requestId,
+                MatchedKeyName = matchedKeyName,
+                MatchedKeyId = matchedKeyId,
+                SignatureAlgorithm = signatureAlgorithm
             };
         }
 

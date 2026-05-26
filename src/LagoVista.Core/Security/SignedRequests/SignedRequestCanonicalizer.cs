@@ -12,8 +12,8 @@ namespace LagoVista.Core.Security
 
             switch (context.Profile)
             {
-                case SignedRequestCanonicalProfile.RuntimeInstanceLegacy:
-                    return BuildRuntimeInstanceLegacy(context);
+                case SignedRequestCanonicalProfile.RuntimeInstanceV1:
+                    return BuildRuntimeInstanceV1(context);
 
                 case SignedRequestCanonicalProfile.RuntimeInstanceHttpV1:
                     return BuildRuntimeInstanceHttpV1(context);
@@ -26,7 +26,7 @@ namespace LagoVista.Core.Security
             }
         }
 
-        private static string BuildRuntimeInstanceLegacy(SignedRequestCanonicalContext context)
+        private static string BuildRuntimeInstanceV1(SignedRequestCanonicalContext context)
         {
             var builder = new StringBuilder();
 
@@ -65,6 +65,9 @@ namespace LagoVista.Core.Security
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.Date));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.Version));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.CallerId));
+            Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.SigningKeyId));
+            Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.SignatureAlgorithm));
+            Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.KeyMaterialFormat));
             Append(builder, Require(context.Method, nameof(context.Method)));
             Append(builder, Require(context.PathAndQuery, nameof(context.PathAndQuery)));
             Append(builder, ResolveBodySha256(context));

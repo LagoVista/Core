@@ -2,6 +2,7 @@ using LagoVista.Core.Security;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace LagoVista.Core.Tests.Security.SignedRequests
@@ -13,13 +14,13 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
         private const string Key2 = "key-two";
 
         [Test]
-        public void RuntimeInstanceLegacy_BuildsCanonicalSource_InLegacyOrder()
+        public void RuntimeInstanceV1_BuildsCanonicalSource_InV1Order()
         {
             var headers = CreateRuntimeHeaders("REQ001", "2026-05-23T16:20:51.0000000Z");
 
             var canonical = SignedRequestCanonicalizer.Build(new SignedRequestCanonicalContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Headers = headers
             });
 
@@ -27,135 +28,176 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
         }
 
         [Test]
-        public void HeaderBuilder_RuntimeInstanceLegacy_AddsAuthorizationHeader_AndValidatorAcceptsKey1()
+        public void HeaderBuilder_RuntimeInstanceV1_AddsAuthorizationHeader_AndValidatorAcceptsKey1()
         {
             var builder = new SignedRequestHeaderBuilder();
             var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Key = Key1,
                 RequestId = "REQ002",
                 DateUtc = DateTimeOffset.UtcNow,
                 Version = "1",
                 OrganizationId = "ORG001",
+                Organization = "Acme Org",
                 UserId = "USER001",
-                InstanceId = "INSTANCE001"
+                User = "Runtime User",
+                InstanceId = "INSTANCE001",
+                Instance = "Runtime Instance"
             });
 
             var validator = new SignedRequestValidator();
             var result = validator.Validate(new SignedRequestValidationContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Headers = headers,
                 Key1 = Key1,
                 Key2 = Key2
             });
 
-            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Successful, Is.True, result.ErrorMessage);
             Assert.That(result.RequestId, Is.EqualTo("REQ002"));
             Assert.That(result.MatchedKeyName, Is.EqualTo("Key1"));
+            Assert.That(result.SignatureAlgorithm, Is.EqualTo(SignedRequestSignatureAlgorithms.HmacSha256));
             Assert.That(headers.ContainsKey(SignedRequestHeaders.Authorization), Is.True);
         }
 
         [Test]
-        public void Validator_RuntimeInstanceLegacy_AcceptsKey2Fallback()
+        public void Validator_RuntimeInstanceV1_AcceptsKey2Fallback()
         {
             var builder = new SignedRequestHeaderBuilder();
             var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Key = Key2,
                 RequestId = "REQ003",
                 DateUtc = DateTimeOffset.UtcNow,
                 Version = "1",
                 OrganizationId = "ORG001",
+                Organization = "Acme Org",
                 UserId = "USER001",
-                InstanceId = "INSTANCE001"
+                User = "Runtime User",
+                InstanceId = "INSTANCE001",
+                Instance = "Runtime Instance"
             });
 
             var validator = new SignedRequestValidator();
             var result = validator.Validate(new SignedRequestValidationContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Headers = headers,
                 Key1 = "wrong-key",
                 Key2 = Key2
             });
 
-            Assert.That(result.Successful, Is.True);
+            Assert.That(result.Successful, Is.True, result.ErrorMessage);
             Assert.That(result.MatchedKeyName, Is.EqualTo("Key2"));
+            Assert.That(result.SignatureAlgorithm, Is.EqualTo(SignedRequestSignatureAlgorithms.HmacSha256));
         }
 
         [Test]
-        public void HeaderBuilder_ServiceHttpV1_AddsBodyHash_AndValidatorAccepts()
+        public void HeaderBuilder_ServiceHttpV1_AddsBodyHash_AndValidatorAcceptsRsaPss()
         {
-            var body = Encoding.UTF8.GetBytes("{\"hello\":\"world\"}");
-            var builder = new SignedRequestHeaderBuilder();
-
-            var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
+            using (var rsa = RSA.Create())
             {
-                Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                Key = Key1,
-                RequestId = "REQ004",
-                DateUtc = DateTimeOffset.UtcNow,
-                Version = "1",
-                CallerId = "portal",
-                Method = "POST",
-                PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands?trace=true",
-                Body = body
-            });
+                rsa.KeySize = 3072;
+                var privateKeyMaterial = SignedRequestRsaXmlSerializer.ToXmlString(rsa.ExportParameters(true), true);
+                var publicKeyMaterial = SignedRequestRsaXmlSerializer.ToXmlString(rsa.ExportParameters(false), false);
+                var body = Encoding.UTF8.GetBytes("{\"hello\":\"world\"}");
+                var builder = new SignedRequestHeaderBuilder();
 
-            var validator = new SignedRequestValidator();
-            var result = validator.Validate(new SignedRequestValidationContext
-            {
-                Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                Headers = headers,
-                Key1 = Key1,
-                Key2 = Key2,
-                Method = "POST",
-                PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands?trace=true",
-                BodySha256 = SignedRequestBodyHasher.ComputeSha256Base64(body)
-            });
+                var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
+                {
+                    Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
+                    RequestId = "REQ004",
+                    DateUtc = DateTimeOffset.UtcNow,
+                    Version = "1",
+                    CallerId = "portal",
+                    SigningKeyId = "portal-live-202605",
+                    PrivateKeyMaterial = privateKeyMaterial,
+                    Method = "POST",
+                    PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands?trace=true",
+                    Body = body
+                });
 
-            Assert.That(result.Successful, Is.True);
-            Assert.That(result.MatchedKeyName, Is.EqualTo("Key1"));
-            Assert.That(headers[SignedRequestHeaders.BodySha256], Is.EqualTo(SignedRequestBodyHasher.ComputeSha256Base64(body)));
+                var validator = new SignedRequestValidator();
+                var result = validator.Validate(new SignedRequestValidationContext
+                {
+                    Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
+                    Headers = headers,
+                    Method = "POST",
+                    PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands?trace=true",
+                    BodySha256 = SignedRequestBodyHasher.ComputeSha256Base64(body),
+                    ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
+                    {
+                        CallerId = "portal",
+                        KeyId = "portal-live-202605",
+                        Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
+                        KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
+                        PublicKeyMaterial = publicKeyMaterial,
+                        Status = SignedRequestValidationKeyStatuses.Active
+                    })
+                });
+
+                Assert.That(result.Successful, Is.True, result.ErrorMessage);
+                Assert.That(result.MatchedKeyName, Is.EqualTo("PublicKey"));
+                Assert.That(result.MatchedKeyId, Is.EqualTo("portal-live-202605"));
+                Assert.That(result.SignatureAlgorithm, Is.EqualTo(SignedRequestSignatureAlgorithms.RsaPssSha256));
+                Assert.That(headers[SignedRequestHeaders.BodySha256], Is.EqualTo(SignedRequestBodyHasher.ComputeSha256Base64(body)));
+                Assert.That(headers[SignedRequestHeaders.SignatureAlgorithm], Is.EqualTo(SignedRequestSignatureAlgorithms.RsaPssSha256));
+                Assert.That(headers[SignedRequestHeaders.KeyMaterialFormat], Is.EqualTo(SignedRequestKeyMaterialFormats.RsaXml));
+                Assert.That(headers[SignedRequestHeaders.SigningKeyId], Is.EqualTo("portal-live-202605"));
+            }
         }
 
         [Test]
         public void Validator_ServiceHttpV1_RejectsTamperedBodyHash()
         {
-            var body = Encoding.UTF8.GetBytes("{\"hello\":\"world\"}");
-            var tamperedBody = Encoding.UTF8.GetBytes("{\"hello\":\"moon\"}");
-            var builder = new SignedRequestHeaderBuilder();
-
-            var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
+            using (var rsa = RSA.Create())
             {
-                Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                Key = Key1,
-                RequestId = "REQ005",
-                DateUtc = DateTimeOffset.UtcNow,
-                Version = "1",
-                CallerId = "portal",
-                Method = "POST",
-                PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands",
-                Body = body
-            });
+                rsa.KeySize = 3072;
+                var privateKeyMaterial = SignedRequestRsaXmlSerializer.ToXmlString(rsa.ExportParameters(true), true);
+                var publicKeyMaterial = SignedRequestRsaXmlSerializer.ToXmlString(rsa.ExportParameters(false), false);
+                var body = Encoding.UTF8.GetBytes("{\"hello\":\"world\"}");
+                var tamperedBody = Encoding.UTF8.GetBytes("{\"hello\":\"moon\"}");
+                var builder = new SignedRequestHeaderBuilder();
 
-            var validator = new SignedRequestValidator();
-            var result = validator.Validate(new SignedRequestValidationContext
-            {
-                Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                Headers = headers,
-                Key1 = Key1,
-                Key2 = Key2,
-                Method = "POST",
-                PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands",
-                BodySha256 = SignedRequestBodyHasher.ComputeSha256Base64(tamperedBody)
-            });
+                var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
+                {
+                    Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
+                    RequestId = "REQ005",
+                    DateUtc = DateTimeOffset.UtcNow,
+                    Version = "1",
+                    CallerId = "portal",
+                    SigningKeyId = "portal-live-202605",
+                    PrivateKeyMaterial = privateKeyMaterial,
+                    Method = "POST",
+                    PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands",
+                    Body = body
+                });
 
-            Assert.That(result.Successful, Is.False);
-            Assert.That(result.ErrorCode, Is.EqualTo("invalid_signature"));
+                var validator = new SignedRequestValidator();
+                var result = validator.Validate(new SignedRequestValidationContext
+                {
+                    Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
+                    Headers = headers,
+                    Method = "POST",
+                    PathAndQuery = "/api/remote-control/targets/INSTANCE001/commands",
+                    BodySha256 = SignedRequestBodyHasher.ComputeSha256Base64(tamperedBody),
+                    ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
+                    {
+                        CallerId = "portal",
+                        KeyId = "portal-live-202605",
+                        Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
+                        KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
+                        PublicKeyMaterial = publicKeyMaterial,
+                        Status = SignedRequestValidationKeyStatuses.Active
+                    })
+                });
+
+                Assert.That(result.Successful, Is.False);
+                Assert.That(result.ErrorCode, Is.EqualTo("invalid_signature"));
+            }
         }
 
         [Test]
@@ -167,7 +209,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
             var validator = new SignedRequestValidator();
             var result = validator.Validate(new SignedRequestValidationContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Headers = headers,
                 Key1 = Key1,
                 Key2 = Key2
@@ -183,20 +225,23 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
             var builder = new SignedRequestHeaderBuilder();
             var headers = builder.BuildHeaders(new SignedRequestHeaderBuildContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Key = Key1,
                 RequestId = "REQ007",
                 DateUtc = DateTimeOffset.UtcNow.AddHours(-1),
                 Version = "1",
                 OrganizationId = "ORG001",
+                Organization = "Acme Org",
                 UserId = "USER001",
-                InstanceId = "INSTANCE001"
+                User = "Runtime User",
+                InstanceId = "INSTANCE001",
+                Instance = "Runtime Instance"
             });
 
             var validator = new SignedRequestValidator();
             var result = validator.Validate(new SignedRequestValidationContext
             {
-                Profile = SignedRequestCanonicalProfile.RuntimeInstanceLegacy,
+                Profile = SignedRequestCanonicalProfile.RuntimeInstanceV1,
                 Headers = headers,
                 Key1 = Key1,
                 Key2 = Key2,
@@ -230,6 +275,28 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 { SignedRequestHeaders.UserId, "USER001" },
                 { SignedRequestHeaders.InstanceId, "INSTANCE001" }
             };
+        }
+
+        private class StaticValidationKeyResolver : ISignedRequestValidationKeyResolver
+        {
+            private readonly SignedRequestValidationKey _key;
+
+            public StaticValidationKeyResolver(SignedRequestValidationKey key)
+            {
+                _key = key;
+            }
+
+            public SignedRequestValidationKey Resolve(string callerId, string keyId, string algorithm)
+            {
+                if (String.Equals(_key.CallerId, callerId, StringComparison.OrdinalIgnoreCase) &&
+                    String.Equals(_key.KeyId, keyId, StringComparison.OrdinalIgnoreCase) &&
+                    String.Equals(SignedRequestSignatureAlgorithms.Normalize(_key.Algorithm), SignedRequestSignatureAlgorithms.Normalize(algorithm), StringComparison.OrdinalIgnoreCase))
+                {
+                    return _key;
+                }
+
+                return null;
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace LagoVista.Core.Security
         public IReadOnlyDictionary<string, string> Headers { get; set; }
         public string Key1 { get; set; }
         public string Key2 { get; set; }
+        public ISignedRequestValidationKeyResolver ValidationKeyResolver { get; set; }
         public string Method { get; set; }
         public string PathAndQuery { get; set; }
         public string BodySha256 { get; set; }
