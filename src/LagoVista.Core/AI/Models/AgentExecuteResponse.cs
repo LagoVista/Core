@@ -126,6 +126,8 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("chapters")]
         public List<EntityHeader> Chapters { get; set; } = new List<EntityHeader>();
 
+        [JsonProperty("artifactAuthoringState")]
+        public ArtifactAuthoringState ArtifactAuthoringState { get; set; }
 
         [JsonProperty("authoring")]
         public AgentAuthoringTurnResult Authoring { get; set; }

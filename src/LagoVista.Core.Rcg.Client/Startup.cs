@@ -10,10 +10,10 @@ namespace LagoVista.Core.Rcg.Client
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IRcgGatewayHttpClient, RcgGatewayHttpClient>();
-            services.AddScoped<IRcgRpcClientTransport, RcgRpcClientTransport>();
-            services.AddScoped<IRcgStatusManager, RcgStatusManager>();
-            services.AddTransient<IRcgClientSettings, RcgClientSettings>();
+            services.AddSingleton<IRcgGatewayHttpClient, RcgGatewayHttpClient>();
+            services.AddSingleton<IRcgRpcClientTransport, RcgRpcClientTransport>();
+            services.AddSingleton<IRcgStatusManager, RcgStatusManager>();
+            services.AddSingleton<IRcgClientSettings, RcgClientSettings>();
         }
     }
 }
