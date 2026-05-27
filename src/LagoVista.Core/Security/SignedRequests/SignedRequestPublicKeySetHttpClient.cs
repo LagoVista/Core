@@ -1,3 +1,4 @@
+using LagoVista.Core.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -10,9 +11,9 @@ namespace LagoVista.Core.Security
     public class SignedRequestPublicKeySetHttpClient : ISignedRequestPublicKeySetClient
     {
         private readonly HttpClient _httpClient;
-        private readonly SignedRequestPublicKeySetClientSettings _settings;
+        private readonly IConfigServerClientSettings _settings;
 
-        public SignedRequestPublicKeySetHttpClient(HttpClient httpClient, SignedRequestPublicKeySetClientSettings settings)
+        public SignedRequestPublicKeySetHttpClient(HttpClient httpClient, IConfigServerClientSettings settings)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
