@@ -13,7 +13,7 @@ namespace LagoVista.Core.Security
         public string RequestId { get; set; }
         public DateTimeOffset DateUtc { get; set; }
         public string Version { get; set; }
-        public string CallerId { get; set; }
+        public string AppKey { get; set; }
         public string OrganizationId { get; set; }
         public string Organization { get; set; }
         public string UserId { get; set; }
@@ -35,7 +35,7 @@ namespace LagoVista.Core.Security
             RequestId = String.Empty;
             DateUtc = DateTimeOffset.UtcNow;
             Version = "1";
-            CallerId = String.Empty;
+            AppKey = String.Empty;
             OrganizationId = String.Empty;
             Organization = String.Empty;
             UserId = String.Empty;

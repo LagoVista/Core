@@ -22,11 +22,11 @@ namespace LagoVista.Core.Security
             {
                 if (ResolveSigningAlgorithm(context) != SignedRequestSignatureAlgorithms.RsaPssSha256) throw new InvalidOperationException("ServiceHttpV1 signed requests must use rsa-pss-sha256.");
                 if (ResolveKeyMaterialFormat(context) != SignedRequestKeyMaterialFormats.RsaXml) throw new InvalidOperationException("ServiceHttpV1 signed requests must use rsa-xml key material.");
-                if (String.IsNullOrWhiteSpace(context.CallerId)) throw new InvalidOperationException("CallerId is required for ServiceHttpV1 signed requests.");
+                if (String.IsNullOrWhiteSpace(context.AppKey)) throw new InvalidOperationException("AppKey is required for ServiceHttpV1 signed requests.");
                 if (String.IsNullOrWhiteSpace(context.SigningKeyId)) throw new InvalidOperationException("SigningKeyId is required for ServiceHttpV1 signed requests.");
                 if (String.IsNullOrWhiteSpace(context.PrivateKeyMaterial)) throw new InvalidOperationException("PrivateKeyMaterial is required for ServiceHttpV1 signed requests.");
 
-                headers[SignedRequestHeaders.CallerId] = context.CallerId;
+                headers[SignedRequestHeaders.AppKey] = context.AppKey;
                 headers[SignedRequestHeaders.SigningKeyId] = context.SigningKeyId;
                 headers[SignedRequestHeaders.SignatureAlgorithm] = ResolveSigningAlgorithm(context);
                 headers[SignedRequestHeaders.KeyMaterialFormat] = ResolveKeyMaterialFormat(context);

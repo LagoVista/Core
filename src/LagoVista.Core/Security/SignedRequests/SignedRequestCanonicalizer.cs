@@ -64,7 +64,7 @@ namespace LagoVista.Core.Security
             Append(builder, SignedRequestHeaders.GetRequestId(context.Headers, context.Profile));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.Date));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.Version));
-            Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.CallerId));
+            Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.AppKey));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.SigningKeyId));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.SignatureAlgorithm));
             Append(builder, SignedRequestHeaders.GetRequired(context.Headers, SignedRequestHeaders.KeyMaterialFormat));

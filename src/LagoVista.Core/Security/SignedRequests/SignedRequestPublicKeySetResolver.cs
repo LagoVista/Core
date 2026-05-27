@@ -55,7 +55,7 @@ namespace LagoVista.Core.Security
                     continue;
                 }
 
-                if (!String.Equals(key.CallerId, callerId, StringComparison.OrdinalIgnoreCase))
+                if (!String.Equals(key.AppKey, callerId, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }

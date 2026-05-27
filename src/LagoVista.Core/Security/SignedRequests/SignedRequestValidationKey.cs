@@ -4,7 +4,7 @@ namespace LagoVista.Core.Security
 {
     public class SignedRequestValidationKey
     {
-        public string CallerId { get; set; }
+        public string AppKey { get; set; }
         public string KeyId { get; set; }
         public string Algorithm { get; set; }
         public string KeyMaterialFormat { get; set; }
@@ -13,7 +13,7 @@ namespace LagoVista.Core.Security
 
         public SignedRequestValidationKey()
         {
-            CallerId = String.Empty;
+            AppKey = String.Empty;
             KeyId = String.Empty;
             Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256;
             KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml;

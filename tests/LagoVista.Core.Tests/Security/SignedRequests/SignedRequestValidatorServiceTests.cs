@@ -119,7 +119,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
             return headerBuilder.BuildHeaders(new SignedRequestHeaderBuildContext
             {
                 Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                CallerId = "api",
+                AppKey = "api",
                 RequestId = "59B328E9E6D249999BA864CE153B5F5E",
                 DateUtc = DateTimeOffset.UtcNow,
                 Version = "1",
@@ -142,7 +142,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 {
                     new SignedRequestPublicKeyEntry
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = keyId,
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,

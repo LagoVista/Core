@@ -8,7 +8,7 @@ namespace LagoVista.Core.Rcg.Client.Interfaces
     public interface IRcgClientSettings
     {
         string GatewayBaseUrl { get; }
-        string CallerId { get; set; }
+        string AppKey { get; set; }
         string Version { get; }
         int TimeoutSeconds { get; }
         RcgServerKeys ServerKeys { get; }

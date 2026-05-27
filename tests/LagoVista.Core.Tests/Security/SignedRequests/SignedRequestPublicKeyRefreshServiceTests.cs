@@ -28,7 +28,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 {
                     new SignedRequestPublicKeyEntry
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,

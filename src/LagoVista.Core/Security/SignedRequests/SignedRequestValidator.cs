@@ -68,7 +68,7 @@ namespace LagoVista.Core.Security
                 return SignedRequestValidationResult.FromError("missing_validation_key_resolver", "ValidationKeyResolver is required for ServiceHttpV1 signed requests.");
             }
 
-            var callerId = SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.CallerId);
+            var callerId = SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.AppKey);
             var keyId = SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.SigningKeyId);
             var algorithm = SignedRequestSignatureAlgorithms.Normalize(SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.SignatureAlgorithm));
             var keyMaterialFormat = SignedRequestKeyMaterialFormats.Normalize(SignedRequestHeaders.GetRequired(headers, SignedRequestHeaders.KeyMaterialFormat));
@@ -89,7 +89,7 @@ namespace LagoVista.Core.Security
                 return SignedRequestValidationResult.FromError("validation_key_not_found", "Signed request validation key could not be resolved.");
             }
 
-            if (!String.Equals(validationKey.CallerId, callerId, StringComparison.OrdinalIgnoreCase))
+            if (!String.Equals(validationKey.AppKey, callerId, StringComparison.OrdinalIgnoreCase))
             {
                 return SignedRequestValidationResult.FromError("validation_key_caller_mismatch", "Signed request validation key caller does not match the request caller.");
             }

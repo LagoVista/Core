@@ -15,7 +15,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
             var key = resolver.Resolve("api", "api-live-202605", SignedRequestSignatureAlgorithms.RsaPssSha256);
 
             Assert.That(key, Is.Not.Null);
-            Assert.That(key.CallerId, Is.EqualTo("api"));
+            Assert.That(key.AppKey, Is.EqualTo("api"));
             Assert.That(key.KeyId, Is.EqualTo("api-live-202605"));
             Assert.That(key.Algorithm, Is.EqualTo(SignedRequestSignatureAlgorithms.RsaPssSha256));
             Assert.That(key.KeyMaterialFormat, Is.EqualTo(SignedRequestKeyMaterialFormats.RsaXml));
@@ -31,7 +31,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
             var key = resolver.Resolve("API", "API-LIVE-202605", "RSA-PSS-SHA256");
 
             Assert.That(key, Is.Not.Null);
-            Assert.That(key.CallerId, Is.EqualTo("api"));
+            Assert.That(key.AppKey, Is.EqualTo("api"));
             Assert.That(key.KeyId, Is.EqualTo("api-live-202605"));
         }
 
@@ -70,7 +70,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 {
                     new SignedRequestPublicKeyEntry
                     {
-                        CallerId = "mcp",
+                        AppKey = "mcp",
                         KeyId = "mcp-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -99,7 +99,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 {
                     new SignedRequestPublicKeyEntry
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -108,7 +108,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     },
                     new SignedRequestPublicKeyEntry
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202604",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,

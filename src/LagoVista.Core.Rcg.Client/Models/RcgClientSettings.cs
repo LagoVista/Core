@@ -8,7 +8,7 @@ namespace LagoVista.Core.Rcg.Client.Models
     public class RcgClientSettings : IRcgClientSettings
     {
         public string GatewayBaseUrl { get; set; }
-        public string CallerId { get; set; }
+        public string AppKey { get; set; }
         public string Version { get; set; }
         public int TimeoutSeconds { get; set; }
         public RcgServerKeys ServerKeys { get; set; }
@@ -19,7 +19,7 @@ namespace LagoVista.Core.Rcg.Client.Models
             var configSection = config.GetSection("RcgClientSettings");
 
             GatewayBaseUrl = configSection.Require("GatewayBaseUrl");
-            CallerId = appKey;
+            AppKey = appKey;
             Version = "1";
             TimeoutSeconds = Convert.ToInt32(configSection.Require("TimeoutSeconds") ?? "0"); 
             ServerKeys = config.Map<RcgServerKeys>();
@@ -27,7 +27,7 @@ namespace LagoVista.Core.Rcg.Client.Models
 
         public string GetSigningKey()
         {
-            if (String.IsNullOrWhiteSpace(CallerId))
+            if (String.IsNullOrWhiteSpace(AppKey))
             {
                 throw new InvalidOperationException("RCG caller id is required.");
             }
@@ -37,7 +37,7 @@ namespace LagoVista.Core.Rcg.Client.Models
                 throw new InvalidOperationException("RCG server keys are required.");
             }
 
-            if (String.Equals(CallerId, "web", StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(AppKey, "web", StringComparison.OrdinalIgnoreCase))
             {
                 if (String.IsNullOrWhiteSpace(ServerKeys.PortalKey1))
                 {
@@ -47,7 +47,7 @@ namespace LagoVista.Core.Rcg.Client.Models
                 return ServerKeys.PortalKey1;
             }
 
-            if (String.Equals(CallerId, "api", StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(AppKey, "api", StringComparison.OrdinalIgnoreCase))
             {
                 if (String.IsNullOrWhiteSpace(ServerKeys.ApiKey1))
                 {
@@ -57,7 +57,7 @@ namespace LagoVista.Core.Rcg.Client.Models
                 return ServerKeys.ApiKey1;
             }
 
-            throw new InvalidOperationException($"Unsupported RCG caller id '{CallerId}'.");
+            throw new InvalidOperationException($"Unsupported RCG caller id '{AppKey}'.");
         }
     }
 }

@@ -8,7 +8,7 @@ namespace LagoVista.Core.Security
         public const string Authorization = "Authorization";
         public const string RequestId = "X-Nuviot-Request-Id";
         public const string RuntimeRequestId = "X-Nuviot-Runtime-Request-Id";
-        public const string CallerId = "X-Nuviot-Caller-Id";
+        public const string AppKey = "X-Nuviot-AppKey";
         public const string SigningKeyId = "X-Nuviot-Signing-Key-Id";
         public const string SignatureAlgorithm = "X-Nuviot-Signature-Algorithm";
         public const string KeyMaterialFormat = "X-Nuviot-Key-Material-Format";

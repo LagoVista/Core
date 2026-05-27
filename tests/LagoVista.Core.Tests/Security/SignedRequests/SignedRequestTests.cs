@@ -112,7 +112,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     RequestId = "REQ004",
                     DateUtc = DateTimeOffset.UtcNow,
                     Version = "1",
-                    CallerId = "portal",
+                    AppKey = "portal",
                     SigningKeyId = "portal-live-202605",
                     PrivateKeyMaterial = privateKeyMaterial,
                     Method = "POST",
@@ -130,7 +130,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     BodySha256 = SignedRequestBodyHasher.ComputeSha256Base64(body),
                     ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
                     {
-                        CallerId = "portal",
+                        AppKey = "portal",
                         KeyId = "portal-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -168,7 +168,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     RequestId = "REQ005",
                     DateUtc = DateTimeOffset.UtcNow,
                     Version = "1",
-                    CallerId = "portal",
+                    AppKey = "portal",
                     SigningKeyId = "portal-live-202605",
                     PrivateKeyMaterial = privateKeyMaterial,
                     Method = "POST",
@@ -186,7 +186,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     BodySha256 = SignedRequestBodyHasher.ComputeSha256Base64(tamperedBody),
                     ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
                     {
-                        CallerId = "portal",
+                        AppKey = "portal",
                         KeyId = "portal-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -286,9 +286,9 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 _key = key;
             }
 
-            public SignedRequestValidationKey Resolve(string callerId, string keyId, string algorithm)
+            public SignedRequestValidationKey Resolve(string appKey, string keyId, string algorithm)
             {
-                if (String.Equals(_key.CallerId, callerId, StringComparison.OrdinalIgnoreCase) &&
+                if (String.Equals(_key.AppKey, appKey, StringComparison.OrdinalIgnoreCase) &&
                     String.Equals(_key.KeyId, keyId, StringComparison.OrdinalIgnoreCase) &&
                     String.Equals(SignedRequestSignatureAlgorithms.Normalize(_key.Algorithm), SignedRequestSignatureAlgorithms.Normalize(algorithm), StringComparison.OrdinalIgnoreCase))
                 {

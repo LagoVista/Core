@@ -22,7 +22,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 var headers = headerBuilder.BuildHeaders(new SignedRequestHeaderBuildContext
                 {
                     Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                    CallerId = "api",
+                    AppKey = "api",
                     RequestId = "59B328E9E6D249999BA864CE153B5F5E",
                     DateUtc = DateTimeOffset.UtcNow,
                     Version = "1",
@@ -42,7 +42,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     PathAndQuery = "/api/internal/work?x=1",
                     ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -73,7 +73,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 var headers = headerBuilder.BuildHeaders(new SignedRequestHeaderBuildContext
                 {
                     Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                    CallerId = "api",
+                    AppKey = "api",
                     RequestId = "59B328E9E6D249999BA864CE153B5F5E",
                     DateUtc = DateTimeOffset.UtcNow,
                     Version = "1",
@@ -93,7 +93,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     PathAndQuery = "/api/internal/work",
                     ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -123,7 +123,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 var headers = headerBuilder.BuildHeaders(new SignedRequestHeaderBuildContext
                 {
                     Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                    CallerId = "api",
+                    AppKey = "api",
                     RequestId = "59B328E9E6D249999BA864CE153B5F5E",
                     DateUtc = DateTimeOffset.UtcNow,
                     Version = "1",
@@ -143,7 +143,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     PathAndQuery = "/api/internal/work",
                     ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202605",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -171,7 +171,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 var headers = headerBuilder.BuildHeaders(new SignedRequestHeaderBuildContext
                 {
                     Profile = SignedRequestCanonicalProfile.ServiceHttpV1,
-                    CallerId = "api",
+                    AppKey = "api",
                     RequestId = "59B328E9E6D249999BA864CE153B5F5E",
                     DateUtc = DateTimeOffset.UtcNow,
                     Version = "1",
@@ -191,7 +191,7 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     PathAndQuery = "/api/internal/work",
                     ValidationKeyResolver = new StaticValidationKeyResolver(new SignedRequestValidationKey
                     {
-                        CallerId = "api",
+                        AppKey = "api",
                         KeyId = "api-live-202606",
                         Algorithm = SignedRequestSignatureAlgorithms.RsaPssSha256,
                         KeyMaterialFormat = SignedRequestKeyMaterialFormats.RsaXml,
@@ -250,9 +250,9 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 _key = key;
             }
 
-            public SignedRequestValidationKey Resolve(string callerId, string keyId, string algorithm)
+            public SignedRequestValidationKey Resolve(string appKey, string keyId, string algorithm)
             {
-                if (String.Equals(_key.CallerId, callerId, StringComparison.OrdinalIgnoreCase) &&
+                if (String.Equals(_key.AppKey, appKey, StringComparison.OrdinalIgnoreCase) &&
                     String.Equals(_key.KeyId, keyId, StringComparison.OrdinalIgnoreCase) &&
                     String.Equals(SignedRequestSignatureAlgorithms.Normalize(_key.Algorithm), SignedRequestSignatureAlgorithms.Normalize(algorithm), StringComparison.OrdinalIgnoreCase))
                 {
