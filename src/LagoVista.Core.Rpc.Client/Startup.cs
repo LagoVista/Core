@@ -13,6 +13,7 @@ namespace LagoVista.Core.Rpc.Client
         public static void AddRpcModule(this IServiceCollection services, IConfiguration configuration, ILogger logger)
         {
             services.AddRcgClientModule();
+            services.AddTransient<IProxyFactory, ProxyFactory>();
             services.AddSingleton<IRpcInvocationTransport, RemoteControlRpcInvocationTransport>();
             services.AddSingleton<ITransceiverConnectionSettings, TransceiverConnectionSettings>();
         }

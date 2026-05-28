@@ -67,55 +67,55 @@ namespace LagoVista.Core.Rpc.Settings
 
         public TransceiverConnectionSettings(IConfiguration configuration)
         {
-            var appKey = configuration["AppKey"];
+            //var appKey = configuration["AppKey"];
 
-            RpgServerKeys = configuration.Map<RcgServerKeys>();
+            //RpgServerKeys = configuration.Map<RcgServerKeys>();
 
-            var rpcAdminSection = configuration.GetSection("RpcAdmin");
-            RpcAdmin = new LagoVista.Core.Models.ConnectionSettings()
-            {
-                AccountId = rpcAdminSection.Require("Endpoint"),
-                UserName = rpcAdminSection.Require("SharedAccessKeyName"),
-                AccessKey = rpcAdminSection.Require("SharedAccessKey"),
-            };
+            //var rpcAdminSection = configuration.GetSection("RpcAdmin");
+            //RpcAdmin = new LagoVista.Core.Models.ConnectionSettings()
+            //{
+            //    AccountId = rpcAdminSection.Require("Endpoint"),
+            //    UserName = rpcAdminSection.Require("SharedAccessKeyName"),
+            //    AccessKey = rpcAdminSection.Require("SharedAccessKey"),
+            //};
 
-            var rpcClientTransmitterSection = configuration.GetSection("RpcClientTransmitter");
-            RpcClientTransmitter = new LagoVista.Core.Models.ConnectionSettings()
-            {
-                AccountId = rpcClientTransmitterSection.Require("Endpoint"),
-                UserName = rpcClientTransmitterSection.Require("SharedAccessKeyName"),
-                AccessKey = rpcClientTransmitterSection.Require("SharedAccessKey"),
-                ResourceName = rpcClientTransmitterSection.Require("TopicPrefix"),
-                TimeoutInSeconds = Convert.ToInt32(rpcClientTransmitterSection.Require("TimeoutInSeconds"))
-            };
+            //var rpcClientTransmitterSection = configuration.GetSection("RpcClientTransmitter");
+            //RpcClientTransmitter = new LagoVista.Core.Models.ConnectionSettings()
+            //{
+            //    AccountId = rpcClientTransmitterSection.Require("Endpoint"),
+            //    UserName = rpcClientTransmitterSection.Require("SharedAccessKeyName"),
+            //    AccessKey = rpcClientTransmitterSection.Require("SharedAccessKey"),
+            //    ResourceName = rpcClientTransmitterSection.Require("TopicPrefix"),
+            //    TimeoutInSeconds = Convert.ToInt32(rpcClientTransmitterSection.Require("TimeoutInSeconds"))
+            //};
 
-            var rpcClientReceiverSection = configuration.GetSection("RpcClientReceiver");
-            var appReceiverSection = rpcClientReceiverSection.GetSection(appKey);
-            RpcClientReceiver = new LagoVista.Core.Models.ConnectionSettings()
-            {
-                AccountId = appReceiverSection.Require("Endpoint"),
-                UserName = appReceiverSection.Require("SharedAccessKeyName"),
-                AccessKey = appReceiverSection.Require("SharedAccessKey"),
-                ResourceName = appReceiverSection.Require("SourceEntityPath"),
-                Uri = appReceiverSection.Require("SubscriptionPath"),
-            };
+            //var rpcClientReceiverSection = configuration.GetSection("RpcClientReceiver");
+            //var appReceiverSection = rpcClientReceiverSection.GetSection(appKey);
+            //RpcClientReceiver = new LagoVista.Core.Models.ConnectionSettings()
+            //{
+            //    AccountId = appReceiverSection.Require("Endpoint"),
+            //    UserName = appReceiverSection.Require("SharedAccessKeyName"),
+            //    AccessKey = appReceiverSection.Require("SharedAccessKey"),
+            //    ResourceName = appReceiverSection.Require("SourceEntityPath"),
+            //    Uri = appReceiverSection.Require("SubscriptionPath"),
+            //};
 
-            var rpcServerTransmitterSection = configuration.GetSection("RpcServerTransmitter");
-            RpcServerTransmitter = new LagoVista.Core.Models.ConnectionSettings()
-            {
-                AccountId = rpcServerTransmitterSection.Require("Endpoint"),
-                UserName = rpcServerTransmitterSection.Require("SharedAccessKeyName"),
-                AccessKey = rpcServerTransmitterSection.Require("SharedAccessKey"),
-            };
+            //var rpcServerTransmitterSection = configuration.GetSection("RpcServerTransmitter");
+            //RpcServerTransmitter = new LagoVista.Core.Models.ConnectionSettings()
+            //{
+            //    AccountId = rpcServerTransmitterSection.Require("Endpoint"),
+            //    UserName = rpcServerTransmitterSection.Require("SharedAccessKeyName"),
+            //    AccessKey = rpcServerTransmitterSection.Require("SharedAccessKey"),
+            //};
 
-            var rpcServerReceiverSection = configuration.GetSection("RpcServerReceiver");
-            RpcServerReceiver = new LagoVista.Core.Models.ConnectionSettings()
-            {
-                AccountId = rpcServerReceiverSection.Require("Endpoint"),
-                UserName = rpcServerReceiverSection.Require("SharedAccessKeyName"),
-                AccessKey = rpcServerReceiverSection.Require("SharedAccessKey"),
-                Uri = rpcServerReceiverSection.Require("SubscriptionPath"),
-            };
+            //var rpcServerReceiverSection = configuration.GetSection("RpcServerReceiver");
+            //RpcServerReceiver = new LagoVista.Core.Models.ConnectionSettings()
+            //{
+            //    AccountId = rpcServerReceiverSection.Require("Endpoint"),
+            //    UserName = rpcServerReceiverSection.Require("SharedAccessKeyName"),
+            //    AccessKey = rpcServerReceiverSection.Require("SharedAccessKey"),
+            //    Uri = rpcServerReceiverSection.Require("SubscriptionPath"),
+            //};
         }
     }
 }
