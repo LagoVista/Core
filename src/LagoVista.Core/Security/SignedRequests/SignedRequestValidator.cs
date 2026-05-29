@@ -89,11 +89,6 @@ namespace LagoVista.Core.Security
                 return SignedRequestValidationResult.FromError("validation_key_not_found", "Signed request validation key could not be resolved.");
             }
 
-            if (!String.Equals(validationKey.AppKey, callerId, StringComparison.OrdinalIgnoreCase))
-            {
-                return SignedRequestValidationResult.FromError("validation_key_caller_mismatch", "Signed request validation key caller does not match the request caller.");
-            }
-
             if (!String.Equals(validationKey.KeyId, keyId, StringComparison.OrdinalIgnoreCase))
             {
                 return SignedRequestValidationResult.FromError("validation_key_id_mismatch", "Signed request validation key id does not match the request key id.");
