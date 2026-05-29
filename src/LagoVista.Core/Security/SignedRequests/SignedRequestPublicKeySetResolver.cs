@@ -1,3 +1,4 @@
+using LagoVista.Core.PlatformSupport;
 using System;
 
 namespace LagoVista.Core.Security
@@ -51,11 +52,6 @@ namespace LagoVista.Core.Security
             foreach (var key in keySet.Keys)
             {
                 if (key == null)
-                {
-                    continue;
-                }
-
-                if (!String.Equals(key.AppKey, callerId, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
