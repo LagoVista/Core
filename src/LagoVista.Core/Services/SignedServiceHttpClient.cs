@@ -1,4 +1,5 @@
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.Security;
 using LagoVista.Core.Validation;
 using Newtonsoft.Json;
@@ -15,10 +16,12 @@ namespace LagoVista.Core.Services
         private readonly IEnvironmentEndpoints _environmentEndpoints;
         private readonly HttpClient _httpClient;
         private readonly SignedRequestHeaderBuilder _headerBuilder;
+        private readonly ILogger _logger;
 
-        public SignedServiceHttpClient(ISignedServiceHttpClientSettings settings, IEnvironmentEndpoints environmentEndpoints)
+        public SignedServiceHttpClient(ISignedServiceHttpClientSettings settings, ILogger logger, IEnvironmentEndpoints environmentEndpoints)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _environmentEndpoints = environmentEndpoints ?? throw new ArgumentNullException(nameof(environmentEndpoints));
             _httpClient = new HttpClient
             {
@@ -68,6 +71,8 @@ namespace LagoVista.Core.Services
                 PathAndQuery = normalizedPath,
                 Body = bodyBytes
             });
+            
+            _logger.Trace($"{this.Tag()} Sending {method} request to {requestUri}");
 
             using (var request = new HttpRequestMessage(method, requestUri))
             {
@@ -90,8 +95,11 @@ namespace LagoVista.Core.Services
 
                     if (!response.IsSuccessStatusCode)
                     {
+                        _logger.AddCustomEvent(LogLevel.Error, this.Tag(), $"Received HTTP {(int)response.StatusCode} response from {requestUri}");
                         return InvokeResult<TResult>.FromError($"Signed service HTTP target '{target}' returned HTTP {(int)response.StatusCode}: {responseText}");
                     }
+
+                    _logger.Trace($"{this.Tag()} Received successful response from {requestUri}. Deserializing response.");
 
                     if (String.IsNullOrWhiteSpace(responseText))
                     {
@@ -101,6 +109,7 @@ namespace LagoVista.Core.Services
                     var invokeResult = JsonConvert.DeserializeObject<InvokeResult<TResult>>(responseText);
                     if (invokeResult == null)
                     {
+                        _logger.AddCustomEvent(LogLevel.Error, this.Tag(), $"Signed service HTTP target '{target}' response could not be deserialized.");
                         return InvokeResult<TResult>.FromError($"Signed service HTTP target '{target}' response could not be deserialized.");
                     }
 
