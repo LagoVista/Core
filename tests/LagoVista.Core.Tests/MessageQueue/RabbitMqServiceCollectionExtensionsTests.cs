@@ -187,6 +187,16 @@ namespace LagoVista.Core.Tests.MessageQueue
             }
 
             public void Warning(string message, params KeyValuePair<string, string>[] details) { }
+
+            public void WriteJson<T>(string name, T data)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void WriteJson(string name, string json)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

@@ -87,5 +87,15 @@ namespace LagoVista.MessageQueue.RabbitMQ.IntegrationTests.TestSupport
         {
             Errors.Add(message);
         }
+
+        public void WriteJson<T>(string name, T data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteJson(string name, string json)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

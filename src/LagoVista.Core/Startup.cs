@@ -3,8 +3,10 @@ using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Security;
+using LagoVista.Core.Services;
 using LagoVista.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace LagoVista.Core
 {
@@ -23,6 +25,9 @@ namespace LagoVista.Core
             services.AddSingleton<ISignedRequestPublicKeySetClient, SignedRequestPublicKeySetHttpClient>();
             services.AddSingleton<ISignedRequestPublicKeyRefreshService, SignedRequestPublicKeyRefreshService>();
             services.AddSingleton<ISignedRequestValidatorService, SignedRequestValidatorService>();
+
+            services.TryAddSingleton<ISummaryListProviderRegistry>(SummaryListProviderRegistry.Instance);
+            services.TryAddTransient<ISummaryListProviderInvoker, SummaryListProviderInvoker>();
         }
     }
 }
@@ -36,6 +41,11 @@ namespace LagoVista.DependencyInjection
         {
             Startup.ConfigureServices(services);
             services.AddMetaDataHelper<AppUserDTO>();
+        }
+
+        public static void RegisterSummaryListProviders<TMarkerType>(this IServiceCollection services)
+        {
+            SummaryListProviderRegistry.Instance.RegisterAssembly(typeof(TMarkerType).Assembly, MetaDataHelper.Instance);
         }
     }
 }

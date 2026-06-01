@@ -43,6 +43,9 @@ namespace LagoVista.Core.PlatformSupport
         void AddException(string tag, Exception ex, params KeyValuePair<string, string>[] args);
 
         void TrackEvent(string message, Dictionary<string, string> parameters);
+        void WriteJson<T>(string name, T data);
+
+        void WriteJson(string name, string json);
 
         void TrackMetric(string kind, string name, MetricType metricType, double count, params KeyValuePair<string, string>[] args);
 

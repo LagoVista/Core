@@ -151,17 +151,32 @@ namespace LagoVista.Core.Models
 
         public override bool Equals(object obj)
         {
-            if (obj is EntityHeader eh)
-            {
-                return eh.Id == Id;
-            }
+            if (ReferenceEquals(this, obj))
+                return true;
 
-            return false;
+            if (obj == null)
+                return false;
+
+            if (obj.GetType() != GetType())
+                return false;
+
+            var other = obj as EntityHeader;
+
+            if (other == null)
+                return false;
+
+            return !String.IsNullOrEmpty(Id) && Id == other.Id;
         }
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            unchecked
+            {
+                var hash = 17;
+                hash = hash * 23 + GetType().GetHashCode();
+                hash = hash * 23 + (Id == null ? 0 : Id.GetHashCode());
+                return hash;
+            }
         }
 
         public static bool operator !=(EntityHeader hdr1, EntityHeader hdr2)

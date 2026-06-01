@@ -53,6 +53,14 @@ namespace LagoVista.Core.AsyncCoupler.Utils.Tests
         public void TrackMetric(string kind, string name, MetricType metricType, int count, params KeyValuePair<string, string>[] args)
         {
         }
+
+        public void WriteJson<T>(string name, T data)
+        {
+        }
+
+        public void WriteJson(string name, string json)
+        {
+        }
     }
 
     //public class LogWriter : ILogWriter
