@@ -66,6 +66,7 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         public string TurnId { get; set; }
 
+        public List<string> RequestedPromptKnowledgeContributorKeys { get; set; } = new List<string>();
 
 
         public string SessionType { get; set; }

@@ -138,7 +138,11 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("vtmMeetingId")]
         public string VtmMeetingId { get; set; }
 
+        [JsonProperty("sopExecution")]
         public SopAgentExecutionResponse SopExecution { get; set; }
+
+        [JsonProperty("vtmMeetingWorkItems")]
+        public List<VtmMeetingWorkItemSummary> VtmMeetingWorkItems { get; set; }  = new List<VtmMeetingWorkItemSummary>();
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
@@ -173,6 +177,28 @@ namespace LagoVista.Core.AI.Models
         /// </summary>
         [JsonProperty("argumentsJson")]
         public string ArgumentsJson { get; set; }
+    }
+
+    public sealed class VtmMeetingWorkItemSummary
+    {
+        [JsonProperty("status")]
+        public string Status { get; set; }
+        [JsonProperty("summary")]
+        public string Summary { get; set; }
+        
+        [JsonProperty("pendingExecution")]
+        public bool PendingExecution { get; set; }
+        [JsonProperty("completed")]
+        public bool Completed { get; set; }
+        
+        [JsonProperty("essentialJobActivity")]
+        public EntityHeader EssentialJobActivity { get; set; }
+        [JsonProperty("virtualTeammember")]
+        public EntityHeader VirtualTeammember { get; set; }
+        [JsonProperty("standardOperatingProcedure")]
+        public EntityHeader StandardOperatingProcedure { get; set; }
+        [JsonProperty("outputArtifact")]
+        public EntityHeader OutputArtifact { get; set; }
     }
 
     /// <summary>
