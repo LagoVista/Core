@@ -7,19 +7,23 @@ namespace LagoVista.Core.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class SummaryListProviderAttribute : Attribute
     {
-        public SummaryListProviderAttribute(string modelName)
+        public SummaryListProviderAttribute(Type modelType)
         {
-            if (String.IsNullOrWhiteSpace(modelName))
-                throw new ArgumentNullException(nameof(modelName));
-
-            ModelName = modelName;
+            ModelType = modelType ?? throw new ArgumentNullException(nameof(modelType));
         }
 
-        public string ModelName { get; }
+        public Type ModelType { get; }
+
+        public string ModelName
+        {
+            get { return ModelType.Name; }
+        }
 
         public string Scope { get; set; } = SummaryListProviderScopes.Organization;
 
         public string Description { get; set; }
+
+        public Type ServiceType { get; set; }
     }
 
     public static class SummaryListProviderScopes

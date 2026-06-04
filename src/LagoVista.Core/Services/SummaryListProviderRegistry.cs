@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,21 +42,29 @@ namespace LagoVista.Core.Services
                     if (attr == null)
                         continue;
 
-                    var entityType = entityTypeResolver.GetEntityType(attr.ModelName);
+                    var modelType = attr.ModelType ?? throw new InvalidOperationException($"Summary list provider [{type.FullName}.{method.Name}] did not provide a model type.");
 
-                    var summaryType = GetSummaryType(method);
+                    if (!entityTypeResolver.TryGetEntityType(modelType.Name, out var registeredEntityType))
+                        throw new InvalidOperationException($"Summary list provider [{type.FullName}.{method.Name}] references model type [{modelType.FullName}], but that model has not been registered with MetaDataHelper.");
+
+                    if (registeredEntityType != modelType)
+                        throw new InvalidOperationException($"Summary list provider [{type.FullName}.{method.Name}] references model type [{modelType.FullName}], but MetaDataHelper resolves [{modelType.Name}] to [{registeredEntityType.FullName}].");
+
+
+                    var methodBinding = ResolveServiceMethodBinding(type.AsType(), method, attr);
+                    var summaryType = GetSummaryType(methodBinding.Method);
 
                     var definition = new SummaryListProviderDefinition
                     {
                         ModelName = attr.ModelName,
                         Scope = String.IsNullOrWhiteSpace(attr.Scope) ? SummaryListProviderScopes.Organization : attr.Scope,
                         Description = attr.Description,
-                        EntityType = entityType,
+                        EntityType = modelType,
                         SummaryType = summaryType,
-                        ServiceType = type.AsType(),
-                        Method = method,
-                        MethodName = method.Name,
-                        Parameters = method.GetParameters().Select(parameter => new SummaryListProviderParameterDefinition
+                        ServiceType = methodBinding.ServiceType,
+                        Method = methodBinding.Method,
+                        MethodName = methodBinding.Method.Name,
+                        Parameters = methodBinding.Method.GetParameters().Select(parameter => new SummaryListProviderParameterDefinition
                         {
                             Name = parameter.Name,
                             ParameterType = parameter.ParameterType
@@ -98,12 +105,86 @@ namespace LagoVista.Core.Services
 
         public void Add(SummaryListProviderDefinition definition)
         {
+            if (definition == null)
+                throw new ArgumentNullException(nameof(definition));
+
             var key = CreateKey(definition.ModelName, definition.Scope);
 
             if (_providers.TryGetValue(key, out var existingDefinition))
                 throw new InvalidOperationException($"Duplicate summary list provider for model [{definition.ModelName}] and scope [{definition.Scope}]. Existing provider: [{existingDefinition.ServiceType.FullName}.{existingDefinition.MethodName}], duplicate provider: [{definition.ServiceType.FullName}.{definition.MethodName}].");
 
             _providers.Add(key, definition);
+        }
+
+        private static SummaryListProviderMethodBinding ResolveServiceMethodBinding(Type declaringType, MethodInfo method, SummaryListProviderAttribute attr)
+        {
+            if (declaringType == null)
+                throw new ArgumentNullException(nameof(declaringType));
+
+            if (method == null)
+                throw new ArgumentNullException(nameof(method));
+
+            if (attr == null)
+                throw new ArgumentNullException(nameof(attr));
+
+            if (declaringType.IsInterface)
+            {
+                if (attr.ServiceType != null)
+                    throw new InvalidOperationException($"Summary list provider [{declaringType.FullName}.{method.Name}] is declared on an interface and must not specify ServiceType.");
+
+                return new SummaryListProviderMethodBinding
+                {
+                    ServiceType = declaringType,
+                    Method = method
+                };
+            }
+
+            if (attr.ServiceType == null)
+                throw new InvalidOperationException($"Summary list provider [{declaringType.FullName}.{method.Name}] is declared on a concrete class and must specify ServiceType.");
+
+            if (!attr.ServiceType.IsInterface)
+                throw new InvalidOperationException($"Summary list provider [{declaringType.FullName}.{method.Name}] specifies ServiceType [{attr.ServiceType.FullName}], but ServiceType must be an interface.");
+
+            if (!attr.ServiceType.IsAssignableFrom(declaringType))
+                throw new InvalidOperationException($"Summary list provider [{declaringType.FullName}.{method.Name}] specifies ServiceType [{attr.ServiceType.FullName}], but [{declaringType.FullName}] does not implement that interface.");
+
+            return new SummaryListProviderMethodBinding
+            {
+                ServiceType = attr.ServiceType,
+                Method = FindMatchingInterfaceMethod(attr.ServiceType, method)
+            };
+        }
+
+        private static MethodInfo FindMatchingInterfaceMethod(Type serviceType, MethodInfo implementationMethod)
+        {
+            var candidates = serviceType.GetMethods().Where(candidate =>
+                String.Equals(candidate.Name, implementationMethod.Name, StringComparison.Ordinal) &&
+                ParametersMatch(candidate, implementationMethod)).ToList();
+
+            if (candidates.Count == 0)
+                throw new InvalidOperationException($"Could not find matching interface method [{serviceType.FullName}.{implementationMethod.Name}] for implementation method [{implementationMethod.DeclaringType.FullName}.{implementationMethod.Name}].");
+
+            if (candidates.Count > 1)
+                throw new InvalidOperationException($"Found multiple matching interface methods [{serviceType.FullName}.{implementationMethod.Name}] for implementation method [{implementationMethod.DeclaringType.FullName}.{implementationMethod.Name}].");
+
+            return candidates[0];
+        }
+
+        private static bool ParametersMatch(MethodInfo left, MethodInfo right)
+        {
+            var leftParameters = left.GetParameters();
+            var rightParameters = right.GetParameters();
+
+            if (leftParameters.Length != rightParameters.Length)
+                return false;
+
+            for (var idx = 0; idx < leftParameters.Length; ++idx)
+            {
+                if (leftParameters[idx].ParameterType != rightParameters[idx].ParameterType)
+                    return false;
+            }
+
+            return true;
         }
 
         private static Type GetSummaryType(MethodInfo method)
@@ -119,7 +200,6 @@ namespace LagoVista.Core.Services
                 throw new InvalidOperationException($"Summary list provider method [{method.DeclaringType.FullName}.{method.Name}] must return Task<ListResponse<TSummary>>.");
 
             var summaryType = taskResultType.GetGenericArguments()[0];
-
             return summaryType;
         }
 
@@ -176,6 +256,13 @@ namespace LagoVista.Core.Services
         private static bool IsCategoryParameter(string name)
         {
             return String.Equals(name, "category", StringComparison.OrdinalIgnoreCase) || String.Equals(name, "categoryKey", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private class SummaryListProviderMethodBinding
+        {
+            public Type ServiceType { get; set; }
+
+            public MethodInfo Method { get; set; }
         }
     }
 }
