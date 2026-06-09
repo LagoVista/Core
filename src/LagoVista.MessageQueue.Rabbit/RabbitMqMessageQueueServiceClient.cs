@@ -65,7 +65,7 @@ namespace LagoVista.MessageQueue.Rabbit
             var json = JsonConvert.SerializeObject(payload);
             var body = Encoding.UTF8.GetBytes(json);
 
-            _adminLogger.Trace($"{this.Tag()} publishing '{messageType.FullName}' on service '{_registration.ServiceName}' to '{route.DestinationName}' with route key '{route.RouteKey}'.");
+            _adminLogger.Trace($"{this.Tag()} publishing '{messageType.FullName}' on service '{_registration.ServiceName}'  Host Name: '{_registration.ConnectionSettings.HostName}', VHost '{_registration.ConnectionSettings.VirtualHost}' to '{route.DestinationName}' with route key '{route.RouteKey}'.");
 
             await _channel.BasicPublishAsync(route.DestinationName, route.RouteKey, false, properties, body, cancellationToken).ConfigureAwait(false);
 
