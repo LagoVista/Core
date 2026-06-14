@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
@@ -127,10 +128,11 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string EssentialJobActivityId { get; set; }
         public string ArtifactTypeId { get; set; }
         public string ArtifactId { get; set; }
-        public string MeetingWorkItemId { get; set; }
+        public string SopWorkItemId { get; set; }
         public bool IsSample { get; set; }
         public string SampleKindId { get; set; }
         public string VtmMeetingId { get; set; }
+        public string SopExecutionId { get; set; }
         public string ScopeType { get; set; }
         public string ScopeId { get; set; }
     }
@@ -183,6 +185,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public string ArtifactTypeText { get; set; }
         public string ArtifactText { get; set; }
         public string VtmMeetingText { get; set; }
+        public string SopExecutionText { get; set; }
         public string ScopeTypeText { get; set; }
         public string ScopeText { get; set; }
 
@@ -388,8 +391,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
                 Add(nameof(RagVectorPayloadMeta.ArtifactTypeId), Meta.ArtifactTypeId);
                 Add(nameof(RagVectorPayloadMeta.ArtifactId), Meta.ArtifactId);
-                Add(nameof(RagVectorPayloadMeta.MeetingWorkItemId), Meta.MeetingWorkItemId);
+                Add(nameof(RagVectorPayloadMeta.SopWorkItemId), Meta.SopWorkItemId);
                 Add(nameof(RagVectorPayloadMeta.VtmMeetingId), Meta.VtmMeetingId);
+                Add(nameof(RagVectorPayloadMeta.SopExecutionId), Meta.SopExecutionId);
                 Add(nameof(RagVectorPayloadMeta.ScopeType), Meta.ScopeType);
                 Add(nameof(RagVectorPayloadMeta.ScopeId), Meta.ScopeId);
                 Add(nameof(RagVectorPayloadMeta.IsSample), Meta.IsSample); 
@@ -476,6 +480,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.ArtifactTypeText), Extra.ArtifactTypeText);
                 Add(nameof(RagVectorPayloadExtra.ArtifactText), Extra.ArtifactText);
                 Add(nameof(RagVectorPayloadExtra.VtmMeetingText), Extra.VtmMeetingText);
+                Add(nameof(RagVectorPayloadExtra.SopExecutionText), Extra.SopExecutionText);
                 Add(nameof(RagVectorPayloadExtra.ScopeTypeText), Extra.ScopeTypeText);
                 Add(nameof(RagVectorPayloadExtra.ScopeText), Extra.ScopeText);
 
@@ -751,8 +756,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Meta.EssentialJobActivityId = GetString(M, nameof(RagVectorPayloadMeta.EssentialJobActivityId));
             payload.Meta.ArtifactTypeId = GetString(M, nameof(RagVectorPayloadMeta.ArtifactTypeId));
             payload.Meta.ArtifactId = GetString(M, nameof(RagVectorPayloadMeta.ArtifactId));
-            payload.Meta.MeetingWorkItemId = GetString(M, nameof(RagVectorPayloadMeta.MeetingWorkItemId));
+            payload.Meta.SopWorkItemId = GetString(M, nameof(RagVectorPayloadMeta.SopWorkItemId));
             payload.Meta.VtmMeetingId = GetString(M, nameof(RagVectorPayloadMeta.VtmMeetingId));
+            payload.Meta.SopExecutionId = GetString(M, nameof(RagVectorPayloadMeta.SopExecutionId));
             payload.Meta.ScopeType = GetString(M, nameof(RagVectorPayloadMeta.ScopeType));
             payload.Meta.ScopeId = GetString(M, nameof(RagVectorPayloadMeta.ScopeId));
             payload.Meta.SampleKindId = GetString(M, nameof(RagVectorPayloadMeta.SampleKindId));
@@ -828,6 +834,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             payload.Extra.ArtifactTypeText = GetString(E, nameof(RagVectorPayloadExtra.ArtifactTypeText));
             payload.Extra.ArtifactText = GetString(E, nameof(RagVectorPayloadExtra.ArtifactText));
             payload.Extra.VtmMeetingText = GetString(E, nameof(RagVectorPayloadExtra.VtmMeetingText));
+            payload.Extra.SopExecutionText = GetString(E, nameof(RagVectorPayloadExtra.SopExecutionText));
             payload.Extra.ScopeTypeText = GetString(E, nameof(RagVectorPayloadExtra.ScopeTypeText));
             payload.Extra.ScopeText = GetString(E, nameof(RagVectorPayloadExtra.ScopeText));
             payload.Extra.SampleKindText = GetString(E, nameof(RagVectorPayloadExtra.SampleKindText));
@@ -890,8 +897,9 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.SampleKindId)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ArtifactTypeId)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ArtifactId)), QdrantPayloadIndexKind.Keyword),
-            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.MeetingWorkItemId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.SopWorkItemId)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.VtmMeetingId)), QdrantPayloadIndexKind.Keyword),
+            new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.SopExecutionId)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ScopeType)), QdrantPayloadIndexKind.Keyword),
             new QdrantPayloadIndexSpec(MetaPath(nameof(RagVectorPayloadMeta.ScopeId)), QdrantPayloadIndexKind.Keyword),
             };

@@ -11,10 +11,14 @@ namespace LagoVista.Core.Configuration
     {
         public static string CurrentClassName { get; set; }
 
+        public static bool Enabled { get; set; } = false;
+
         private static List<ConfigurationDiagnosticContext> _diagnostics = new List<ConfigurationDiagnosticContext>();
 
         public static void AddRegisteredConfiguration(string path, bool keyPresent = true, bool valuePresent = true)
         {
+            if(!Enabled) return;
+
             _diagnostics.Add(new ConfigurationDiagnosticContext()
             {
                 Class = CurrentClassName,
@@ -27,6 +31,8 @@ namespace LagoVista.Core.Configuration
 
         public static void AddOptionalConfiguration(string path, bool keyPresent = true, bool valuePresent = true)
         {
+            if (!Enabled) return;
+
             _diagnostics.Add(new ConfigurationDiagnosticContext()
             {
                 Class = CurrentClassName,

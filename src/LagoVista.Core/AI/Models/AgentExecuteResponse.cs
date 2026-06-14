@@ -138,6 +138,7 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("vtmMeetingId")]
         public string VtmMeetingId { get; set; }
 
+
         [JsonProperty("sopExecution")]
         public SopAgentExecutionResponse SopExecution { get; set; }
 
