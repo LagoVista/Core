@@ -24,6 +24,16 @@ namespace LagoVista.Core.Utils
             return BuildSchema(type, visited, 0);
         }
 
+        private static bool IsNormalizedId32Type(Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            return type.Name == "NormalizedId32";
+        }
+
         private static JObject BuildSchema(Type type, HashSet<Type> visited, int depth)
         {
             if (type == null)
@@ -47,6 +57,11 @@ namespace LagoVista.Core.Utils
                 return TypeSchema("string");
             }
 
+            if (IsNormalizedId32Type((Type)type))
+            {
+                return TypeSchema("string", "Random GUID-ish value, 32 characters, ONLY numbers and upper case letters, no special charaters or symbols");
+            }
+
             if (type == typeof(bool))
             {
                 return TypeSchema("boolean");
@@ -61,8 +76,6 @@ namespace LagoVista.Core.Utils
             {
                 return TypeSchema("number");
             }
-
-
 
             if (type == typeof(DateTime) || type == typeof(DateTimeOffset))
             {
@@ -188,6 +201,15 @@ namespace LagoVista.Core.Utils
             return new JObject
             {
                 ["type"] = type
+            };
+        }
+
+        private static JObject TypeSchema(string type, string description)
+        {
+            return new JObject
+            {
+                ["type"] = type,
+                ["description"] = description   
             };
         }
 
