@@ -139,6 +139,11 @@ namespace LagoVista.Core.AI.Models
         public string Language { get; set; }
 
         /// <summary>
+        /// Optional structured output contract declaration by the client. This is a "hint" that the client can provide to the agent to specify expected structured output schemas for this turn.
+        /// </summary>
+        public AgentStructuredOutputContract StructuredOutput { get; set; }
+
+        /// <summary>
         /// Tool execution results submitted by the client for continuation.
         /// Required (non-empty) on Tool Continuation Submissions.
         /// Forbidden on User Turn Requests.

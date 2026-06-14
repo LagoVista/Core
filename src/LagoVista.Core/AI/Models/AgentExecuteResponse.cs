@@ -143,6 +143,9 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("vtmMeetingWorkItems")]
         public List<VtmMeetingWorkItemSummary> VtmMeetingWorkItems { get; set; }  = new List<VtmMeetingWorkItemSummary>();
+
+        [JsonProperty("structuredOutputs")]
+        public List<AgentStructuredOutput> StructuredOutputs { get; set; }
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
