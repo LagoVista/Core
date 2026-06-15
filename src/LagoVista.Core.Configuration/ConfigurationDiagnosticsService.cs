@@ -34,8 +34,6 @@ namespace LagoVista.Core.Configuration
         {
             Console.WriteLine($"{this.Tag()} - Running Populate.");
 
-            ConfigurationDiagnostics.Reset();
-
             foreach (var entry in _snapshot.Entries)
             {
                 var implementationType = entry.ImplementationType;
