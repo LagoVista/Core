@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Models;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models;
 using LagoVista.Core.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -37,6 +38,12 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.DeletionDate)}",
                 $"/{nameof(IEntityBase.DeprecatedBy)}",
                 $"/{nameof(IEntityBase.DeprecationDate)}",
+                $"/{nameof(ICoreDefinitionEntity.CoreDefinitionScore)}",
+                $"/{nameof(ICoreDefinitionEntity.CoreDefinitionReviewedUtc)}",
+                $"/{nameof(IEntityBase.DeprecationDate)}",
+                $"/{nameof(EntityBase.ReadinessReport)}",
+                $"/{nameof(EntityBase.ReadinessStatus)}",
+                $"/{nameof(EntityBase.ChecklistStatus)}",
                 $"/{nameof(IEntityBase.DeprecationNotes)}",
                 $"/{nameof(IEntityBase.PublicPromotionDate)}",
                 $"/_etag",

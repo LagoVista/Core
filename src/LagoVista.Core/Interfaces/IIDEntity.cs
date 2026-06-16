@@ -19,4 +19,16 @@ namespace LagoVista.Core.Interfaces
     {
         GuidString36 Id { get; set; }
     }
+
+    public interface ICoreDefinitionEntity
+    {
+        string Name { get; set; }
+        string Description { get; set; }
+        string Purpose { get; set; }
+        string PurposeSummary { get; set; }
+
+        int CoreDefinitionScore { get; set; }
+        string CoreDefinitionReviewedUtc { get; set; }
+        string CoreDefinitionSummary { get; set; }
+    }
 }
