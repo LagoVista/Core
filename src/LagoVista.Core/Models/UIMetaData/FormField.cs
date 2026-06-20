@@ -67,6 +67,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public int? MaxLength { get; set; }
         public bool IsVisible { get; set; }
 
+        public string AiImagePurpose { get; private set; }
+        public string AiImageQuality { get; private set; }
+        public string AiReferenceImageField { get; private set; }
         public bool IsMarkDown { get; set; }
         public string CustomFieldType { get; set; }
         public string HelpUrl { get; set; }
@@ -209,6 +212,9 @@ namespace LagoVista.Core.Models.UIMetaData
             field.EditorPath = attr.EditorPath;
             field.OpenByDefault = attr.OpenByDefault;
             field.AiChatPrompt = attr.AiChatPrompt;
+            field.AiReferenceImageField = attr.AiReferenceImageField;
+            field.AiImagePurpose = attr.AiImagePurpose;
+            field.AiImageQuality = attr.AiImageQuality;
             field.GeneratedImageSize = attr.GeneratedImageSize;
             field.DisplayImageSize = attr.DisplayImageSize;
             field.SharedContentKey = attr.SharedContentKey;

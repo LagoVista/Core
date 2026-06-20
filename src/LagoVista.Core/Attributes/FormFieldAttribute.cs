@@ -86,6 +86,7 @@ namespace LagoVista.Core.Attributes
         StringList,
         EntithHeaderPickerDropDown,
         CronBuilder,
+        FileUploads
     }
 
     public enum NamespaceTypes
@@ -196,6 +197,9 @@ namespace LagoVista.Core.Attributes
                                   string ThumbnailField = "",
                                   string ParentRowName = "",
                                   string PickerProviderFieldName = "",
+                                  string AiImagePurpose = "",
+                                  string AiReferenceImageField = "",   
+                                  string AiImageQuality = "",
                                   int ParentRowIndex = -1)
         {
             _labelDisplayResource = LabelResource;
@@ -252,6 +256,9 @@ namespace LagoVista.Core.Attributes
             this.ParentRowName = ParentRowName;
             this.ParentRowIndex = ParentRowIndex;
             this.PickerProviderFieldName = PickerProviderFieldName;
+            this.AiImagePurpose = AiImagePurpose;
+            this.AiReferenceImageField = AiReferenceImageField;
+            this.AiImageQuality = AiImageQuality;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -320,6 +327,10 @@ namespace LagoVista.Core.Attributes
         public string ParentRowName { get; }
         public int ParentRowIndex { get; set; }
         public string PickerProviderFieldName { get; set; }
+
+        public string AiImagePurpose { get;  }
+        public string AiImageQuality { get; }
+        public string AiReferenceImageField { get; }
     }
 
     public class SelectListItem

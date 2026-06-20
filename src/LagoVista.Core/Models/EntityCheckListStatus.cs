@@ -63,6 +63,19 @@ namespace LagoVista.Core.Models
     }
 
 
+    public class EntityChecklistCandidateSummary
+    {
+        public string Id { get; set; }
+
+        public string EntityType { get; set; }
+
+        public string Name { get; set; }
+
+        public string Key { get; set; }
+
+        public string Description { get; set; }
+    }
+
     public class EntityChecklistStep
     {
         public const string StepType_Review = "review";

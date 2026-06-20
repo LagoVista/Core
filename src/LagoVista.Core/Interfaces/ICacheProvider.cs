@@ -26,5 +26,8 @@ namespace LagoVista.Core.Interfaces
         Task<bool> AttemptAcquireLockAsync(string key, string token, TimeSpan? expires = null);
         Task<bool> ExtendLockAsync(string key, string token, TimeSpan? expires = null);
         Task<bool> ReleaseLockAsync(string key, string toke);
+        Task AddAsync<T>(string key, T value, IEnumerable<string> dependencyKeys, TimeSpan? ttl = null);
+        Task AddAsync(string key, string value, IEnumerable<string> dependencyKeys, TimeSpan? ttl = null);
+        Task RegisterDependenciesAsync(string key, IEnumerable<string> dependencyKeys);
     }
 }

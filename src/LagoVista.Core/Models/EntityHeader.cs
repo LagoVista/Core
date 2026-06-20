@@ -417,4 +417,17 @@ namespace LagoVista.Core.Models
         }
     }
 
+    public class ImageEntityHeader : EntityHeader
+    {
+        public string AltText { get; set; }
+
+        public int? Width { get; set; }
+
+        public int? Height { get; set; }
+
+        public double? FocalPointX { get; set; }
+
+        public double? FocalPointY { get; set; }
+    }
+
 }
