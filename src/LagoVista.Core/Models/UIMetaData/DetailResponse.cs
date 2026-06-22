@@ -3,16 +3,17 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
-using System.Reflection;
-using System.Linq;
-using System.Collections.Generic;
-using LagoVista.Core.Validation;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.AIMetaData;
+using LagoVista.Core.Validation;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace LagoVista.Core.Models.UIMetaData
 {
-    public class DetailResponse<TModel> : InvokeResult where TModel : new()
+    public class DetailResponse<TModel> : InvokeResult, IEntityTypeDetailResponse where TModel : new()
     {
         private DetailResponse() 
         { 
@@ -246,4 +247,68 @@ namespace LagoVista.Core.Models.UIMetaData
             return response;
         }
     }
+
+    public static class RuntimeDetailResponseFactory
+    {
+        public static InvokeResult<IEntityTypeDetailResponse> Create(Type entityType)
+        {
+            if (entityType == null)
+                return InvokeResult<IEntityTypeDetailResponse>.FromError("Entity CLR type is required.");
+
+            if (entityType.IsAbstract || entityType.IsInterface)
+                return InvokeResult<IEntityTypeDetailResponse>.FromError($"Entity type '{entityType.FullName}' cannot be instantiated.");
+
+            if (entityType.GetConstructor(Type.EmptyTypes) == null)
+                return InvokeResult<IEntityTypeDetailResponse>.FromError($"Entity type '{entityType.FullName}' must have a public parameterless constructor.");
+
+            try
+            {
+                var detailResponseType = typeof(DetailResponse<>).MakeGenericType(entityType);
+
+                var createMethod = detailResponseType.GetMethod(
+                    "Create",
+                    BindingFlags.Public | BindingFlags.Static,
+                    null,
+                    new[] { typeof(bool) },
+                    null);
+
+                if (createMethod == null)
+                    return InvokeResult<IEntityTypeDetailResponse>.FromError($"Could not find the detail response creation method for entity type '{entityType.FullName}'.");
+
+                var response = createMethod.Invoke(null, new object[] { false }) as IEntityTypeDetailResponse;
+
+                if (response == null)
+                    return InvokeResult<IEntityTypeDetailResponse>.FromError($"Could not create detail metadata for entity type '{entityType.FullName}'.");
+
+                return InvokeResult<IEntityTypeDetailResponse>.Create(response);
+            }
+            catch (TargetInvocationException ex)
+            {
+                var message = ex.InnerException?.Message ?? ex.Message;
+
+                return InvokeResult<IEntityTypeDetailResponse>.FromError($"Could not create detail metadata for entity type '{entityType.FullName}': {message}");
+            }
+            catch (Exception ex)
+            {
+                return InvokeResult<IEntityTypeDetailResponse>.FromError($"Could not create detail metadata for entity type '{entityType.FullName}': {ex.Message}");
+            }
+        }
+    }
+
+    public interface IEntityTypeDetailResponse
+    {
+        string ModelTitle { get; }
+
+        string ModelHelp { get; }
+
+        string ModelName { get; }
+
+        string Icon { get; }
+
+        IDictionary<string, FormField> View { get; }
+
+        List<EntityReadinessCriterion> Criterion { get; }
+
+        List<EntityChecklistStep> ChecklistSteps { get; }
+    } 
 }
