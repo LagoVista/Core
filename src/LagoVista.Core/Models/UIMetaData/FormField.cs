@@ -70,6 +70,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string AiImagePurpose { get; private set; }
         public string AiImageQuality { get; private set; }
         public string AiReferenceImageField { get; private set; }
+        public string ImageGenerationStyleGuidance { get; private set; }
+        public string ImageStyle { get; set; }
         public bool IsMarkDown { get; set; }
         public string CustomFieldType { get; set; }
         public string HelpUrl { get; set; }
@@ -213,6 +215,8 @@ namespace LagoVista.Core.Models.UIMetaData
             field.OpenByDefault = attr.OpenByDefault;
             field.AiChatPrompt = attr.AiChatPrompt;
             field.AiReferenceImageField = attr.AiReferenceImageField;
+            field.ImageStyle = attr.ImageStyle;
+            field.ImageGenerationStyleGuidance = attr.ImageGenerationStyleGuidance;
             field.AiImagePurpose = attr.AiImagePurpose;
             field.AiImageQuality = attr.AiImageQuality;
             field.GeneratedImageSize = attr.GeneratedImageSize;
@@ -222,6 +226,7 @@ namespace LagoVista.Core.Models.UIMetaData
             field.ParentRowName = attr.ParentRowName;
             field.ParentRowIndex = attr.ParentRowIndex;
             field.Rows = attr.Rows;
+            field.DataType = property.GetType().Name;
             
             if (!String.IsNullOrEmpty(attr.PickerProviderFieldName))
                 field.PickerProviderFieldName = attr.PickerProviderFieldName.CamelCase();

@@ -419,6 +419,11 @@ namespace LagoVista.Core.Models
 
     public class ImageEntityHeader : EntityHeader
     {
+        public ImageEntityHeader()
+        {
+            Indexer = "ieh";
+        }
+
         public string AltText { get; set; }
 
         public int? Width { get; set; }
@@ -428,6 +433,7 @@ namespace LagoVista.Core.Models
         public double? FocalPointX { get; set; }
 
         public double? FocalPointY { get; set; }
+
     }
 
 }

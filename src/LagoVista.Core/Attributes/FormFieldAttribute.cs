@@ -200,6 +200,8 @@ namespace LagoVista.Core.Attributes
                                   string AiImagePurpose = "",
                                   string AiReferenceImageField = "",   
                                   string AiImageQuality = "",
+                                  string ImageStyle = "",
+                                  string ImageGenerationStyleGuidance = "",
                                   int ParentRowIndex = -1)
         {
             _labelDisplayResource = LabelResource;
@@ -257,8 +259,10 @@ namespace LagoVista.Core.Attributes
             this.ParentRowIndex = ParentRowIndex;
             this.PickerProviderFieldName = PickerProviderFieldName;
             this.AiImagePurpose = AiImagePurpose;
+            this.ImageGenerationStyleGuidance = ImageGenerationStyleGuidance;
             this.AiReferenceImageField = AiReferenceImageField;
             this.AiImageQuality = AiImageQuality;
+            this.ImageStyle = ImageStyle;
         }
 
         public String PickerFor { get { return _pickerFor; } }
@@ -330,7 +334,9 @@ namespace LagoVista.Core.Attributes
 
         public string AiImagePurpose { get;  }
         public string AiImageQuality { get; }
+        public string ImageStyle { get; }
         public string AiReferenceImageField { get; }
+        public string ImageGenerationStyleGuidance { get; set; }
     }
 
     public class SelectListItem
