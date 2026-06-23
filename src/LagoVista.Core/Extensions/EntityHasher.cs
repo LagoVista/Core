@@ -38,9 +38,8 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.DeletionDate)}",
                 $"/{nameof(IEntityBase.DeprecatedBy)}",
                 $"/{nameof(IEntityBase.DeprecationDate)}",
-                $"/{nameof(ICoreDefinitionEntity.CoreDefinitionScore)}",
-                $"/{nameof(ICoreDefinitionEntity.CoreDefinitionReviewedUtc)}",
                 $"/{nameof(IEntityBase.DeprecationDate)}",
+                $"/{nameof(IEntityBase.ReadinessChecks)}",
                 $"/{nameof(EntityBase.ReadinessReport)}",
                 $"/{nameof(EntityBase.ReadinessStatus)}",
                 $"/{nameof(EntityBase.ChecklistStatus)}",
@@ -52,6 +51,74 @@ namespace LagoVista
                 $"/_ts",
                 $"/_attachments",
             };
+
+        public static JObject RemoveExcludedNodes(JObject source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            var result = (JObject)source.DeepClone();
+
+            foreach (var excludedNode in ExcludedNodes)
+                RemoveNode(result, excludedNode);
+
+            return result;
+        }
+
+        private static void RemoveNode(JObject root, string path)
+        {
+            if (root == null || String.IsNullOrWhiteSpace(path))
+                return;
+
+            var segments = path
+                .Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(UnescapeJsonPointerSegment)
+                .ToArray();
+
+            if (segments.Length == 0)
+                return;
+
+            JToken current = root;
+
+            for (var index = 0; index < segments.Length - 1; index++)
+            {
+                if (current.Type != JTokenType.Object)
+                    return;
+
+                current = GetPropertyValue((JObject)current, segments[index]);
+
+                if (current == null)
+                    return;
+            }
+
+            if (current.Type != JTokenType.Object)
+                return;
+
+            var parent = (JObject)current;
+            var property = GetProperty(parent, segments[segments.Length - 1]);
+
+            property?.Remove();
+        }
+
+        private static JToken GetPropertyValue(JObject obj, string propertyName)
+        {
+            return GetProperty(obj, propertyName)?.Value;
+        }
+
+        private static JProperty GetProperty(JObject obj, string propertyName)
+        {
+            return obj
+                .Properties()
+                .FirstOrDefault(property =>
+                    String.Equals(property.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static string UnescapeJsonPointerSegment(string segment)
+        {
+            return segment
+                .Replace("~1", "/")
+                .Replace("~0", "~");
+        }
 
         public static string CalculateHash(JToken token)
         {

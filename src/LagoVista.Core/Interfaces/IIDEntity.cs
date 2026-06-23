@@ -27,18 +27,10 @@ namespace LagoVista.Core.Interfaces
         string Purpose { get; set; }
         string PurposeSummary { get; set; }
 
-        bool IsCoreReady { get; set; }
-        int CoreDefinitionScore { get; set; }
-        UtcTimestamp? CoreDefinitionReviewedUtc { get; set; }
-        string CoreDefinitionSummary { get; set; }
     }
 
     public interface IEntityDefinitionReadiness : ICoreDefinitionEntity
     {
-        bool IsDefinitionReady { get; set; }
-
-        UtcTimestamp? DefinitionReadyUtc { get; set; }
-
         IReadOnlyList<EntityChecklistStageDefinition> GetDefinitionReadinessStages();
     }
 
@@ -82,51 +74,5 @@ namespace LagoVista.Core.Interfaces
         /// </summary>
         public List<string> TargetIncompleteStepKeys { get; set; }
 
-    }
-
-    public static class EntityDefinitionReadinessEvaluator
-    {
-        public static bool Recalculate(IEntityDefinitionReadiness entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            var stages = entity.GetDefinitionReadinessStages() ??
-                         new List<EntityChecklistStageDefinition>();
-
-            var completedStepKeys = new HashSet<string>(
-                (entity.ChecklistStatus ?? new List<EntityChecklistStatus>())
-                    .Where(status =>
-                        status != null &&
-                        status.Status?.Value == EntityChecklistStepStatus.Completed &&
-                        !String.IsNullOrWhiteSpace(status.StepKey))
-                    .Select(status => status.StepKey),
-                StringComparer.OrdinalIgnoreCase);
-
-            var requiredStepKeys = stages
-                .Where(stage => stage != null)
-                .SelectMany(stage => stage.CompletedStepKeys ?? new List<string>())
-                .Where(stepKey => !String.IsNullOrWhiteSpace(stepKey))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            var wasReady = entity.IsDefinitionReady;
-
-            entity.IsDefinitionReady =
-                entity.IsCoreReady &&
-                requiredStepKeys.Count > 0 &&
-                requiredStepKeys.All(completedStepKeys.Contains);
-
-            if (entity.IsDefinitionReady && !wasReady)
-            {
-                entity.DefinitionReadyUtc = UtcTimestamp.Now;
-            }
-            else if (!entity.IsDefinitionReady)
-            {
-                entity.DefinitionReadyUtc = null;
-            }
-
-            return wasReady != entity.IsDefinitionReady;
-        }
     }
 }

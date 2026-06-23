@@ -5,6 +5,7 @@
 using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
+using LagoVista.Core.Models.EntityReadiness;
 using LagoVista.Core.Resources;
 using LagoVista.Models;
 using Newtonsoft.Json;
@@ -20,6 +21,7 @@ namespace LagoVista.Core.Models
     public interface IEntityBase : INoSQLEntity, IDiscussableEntity, IOwnedEntity, IIconEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
     {
         bool ShouldVectorIndex { get; set; }
+        List<EntityReadinessCheckState> ReadinessChecks { get; set; }
     }
 
     public class EntityBase : ModelBase, IEntityBase
@@ -83,6 +85,9 @@ namespace LagoVista.Core.Models
 
         public EntityReadinessStatus ReadinessStatus { get; set; }
         public EntityReadinessReport ReadinessReport { get; set; }
+
+        [AiSchemaIgnore]
+        public List<EntityReadinessCheckState> ReadinessChecks { get; set; } = new List<EntityReadinessCheckState>();
 
         public List<EntityChecklistStatus> ChecklistStatus { get; set; } = new List<EntityChecklistStatus>();
 
