@@ -75,6 +75,12 @@ namespace LagoVista.Core.Models
         public string Key { get; set; }
 
         public string Description { get; set; }
+
+        public int CompletedTargetStepCount { get; set; }
+
+        public int TargetStepCount { get; set; }
+
+        public List<string> CompletedTargetStepKeys { get; set; } = new List<string>();
     }
 
     public class EntityChecklistBlockedCandidateSummary
