@@ -77,6 +77,21 @@ namespace LagoVista.Core.Models
         public string Description { get; set; }
     }
 
+    public class EntityChecklistBlockedCandidateSummary
+    {
+        public string Id { get; set; }
+
+        public string EntityType { get; set; }
+
+        public string Name { get; set; }
+
+        public string Key { get; set; }
+
+        public string Description { get; set; }
+
+        public List<string> MissingRequiredStepKeys { get; set; } = new List<string>();
+    }
+
     public class EntityChecklistStep
     {
         public const string StepType_Review = "review";
