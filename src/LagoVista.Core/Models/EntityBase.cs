@@ -187,6 +187,9 @@ namespace LagoVista.Core.Models
         public EntityHeader ClonedRevision { get; set; }
 
         [AiSchemaIgnore]
+        public string LastVectorIndexSha256Hex { get; set; }
+
+        [AiSchemaIgnore]
         public string Sha256Hex {get; set;}
 
         [AiSchemaIgnore]
