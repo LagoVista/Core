@@ -46,6 +46,29 @@ namespace LagoVista.Core.Models
         public EntityHeader UpdatedBy { get; set; }
 
         public string Notes { get; set; }
+
+        public EntityChecklistRunReceipt LastRun { get; set; }
+    }
+
+    public class EntityChecklistRunReceipt
+    {
+        public string RunId { get; set; }
+
+        public UtcTimestamp? StartedUtc { get; set; }
+
+        public UtcTimestamp CompletedUtc { get; set; }
+
+        public EntityHeader RunBy { get; set; }
+
+        public string Outcome { get; set; }
+
+        public int? Score { get; set; }
+
+        public int? TargetScore { get; set; }
+
+        public string Summary { get; set; }
+
+        public int WorkItemCount { get; set; }
     }
 
     public enum EntityChecklistStepType
@@ -81,6 +104,8 @@ namespace LagoVista.Core.Models
         public int TargetStepCount { get; set; }
 
         public List<string> CompletedTargetStepKeys { get; set; } = new List<string>();
+
+        public EntityChecklistStatus TargetChecklistStatus { get; set; }
     }
 
     public class EntityChecklistBlockedCandidateSummary
@@ -125,28 +150,34 @@ namespace LagoVista.Core.Models
 
         public string PromptActionLabel { get; set; }
 
+        public string StepKey { get; set; }
+
         public string AiPrompt { get; set; }
 
         public List<string> ContextFieldNames { get; set; } = new List<string>();
 
-        public static EntityChecklistStep Review(string fieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null)
+        public static EntityChecklistStep Review(string fieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null,
+            IEnumerable<string> contextFieldNames = null, string stepKey = null)
         {
-            return ForField(fieldName, EntityChecklistStepType.Review, name, description, promptActionLabel, aiPrompt, contextFieldNames);
+            return ForField(fieldName, EntityChecklistStepType.Review, name, description, promptActionLabel, aiPrompt, contextFieldNames, stepKey);
         }
 
-        public static EntityChecklistStep Improve(string fieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null)
+        public static EntityChecklistStep Improve(string fieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null,
+            IEnumerable<string> contextFieldNames = null, string stepKey = null)
         {
-            return ForField(fieldName, EntityChecklistStepType.Improve, name, description, promptActionLabel, aiPrompt, contextFieldNames);
+            return ForField(fieldName, EntityChecklistStepType.Improve, name, description, promptActionLabel, aiPrompt, contextFieldNames, stepKey);
         }
 
-        public static EntityChecklistStep Validate(string fieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null)
+        public static EntityChecklistStep Validate(string fieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null,
+            IEnumerable<string> contextFieldNames = null, string stepKey = null)
         {
-            return ForField(fieldName, EntityChecklistStepType.Validate, name, description, promptActionLabel, aiPrompt, contextFieldNames);
+            return ForField(fieldName, EntityChecklistStepType.Validate, name, description, promptActionLabel, aiPrompt, contextFieldNames, stepKey);
         }
 
-        public static EntityChecklistStep CreateChild(string collectionFieldName, string name, string description, string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null)
+        public static EntityChecklistStep CreateChild(string collectionFieldName, string name, string description, string promptActionLabel = null,
+            string aiPrompt = null, IEnumerable<string> contextFieldNames = null, string stepKey = null)
         {
-            return ForField(collectionFieldName, EntityChecklistStepType.Create, name, description, promptActionLabel, aiPrompt, contextFieldNames);
+            return ForField(collectionFieldName, EntityChecklistStepType.Create, name, description, promptActionLabel, aiPrompt, contextFieldNames, stepKey);
         }
 
         public static EntityChecklistStep Create(string key, string name, string description, string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null)
@@ -168,7 +199,8 @@ namespace LagoVista.Core.Models
             };
         }
 
-        public static EntityChecklistStep ForField(string fieldName, EntityChecklistStepType stepType, string name, string description, string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null)
+        public static EntityChecklistStep ForField(string fieldName, EntityChecklistStepType stepType, string name, string description,
+            string promptActionLabel = null, string aiPrompt = null, IEnumerable<string> contextFieldNames = null, string stepKey = null)
         {
             if (String.IsNullOrWhiteSpace(fieldName))
             {
@@ -177,10 +209,14 @@ namespace LagoVista.Core.Models
 
             var normalizedFieldName = NormalizeFieldName(fieldName);
             var stepTypeHeader = EntityHeader<EntityChecklistStepType>.Create(stepType);
+            var resolvedStepKey = String.IsNullOrWhiteSpace(stepKey)
+                ? $"{normalizedFieldName}.{stepTypeHeader.Id}"
+                : stepKey;
 
             return new EntityChecklistStep
             {
-                Key = $"{normalizedFieldName}.{stepTypeHeader.Id}",
+                Key = resolvedStepKey,
+                StepKey = resolvedStepKey,
                 FieldName = normalizedFieldName,
                 StepType = stepTypeHeader,
                 Name = name,

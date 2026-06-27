@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LagoVista.Core.Models.EntityReadiness
 {
@@ -10,27 +8,49 @@ namespace LagoVista.Core.Models.EntityReadiness
 
         public string TargetName { get; set; }
 
+        public string StepKey { get; set; }
+
         public static EntityChecklistStepReference Review(string targetName)
         {
-            return Create(EntityChecklistStepType.Review, targetName);
+            return Create(EntityChecklistStepType.Review, targetName, null);
+        }
+
+        public static EntityChecklistStepReference Review(string targetName, string stepKey)
+        {
+            return Create(EntityChecklistStepType.Review, targetName, stepKey);
         }
 
         public static EntityChecklistStepReference Improve(string targetName)
         {
-            return Create(EntityChecklistStepType.Improve, targetName);
+            return Create(EntityChecklistStepType.Improve, targetName, null);
+        }
+
+        public static EntityChecklistStepReference Improve(string targetName, string stepKey)
+        {
+            return Create(EntityChecklistStepType.Improve, targetName, stepKey);
         }
 
         public static EntityChecklistStepReference Validate(string targetName)
         {
-            return Create(EntityChecklistStepType.Validate, targetName);
+            return Create(EntityChecklistStepType.Validate, targetName, null);
+        }
+
+        public static EntityChecklistStepReference Validate(string targetName, string stepKey)
+        {
+            return Create(EntityChecklistStepType.Validate, targetName, stepKey);
         }
 
         public static EntityChecklistStepReference Create(string targetName)
         {
-            return Create(EntityChecklistStepType.Create, targetName);
+            return Create(EntityChecklistStepType.Create, targetName, null);
         }
 
-        private static EntityChecklistStepReference Create(EntityChecklistStepType stepType, string targetName)
+        public static EntityChecklistStepReference Create(string targetName, string stepKey)
+        {
+            return Create(EntityChecklistStepType.Create, targetName, stepKey);
+        }
+
+        private static EntityChecklistStepReference Create(EntityChecklistStepType stepType, string targetName, string stepKey)
         {
             if (String.IsNullOrWhiteSpace(targetName))
             {
@@ -40,7 +60,8 @@ namespace LagoVista.Core.Models.EntityReadiness
             return new EntityChecklistStepReference
             {
                 StepType = stepType,
-                TargetName = targetName
+                TargetName = targetName,
+                StepKey = stepKey
             };
         }
     }
