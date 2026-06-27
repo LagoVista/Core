@@ -11,6 +11,7 @@ namespace LagoVista.Core.Interfaces
 
     public interface IAuditableEntitySimple : ISoftDeletable
     {
+        String LastVectorIndexSha256Hex { get; set; }
         String Sha256Hex { get; set; }
         UtcTimestamp CreationDate { get; set; }
         UtcTimestamp LastUpdatedDate { get; set; }

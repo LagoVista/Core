@@ -33,6 +33,7 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.AiEntitySessions)}",
                 $"/AISessions",
                 $"/{nameof(IEntityBase.Sha256Hex)}",
+                $"/{nameof(IEntityBase.LastVectorIndexSha256Hex)}",
                 $"/{nameof(IEntityBase.PublicPromotedBy)}",
                 $"/{nameof(IEntityBase.DeletedBy)}",
                 $"/{nameof(IEntityBase.DeletionDate)}",

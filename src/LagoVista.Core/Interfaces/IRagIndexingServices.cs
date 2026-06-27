@@ -17,6 +17,8 @@ namespace LagoVista.Core.Interfaces
         float[] GetEmbedingsAsync(IAIAgentContext agentContext, string text);
         Task UpsertInBatchesAsync(IAIAgentContext agentContext, IReadOnlyList<PayloadBuildResult> points, int vectorDims, int? maxPerBatch = null, CancellationToken ct = default);
         Task RemoveStaleVectorsAsync(IAIAgentContext agentContext, string docId, CancellationToken ct = default);
+        Task<InvokeResult> IndexNowAsync(IEntityBase entity, CancellationToken cancellationToken = default);
+
         Task<InvokeResult> IndexAsync(IEntityBase entity);
         Task<InvokeResult> RemoveIndexAsync(string orgId, string docId);
     }
