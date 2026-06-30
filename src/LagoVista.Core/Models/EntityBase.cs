@@ -22,6 +22,7 @@ namespace LagoVista.Core.Models
     {
         bool ShouldVectorIndex { get; set; }
         List<EntityReadinessCheckState> ReadinessChecks { get; set; }
+        MasterEntityStatus MasterStatus { get; set; }
     }
 
     public class EntityBase : ModelBase, IEntityBase
@@ -133,6 +134,9 @@ namespace LagoVista.Core.Models
         [AiSchemaIgnore]
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Category, FieldType: FieldTypes.Category, WaterMark: LagoVistaCommonStrings.Names.Common_Category_Select, ResourceType: typeof(LagoVistaCommonStrings), IsRequired: false, IsUserEditable: true)]
         public EntityHeader Category { get; set; }
+
+        [AiSchemaIgnore]
+        public MasterEntityStatus MasterStatus { get; set; } = new MasterEntityStatus();
 
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]

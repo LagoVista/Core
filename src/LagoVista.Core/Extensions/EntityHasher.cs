@@ -38,6 +38,7 @@ namespace LagoVista
                 $"/{nameof(IEntityBase.DeletedBy)}",
                 $"/{nameof(IEntityBase.DeletionDate)}",
                 $"/{nameof(IEntityBase.DeprecatedBy)}",
+                $"/{nameof(IEntityBase.MasterStatus)}",
                 $"/{nameof(IEntityBase.DeprecationDate)}",
                 $"/{nameof(IEntityBase.DeprecationDate)}",
                 $"/{nameof(EntityBase.ReadinessReport)}",

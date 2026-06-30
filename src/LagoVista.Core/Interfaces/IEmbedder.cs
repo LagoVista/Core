@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.Validation;
+﻿using LagoVista.Core.Models;
+using LagoVista.Core.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ namespace LagoVista.Core.Interfaces
 {
     public interface IEmbedder
     {
-        Task<InvokeResult<EmbeddingResult>> EmbedAsync(string text, int? estimatedTokens = null, string embeddingModel = null);
+        Task<InvokeResult<EmbeddingResult>> EmbedAsync(string text, EntityHeader org, EntityHeader user, int? estimatedTokens = null, string embeddingModel = null);
     }
 
     public class EmbeddingResult
