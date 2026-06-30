@@ -50,6 +50,20 @@ namespace LagoVista.Core.Models.EntityReadiness
             return Create(EntityChecklistStepType.Create, targetName, stepKey);
         }
 
+        public string GetResolvedStepKey()
+        {
+            if (!String.IsNullOrWhiteSpace(StepKey))
+                return StepKey;
+
+            if (String.IsNullOrWhiteSpace(TargetName))
+                throw new InvalidOperationException("A checklist step reference must have a target name.");
+
+            var normalizedTargetName = Char.ToLowerInvariant(TargetName[0]) + TargetName.Substring(1);
+            var stepTypeHeader = EntityHeader<EntityChecklistStepType>.Create(StepType);
+
+            return $"{normalizedTargetName}.{stepTypeHeader.Id}";
+        }
+
         private static EntityChecklistStepReference Create(EntityChecklistStepType stepType, string targetName, string stepKey)
         {
             if (String.IsNullOrWhiteSpace(targetName))

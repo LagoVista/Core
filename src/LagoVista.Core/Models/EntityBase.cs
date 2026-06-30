@@ -23,6 +23,7 @@ namespace LagoVista.Core.Models
         bool ShouldVectorIndex { get; set; }
         List<EntityReadinessCheckState> ReadinessChecks { get; set; }
         MasterEntityStatus MasterStatus { get; set; }
+        List<EntityChecklistStatus> ChecklistStatus { get; set; }
     }
 
     public class EntityBase : ModelBase, IEntityBase
