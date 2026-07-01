@@ -45,6 +45,8 @@ namespace LagoVista.Core.Models
 
         public EntityHeader UpdatedBy { get; set; }
 
+        public string ContextSha256 { get; set; }
+
         public string Notes { get; set; }
 
         public EntityChecklistRunReceipt LastRun { get; set; }
@@ -152,6 +154,7 @@ namespace LagoVista.Core.Models
 
         public string StepKey { get; set; }
 
+        public string Version { get; set; } = "1";
         public string AiPrompt { get; set; }
 
         public List<string> ContextFieldNames { get; set; } = new List<string>();
