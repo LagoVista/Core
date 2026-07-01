@@ -152,6 +152,8 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
         public int? CharStart { get; set; }
         public int? CharEnd { get; set; }
 
+        public string ShortSummary { get; set; }
+
         public string SymbolFullName { get; set; }
         public string SymbolName { get; set; }
         public string SymbolType { get; set; }
@@ -451,6 +453,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
                 Add(nameof(RagVectorPayloadExtra.FullDocumentBlobUri), Extra.FullDocumentBlobUri);
                 Add(nameof(RagVectorPayloadExtra.SourceSliceBlobUri), Extra.SourceSliceBlobUri);
                 Add(nameof(RagVectorPayloadExtra.DescriptionBlobUri), Extra.DescriptionBlobUri);
+                Add(nameof(RagVectorPayloadExtra.ShortSummary), Extra.ShortSummary);
 
                 Add(nameof(RagVectorPayloadExtra.BlobVersionId), Extra.BlobVersionId);
                 Add(nameof(RagVectorPayloadExtra.SourceSha256), Extra.SourceSha256);
@@ -804,6 +807,7 @@ namespace LagoVista.Core.Utils.Types.Nuviot.RagIndexing
 
             // --- Extra
             payload.Extra.FullDocumentBlobUri = GetString(E, nameof(RagVectorPayloadExtra.FullDocumentBlobUri));
+            payload.Extra.ShortSummary = GetString(E, nameof(RagVectorPayloadExtra.ShortSummary));
             payload.Extra.SourceSliceBlobUri = GetString(E, nameof(RagVectorPayloadExtra.SourceSliceBlobUri));
             payload.Extra.DescriptionBlobUri = GetString(E, nameof(RagVectorPayloadExtra.DescriptionBlobUri));
 
