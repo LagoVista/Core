@@ -8,6 +8,7 @@ using System.Text;
 
 namespace LagoVista.Core.Utils.Types
 {
+    using LagoVista.Core.AI.Models.Rag;
     using System;
     using System.Collections.Generic;
     using System.Linq;

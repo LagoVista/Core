@@ -30,7 +30,7 @@ namespace LagoVista.Core.AI.Models.Rag
                 .Select(property => new
                 {
                     Property = property,
-                    Attribute = property.GetCustomAttribute<RagPayloadAttributes>(true)
+                    Attribute = property.GetCustomAttribute<QdrantPayloadIndexAttribute>(true)
                 })
                 .Where(item => item.Attribute != null)
                 .Select(item => new QdrantPayloadIndexSpec($"{bucketName}.{item.Property.Name}", item.Attribute.Kind))

@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.AI.Models;
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Models;
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using System.Collections.Generic;

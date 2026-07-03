@@ -11,28 +11,28 @@ namespace LagoVista.Core.AI.Models.Rag
             IsReference = false;
         }
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string ProjectId { get; set; }
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string SemanticId { get; set; }
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string SysDomain { get; set; }
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string SysLayer { get; set; }
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string SysRole { get; set; }
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Integer)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Integer)]
         public int Priority { get; set; } = 3;
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public List<string> LabelIds { get; set; } = new List<string>();
 
-        [RagPayloadAttributes(QdrantPayloadIndexKind.Integer)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Integer)]
         public long? UpdatedUnix { get; set; }
 
 

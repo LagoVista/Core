@@ -259,10 +259,17 @@ namespace LagoVista.Core.AI.Models.Rag
 
             if (effectiveType.IsEnum)
             {
-                if (rawValue is string enumText && Enum.TryParse(effectiveType, enumText, true, out var parsedEnum))
+                try
                 {
-                    convertedValue = parsedEnum;
-                    return true;
+                    if (rawValue is string enumText)
+                    {
+                        convertedValue = Enum.Parse(effectiveType, enumText, true);
+                        return true;
+                    }
+                }
+                catch
+                {
+                    return false;
                 }
 
                 try

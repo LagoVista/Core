@@ -1,4 +1,5 @@
 ﻿using LagoVista.Core.AI.Models;
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
@@ -83,7 +84,7 @@ namespace LagoVista.Core.AI.Services
                     continue;
                 }
 
-                var payload = RagReferenceVectorPayload.FromPrimary(primaryPayload, primaryPointId, referenceType, property.Name, sourceIndex);
+                var payload = RagReferenceVectorPayload.FromPrimary(primaryPayload);
 
                 payload.Meta.ContentHash = EntityRagText.ComputeSha256(normalized);
 

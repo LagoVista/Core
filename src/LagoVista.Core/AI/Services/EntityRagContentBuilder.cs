@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.AI.Interfaces;
 using LagoVista.Core.AI.Models;
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.EntityReadiness;
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;

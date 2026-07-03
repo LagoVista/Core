@@ -2,6 +2,7 @@
 // ContentHash: 841545c40df34bd9ca3ea4ab6b26881927e02a655ddff19c7a1ff507b921e4e5
 // IndexVersion: 2
 // --- END CODE INDEX META ---
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Utils.Types.Nuviot.RagIndexing;
 using System;
 using System.Collections.Generic;
