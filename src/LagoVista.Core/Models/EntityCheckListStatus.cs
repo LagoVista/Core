@@ -14,7 +14,7 @@ namespace LagoVista.Core.Models
         NotStarted,
 
         [EnumLabel(EntityChecklistStatus.InProgress, LagoVistaCommonStrings.Names.EntityChecklistStepStatus_InProgress, typeof(LagoVistaCommonStrings))]
-        InProgressLagoVistaCommonStrings,
+        InProgress,
 
         [EnumLabel(EntityChecklistStatus.NeedsAttention, LagoVistaCommonStrings.Names.EntityChecklistStepStatus_NeedsAttention, typeof(LagoVistaCommonStrings))]
         NeedsAttention,

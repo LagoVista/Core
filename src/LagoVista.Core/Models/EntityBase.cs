@@ -85,12 +85,15 @@ namespace LagoVista.Core.Models
         [AiSchemaIgnore]
         public string PublicPromotionDate { get; set; }
 
+        [AiSchemaIgnore]
         public EntityReadinessStatus ReadinessStatus { get; set; }
+        [AiSchemaIgnore]
         public EntityReadinessReport ReadinessReport { get; set; }
 
         [AiSchemaIgnore]
         public List<EntityReadinessCheckState> ReadinessChecks { get; set; } = new List<EntityReadinessCheckState>();
 
+        [AiSchemaIgnore]
         public List<EntityChecklistStatus> ChecklistStatus { get; set; } = new List<EntityChecklistStatus>();
 
         [AiSchemaIgnore]
