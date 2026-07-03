@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.AI.Models.Rag
 {
-    public class RagCoreVectorPayloadMeta
+    public class RagCoreVectorPayloadMeta : IRagVectorPayloadMeta
     {
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string OrgNamespace { get; set; }
@@ -20,8 +20,6 @@ namespace LagoVista.Core.AI.Models.Rag
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Boolean)]
         public bool IsReference { get; set; }
 
-        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
-        public string BusinessDomainKey { get; set; }
 
         [RagNotDefault("ContentTypeId must be specified and cannot be Unknown.")]
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Integer)]
@@ -39,16 +37,16 @@ namespace LagoVista.Core.AI.Models.Rag
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Boolean)]
         public bool HasIssues { get; set; }
 
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
+        public string Language { get; set; } = "en-US";
+
+        public string ParentPointId { get; set; }
+
+
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Boolean)]
         public bool Deleted { get; set; }
 
-        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
-        public string ScopeType { get; set; }
-
-        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
-        public string ScopeId { get; set; }
-
-        public string ContentType { get; set; }
+        public string ContentType { get; set; } = "text/plain";
         public string SubtypeFlavor { get; set; }
         public string Title { get; set; }
 
@@ -65,7 +63,6 @@ namespace LagoVista.Core.AI.Models.Rag
         public string ContentHash { get; set; }
 
         public DateTime IndexedUtc { get; set; } = DateTime.UtcNow;
-
 
         public virtual void ValidateForIndex(InvokeResult result)
         {

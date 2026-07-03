@@ -1,19 +1,24 @@
 ﻿using LagoVista.Core.Validation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.Core.AI.Models.Rag
 {
-    public abstract class RagVectorPayloadBase<TMeta, TExtra> : IRagVectorPayload
-        where TMeta : RagCoreVectorPayloadMeta, new()
-        where TExtra : RagCoreVectorPayloadExtra, new()
+    public abstract class RagVectorPayloadBase<TMeta, TExtra> : IRagVectorPayload<TMeta, TExtra>
+        where TMeta : RagCoreVectorPayloadMeta, IRagVectorPayloadMeta, new()
+        where TExtra : RagCoreVectorPayloadExtra, IRagVectorPayloadExtra, new()
     {
         public const string BucketMeta = "Meta";
         public const string BucketExtra = "Extra";
 
+        public string PointId { get; set; }
+
         protected RagVectorPayloadBase()
         {
+            PointId = Guid.NewGuid().ToString().ToLower();
             Meta = new TMeta();
             Extra = new TExtra();
         }
@@ -113,6 +118,8 @@ namespace LagoVista.Core.AI.Models.Rag
             var slug = builder.ToString().Trim('-');
             return String.IsNullOrWhiteSpace(slug) ? fallback : slug;
         }
+
+        public abstract JObject Serialize();
 
     }
 }

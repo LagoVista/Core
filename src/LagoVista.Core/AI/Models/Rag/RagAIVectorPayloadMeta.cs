@@ -4,19 +4,12 @@ using System.Text;
 
 namespace LagoVista.Core.AI.Models.Rag
 {
-    public class RagArtifactVectorPayloadMeta : RagCoreVectorPayloadMeta
+    public class RagAIVectorPayloadMeta : RagCoreVectorPayloadMeta
     {
-        public RagArtifactVectorPayloadMeta()
+        public RagAIVectorPayloadMeta() 
         {
-            ContentTypeId = RagContentType.ProducedArtifact;
+            ContentTypeId = RagContentType.Ai;
         }
-
-
-        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
-        public string ScopeType { get; set; }
-
-        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
-        public string ScopeId { get; set; }
 
         public string VirtualTeamMemberId { get; set; }
 
@@ -35,5 +28,6 @@ namespace LagoVista.Core.AI.Models.Rag
         public string VtmMeetingId { get; set; }
 
         public string SopExecutionId { get; set; }
+
     }
 }

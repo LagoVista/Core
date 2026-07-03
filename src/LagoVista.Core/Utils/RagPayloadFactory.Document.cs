@@ -42,7 +42,7 @@ namespace LagoVista.Core.Utils
                           : (!string.IsNullOrWhiteSpace(c.Title) ? c.Title
                           : doc.ContentSubtype);
 
-                var payload = new RagVectorPayload();
+                var payload = new RagCodeVectorPayload();
 
                 // -------------------------
                 // META (filterable / canonical)
@@ -65,9 +65,6 @@ namespace LagoVista.Core.Utils
 
                 payload.Meta.Title = title;
                 payload.Meta.Language = !string.IsNullOrWhiteSpace(docCtx.Language) ? docCtx.Language : doc.Language;
-                payload.Meta.Priority = doc.Priority;
-                payload.Meta.Audience = doc.Audience;
-                payload.Meta.Persona = doc.Persona;
                 payload.Meta.Stage = doc.Stage;
 
                 payload.Meta.LabelSlugs = doc.GetLabelSlugs() != null

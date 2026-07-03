@@ -3,7 +3,7 @@ using System;
 
 namespace LagoVista.Core.AI.Models.Rag
 {
-    public class RagCoreVectorPayloadExtra
+    public class RagCoreVectorPayloadExtra : IRagVectorPayloadExtra
     {
         public string ShortSummary { get; set; }
 

@@ -195,6 +195,9 @@ namespace LagoVista.Core.Models
         public string LastVectorIndexSha256Hex { get; set; }
 
         [AiSchemaIgnore]
+        public int LastVectorIndexVersion { get; set; } = 1;
+
+        [AiSchemaIgnore]
         public string Sha256Hex {get; set;}
 
         [AiSchemaIgnore]

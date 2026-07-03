@@ -9,11 +9,11 @@ namespace LagoVista.Core.AI.Services
 {
     public static class EntityRagLabelHelper
     {
-        public static void AddLabel(RagVectorPayload payload, string label)
+        public static void AddLabel(RagCoreVectorPayloadMeta meta, string label)
         {
-            if (payload == null)
+            if (meta == null)
             {
-                throw new ArgumentNullException(nameof(payload));
+                throw new ArgumentNullException(nameof(meta));
             }
 
             var normalized = NormalizeLabel(label);
@@ -23,15 +23,15 @@ namespace LagoVista.Core.AI.Services
                 return;
             }
 
-            payload.Meta.LabelSlugs ??= new List<string>();
+            meta.LabelSlugs ??= new List<string>();
 
-            if (!payload.Meta.LabelSlugs.Contains(normalized, StringComparer.OrdinalIgnoreCase))
+            if (!meta.LabelSlugs.Contains(normalized, StringComparer.OrdinalIgnoreCase))
             {
-                payload.Meta.LabelSlugs.Add(normalized);
+                meta.LabelSlugs.Add(normalized);
             }
         }
 
-        public static void AddLabels(RagVectorPayload payload, IEnumerable<string> labels)
+        public static void AddLabels(RagCoreVectorPayloadMeta payload, IEnumerable<string> labels)
         {
             if (labels == null)
             {
@@ -44,7 +44,7 @@ namespace LagoVista.Core.AI.Services
             }
         }
 
-        public static void AddEntityLabels(RagVectorPayload payload, IEnumerable<Label> labels)
+        public static void AddEntityLabels(RagEntityVectorPayload payload, IEnumerable<Label> labels)
         {
             if (labels == null)
             {
@@ -53,7 +53,7 @@ namespace LagoVista.Core.AI.Services
 
             foreach (var label in labels.Where(item => item != null && !String.IsNullOrWhiteSpace(item.Text)))
             {
-                AddLabel(payload, label.Text);
+                AddLabel(payload.Meta, label.Text);
             }
         }
 
@@ -64,7 +64,7 @@ namespace LagoVista.Core.AI.Services
                 return;
             }
 
-            AddLabel(payload, $"{NormalizeLabel(relationshipType)}:{entity.Id}");
+            AddLabel(payload.Meta, $"{NormalizeLabel(relationshipType)}:{entity.Id}");
         }
 
         private static string NormalizeLabel(string value)

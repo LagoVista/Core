@@ -7,6 +7,7 @@ namespace LagoVista.Core.AI.Models.Rag
         public RagReferenceVectorPayloadMeta()
         {
             IsReference = true;
+            ContentTypeId = RagContentType.Entity;
         }
 
         public override void ValidateForIndex(InvokeResult result)

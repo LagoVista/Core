@@ -44,7 +44,7 @@ namespace LagoVista.Core.Utils
                     !string.IsNullOrWhiteSpace(c.Title) ? c.Title :
                     code.Path;
 
-                var payload = new RagVectorPayload();
+                var payload = new RagCodeVectorPayload();
 
                 // -------------------------
                 // META (filterable / canonical)
@@ -64,7 +64,6 @@ namespace LagoVista.Core.Utils
 
                 payload.Meta.Title = title;
                 payload.Meta.Language = code.Language;
-                payload.Meta.Priority = 3;
 
                 payload.Meta.IndexVersion = ctx.IndexVersion;
                 payload.Meta.EmbeddingModel = ctx.EmbeddingModel;

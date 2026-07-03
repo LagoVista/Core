@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace LagoVista.Core.AI.Models
 {
-    public class EntityRagContent
+    public class EntityRagContent<TRagPayload> where TRagPayload : IRagVectorPayload, new()
     {
-        public RagVectorPayload Payload { get; set; }
+        public TRagPayload Payload { get; set; }
 
         public IReadOnlyList<EntityRagReferenceContent> ReferenceContents { get; set; } = Array.Empty<EntityRagReferenceContent>();
 

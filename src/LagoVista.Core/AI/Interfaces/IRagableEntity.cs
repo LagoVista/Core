@@ -1,4 +1,5 @@
 using LagoVista.Core.AI.Models;
+using LagoVista.Core.AI.Models.Rag;
 using LagoVista.Core.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace LagoVista.Core.AI.Interfaces
     /// </summary>
     public interface IRagableEntity :  IEntityBase
     {
-        Task<List<EntityRagContent>> GetRagContentAsync();
+        Task<List<EntityRagContent<RagEntityVectorPayload>>> GetRagContentAsync();
     }
 
     public interface IAISessionTracker

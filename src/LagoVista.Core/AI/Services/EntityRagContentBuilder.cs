@@ -29,14 +29,14 @@ namespace LagoVista.Core.AI.Services
         private EntityRagContentBuilder(IEntityBase entity)
         {
             Entity = entity ?? throw new ArgumentNullException(nameof(entity));
-            Payload = RagVectorPayload.FromEntity(entity);
+            Payload = RagEntityVectorPayload.FromEntity(entity);
 
             ApplyStandardPayload();
         }
 
         public IEntityBase Entity { get; }
 
-        public RagVectorPayload Payload { get; }
+        public RagEntityVectorPayload Payload { get; }
 
         public static EntityRagContentBuilder For(IEntityBase entity)
         {
@@ -49,17 +49,7 @@ namespace LagoVista.Core.AI.Services
             return this;
         }
 
-        public IEntityRagContentBuilder WithAudience(string audience)
-        {
-            Payload.Meta.Audience = EntityRagText.NormalizeInline(audience);
-            return this;
-        }
 
-        public IEntityRagContentBuilder WithPersona(string persona)
-        {
-            Payload.Meta.Persona = EntityRagText.NormalizeInline(persona);
-            return this;
-        }
 
         public IEntityRagContentBuilder WithShortSummary(string shortSummary)
         {
@@ -96,13 +86,19 @@ namespace LagoVista.Core.AI.Services
 
         public IEntityRagContentBuilder AddLabel(string label)
         {
-            EntityRagLabelHelper.AddLabel(Payload, label);
+            EntityRagLabelHelper.AddLabel(Payload.Meta, label);
+            return this;
+        }
+
+        public IEntityRagContentBuilder SetVersion(int version)
+        {
+            Payload.Meta.IndexVersion = version;
             return this;
         }
 
         public IEntityRagContentBuilder AddLabels(params string[] labels)
         {
-            EntityRagLabelHelper.AddLabels(Payload, labels);
+            EntityRagLabelHelper.AddLabels(Payload.Meta, labels);
             return this;
         }
 
@@ -192,7 +188,7 @@ namespace LagoVista.Core.AI.Services
             return this;
         }
 
-        public EntityRagContent Build()
+        public EntityRagContent<RagEntityVectorPayload> Build()
         {
             ApplyStandardIssues();
 
@@ -201,7 +197,7 @@ namespace LagoVista.Core.AI.Services
             Payload.Meta.HasIssues = !String.IsNullOrWhiteSpace(issues);
             Payload.Extra.ShortSummary = BuildShortSummary();
 
-            var content = new EntityRagContent
+            var content = new EntityRagContent<RagEntityVectorPayload>
             {
                 Payload = Payload,
                 SummarizeModelForEmbeddings = false,
@@ -211,49 +207,46 @@ namespace LagoVista.Core.AI.Services
                 Issues = issues
             };
 
-            var primaryPointId = RagVectorPayload.BuildPointId(Payload.Meta.DocId, Payload.Meta.SectionKey, Payload.Meta.PartIndex);
-
-            content.ReferenceContents = EntityRagReferenceFactory.Create(Entity, Payload, primaryPointId);
+            content.ReferenceContents = EntityRagReferenceFactory.Create(Entity, Payload, Payload.PointId);
 
             return content;
         }
 
         private void ApplyStandardPayload()
         {
-            Payload.Meta.SourceObjectId = Entity.Id;
             Payload.Meta.Stage = Entity.GetRagReadinessStage();
 
             EntityRagLabelHelper.AddEntityLabels(Payload, Entity.Labels);
-            EntityRagLabelHelper.AddLabel(Payload, $"entity-type:{RagReferenceNameHelper.ToKebabCase(Entity.EntityType ?? Entity.GetType().Name)}");
+            EntityRagLabelHelper.AddLabel(Payload.Meta, $"entity-type:{RagReferenceNameHelper.ToKebabCase(Entity.EntityType ?? Entity.GetType().Name)}");
 
             if (Entity.IsReadyFor(EntityReadinessCheckType.CoreDefinition))
             {
-                EntityRagLabelHelper.AddLabel(Payload, "readiness:core-definition-ready");
+                EntityRagLabelHelper.AddLabel(Payload.Meta, "readiness:core-definition-ready");
             }
 
             if (Entity.IsReadyFor(EntityReadinessCheckType.EntityDefinition))
             {
-                EntityRagLabelHelper.AddLabel(Payload, "readiness:entity-definition-ready");
+                EntityRagLabelHelper.AddLabel(Payload.Meta, "readiness:entity-definition-ready");
             }
 
             if (Entity.IsReadyFor(EntityReadinessCheckType.RelationshipReadiness))
             {
-                EntityRagLabelHelper.AddLabel(Payload, "readiness:relationship-ready");
+                EntityRagLabelHelper.AddLabel(Payload.Meta, "readiness:relationship-ready");
             }
 
             if (Entity.IsDraft)
             {
-                EntityRagLabelHelper.AddLabel(Payload, "lifecycle:draft");
+                EntityRagLabelHelper.AddLabel(Payload.Meta, "lifecycle:draft");
             }
 
             if (Entity.IsDeprecated)
             {
-                EntityRagLabelHelper.AddLabel(Payload, "lifecycle:deprecated");
+                EntityRagLabelHelper.AddLabel(Payload.Meta, "lifecycle:deprecated");
             }
 
             if (Entity.IsDeleted == true)
             {
-                EntityRagLabelHelper.AddLabel(Payload, "lifecycle:deleted");
+                EntityRagLabelHelper.AddLabel(Payload.Meta, "lifecycle:deleted");
             }
         }
 

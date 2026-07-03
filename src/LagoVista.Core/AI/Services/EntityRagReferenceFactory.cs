@@ -7,12 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using static LagoVista.Core.Models.AdaptiveCard.MSTeams;
 
 namespace LagoVista.Core.AI.Services
 {
     public static class EntityRagReferenceFactory
     {
-        public static IReadOnlyList<EntityRagReferenceContent> Create(IEntityBase entity, RagVectorPayload primaryPayload, string primaryPointId)
+        public static IReadOnlyList<EntityRagReferenceContent> Create(IEntityBase entity, RagEntityVectorPayload primaryPayload, string primaryPointId)
         {
             if (entity == null)
             {
@@ -51,7 +52,7 @@ namespace LagoVista.Core.AI.Services
             return results;
         }
 
-        private static void AddPropertyReferences(List<EntityRagReferenceContent> results, HashSet<string> seenContent, IEntityBase entity, RagVectorPayload primaryPayload, string primaryPointId, PropertyInfo property, RagEmbeddingContentAttribute attribute)
+        private static void AddPropertyReferences(List<EntityRagReferenceContent> results, HashSet<string> seenContent, IEntityBase entity, RagEntityVectorPayload primaryPayload, string primaryPointId, PropertyInfo property, RagEmbeddingContentAttribute attribute)
         {
             var values = property.GetValue(entity) as IEnumerable<string>;
 
@@ -87,6 +88,8 @@ namespace LagoVista.Core.AI.Services
                 var payload = RagReferenceVectorPayload.FromPrimary(primaryPayload);
 
                 payload.Meta.ContentHash = EntityRagText.ComputeSha256(normalized);
+                EntityRagLabelHelper.AddLabel(payload.Meta, $"entity-type:{RagReferenceNameHelper.ToKebabCase(property.Name)}-{sourceIndex+1}");
+
 
                 results.Add(new EntityRagReferenceContent
                 {

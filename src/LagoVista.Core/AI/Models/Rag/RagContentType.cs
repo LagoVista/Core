@@ -12,6 +12,9 @@ namespace LagoVista.Core.AI.Models.Rag
         Infrastructure = 7,
         Schema = 8,
         ApiContract = 9,
-        Spec = 10
+        Spec = 10,
+        ProducedArtifact = 11,
+        Entity = 12,
+        Ai = 13,
     }
 }

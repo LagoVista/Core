@@ -10,9 +10,17 @@ namespace LagoVista.Core.AI.Interfaces
     {
         string PointId { get; set; }
         public float[] Vector { get; set; }
-        public RagVectorPayload Payload { get; set; }
+        public IRagVectorPayload Payload { get; set; }
         public byte[] Contents { get; set; }
         public byte[] FinderSnippet { get; set; }
+    }
 
+    public interface IRagPoint<TPayload> where TPayload : IRagVectorPayload
+    {
+        string PointId { get; set; }
+        public float[] Vector { get; set; }
+        public TPayload Payload { get; set; }
+        public byte[] Contents { get; set; }
+        public byte[] FinderSnippet { get; set; }
     }
 }

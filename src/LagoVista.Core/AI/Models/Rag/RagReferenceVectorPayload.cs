@@ -1,18 +1,19 @@
 using LagoVista.Core.Validation;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LagoVista.Core.AI.Models.Rag
 {
-    public sealed class RagReferenceVectorPayload : RagVectorPayloadBase<RagReferenceVectorPayloadMeta, RagReferenceVectorPayloadExtra>, IRagVectorPayload
+    public sealed class RagReferenceVectorPayload : RagVectorPayloadBase<RagReferenceVectorPayloadMeta, RagReferenceVectorPayloadExtra>
     {
         public static RagReferenceVectorPayload FromDictionary(IDictionary<string, object> source)
         {
             return FromDictionary<RagReferenceVectorPayload>(source);
         }
 
-        public static RagReferenceVectorPayload FromPrimary(RagVectorPayload primary)
+        public static RagReferenceVectorPayload FromPrimary(RagEntityVectorPayload primary)
         {
             if (primary == null)
             {
@@ -21,8 +22,8 @@ namespace LagoVista.Core.AI.Models.Rag
 
             var payload = new RagReferenceVectorPayload
             {
-                Meta = RagPayloadMapper.CopySharedProperties<RagVectorPayloadMeta, RagReferenceVectorPayloadMeta>(primary.Meta),
-                Extra = RagPayloadMapper.CopySharedProperties<RagVectorPayloadExtra, RagReferenceVectorPayloadExtra>(primary.Extra)
+                Meta = RagPayloadMapper.CopySharedProperties<RagEntityVectorPayloadMeta, RagReferenceVectorPayloadMeta>(primary.Meta),
+                Extra = RagPayloadMapper.CopySharedProperties<RagEntityVectorPayloadExtra, RagReferenceVectorPayloadExtra>(primary.Extra)
             };
 
             payload.Meta.IsReference = true;
@@ -53,7 +54,12 @@ namespace LagoVista.Core.AI.Models.Rag
 
             return $"{Slug(entityType, "unknown")}:{Slug(entityId, "unknown")}:{Slug(sourceField, "unknown")}:{sourceIndex}";
         }
-        
+
+        public override JObject Serialize()
+        {
+            return JObject.FromObject(this);
+        }
+
         public override string ToString()
         {
             return $"{Meta.OrgNamespace}/{Meta.DocId} reference={Meta.IsReference}";

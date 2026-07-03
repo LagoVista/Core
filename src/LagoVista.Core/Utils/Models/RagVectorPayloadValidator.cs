@@ -54,6 +54,30 @@ namespace LagoVista.Core.Utils.Types
                     errs.Add("content_type must be DomainDocument or Code.");
                 RequireNonEmpty(m.Subtype, "subtype", errs);
 
+                return errs;
+            }
+            public static List<string> Validate(RagCodeVectorPayload p, ValidateOptions opt = null)
+            {
+
+                var errs = new List<string>();
+                if (p == null) { errs.Add("Payload is null."); return errs; }
+                opt = opt ?? new ValidateOptions();
+
+                var m = p.Meta;
+                var x = p.Extra;
+
+                if (m == null) { errs.Add("meta is required."); return errs; }
+                if (x == null) x = new RagCodeVectorPayloadExtra(); // allow null extra but avoid null refs
+
+                // ---------- Identity / tenancy ----------
+                RequireNonEmpty(m.OrgNamespace, "org_namespace", errs);
+                // project_id may be optional in some installs
+                RequireNonEmpty(m.DocId, "doc_id", errs);
+
+                // ---------- Classification ----------
+                if (m.ContentTypeId == RagContentType.Unknown)
+                    errs.Add("content_type must be DomainDocument or Code.");
+                RequireNonEmpty(m.Subtype, "subtype", errs);
                 // ---------- Sectioning ----------
                 RequireNonEmpty(m.SectionKey, "section_key", errs);
                 if (opt.EnforcePartBounds)
@@ -69,11 +93,6 @@ namespace LagoVista.Core.Utils.Types
                 if (!string.IsNullOrWhiteSpace(m.Language) && m.Language.Length > 20)
                     errs.Add("language looks too long (expected like 'en-US').");
 
-                // Priority range
-                if (opt.MinPriority.HasValue && m.Priority < opt.MinPriority.Value)
-                    errs.Add($"priority must be >= {opt.MinPriority.Value}.");
-                if (opt.MaxPriority.HasValue && m.Priority > opt.MaxPriority.Value)
-                    errs.Add($"priority must be <= {opt.MaxPriority.Value}.");
 
                 if (opt.RequireLabelIdsWhenSlugsPresent &&
                     m.LabelSlugs != null && m.LabelSlugs.Count > 0 &&

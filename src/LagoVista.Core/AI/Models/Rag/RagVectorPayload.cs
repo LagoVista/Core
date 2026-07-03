@@ -1,6 +1,7 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Models;
 using LagoVista.Core.Models.UIMetaData;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace LagoVista.Core.AI.Models.Rag
                 ? Meta.ContentType
                 : Meta.ContentTypeId != RagContentType.Unknown ? Meta.ContentTypeId.ToString() : "Unknown";
 
-            return $"{Meta.OrgNamespace}/{Meta.ProjectId}/{Meta.DocId} ({contentType}) sec={Meta.SectionKey} p={Meta.PartIndex}/{Meta.PartTotal}";
+            return $"{Meta.OrgNamespace}/{Meta.DocId} ({contentType})";
         }
 
         public static RagVectorPayload FromDictionary(IDictionary<string, object> source)
@@ -49,59 +50,9 @@ namespace LagoVista.Core.AI.Models.Rag
             return BuildSemanticId(docId, sectionKey, partIndex);
         }
 
-        public static RagVectorPayload FromEntity(IEntityBase entity)
+        public override JObject Serialize()
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            var entityType = entity.GetType();
-            var attribute = entityType.GetTypeInfo().GetCustomAttributes<EntityDescriptionAttribute>().FirstOrDefault();
-            var entityDescription = EntityDescription.Create(entityType, attribute);
-
-            var payload = new RagVectorPayload
-            {
-                Meta =
-                {
-                    DocId = entity.Id,
-                    Title = entity.Name,
-                    SectionKey = "main",
-                    BusinessDomainArea = "EntityModel",
-                    BusinessDomainKey = entityDescription.DomainName,
-                    SysDomain = "AppDomain",
-                    SysLayer = "Server",
-                    SysRole = "EntityModel",
-                    PartIndex = 1,
-                    PartTotal = 1,
-                    Deleted = entity.IsDeleted ?? false,
-                    SemanticId = $"{entityDescription.DomainName}:{entityType.Name}:{entity.Id}".Replace(" ", String.Empty).ToLowerInvariant(),
-                    ContentTypeId = RagContentType.DomainDocument,
-                    Subtype = entity.EntityType,
-                    SubtypeFlavor = "ModelContents",
-                    ProjectId = "default",
-                    OrgId = entity.EntityType == "Organization" ? entity.Id.ToString() : entity.OwnerOrganization.Id
-                }
-            };
-
-            if (!String.IsNullOrEmpty(entityDescription.EditUIUrl))
-            {
-                payload.Extra.EditorUrl = entityDescription.EditUIUrl.Replace("{id}", entity.Id);
-            }
-
-            if (!String.IsNullOrEmpty(entityDescription.PreviewUIUrl))
-            {
-                payload.Extra.PreviewUrl = entityDescription.PreviewUIUrl.Replace("{id}", entity.Id);
-            }
-
-            if (!String.IsNullOrEmpty(entityDescription.GetUrl))
-            {
-                payload.Extra.RestGETUrl = entityDescription.GetUrl.Replace("{id}", entity.Id);
-            }
-
-            payload.Extra.RestPUTUrl = entityDescription.UpdateUrl;
-            return payload;
+            return JObject.FromObject(this);
         }
-
     }
 }

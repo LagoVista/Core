@@ -10,13 +10,10 @@ namespace LagoVista.Core.AI.Interfaces
     {
         IEntityBase Entity { get; }
 
-        RagVectorPayload Payload { get; }
+        RagEntityVectorPayload Payload { get; }
 
         IEntityRagContentBuilder WithSubtypeFlavor(string subtypeFlavor);
 
-        IEntityRagContentBuilder WithAudience(string audience);
-
-        IEntityRagContentBuilder WithPersona(string persona);
 
         IEntityRagContentBuilder WithShortSummary(string shortSummary);
 
@@ -27,6 +24,8 @@ namespace LagoVista.Core.AI.Interfaces
         IEntityRagContentBuilder AddShortSummaryList(string heading, IEnumerable<EntityHeader> items, int priority = 50, int maxItems = 8);
 
         IEntityRagContentBuilder AddLabel(string label);
+
+        IEntityRagContentBuilder SetVersion(int version);
 
         IEntityRagContentBuilder AddLabels(params string[] labels);
 
@@ -48,6 +47,6 @@ namespace LagoVista.Core.AI.Interfaces
 
         IEntityRagContentBuilder AddIssueIf(bool condition, string issue);
 
-        EntityRagContent Build();
+        EntityRagContent<RagEntityVectorPayload> Build();
     }
 }
