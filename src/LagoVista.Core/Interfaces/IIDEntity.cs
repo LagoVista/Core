@@ -20,7 +20,7 @@ namespace LagoVista.Core.Interfaces
         List<EntityChecklistStatus> ChecklistStatus { get;  }
     }
 
-    public interface ICoreDefinitionEntity : ICheckListEntity
+    public interface ICoreDefinitionEntity : ICheckListEntity, IOwnershipPoints
     {
         string Name { get; set; }
         string Description { get; set; }

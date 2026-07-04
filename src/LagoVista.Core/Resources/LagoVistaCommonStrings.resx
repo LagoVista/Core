@@ -549,4 +549,22 @@
   <data name="EntityReadinessLevel_Ready" xml:space="preserve">
   <value>Ready</value>
 </data>
+  <data name="EntityOwnershipPoint_Title" xml:space="preserve">
+  <value>Ownership Point</value>
+</data>
+  <data name="EntityOwnershipPoint_Help" xml:space="preserve">
+  <value>Defines a concise area of accountability for an entity.</value>
+</data>
+  <data name="EntityOwnershipPoint_Description" xml:space="preserve">
+  <value>Identifies an action, its business subject, and the boundary of responsibility.</value>
+</data>
+  <data name="EntityOwnershipPoint_Action" xml:space="preserve">
+  <value>Action</value>
+</data>
+  <data name="EntityOwnershipPoint_Subject" xml:space="preserve">
+  <value>Subject</value>
+</data>
+  <data name="EntityOwnershipPoint_Summary" xml:space="preserve">
+  <value>Summary</value>
+</data>
 </root>

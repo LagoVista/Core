@@ -1,4 +1,4 @@
-﻿/*5/13/2026 3:09:24 PM*/
+﻿/*7/4/2026 3:13:30 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1153,6 +1153,24 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:EntityChecklistStepType_Validate
 
 		public static string EntityChecklistStepType_Validate { get { return GetResourceString("EntityChecklistStepType_Validate"); } }
+//Resources:LagoVistaCommonStrings:EntityOwnershipPoint_Action
+
+		public static string EntityOwnershipPoint_Action { get { return GetResourceString("EntityOwnershipPoint_Action"); } }
+//Resources:LagoVistaCommonStrings:EntityOwnershipPoint_Description
+
+		public static string EntityOwnershipPoint_Description { get { return GetResourceString("EntityOwnershipPoint_Description"); } }
+//Resources:LagoVistaCommonStrings:EntityOwnershipPoint_Help
+
+		public static string EntityOwnershipPoint_Help { get { return GetResourceString("EntityOwnershipPoint_Help"); } }
+//Resources:LagoVistaCommonStrings:EntityOwnershipPoint_Subject
+
+		public static string EntityOwnershipPoint_Subject { get { return GetResourceString("EntityOwnershipPoint_Subject"); } }
+//Resources:LagoVistaCommonStrings:EntityOwnershipPoint_Summary
+
+		public static string EntityOwnershipPoint_Summary { get { return GetResourceString("EntityOwnershipPoint_Summary"); } }
+//Resources:LagoVistaCommonStrings:EntityOwnershipPoint_Title
+
+		public static string EntityOwnershipPoint_Title { get { return GetResourceString("EntityOwnershipPoint_Title"); } }
 //Resources:LagoVistaCommonStrings:EntityReadinessLevel_MostlyReady
 
 		public static string EntityReadinessLevel_MostlyReady { get { return GetResourceString("EntityReadinessLevel_MostlyReady"); } }
@@ -1409,6 +1427,12 @@ namespace LagoVista.Core.Resources
 			public const string EntityChecklistStepType_Improve = "EntityChecklistStepType_Improve";
 			public const string EntityChecklistStepType_Review = "EntityChecklistStepType_Review";
 			public const string EntityChecklistStepType_Validate = "EntityChecklistStepType_Validate";
+			public const string EntityOwnershipPoint_Action = "EntityOwnershipPoint_Action";
+			public const string EntityOwnershipPoint_Description = "EntityOwnershipPoint_Description";
+			public const string EntityOwnershipPoint_Help = "EntityOwnershipPoint_Help";
+			public const string EntityOwnershipPoint_Subject = "EntityOwnershipPoint_Subject";
+			public const string EntityOwnershipPoint_Summary = "EntityOwnershipPoint_Summary";
+			public const string EntityOwnershipPoint_Title = "EntityOwnershipPoint_Title";
 			public const string EntityReadinessLevel_MostlyReady = "EntityReadinessLevel_MostlyReady";
 			public const string EntityReadinessLevel_NeedsWork = "EntityReadinessLevel_NeedsWork";
 			public const string EntityReadinessLevel_NotReviewed = "EntityReadinessLevel_NotReviewed";
