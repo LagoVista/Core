@@ -14,7 +14,11 @@ namespace LagoVista.Core.Interfaces
     public enum LlmProviders
     {
         [EnumLabel("openai", LagoVistaCommonStrings.Names.LLMProvider_OpenAI, typeof(LagoVistaCommonStrings))]
-        OpenAI
+        OpenAI,
+
+
+        [EnumLabel("grok", LagoVistaCommonStrings.Names.LLMProvider_Grok, typeof(LagoVistaCommonStrings))]
+        Grok
     }
 
     public interface IAIAgentContext

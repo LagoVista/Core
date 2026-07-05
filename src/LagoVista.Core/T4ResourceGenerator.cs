@@ -1,4 +1,4 @@
-﻿/*7/4/2026 3:13:30 PM*/
+﻿/*7/5/2026 12:39:25 PM*/
 using System.Globalization;
 using System.Reflection;
 
@@ -1192,6 +1192,9 @@ namespace LagoVista.Core.Resources
 //Resources:LagoVistaCommonStrings:ListResponse_Deleted
 
 		public static string ListResponse_Deleted { get { return GetResourceString("ListResponse_Deleted"); } }
+//Resources:LagoVistaCommonStrings:LLMProvider_Grok
+
+		public static string LLMProvider_Grok { get { return GetResourceString("LLMProvider_Grok"); } }
 //Resources:LagoVistaCommonStrings:LLMProvider_OpenAI
 
 		public static string LLMProvider_OpenAI { get { return GetResourceString("LLMProvider_OpenAI"); } }
@@ -1440,6 +1443,7 @@ namespace LagoVista.Core.Resources
 			public const string ErrorMakingCall = "ErrorMakingCall";
 			public const string ListResponse_Category = "ListResponse_Category";
 			public const string ListResponse_Deleted = "ListResponse_Deleted";
+			public const string LLMProvider_Grok = "LLMProvider_Grok";
 			public const string LLMProvider_OpenAI = "LLMProvider_OpenAI";
 			public const string Month_April = "Month_April";
 			public const string Month_August = "Month_August";

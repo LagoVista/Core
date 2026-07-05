@@ -6,6 +6,7 @@ using LagoVista.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LagoVista.Core.Interfaces
@@ -32,7 +33,12 @@ namespace LagoVista.Core.Interfaces
     {
         Task<DependentObjectCheckResult> CheckForDependenciesAsync(IIDEntity instance);
 
+        Task<DependentObjectCheckResult> CheckRegisteredReferencesAsync(Type sourceType, string sourceId, string ownerOrgId, CancellationToken ct = default);
+
+        Task RenameRegisteredReferencesAsync(EntityHeader changedBy, Type sourceType, string sourceId, string ownerOrgId, string newName, CancellationToken ct = default);
+
         Task RenameObjectAsync(EntityHeader changedBy, string changedObjectId, string changedObjectType, string newName);
+
         Task RenameDependentObjectsAsync(EntityHeader changedBy, string changedObjectId, string changedObjectType, string dependentObjectId, string dependentObjectType, string newName);
     }
 }
