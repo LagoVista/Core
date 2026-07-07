@@ -19,6 +19,7 @@ public class EntitySummary
     public String Icon { get; set; }
     public String Description { get; set; }
     public String UserHelp { get; set; }
+    public string AiIconGuidance { get; set; }
 
     // Existing (keep)
     public EntityDescriptionAttribute.EntityTypes EntityType { get; set; }
@@ -61,6 +62,9 @@ public class EntitySummary
             Name = title,
             Description = description,
             UserHelp = userHelp,
+
+            // Ai Guidance
+            AiIconGuidance = attr.AiIconGuidance,
 
             // Domain + UI
             DomainKey = attr.Domain,
