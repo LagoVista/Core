@@ -113,7 +113,7 @@ namespace LagoVista.Core.Models
         public string ETag { get; set; }
 
         [JsonIgnore]
-        public bool ShouldVectorIndex { get; set; }
+        public bool ShouldVectorIndex { get; set; } = true;
 
         private string _name;
         [AiSchemaIgnore]

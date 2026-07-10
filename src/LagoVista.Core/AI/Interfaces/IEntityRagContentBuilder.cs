@@ -27,6 +27,8 @@ namespace LagoVista.Core.AI.Interfaces
 
         IEntityRagContentBuilder SetVersion(int version);
 
+        IEntityRagContentBuilder SetStatusKey(string statusKey);
+
         IEntityRagContentBuilder AddLabels(params string[] labels);
 
         IEntityRagContentBuilder AddEmbeddingSection(string heading, string content, int priority = 50);

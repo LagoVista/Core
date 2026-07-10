@@ -40,6 +40,13 @@ namespace LagoVista.Core.AI.Models.Rag
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string Language { get; set; } = "en-US";
 
+        public string EmbeddingRole { get; set; }
+
+
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
+        public string StatusKey { get; set; }
+
+
         public string ParentPointId { get; set; }
 
 

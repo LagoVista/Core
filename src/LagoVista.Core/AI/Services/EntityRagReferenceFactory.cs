@@ -88,6 +88,7 @@ namespace LagoVista.Core.AI.Services
                 var payload = RagReferenceVectorPayload.FromPrimary(primaryPayload);
 
                 payload.Meta.ContentHash = EntityRagText.ComputeSha256(normalized);
+                payload.Meta.EmbeddingRole = attribute.Category.ToString();
                 EntityRagLabelHelper.AddLabel(payload.Meta, $"entity-type:{RagReferenceNameHelper.ToKebabCase(property.Name)}-{sourceIndex+1}");
 
 

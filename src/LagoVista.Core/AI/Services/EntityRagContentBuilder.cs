@@ -96,6 +96,12 @@ namespace LagoVista.Core.AI.Services
             return this;
         }
 
+        public IEntityRagContentBuilder SetStatusKey(string statusKey)
+        {
+            Payload.Meta.StatusKey = statusKey;
+            return this;
+        }
+
         public IEntityRagContentBuilder AddLabels(params string[] labels)
         {
             EntityRagLabelHelper.AddLabels(Payload.Meta, labels);
@@ -356,21 +362,12 @@ namespace LagoVista.Core.AI.Services
                 return;
             }
 
-            builder.AppendLine($"# {title}");
-            builder.AppendLine();
+            builder.Append($"{title}: ");
         }
 
         private void AppendModelIdentity(StringBuilder builder)
         {
-            builder.AppendLine("## Identity");
-            builder.AppendLine();
-            builder.AppendLine($"- Entity type: {Entity.EntityType ?? Entity.GetType().Name}");
-            builder.AppendLine($"- Entity ID: {Entity.Id}");
-
-            if (!String.IsNullOrWhiteSpace(Entity.Key))
-            {
-                builder.AppendLine($"- Key: {Entity.Key}");
-            }
+            builder.AppendLine($"Identity: Type={Entity.EntityType ?? Entity.GetType().Name};");
 
             if (!String.IsNullOrWhiteSpace(Payload.Meta.Stage))
             {

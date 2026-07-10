@@ -34,6 +34,7 @@ namespace LagoVista.Core.AI.Models.Rag
                 {
                     DocId = entity.Id,
                     Title = entity.Name,
+                    EmbeddingRole = RagEmbeddingCategory.Primary.ToString(),
                     EntityId = entity.Id,
                     EntityType = entityType.Name,
                     BusinessDomain = entityDescription.DomainName,
