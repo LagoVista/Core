@@ -168,7 +168,8 @@ namespace LagoVista.Core.Attributes
             IndexTiers IndexTier = IndexTiers.Secondary,
             int IndexPriority = 50,
             string IndexTagsCsv = null,
-            string AiIconGuidance = null
+            string AiIconGuidance = null,
+            string AiIconGuidanceEntityField = null
         )
         {
             _descriptionResource = DescriptionResource;
@@ -220,6 +221,7 @@ namespace LagoVista.Core.Attributes
             _indexPriority = IndexPriority;
             _indexTagsCsv = IndexTagsCsv;
             this.AiIconGuidance = AiIconGuidance;
+            this.AiIconGuidanceEntityField = AiIconGuidanceEntityField;
         }
 
         public int? Col1WidthPercent { get { return _col1WidthPct; } }
@@ -244,6 +246,7 @@ namespace LagoVista.Core.Attributes
 
         public string AiIconGuidance { get;  }
 
+        public string AiIconGuidanceEntityField { get; }
         public bool Cloneable { get; private set; }
         public bool CanImport { get; private set; }
         public bool CanExport { get; private set; }

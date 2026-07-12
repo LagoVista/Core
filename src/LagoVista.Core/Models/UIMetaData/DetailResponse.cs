@@ -58,7 +58,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string DeleteUrl { get; set; }
         public string GetListUrl { get; set; }
         public string HelpUrl { get; set; }
-
+        public string AiIconGuidanceEntityField { get; set; }
+        public string AiIconGuidance { get; set; }
 
         public string AiPromptInstructions { get; set; }
         public string AiDefaultMode{ get; set; }
@@ -200,6 +201,8 @@ namespace LagoVista.Core.Models.UIMetaData
             response.AutoSave = entity.AutoSave;
             response.AutoSaveIntervalSeconds = entity.AutoSaveIntervalSeconds;
             response.SaveDraft = entity.SaveDraft;
+            response.AiIconGuidanceEntityField = attr.AiIconGuidanceEntityField;
+            response.AiIconGuidance = attr.AiIconGuidance;
 
             var properties = typeof(TModel).GetRuntimeProperties();
             foreach(var property in properties)
