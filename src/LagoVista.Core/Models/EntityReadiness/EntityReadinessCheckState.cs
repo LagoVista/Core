@@ -24,6 +24,7 @@ namespace LagoVista.Core.Models.EntityReadiness
     public enum EntityReadinessCheckType
     {
         CoreDefinition,
+        CatalogDefinition,
         EntityDefinition,
         RelationshipReadiness,
         OperationalReadiness

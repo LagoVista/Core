@@ -27,6 +27,10 @@ namespace LagoVista.Core.AI.Models.Rag
 
         public TExtra Extra { get; set; }
 
+        IRagVectorPayloadMeta IRagVectorPayload.CoreMeta => Meta;
+
+        IRagVectorPayloadExtra IRagVectorPayload.CoreExtra => Extra;
+
         public InvokeResult ValidateForIndex()
         {
             var result = new InvokeResult();
@@ -62,7 +66,7 @@ namespace LagoVista.Core.AI.Models.Rag
             };
         }
 
-        public IReadOnlyList<QdrantPayloadIndexSpec> Indexes => RagPayloadIndexResolver.GetIndexes<TMeta>(BucketMeta);
+        public static IReadOnlyList<QdrantPayloadIndexSpec> Indexes => RagPayloadIndexResolver.GetIndexes<TMeta>(BucketMeta);
 
         public IReadOnlyList<QdrantPayloadIndexSpec> GetIndexes()
         {

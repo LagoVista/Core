@@ -7,8 +7,14 @@ namespace LagoVista.Core.AI.Models.Rag
 {
     public interface IRagVectorPayload
     {
-        public string PointId { get; set; }
-        IReadOnlyList<QdrantPayloadIndexSpec> Indexes { get; }
+        string PointId { get; set; }
+
+        IRagVectorPayloadMeta CoreMeta { get; }
+
+        IRagVectorPayloadExtra CoreExtra { get; }
+
+        IReadOnlyList<QdrantPayloadIndexSpec> GetIndexes();
+
         JObject Serialize();
     }
 
@@ -24,14 +30,19 @@ namespace LagoVista.Core.AI.Models.Rag
     public interface IRagVectorPayloadMeta
     {
         string DocId { get; }
+
         string OrgId { get; }
+
+        string Title { get; }
+
         RagContentType ContentTypeId { get; }
+
         string Subtype { get; }
     }
 
     public interface IRagVectorPayloadExtra
     {
         string ShortSummary { get; }
-  
+        string ModelContentUrl { get; }
     }
 }
