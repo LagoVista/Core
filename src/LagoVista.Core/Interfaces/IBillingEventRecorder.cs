@@ -7,7 +7,8 @@ namespace LagoVista.Core.Interfaces
     {
         AudioGeneration,
         VideoAvatarCreated,
-        VideoGeneration,
+        VideoGenerationStandard,
+        VideoGenerationPremium,
         VideoAssembly
     }
 

@@ -11,16 +11,27 @@ namespace LagoVista.MessageQueue.Rabbit
 {
     public static class RabbitMqPublisherServiceCollectionExtensions
     {
-        public static IServiceCollection AddRabbitMqPublisher<TMessage, TPublisher, TImplementation>(this IServiceCollection services, IConfiguration configuration, string sectionName)
+        public static IServiceCollection AddRabbitMqPublisher<TMessage, TPublisher, TImplementation>(
+            this IServiceCollection services,
+            IConfiguration configuration,
+            string sectionName,
+            string registrationName = null)
             where TPublisher : class
             where TImplementation : class, TPublisher
         {
-            if(services == null) throw new ArgumentNullException(nameof(services));
-            if(configuration == null) throw new ArgumentNullException(nameof(configuration));
-            if(String.IsNullOrEmpty(sectionName)) throw new ArgumentNullException(nameof(sectionName));
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (String.IsNullOrEmpty(sectionName)) throw new ArgumentNullException(nameof(sectionName));
+
+            registrationName = String.IsNullOrWhiteSpace(registrationName)
+                ? sectionName
+                : registrationName;
 
             var settings = RabbitMqPublisherSettings.Read(configuration, sectionName);
-            return services.AddRabbitMqPublisher<TMessage, TPublisher, TImplementation>(settings, sectionName);
+
+            return services.AddRabbitMqPublisher<TMessage, TPublisher, TImplementation>(
+                settings,
+                registrationName);
         }
 
         public static IServiceCollection AddRabbitMqPublisher<TMessage, TPublisher, TImplementation>(this IServiceCollection services, RabbitMqPublisherSettings settings, string serviceName)

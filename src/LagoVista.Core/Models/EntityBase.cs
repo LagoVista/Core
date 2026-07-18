@@ -144,7 +144,7 @@ namespace LagoVista.Core.Models
 
 
         [FormField(LabelResource: LagoVistaCommonStrings.Names.Common_Description, IsRequired: false, FieldType: FieldTypes.MultiLineText, ResourceType: typeof(LagoVistaCommonStrings))]
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
         [AiSchemaIgnore]
         public List<AiEntitySession> AiEntitySessions { get; set; } = new List<AiEntitySession>();
