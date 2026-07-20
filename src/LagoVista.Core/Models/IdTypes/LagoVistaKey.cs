@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace LagoVista
 {
@@ -15,21 +16,25 @@ namespace LagoVista
 
         public string Value => _value;
 
+        private static readonly Regex LagoVistaKeyRegex = new Regex(
+            @"^[a-z](?:[a-z0-9]|-(?!-)){1,126}[a-z0-9]$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         public LagoVistaKey(string value)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            var first = value[0];
-            if (first >= '0' && first <= '9')
-                value = $"a{value}";
+            value = value.ToLowerInvariant();
 
-            value = value.ToLower();
-
-            if (!IsValid(value))
+            if (!LagoVistaKeyRegex.IsMatch(value))
+            {
                 throw new FormatException(
                     $"Invalid LagoVistaKey: '{value}'. " +
-                    "Must be 3–64 chars, lowercase a-z and 0-9 only, and start with a letter.  It may also be a legacy generated key from an id");
+                    "Must be 3–128 characters, start with a lowercase letter, " +
+                    "contain only lowercase a-z, 0-9, or hyphens, " +
+                    "must not contain consecutive hyphens, and must not end with a hyphen.");
+            }
 
             _value = value;
         }
