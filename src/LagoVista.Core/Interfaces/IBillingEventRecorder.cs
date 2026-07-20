@@ -14,9 +14,9 @@ namespace LagoVista.Core.Interfaces
 
     public interface IBillingEventRecorder
     {
-        Task RecordUsageAsync(BillingEventType eventType, GuidString36 subscriptionId, double quantity, string note, EntityHeader org, EntityHeader user);
-        Task RecordUsageAsync(BillingEventType eventType, double quantity, string note, EntityHeader org, EntityHeader user);
-        Task RecordUsageAsync(BillingEventType eventType, double quantity, BillingUsageContext ctx);
+        Task<GuidString36> RecordUsageAsync(BillingEventType eventType, GuidString36 subscriptionId, double quantity, string note, EntityHeader org, EntityHeader user);
+        Task<GuidString36> RecordUsageAsync(BillingEventType eventType, double quantity, string note, EntityHeader org, EntityHeader user);
+        Task<GuidString36> RecordUsageAsync(BillingEventType eventType, double quantity, BillingUsageContext ctx);
 
     }
 
