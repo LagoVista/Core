@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace LagoVista.Core.AI.Models
 {
     /// <summary>
-    /// AGN-034 — AgentExecuteRequest Streamlining
+    /// AGN-034 ï¿½ AgentExecuteRequest Streamlining
     ///
     /// Two request scenarios (presence-based, no explicit discriminator):
     ///
@@ -152,6 +152,8 @@ namespace LagoVista.Core.AI.Models
 
         public SopAgentExecutionRequest SopExecution { get; set; }
 
+        public GuidedSopInteractionRequest GuidedSopInteraction { get; set; }
+
         [JsonIgnore]
         public bool IsSopExecution => SopExecution != null;
 
@@ -199,6 +201,9 @@ namespace LagoVista.Core.AI.Models
                 if (Streaming)
                     throw new InvalidOperationException("Streaming is forbidden on tool continuation submissions.");
 
+                if (GuidedSopInteraction != null)
+                    throw new InvalidOperationException("GuidedSopInteraction is forbidden on tool continuation submissions.");
+
                 foreach (var tr in ToolResults)
                     tr.Validate();
             }
@@ -211,9 +216,10 @@ namespace LagoVista.Core.AI.Models
                 var hasInstruction = !String.IsNullOrWhiteSpace(Instruction);
                 var hasArtifacts = InputArtifacts != null && InputArtifacts.Count > 0;
                 var hasClipboardImages = ClipboardImages != null && ClipboardImages.Count > 0;
+                var hasGuidedSopInteraction = GuidedSopInteraction != null;
 
-                if (!hasInstruction && !hasArtifacts && !hasClipboardImages)
-                    throw new InvalidOperationException("User turn requests must include at least one of: Instruction, InputArtifacts, ClipboardImages.");
+                if (!hasInstruction && !hasArtifacts && !hasClipboardImages && !hasGuidedSopInteraction)
+                    throw new InvalidOperationException("User turn requests must include at least one of: Instruction, InputArtifacts, ClipboardImages, GuidedSopInteraction.");
 
                 if (hasArtifacts)
                 {
@@ -228,6 +234,7 @@ namespace LagoVista.Core.AI.Models
                 }
 
                 RagScope?.Validate();
+                GuidedSopInteraction?.Validate();
             }
         }
     }

@@ -25,6 +25,10 @@ namespace LagoVista
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
+
+            if (value.Length > 0 && value[0] >= '0' && value[0] <= '9')
+                value = $"k{value}";
+
             value = value.ToLowerInvariant();
 
             if (!LagoVistaKeyRegex.IsMatch(value))

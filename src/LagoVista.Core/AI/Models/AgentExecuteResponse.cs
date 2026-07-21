@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 namespace LagoVista.Core.AI.Models
 {
     /// <summary>
-    /// AGN-033 — Model-agnostic response contract for agent execution APIs.
+    /// AGN-033 ï¿½ Model-agnostic response contract for agent execution APIs.
     ///
     /// Notes:
     /// - This payload is typically wrapped by InvokeResult&lt;T&gt;. If invocation is not successful,
@@ -27,7 +27,7 @@ namespace LagoVista.Core.AI.Models
         public AgentExecuteResponseKind Kind { get; set; }
 
         /// <summary>
-        /// Identifies the session (the “room”) in which this turn exists.
+        /// Identifies the session (the ï¿½roomï¿½) in which this turn exists.
         /// Always present.
         /// </summary>
         [JsonProperty("sessionId")]
@@ -141,6 +141,9 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("sopExecution")]
         public SopAgentExecutionResponse SopExecution { get; set; }
+
+        [JsonProperty("guidedSopExecution", NullValueHandling = NullValueHandling.Ignore)]
+        public GuidedSopExecutionWorkspace GuidedSopExecution { get; set; }
 
         [JsonProperty("vtmMeetingWorkItems")]
         public List<VtmMeetingWorkItemSummary> VtmMeetingWorkItems { get; set; }  = new List<VtmMeetingWorkItemSummary>();
