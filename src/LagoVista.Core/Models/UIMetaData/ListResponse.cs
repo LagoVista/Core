@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Attributes;
+using LagoVista.Core.Models;
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
@@ -18,6 +19,13 @@ namespace LagoVista.Core.Models.UIMetaData
         string Help { get; }
         List<ListColumn> Columns { get; }
         List<string> ColumnFilters { get; }
+        List<EnumDescription> Categories { get; }
+        List<EntityHeader> StatusOptions { get; }
+
+        string CategoryKey { get; }
+        string StatusKey { get; }
+        string LabelKey { get; }
+        string SearchText { get; }
 
         string Icon { get; set; }
         int PageSize { get; }
@@ -45,6 +53,13 @@ namespace LagoVista.Core.Models.UIMetaData
 
         public List<string> ColumnFilters { get; set; }
         public List<EnumDescription> Categories { get; set; }
+        public List<EntityHeader> StatusOptions { get; set; }
+
+        public string CategoryKey { get; set; }
+        public string StatusKey { get; set; }
+        public string LabelKey { get; set; }
+        public string SearchText { get; set; }
+
         public IEnumerable<TModel> Model { get; set; }
 
         public int RecordCount { get; set; }
@@ -90,6 +105,10 @@ namespace LagoVista.Core.Models.UIMetaData
             response.Model = items;
             response.PageSize = request.PageSize;
             response.PageIndex = request.PageIndex;
+            response.CategoryKey = request.CategoryKey;
+            response.StatusKey = request.StatusKey;
+            response.LabelKey = request.LabelKey;
+            response.SearchText = request.SearchText;
             response.HasMoreRecords = hasMoreRecords;
             response.NextPartitionKey = nextPartitionKey;
             response.NextRowKey = nextRowKey;
@@ -116,6 +135,10 @@ namespace LagoVista.Core.Models.UIMetaData
             var response = Create(model, listRequest: request);
             response.PageIndex = request.PageIndex;
             response.PageSize = request.PageSize;
+            response.CategoryKey = request.CategoryKey;
+            response.StatusKey = request.StatusKey;
+            response.LabelKey = request.LabelKey;
+            response.SearchText = request.SearchText;
             response.HasMoreRecords = model.Count() == response.PageSize;
             return response;
         }
@@ -182,6 +205,10 @@ namespace LagoVista.Core.Models.UIMetaData
             response.HasMoreRecords = request.PageSize == model.Count();
             response.PageIndex = request.PageIndex;
             response.PageSize = request.PageSize;
+            response.CategoryKey = request.CategoryKey;
+            response.StatusKey = request.StatusKey;
+            response.LabelKey = request.LabelKey;
+            response.SearchText = request.SearchText;
             response.GetListUrl = request.Url;
 
             if (bldr != null)
@@ -220,6 +247,12 @@ namespace LagoVista.Core.Models.UIMetaData
             {
                 Model = items,
                 Columns = source.Columns,
+                Categories = source.Categories,
+                StatusOptions = source.StatusOptions,
+                CategoryKey = source.CategoryKey,
+                StatusKey = source.StatusKey,
+                LabelKey = source.LabelKey,
+                SearchText = source.SearchText,
 
                 Help = source.Help,
                 Title = source.Title,

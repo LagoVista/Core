@@ -37,6 +37,9 @@ namespace LagoVista.Core.Models.UIMetaData
         public string Url { get; set; }
 
         public string CategoryKey { get; set; }
+        public string StatusKey { get; set; }
+        public string LabelKey { get; set; }
+        public string SearchText { get; set; }
 
         public double TimeBucketSize { get; set; }
         public string TimeBucket { get; set; }
@@ -62,6 +65,12 @@ namespace LagoVista.Core.Models.UIMetaData
 \tGroup By         : {GroupBy}
 \tGroup By Type    : {GroupByType}
 \tGroup By Size    : {GroupBySize}
+\tCategory Key     : {CategoryKey}
+\tStatus Key       : {StatusKey}
+\tLabel Key        : {LabelKey}
+\tSearch Text      : {SearchText}
+\tShow Drafts      : {ShowDrafts}
+\tShow Deleted     : {ShowDeleted}
 \tUrl              : {Url}";
         }
 
