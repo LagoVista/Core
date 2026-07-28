@@ -18,6 +18,11 @@ namespace LagoVista.Core.AI.Models.Rag
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string ScopeId { get; set; }
 
+        public string ArtifactArchetype { get; set; }
+
+       [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
+        public string ArtifactArchetypeKey { get; set; }
+
         public string VirtualTeamMemberId { get; set; }
 
         public string EssentialJobActivityId { get; set; }
