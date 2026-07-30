@@ -28,7 +28,7 @@ namespace LagoVista
             if (!IsValid(value))
                 throw new FormatException(
                     $"Invalid OrgNamespace: '{value}'. " +
-                    "Must be 6–64 lowercase letters (a-z) only.");
+                    "Must be 6–64 lowercase letters and numbers (a-z, 0-9) only.  It must start with a lowercase letter.");
 
             _value = value;
         }
@@ -71,16 +71,24 @@ namespace LagoVista
 
         public static bool IsValid(string value)
         {
-            if (value == null) return false;
+            if (value == null)
+                return false;
 
             var length = value.Length;
             if (length < 6 || length > 64)
                 return false;
 
-            for (var i = 0; i < length; i++)
+            var first = value[0];
+            if (first < 'a' || first > 'z')
+                return false;
+
+            for (var i = 1; i < length; i++)
             {
                 var c = value[i];
-                if (c < 'a' || c > 'z')
+                var isLowercaseLetter = c >= 'a' && c <= 'z';
+                var isNumber = c >= '0' && c <= '9';
+
+                if (!isLowercaseLetter && !isNumber)
                     return false;
             }
 
