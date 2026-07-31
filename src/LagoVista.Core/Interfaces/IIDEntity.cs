@@ -50,6 +50,11 @@ namespace LagoVista.Core.Interfaces
         public string Description { get; set; }
 
         /// <summary>
+        /// Entity improvement component responsible for executing this stage.
+        /// </summary>
+        public string ToolKey { get; set; }
+
+        /// <summary>
         /// Optional guidance describing the objective of this stage and how its
         /// checklist steps should be approached together. This augments the
         /// guidance defined on each individual checklist step.
