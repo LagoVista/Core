@@ -59,7 +59,8 @@ namespace LagoVista.MessageQueue.Rabbit
             var properties = new BasicProperties
             {
                 ContentType = String.IsNullOrWhiteSpace(route.ContentType) ? "application/json" : route.ContentType,
-                DeliveryMode = route.Persistent ? DeliveryModes.Persistent : DeliveryModes.Transient
+                DeliveryMode = route.Persistent ? DeliveryModes.Persistent : DeliveryModes.Transient,
+                Type = messageType.Name
             };
 
             var json = JsonConvert.SerializeObject(payload);
