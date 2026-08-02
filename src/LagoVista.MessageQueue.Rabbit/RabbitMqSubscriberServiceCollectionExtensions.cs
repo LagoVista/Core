@@ -11,6 +11,17 @@ namespace LagoVista.MessageQueue.Rabbit
 {
     public static class RabbitMqSubscriberServiceCollectionExtensions
     {
+        public static IServiceCollection AddRabbitMqSubscriber<TMessage, THandler>(this IServiceCollection services, IConfiguration configuration, string sectionName, string serviceName)
+            where THandler : class, IMessageQueueHandler<TMessage>
+        {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (String.IsNullOrWhiteSpace(sectionName)) throw new ArgumentNullException(nameof(sectionName));
+
+            var settings = RabbitMqSubscriberSettings.Read(configuration, sectionName);
+            return services.AddRabbitMqSubscriber<TMessage, THandler>(settings, serviceName);
+        }
+
         public static IServiceCollection AddRabbitMqSubscriber<TMessage, THandler>(this IServiceCollection services, IConfiguration configuration, string sectionName)
             where THandler : class, IMessageQueueHandler<TMessage>
         {
@@ -124,7 +135,7 @@ namespace LagoVista.MessageQueue.Rabbit
             return services;
         }
 
-        private static void ValidateRegistrations(IReadOnlyCollection<RabbitMqSubscriberHandlerRegistration> registrations, string serviceName)
+        private static void ValidateRegistrations(IList<RabbitMqSubscriberHandlerRegistration> registrations, string serviceName)
         {
             if (!registrations.Any())
                 throw new InvalidOperationException($"RabbitMQ subscriber '{serviceName}' must register at least one message handler.");

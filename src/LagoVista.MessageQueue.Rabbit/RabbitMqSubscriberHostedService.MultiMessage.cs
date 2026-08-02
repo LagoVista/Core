@@ -81,7 +81,7 @@ namespace LagoVista.MessageQueue.Rabbit
         {
             try
             {
-                _logger.Trace($"{nameof(RabbitMqSubscriberHostedService)} starting '{_serviceName}'.", _serviceName.ToKVP("serviceName"), _settings.QueueName.ToKVP("queueName"), _settings.ExchangeName.ToKVP("destinationName"), _settings.RouteKey.ToKVP("routeKey"));
+                _logger.Trace($"{this.Tag()} starting '{_serviceName}'.", _serviceName.ToKVP("serviceName"), _settings.QueueName.ToKVP("queueName"), _settings.ExchangeName.ToKVP("destinationName"), _settings.RouteKey.ToKVP("routeKey"));
 
                 await EnsureConnectedAsync(stoppingToken).ConfigureAwait(false);
 
@@ -96,7 +96,7 @@ namespace LagoVista.MessageQueue.Rabbit
             }
             catch (Exception ex)
             {
-                _logger.AddException($"[RabbitMqSubscriberHostedService__ExecuteAsync__{nameof(RabbitMqSubscriberHostedService)}]", ex, _settings.UserName.ToKVP("userName"), _settings.VirtualHost.ToKVP("vhost"), _serviceName.ToKVP("serviceName"),
+                _logger.AddException(this.Tag(), ex, _settings.UserName.ToKVP("userName"), _settings.VirtualHost.ToKVP("vhost"), _serviceName.ToKVP("serviceName"),
                     _settings.QueueName.ToKVP("queueName"), _settings.ExchangeName.ToKVP("destinationName"), _settings.RouteKey.ToKVP("routeKey"));
                 _snapShot.Status = HostedServiceDiagnosticStatus.Error;
                 _snapShot.LastError = ex.Message;
@@ -166,6 +166,8 @@ namespace LagoVista.MessageQueue.Rabbit
                 _snapShot.LastActivityUtc = DateTime.UtcNow;
                 _snapShot.LastActivity = $"Process message {++_processedMessage} ({messageTypeName})";
 
+                _logger.Trace($"{this.Tag()} handling message '{messageTypeName}' with {registration.HandlerType.Name}.");
+
                 await registration.Dispatcher.DispatchAsync(payload, args, scope.ServiceProvider, cancellationToken).ConfigureAwait(false);
                 await _channel.BasicAckAsync(args.DeliveryTag, false, cancellationToken).ConfigureAwait(false);
             }
@@ -174,7 +176,7 @@ namespace LagoVista.MessageQueue.Rabbit
                 _snapShot.LastError = ex.Message;
                 _snapShot.LastErrorUtc = DateTime.UtcNow;
 
-                _logger.AddException($"{nameof(RabbitMqSubscriberHostedService)}__HandleMessageAsync", ex, _serviceName.ToKVP("serviceName"), messageTypeName.ToKVP("messageType"));
+                _logger.AddException($"{this.Tag()}", ex, _serviceName.ToKVP("serviceName"), messageTypeName.ToKVP("messageType"));
 
                 if (_channel != null && !_channel.IsClosed)
                     await _channel.BasicNackAsync(args.DeliveryTag, false, false, cancellationToken).ConfigureAwait(false);
