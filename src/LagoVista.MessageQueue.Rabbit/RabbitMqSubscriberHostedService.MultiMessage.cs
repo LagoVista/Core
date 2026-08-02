@@ -34,7 +34,7 @@ namespace LagoVista.MessageQueue.Rabbit
 
         public string Name => $"RabbitMqSubscriberHostedService - {_serviceName}";
 
-        public RabbitMqSubscriberHostedService(string serviceName, RabbitMqSubscriberSettings settings, IEnumerable<RabbitMqSubscriberHandlerRegistration> registrations, ILogger logger, IServiceScopeFactory scopeFactory)
+        internal RabbitMqSubscriberHostedService(string serviceName, RabbitMqSubscriberSettings settings, IEnumerable<RabbitMqSubscriberHandlerRegistration> registrations, ILogger logger, IServiceScopeFactory scopeFactory)
         {
             if (String.IsNullOrWhiteSpace(serviceName)) throw new ArgumentNullException(nameof(serviceName));
             _serviceName = serviceName;
