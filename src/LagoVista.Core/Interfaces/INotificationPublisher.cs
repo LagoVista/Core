@@ -37,6 +37,8 @@ namespace LagoVista.Core.Interfaces
 
         Entity,
 
+        EntityHealthBatch,
+
         WebSocketServer,
     }
 

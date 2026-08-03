@@ -19,6 +19,46 @@ namespace LagoVista.Core.Validation
         public string RedirectURL { get; set; }
 
 
+        public static InvokeResult<T> Deferred(
+    string correlationId,
+    string continuationType,
+    string referenceId = null,
+    string message = null)
+        {
+            return new InvokeResult<T>
+            {
+                Continuation = new InvokeResultContinuation
+                {
+                    CorrelationId = correlationId,
+                    ContinuationType = continuationType,
+                    ReferenceId = referenceId,
+                    Message = message
+                }
+            };
+        }
+
+
+        public InvokeResultContinuation Continuation { get; set; }
+
+
+        public virtual InvokeResultState State
+        {
+            get
+            {
+                if (Aborted)
+                    return InvokeResultState.Aborted;
+
+                if (Errors.Count > 0)
+                    return InvokeResultState.Failed;
+
+                if (Continuation != null)
+                    return InvokeResultState.Deferred;
+
+                return InvokeResultState.Completed;
+            }
+        }
+
+
         public bool Aborted { get; private set; } = false;
 
         public string AbortReason { get; private set; }
@@ -166,6 +206,7 @@ namespace LagoVista.Core.Validation
 
         public List<ResultTiming> Timings { get; set; } = new List<ResultTiming>();
 
+
         public override InvokeResult ToInvokeResult()
         {
             var invokeResult = new InvokeResult();
@@ -175,8 +216,52 @@ namespace LagoVista.Core.Validation
 
             return invokeResult;            
         }
+        public override string ToString()
+        {
+            if (Aborted)
+                return $"Aborted: {AbortReason}";
+
+            if (State == InvokeResultState.Deferred)
+            {
+                var message = Continuation?.Message;
+
+                return String.IsNullOrWhiteSpace(message)
+                    ? $"Deferred: {Continuation?.CorrelationId}"
+                    : $"Deferred: {message}";
+            }
+
+            if (Errors.Count == 0)
+                return "Success";
+
+            var bldr = new StringBuilder("Failed: ");
+
+            foreach (var err in Errors)
+                bldr.Append($" {err};");
+
+            return bldr.ToString();
+        }
+
     }
 
+
+    public enum InvokeResultState
+    {
+        Completed,
+        Deferred,
+        Failed,
+        Aborted
+    }
+
+    public class InvokeResultContinuation
+    {
+        public string CorrelationId { get; set; }
+
+        public string ContinuationType { get; set; }
+
+        public string ReferenceId { get; set; }
+
+        public string Message { get; set; }
+    }
 
     public class InvokeResult : ValidationResult
     {
@@ -194,6 +279,44 @@ namespace LagoVista.Core.Validation
         public static InvokeResult Abort()
         {
             return Abort("Session Aborted");
+        }
+
+
+        public InvokeResultContinuation Continuation { get; set; }
+
+        public static InvokeResult Deferred(
+            string correlationId,
+            string continuationType,
+            string referenceId = null,
+            string message = null)
+        {
+            return new InvokeResult
+            {
+                Continuation = new InvokeResultContinuation
+                {
+                    CorrelationId = correlationId,
+                    ContinuationType = continuationType,
+                    ReferenceId = referenceId,
+                    Message = message
+                }
+            };
+        }
+
+        public virtual InvokeResultState State
+        {
+            get
+            {
+                if (Aborted)
+                    return InvokeResultState.Aborted;
+
+                if (Errors.Count > 0)
+                    return InvokeResultState.Failed;
+
+                if (Continuation != null)
+                    return InvokeResultState.Deferred;
+
+                return InvokeResultState.Completed;
+            }
         }
 
         public static InvokeResult Abort(string reason)
@@ -290,19 +413,25 @@ namespace LagoVista.Core.Validation
 
         public override string ToString()
         {
-            var bldr = new StringBuilder();
+            if (Aborted)
+                return $"Aborted: {AbortReason}";
+
+            if (State == InvokeResultState.Deferred)
+            {
+                var message = Continuation?.Message;
+
+                return String.IsNullOrWhiteSpace(message)
+                    ? $"Deferred: {Continuation?.CorrelationId}"
+                    : $"Deferred: {message}";
+            }
+
             if (Errors.Count == 0)
-            {
-                bldr.Append("Success");
-            }
-            else
-            {
-                bldr.Append("Failed: ");
-                foreach(var err in Errors)
-                {
-                    bldr.Append($" {err};");
-                }
-            }
+                return "Success";
+
+            var bldr = new StringBuilder("Failed: ");
+
+            foreach (var err in Errors)
+                bldr.Append($" {err};");
 
             return bldr.ToString();
         }
