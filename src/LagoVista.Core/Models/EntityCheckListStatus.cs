@@ -52,6 +52,12 @@ namespace LagoVista.Core.Models
         public string Notes { get; set; }
 
         public EntityChecklistRunReceipt LastRun { get; set; }
+
+        public int FailureCount { get; set; }
+
+        public UtcTimestamp? LastFailureUtc { get; set; }
+
+        public string LastFailureSummary { get; set; }
     }
 
     public class EntityChecklistRunReceipt
