@@ -10,6 +10,13 @@ namespace LagoVista.Core.Models
 
         public List<EntityBlockingWorkItem> BlockingWorkItems { get; set; } = new List<EntityBlockingWorkItem>();
         public string NextChecklistStepKey { get; set; }
+
+        public string NextImprovementStageKey { get; set; }
+
+        public string ImprovementSpecificationVersion { get; set; }
+
+        public UtcTimestamp? ImprovementStatusReconciledUtc { get; set; }
+
         public string NextReadinessStage { get; set; }
         public bool IsProductionReady { get; set; }
         public int TotalChecklistCount { get; set; }
