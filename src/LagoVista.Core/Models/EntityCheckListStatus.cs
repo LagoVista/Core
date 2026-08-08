@@ -47,6 +47,8 @@ namespace LagoVista.Core.Models
 
         public string ContextSha256 { get; set; }
 
+        public string OutputSha256 { get; set; }
+
         public string Version { get; set; }
 
         public string Notes { get; set; }
