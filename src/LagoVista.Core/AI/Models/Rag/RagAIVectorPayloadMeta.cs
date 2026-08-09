@@ -6,8 +6,9 @@ namespace LagoVista.Core.AI.Models.Rag
 {
     public class RagAIVectorPayloadMeta : RagCoreVectorPayloadMeta
     {
-        public RagAIVectorPayloadMeta() 
+        public RagAIVectorPayloadMeta()
         {
+            PayloadFamily = RagPayloadFamily.AI;
             ContentTypeId = RagContentType.Ai;
         }
 
@@ -28,6 +29,5 @@ namespace LagoVista.Core.AI.Models.Rag
         public string VtmMeetingId { get; set; }
 
         public string SopExecutionId { get; set; }
-
     }
 }
