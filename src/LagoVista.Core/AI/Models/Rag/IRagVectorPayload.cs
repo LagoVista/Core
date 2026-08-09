@@ -29,6 +29,8 @@ namespace LagoVista.Core.AI.Models.Rag
 
     public interface IRagVectorPayloadMeta
     {
+        string PayloadFamily { get; }
+
         string DocId { get; }
 
         string OrgId { get; }
