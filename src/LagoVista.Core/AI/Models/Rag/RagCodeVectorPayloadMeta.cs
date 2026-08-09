@@ -9,9 +9,9 @@ namespace LagoVista.Core.AI.Models.Rag
     {
         public RagCodeVectorPayloadMeta()
         {
+            PayloadFamily = RagPayloadFamily.Code;
             ContentTypeId = RagContentType.SourceCode;
         }
-
 
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string SemanticId { get; set; }
@@ -34,7 +34,6 @@ namespace LagoVista.Core.AI.Models.Rag
 
         public int? OverlapTokens { get; set; }
 
-
         public string SectionKey { get; set; }
 
         public int PartIndex { get; set; }
@@ -43,7 +42,6 @@ namespace LagoVista.Core.AI.Models.Rag
 
         public int? ChunkSizeTokens { get; set; }
         public int? ContentLenChars { get; set; }
-
 
         public List<string> LabelIds { get; set; }
 
@@ -77,6 +75,5 @@ namespace LagoVista.Core.AI.Models.Rag
                 result.AddWarning("SemanticId was generated from DocId, SectionKey, and PartIndex.");
             }
         }
-
     }
 }
