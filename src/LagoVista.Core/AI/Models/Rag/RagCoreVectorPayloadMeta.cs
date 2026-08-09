@@ -7,6 +7,9 @@ namespace LagoVista.Core.AI.Models.Rag
     public class RagCoreVectorPayloadMeta : IRagVectorPayloadMeta
     {
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
+        public string PayloadFamily { get; set; } = RagPayloadFamily.General;
+
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string OrgNamespace { get; set; }
 
         [RagRequired]
@@ -19,7 +22,6 @@ namespace LagoVista.Core.AI.Models.Rag
 
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Boolean)]
         public bool IsReference { get; set; }
-
 
         [RagNotDefault("ContentTypeId must be specified and cannot be Unknown.")]
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Integer)]
@@ -42,13 +44,10 @@ namespace LagoVista.Core.AI.Models.Rag
 
         public string EmbeddingRole { get; set; }
 
-
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string StatusKey { get; set; }
 
-
         public string ParentPointId { get; set; }
-
 
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Boolean)]
         public bool Deleted { get; set; }
@@ -74,6 +73,12 @@ namespace LagoVista.Core.AI.Models.Rag
         public virtual void ValidateForIndex(InvokeResult result)
         {
             RagPayloadValidationResolver.ValidateAndNormalize(this, result);
+
+            if (String.IsNullOrWhiteSpace(PayloadFamily))
+            {
+                PayloadFamily = RagPayloadFamily.General;
+                result.AddWarning("PayloadFamily was empty and was defaulted to general.");
+            }
 
             if (String.IsNullOrWhiteSpace(ContentType) && ContentTypeId != RagContentType.Unknown)
             {
