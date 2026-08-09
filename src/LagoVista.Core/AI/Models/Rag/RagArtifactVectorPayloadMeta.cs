@@ -8,9 +8,9 @@ namespace LagoVista.Core.AI.Models.Rag
     {
         public RagArtifactVectorPayloadMeta()
         {
+            PayloadFamily = RagPayloadFamily.Artifact;
             ContentTypeId = RagContentType.ProducedArtifact;
         }
-
 
         [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string ScopeType { get; set; }
@@ -20,7 +20,7 @@ namespace LagoVista.Core.AI.Models.Rag
 
         public string ArtifactArchetype { get; set; }
 
-       [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
+        [QdrantPayloadIndex(QdrantPayloadIndexKind.Keyword)]
         public string ArtifactArchetypeKey { get; set; }
 
         public string VirtualTeamMemberId { get; set; }
