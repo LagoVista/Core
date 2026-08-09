@@ -6,8 +6,9 @@ namespace LagoVista.Core.AI.Models.Rag
 {
     public class RagEntityVectorPayloadMeta : RagCoreVectorPayloadMeta
     {
-        public RagEntityVectorPayloadMeta() 
+        public RagEntityVectorPayloadMeta()
         {
+            PayloadFamily = RagPayloadFamily.Entity;
             ContentTypeId = RagContentType.Entity;
         }
 
