@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LagoVista.Core.AI.Models.Rag
 {
-    public class RagAIVectorPayload : RagVectorPayloadBase<RagArtifactVectorPayloadMeta, RagArtifactVectorPayloadExtra>
+    public class RagAIVectorPayload : RagVectorPayloadBase<RagAIVectorPayloadMeta, RagAIVectorPayloadExtra>
     {
         public override JObject Serialize()
         {
