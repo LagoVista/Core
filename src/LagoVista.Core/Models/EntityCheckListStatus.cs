@@ -21,6 +21,8 @@ namespace LagoVista.Core.Models
 
         [EnumLabel(EntityChecklistStatus.Completed, LagoVistaCommonStrings.Names.EntityChecklistStepStatus_Completed, typeof(LagoVistaCommonStrings))]
         Completed,
+
+        Failed,
     }
 
     public class EntityChecklistStatus
@@ -29,6 +31,7 @@ namespace LagoVista.Core.Models
         public const string InProgress = "inprogress";
         public const string NeedsAttention = "needsattention";
         public const string Completed = "completed";
+        public const string Failed = "Failed";
 
         public EntityChecklistStatus()
         {
