@@ -81,6 +81,10 @@ namespace LagoVista.Core.Models
 
         public int? TargetScore { get; set; }
 
+        public int? Confidence { get; set; }
+
+        public int? TargetConfidence { get; set; }
+
         public string Summary { get; set; }
 
         public int WorkItemCount { get; set; }
