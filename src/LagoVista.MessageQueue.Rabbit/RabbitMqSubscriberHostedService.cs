@@ -25,15 +25,14 @@ namespace LagoVista.MessageQueue.Rabbit
         private readonly ILogger _logger;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ConnectionFactory _connectionFactory;
+        private readonly IApplicationRuntimeState _runtimeState;
 
-        HostedServiceDiagnosticSnapshot _snapShot = new HostedServiceDiagnosticSnapshot()
-        {
-
-        };
+        HostedServiceDiagnosticSnapshot _snapShot = new HostedServiceDiagnosticSnapshot();
 
         private IConnection _connection;
         private RabbitMQ.Client.IChannel _channel;
         private string _consumerTag;
+        private int _activeMessageCount;
 
         public string Name => $"RabbitMqSubscriberHostedService - {_serviceName}";
 
@@ -42,7 +41,7 @@ namespace LagoVista.MessageQueue.Rabbit
             return _snapShot;
         }
 
-        public RabbitMqSubscriberHostedService(string serviceName, RabbitMqSubscriberSettings settings, IMessageQueueTopology topology, ILogger logger, IServiceScopeFactory scopeFactory)
+        public RabbitMqSubscriberHostedService(string serviceName, RabbitMqSubscriberSettings settings, IMessageQueueTopology topology, ILogger logger, IServiceScopeFactory scopeFactory, IApplicationRuntimeState runtimeState)
         {
             if (String.IsNullOrWhiteSpace(serviceName)) throw new ArgumentNullException(nameof(serviceName));
             _serviceName = serviceName;
@@ -50,6 +49,7 @@ namespace LagoVista.MessageQueue.Rabbit
             _topology = topology ?? throw new ArgumentNullException(nameof(topology));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
+            _runtimeState = runtimeState ?? throw new ArgumentNullException(nameof(runtimeState));
 
             _settings.Validate(serviceName);
 
@@ -71,13 +71,13 @@ namespace LagoVista.MessageQueue.Rabbit
 
         public async Task StartIt()
         {
-            await ExecuteAsync(CancellationToken.None).ConfigureAwait(false);   
+            await ExecuteAsync(CancellationToken.None).ConfigureAwait(false);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var route = _topology.GetSubscriptionRoute(typeof(TMessage));
-         
+
             try
             {
                 _logger.Trace($"[RabbitSubscriber__{nameof(RabbitMqSubscriberHostedService<TMessage>)}] starting '{_serviceName}'.", _serviceName.ToKVP("serviceName"), route.QueueName.ToKVP("queueName"), route.DestinationName.ToKVP("destinationName"), route.RouteKey.ToKVP("routeKey"));
@@ -85,13 +85,13 @@ namespace LagoVista.MessageQueue.Rabbit
                 await EnsureConnectedAsync(route, stoppingToken).ConfigureAwait(false);
 
                 var consumer = new AsyncEventingBasicConsumer(_channel);
-                consumer.ReceivedAsync += async (_, args) => await HandleMessageAsync(args, stoppingToken).ConfigureAwait(false);
+                consumer.ReceivedAsync += async (_, args) => await HandleMessageAsync(args).ConfigureAwait(false);
 
                 _consumerTag = await _channel.BasicConsumeAsync(route.QueueName, false, consumer, stoppingToken).ConfigureAwait(false);
                 _snapShot.Status = HostedServiceDiagnosticStatus.Running;
                 _snapShot.StartedUtc = DateTime.UtcNow;
                 _snapShot.LastActivity = "Started";
-                _snapShot.LastActivityUtc = DateTime.UtcNow;  
+                _snapShot.LastActivityUtc = DateTime.UtcNow;
             }
             catch (Exception ex)
             {
@@ -118,10 +118,14 @@ namespace LagoVista.MessageQueue.Rabbit
                 {
                     await _channel.BasicCancelAsync(_consumerTag, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _logger.AddException($"{nameof(RabbitMqSubscriberHostedService<TMessage>)}__StopAsync__BasicCancel", ex, _serviceName.ToKVP("serviceName"));
                 }
             }
+
+            while (Volatile.Read(ref _activeMessageCount) > 0)
+                await Task.Delay(100, cancellationToken).ConfigureAwait(false);
 
             await base.StopAsync(cancellationToken).ConfigureAwait(false);
 
@@ -145,10 +149,24 @@ namespace LagoVista.MessageQueue.Rabbit
 
         int processedMessage;
 
-        private async Task HandleMessageAsync(BasicDeliverEventArgs args, CancellationToken cancellationToken)
+        private async Task HandleMessageAsync(BasicDeliverEventArgs args)
         {
+            Interlocked.Increment(ref _activeMessageCount);
+            IDisposable workLease = null;
+
             try
             {
+                var messageId = args.BasicProperties?.MessageId;
+                _runtimeState.TryBeginWork(
+                    "RabbitMQ",
+                    typeof(TMessage).Name,
+                    messageId,
+                    item => _logger.AddCustomEvent(
+                        LogLevel.Error,
+                        $"{nameof(RabbitMqSubscriberHostedService<TMessage>)}__LongRunningWork",
+                        $"RabbitMQ handler '{item.Name}' on service '{_serviceName}' has been running for more than 5 minutes. MessageId={item.CorrelationId}, StartedUtc={item.StartedUtc:O}, WorkId={item.WorkId}."),
+                    out workLease);
+
                 var json = Encoding.UTF8.GetString(args.Body.ToArray());
                 var payload = JsonConvert.DeserializeObject<TMessage>(json);
                 if (payload == null) throw new InvalidOperationException($"RabbitMQ message body for '{typeof(TMessage).FullName}' could not be deserialized.");
@@ -159,7 +177,7 @@ namespace LagoVista.MessageQueue.Rabbit
                 var context = new MessageQueueContext<TMessage>
                 {
                     Payload = payload,
-                    MessageId = args.BasicProperties?.MessageId,
+                    MessageId = messageId,
                     MessageType = typeof(TMessage).FullName,
                     ReceivedAtUtc = DateTime.UtcNow,
                     Headers = ConvertHeaders(args.BasicProperties?.Headers)
@@ -168,8 +186,9 @@ namespace LagoVista.MessageQueue.Rabbit
                 _snapShot.LastActivityUtc = DateTime.UtcNow;
                 _snapShot.LastActivity = $"Process message {++processedMessage}";
 
-                await handler.HandleAsync(context, cancellationToken).ConfigureAwait(false);
-                await _channel.BasicAckAsync(args.DeliveryTag, false, cancellationToken).ConfigureAwait(false);
+                // Host shutdown stops new deliveries. A message already delivered is allowed to finish naturally.
+                await handler.HandleAsync(context, CancellationToken.None).ConfigureAwait(false);
+                await _channel.BasicAckAsync(args.DeliveryTag, false, CancellationToken.None).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -179,7 +198,12 @@ namespace LagoVista.MessageQueue.Rabbit
                 _logger.AddException($"{nameof(RabbitMqSubscriberHostedService<TMessage>)}__HandleMessageAsync", ex, _serviceName.ToKVP("serviceName"), typeof(TMessage).FullName.ToKVP("messageType"));
 
                 if (_channel != null && !_channel.IsClosed)
-                    await _channel.BasicNackAsync(args.DeliveryTag, false, false, cancellationToken).ConfigureAwait(false);
+                    await _channel.BasicNackAsync(args.DeliveryTag, false, false, CancellationToken.None).ConfigureAwait(false);
+            }
+            finally
+            {
+                workLease?.Dispose();
+                Interlocked.Decrement(ref _activeMessageCount);
             }
         }
 
@@ -209,7 +233,5 @@ namespace LagoVista.MessageQueue.Rabbit
             {
             }
         }
-
-      
     }
 }
