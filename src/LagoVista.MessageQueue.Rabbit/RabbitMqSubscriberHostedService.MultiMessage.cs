@@ -24,23 +24,25 @@ namespace LagoVista.MessageQueue.Rabbit
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ConnectionFactory _connectionFactory;
         private readonly IReadOnlyDictionary<string, RabbitMqSubscriberHandlerRegistration> _registrations;
-
+        private readonly IApplicationRuntimeState _runtimeState;
         private readonly HostedServiceDiagnosticSnapshot _snapShot = new HostedServiceDiagnosticSnapshot();
 
         private IConnection _connection;
         private RabbitMQ.Client.IChannel _channel;
         private string _consumerTag;
         private int _processedMessage;
+        private int _activeMessageCount;
 
         public string Name => $"RabbitMqSubscriberHostedService - {_serviceName}";
 
-        internal RabbitMqSubscriberHostedService(string serviceName, RabbitMqSubscriberSettings settings, IEnumerable<RabbitMqSubscriberHandlerRegistration> registrations, ILogger logger, IServiceScopeFactory scopeFactory)
+        internal RabbitMqSubscriberHostedService(string serviceName, RabbitMqSubscriberSettings settings, IEnumerable<RabbitMqSubscriberHandlerRegistration> registrations, ILogger logger, IServiceScopeFactory scopeFactory, IApplicationRuntimeState runtimeState)
         {
             if (String.IsNullOrWhiteSpace(serviceName)) throw new ArgumentNullException(nameof(serviceName));
             _serviceName = serviceName;
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
+            _runtimeState = runtimeState ?? throw new ArgumentNullException(nameof(runtimeState));
             if (registrations == null) throw new ArgumentNullException(nameof(registrations));
 
             _settings.Validate(serviceName);
@@ -67,10 +69,7 @@ namespace LagoVista.MessageQueue.Rabbit
             _connectionFactory.Ssl.Enabled = _settings.UseSsl;
         }
 
-        public HostedServiceDiagnosticSnapshot GetSnapshot()
-        {
-            return _snapShot;
-        }
+        public HostedServiceDiagnosticSnapshot GetSnapshot() => _snapShot;
 
         public async Task StartIt()
         {
@@ -82,11 +81,10 @@ namespace LagoVista.MessageQueue.Rabbit
             try
             {
                 _logger.Trace($"{this.Tag()} starting '{_serviceName}'.", _serviceName.ToKVP("serviceName"), _settings.QueueName.ToKVP("queueName"), _settings.ExchangeName.ToKVP("destinationName"), _settings.RouteKey.ToKVP("routeKey"));
-
                 await EnsureConnectedAsync(stoppingToken).ConfigureAwait(false);
 
                 var consumer = new AsyncEventingBasicConsumer(_channel);
-                consumer.ReceivedAsync += async (_, args) => await HandleMessageAsync(args, stoppingToken).ConfigureAwait(false);
+                consumer.ReceivedAsync += async (_, args) => await HandleMessageAsync(args).ConfigureAwait(false);
 
                 _consumerTag = await _channel.BasicConsumeAsync(_settings.QueueName, false, consumer, stoppingToken).ConfigureAwait(false);
                 _snapShot.Status = HostedServiceDiagnosticStatus.Running;
@@ -119,16 +117,19 @@ namespace LagoVista.MessageQueue.Rabbit
                 {
                     await _channel.BasicCancelAsync(_consumerTag, cancellationToken: cancellationToken).ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _logger.AddException($"{nameof(RabbitMqSubscriberHostedService)}__StopAsync__BasicCancel", ex, _serviceName.ToKVP("serviceName"));
                 }
             }
+
+            while (Volatile.Read(ref _activeMessageCount) > 0)
+                await Task.Delay(100, cancellationToken).ConfigureAwait(false);
 
             await base.StopAsync(cancellationToken).ConfigureAwait(false);
 
             SafeDispose(_channel);
             _channel = null;
-
             SafeDispose(_connection);
             _connection = null;
         }
@@ -144,8 +145,10 @@ namespace LagoVista.MessageQueue.Rabbit
             await _channel.ExchangeDeclarePassiveAsync(_settings.ExchangeName).ConfigureAwait(false);
         }
 
-        private async Task HandleMessageAsync(BasicDeliverEventArgs args, CancellationToken cancellationToken)
+        private async Task HandleMessageAsync(BasicDeliverEventArgs args)
         {
+            Interlocked.Increment(ref _activeMessageCount);
+            IDisposable workLease = null;
             var messageTypeName = args.BasicProperties?.Type;
 
             try
@@ -155,6 +158,17 @@ namespace LagoVista.MessageQueue.Rabbit
 
                 if (!_registrations.TryGetValue(messageTypeName, out var registration))
                     throw new InvalidOperationException($"RabbitMQ subscriber '{_serviceName}' does not have a handler registered for message type '{messageTypeName}'.");
+
+                var messageId = args.BasicProperties?.MessageId;
+                _runtimeState.TryBeginWork(
+                    "RabbitMQ",
+                    messageTypeName,
+                    messageId,
+                    item => _logger.AddCustomEvent(
+                        LogLevel.Error,
+                        $"{nameof(RabbitMqSubscriberHostedService)}__LongRunningWork",
+                        $"RabbitMQ handler '{item.Name}' on service '{_serviceName}' has been running for more than 5 minutes. MessageId={item.CorrelationId}, StartedUtc={item.StartedUtc:O}, WorkId={item.WorkId}."),
+                    out workLease);
 
                 var json = Encoding.UTF8.GetString(args.Body.ToArray());
                 var payload = JsonConvert.DeserializeObject(json, registration.MessageType);
@@ -168,8 +182,8 @@ namespace LagoVista.MessageQueue.Rabbit
 
                 _logger.Trace($"{this.Tag()} handling message '{messageTypeName}' with {registration.HandlerType.Name}.");
 
-                await registration.Dispatcher.DispatchAsync(payload, args, scope.ServiceProvider, cancellationToken).ConfigureAwait(false);
-                await _channel.BasicAckAsync(args.DeliveryTag, false, cancellationToken).ConfigureAwait(false);
+                await registration.Dispatcher.DispatchAsync(payload, args, scope.ServiceProvider, CancellationToken.None).ConfigureAwait(false);
+                await _channel.BasicAckAsync(args.DeliveryTag, false, CancellationToken.None).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -179,19 +193,18 @@ namespace LagoVista.MessageQueue.Rabbit
                 _logger.AddException($"{this.Tag()}", ex, _serviceName.ToKVP("serviceName"), messageTypeName.ToKVP("messageType"));
 
                 if (_channel != null && !_channel.IsClosed)
-                    await _channel.BasicNackAsync(args.DeliveryTag, false, false, cancellationToken).ConfigureAwait(false);
+                    await _channel.BasicNackAsync(args.DeliveryTag, false, false, CancellationToken.None).ConfigureAwait(false);
+            }
+            finally
+            {
+                workLease?.Dispose();
+                Interlocked.Decrement(ref _activeMessageCount);
             }
         }
 
         private static void SafeDispose(IDisposable disposable)
         {
-            try
-            {
-                disposable?.Dispose();
-            }
-            catch
-            {
-            }
+            try { disposable?.Dispose(); } catch { }
         }
     }
 }
