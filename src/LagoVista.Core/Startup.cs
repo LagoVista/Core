@@ -18,6 +18,7 @@ namespace LagoVista.Core
             services.AddScoped<ICoreAppServices, CoreAppServices>();
             services.AddSingleton<IClock, LagoVistaClock>();
             services.AddSingleton<IEntityTypeResolver>(MetaDataHelper.Instance);
+            services.TryAddSingleton<IApplicationRuntimeState, ApplicationRuntimeStateService>();
             services.AddSingleton<SignedRequestPublicKeySetResolver>(sp => new SignedRequestPublicKeySetResolver(new SignedRequestPublicKeySet()));
             
             services.AddSingleton<ISignedRequestPublicKeySetStore>(sp => sp.GetRequiredService<SignedRequestPublicKeySetResolver>());
