@@ -1,4 +1,5 @@
-﻿using LagoVista.Core.MessageQueue;
+﻿using LagoVista.Core.Interfaces;
+using LagoVista.Core.MessageQueue;
 using LagoVista.Core.PlatformSupport;
 using LagoVista.MessageQueue.Rabbit;
 using LagoVista.MessageQueue.RabbitMQ.IntegrationTests.TestSupport;
@@ -38,7 +39,8 @@ namespace LagoVista.MessageQueueTests
                 DestinationName = "dev.import.transactions",
                 RouteKey = "test-route",
 
-            }), Mock.Of<ILogger>(), Mock.Of<IServiceScopeFactory>());
+            }), Mock.Of<ILogger>(), Mock.Of<IServiceScopeFactory>(),
+            Mock.Of<IApplicationRuntimeState>());
 
             await subSerivce.StartIt();
         }
