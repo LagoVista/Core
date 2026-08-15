@@ -1,7 +1,9 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.MessageQueue;
+using LagoVista.Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -41,6 +43,7 @@ namespace LagoVista.MessageQueue.Rabbit
             if (String.IsNullOrWhiteSpace(serviceName)) throw new ArgumentNullException(nameof(serviceName));
 
             settings.Validate(serviceName);
+            services.TryAddSingleton<IApplicationRuntimeState, ApplicationRuntimeStateService>();
 
             var topology = new SingleMessageTopology<TMessage>(
                 new MessageQueuePublishRoute
@@ -69,7 +72,8 @@ namespace LagoVista.MessageQueue.Rabbit
                     settings,
                     topology,
                     serviceProvider.GetRequiredService<LagoVista.Core.PlatformSupport.ILogger>(),
-                    serviceProvider.GetRequiredService<IServiceScopeFactory>()));
+                    serviceProvider.GetRequiredService<IServiceScopeFactory>(),
+                    serviceProvider.GetRequiredService<IApplicationRuntimeState>()));
 
             services.AddSingleton<IHostedService>(serviceProvider =>
                 serviceProvider.GetRequiredService<RabbitMqSubscriberHostedService<TMessage>>());
@@ -103,6 +107,7 @@ namespace LagoVista.MessageQueue.Rabbit
             if (configure == null) throw new ArgumentNullException(nameof(configure));
 
             settings.Validate(serviceName);
+            services.TryAddSingleton<IApplicationRuntimeState, ApplicationRuntimeStateService>();
 
             var builder = new RabbitMqSubscriberBuilder();
             configure(builder);
@@ -124,7 +129,8 @@ namespace LagoVista.MessageQueue.Rabbit
                     settings,
                     registrations,
                     serviceProvider.GetRequiredService<LagoVista.Core.PlatformSupport.ILogger>(),
-                    serviceProvider.GetRequiredService<IServiceScopeFactory>()));
+                    serviceProvider.GetRequiredService<IServiceScopeFactory>(),
+                    serviceProvider.GetRequiredService<IApplicationRuntimeState>()));
 
             services.AddSingleton<IHostedService>(serviceProvider =>
                 serviceProvider.GetRequiredService<RabbitMqSubscriberHostedService>());
