@@ -13,8 +13,17 @@ namespace LagoVista.Core.Interfaces
         Task QueueBackgroundWorkItemAsync(Func<CancellationToken, Task> workItem);
         bool TryQueueBackgroundWorkItem(Func<CancellationToken, Task> workItem);
 
-
         Task<Func<CancellationToken, Task>> DequeueAsync(CancellationToken cancellationToken);
+    }
+
+    /// <summary>
+    /// Optional support used by graceful shutdown to drain work that was already accepted before
+    /// shutdown, including continuations created by an active admitted operation.
+    /// </summary>
+    public interface IBackgroundServiceTaskQueueDrainSupport
+    {
+        int PendingCount { get; }
+        bool TryDequeue(out Func<CancellationToken, Task> workItem);
     }
 
     public static class BackgroundServiceTaskQueueProvider
