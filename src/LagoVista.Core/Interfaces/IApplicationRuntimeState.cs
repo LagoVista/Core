@@ -28,6 +28,7 @@ namespace LagoVista.Core.Interfaces
     {
         ApplicationRuntimeState State { get; }
         bool IsDraining { get; }
+        bool HasActiveWorkContext { get; }
         int ActiveWorkCount { get; }
         DateTime? DrainStartedUtc { get; }
         DateTime? DrainDeadlineUtc { get; }
@@ -43,6 +44,17 @@ namespace LagoVista.Core.Interfaces
             string correlationId,
             Action<ActiveApplicationWorkItem> longRunningCallback,
             out IDisposable lease);
+
+        /// <summary>
+        /// Begins execution of work that was already admitted before drain began, or work that
+        /// is a continuation of an already-active operation. This intentionally bypasses the
+        /// new-root admission gate while still tracking the work for graceful shutdown.
+        /// </summary>
+        IDisposable BeginAdmittedWork(
+            string category,
+            string name,
+            string correlationId,
+            Action<ActiveApplicationWorkItem> longRunningCallback);
 
         IReadOnlyCollection<ActiveApplicationWorkItem> GetActiveWork();
         Task<bool> WaitForIdleAsync(TimeSpan timeout, CancellationToken cancellationToken = default);
