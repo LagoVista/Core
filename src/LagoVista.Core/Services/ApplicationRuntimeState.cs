@@ -12,12 +12,14 @@ namespace LagoVista.Core.Services
     {
         private static readonly TimeSpan LongRunningThreshold = TimeSpan.FromMinutes(5);
         private readonly ConcurrentDictionary<string, ActiveEntry> _active = new ConcurrentDictionary<string, ActiveEntry>();
+        private readonly AsyncLocal<int> _activeWorkDepth = new AsyncLocal<int>();
         private volatile ApplicationRuntimeState _state = ApplicationRuntimeState.Starting;
         private DateTime? _drainStartedUtc;
         private DateTime? _drainDeadlineUtc;
 
         public ApplicationRuntimeState State => _state;
         public bool IsDraining => _state == ApplicationRuntimeState.Draining || _state == ApplicationRuntimeState.Stopped;
+        public bool HasActiveWorkContext => _activeWorkDepth.Value > 0;
         public int ActiveWorkCount => _active.Count;
         public DateTime? DrainStartedUtc => _drainStartedUtc;
         public DateTime? DrainDeadlineUtc => _drainDeadlineUtc;
@@ -64,30 +66,30 @@ namespace LagoVista.Core.Services
             if (IsDraining)
                 return false;
 
-            var snapshot = new ActiveApplicationWorkItem
-            {
-                WorkId = Guid.NewGuid().ToString("N"),
-                Category = category ?? String.Empty,
-                Name = name ?? String.Empty,
-                CorrelationId = correlationId ?? String.Empty,
-                StartedUtc = DateTime.UtcNow
-            };
-
-            var entry = new ActiveEntry(snapshot, longRunningCallback);
-            if (!_active.TryAdd(snapshot.WorkId, entry))
+            var workLease = CreateWorkLease(category, name, correlationId, longRunningCallback);
+            if (workLease == null)
                 return false;
 
             if (IsDraining)
             {
-                ActiveEntry removed;
-                _active.TryRemove(snapshot.WorkId, out removed);
-                entry.Dispose();
+                workLease.Dispose();
                 return false;
             }
 
-            entry.StartLongRunningTimer(LongRunningThreshold);
-            lease = new WorkLease(this, snapshot.WorkId);
+            lease = workLease;
             return true;
+        }
+
+        public IDisposable BeginAdmittedWork(string category, string name, string correlationId, Action<ActiveApplicationWorkItem> longRunningCallback)
+        {
+            if (_state == ApplicationRuntimeState.Stopped)
+                throw new InvalidOperationException("Application has stopped and cannot execute admitted work.");
+
+            var lease = CreateWorkLease(category, name, correlationId, longRunningCallback);
+            if (lease == null)
+                throw new InvalidOperationException("Could not register admitted application work.");
+
+            return lease;
         }
 
         public IReadOnlyCollection<ActiveApplicationWorkItem> GetActiveWork()
@@ -123,6 +125,33 @@ namespace LagoVista.Core.Services
             return true;
         }
 
+        private IDisposable CreateWorkLease(string category, string name, string correlationId, Action<ActiveApplicationWorkItem> longRunningCallback)
+        {
+            var snapshot = new ActiveApplicationWorkItem
+            {
+                WorkId = Guid.NewGuid().ToString("N"),
+                Category = category ?? String.Empty,
+                Name = name ?? String.Empty,
+                CorrelationId = correlationId ?? String.Empty,
+                StartedUtc = DateTime.UtcNow
+            };
+
+            var entry = new ActiveEntry(snapshot, longRunningCallback);
+            if (!_active.TryAdd(snapshot.WorkId, entry))
+                return null;
+
+            entry.StartLongRunningTimer(LongRunningThreshold);
+            var contextLease = EnterWorkContext();
+            return new WorkLease(this, snapshot.WorkId, contextLease);
+        }
+
+        private IDisposable EnterWorkContext()
+        {
+            var previousDepth = _activeWorkDepth.Value;
+            _activeWorkDepth.Value = previousDepth + 1;
+            return new WorkContextLease(_activeWorkDepth, previousDepth);
+        }
+
         private void CompleteWork(string workId)
         {
             ActiveEntry entry;
@@ -134,18 +163,42 @@ namespace LagoVista.Core.Services
         {
             private readonly ApplicationRuntimeStateService _owner;
             private readonly string _workId;
+            private readonly IDisposable _contextLease;
             private int _disposed;
 
-            public WorkLease(ApplicationRuntimeStateService owner, string workId)
+            public WorkLease(ApplicationRuntimeStateService owner, string workId, IDisposable contextLease)
             {
                 _owner = owner;
                 _workId = workId;
+                _contextLease = contextLease;
             }
 
             public void Dispose()
             {
                 if (Interlocked.Exchange(ref _disposed, 1) == 0)
+                {
+                    _contextLease?.Dispose();
                     _owner.CompleteWork(_workId);
+                }
+            }
+        }
+
+        private sealed class WorkContextLease : IDisposable
+        {
+            private readonly AsyncLocal<int> _depth;
+            private readonly int _previousDepth;
+            private int _disposed;
+
+            public WorkContextLease(AsyncLocal<int> depth, int previousDepth)
+            {
+                _depth = depth;
+                _previousDepth = previousDepth;
+            }
+
+            public void Dispose()
+            {
+                if (Interlocked.Exchange(ref _disposed, 1) == 0)
+                    _depth.Value = _previousDepth;
             }
         }
 
