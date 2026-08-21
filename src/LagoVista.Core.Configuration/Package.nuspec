@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Configuration</id>
-    <version>3.0.3233.1629</version>
+    <version>3.0.3379.1123</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,18 +12,18 @@
     <description>Common Models, Interfaces and Functionality for the LagoVista Devices, IoT and Home Automation Frameworks</description>
     <copyright>Copyright Software Logistics - 2026</copyright>
     <tags>HomeAutomation IoT LagoVista</tags>
-    <releaseNotes>Build Date: 3/24/2026 8:29:21 PM UTC</releaseNotes>
+    <releaseNotes>Build Date: 8/17/2026 3:23:59 PM UTC</releaseNotes>
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
-      <group targetFramework="net9.0">
+      <group targetFramework="netstandard2.1">
         <dependency id="Microsoft.Extensions.Configuration" version="9.0.13" />
-        <dependency id="LagoVista.Core" version="3.0.3233.1629" />
+        <dependency id="LagoVista.Core" version="3.0.3379.1123" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\net9.0\LagoVista.Core.Configuration.dll" target="lib\net9.0\LagoVista.Core.Configuration.dll" />
-    <file src="bin\release\net9.0\LagoVista.Core.Configuration.pdb" target="lib\net9.0\LagoVista.Core.Configuration.pdb" />
+    <file src="bin\release\netstandard2.1\LagoVista.Core.Configuration.dll" target="lib\netstandard2.1\LagoVista.Core.Configuration.dll" />
+    <file src="bin\release\netstandard2.1\LagoVista.Core.Configuration.pdb" target="lib\netstandard2.1\LagoVista.Core.Configuration.pdb" />
   </files>
 </package>
