@@ -1,7 +1,6 @@
 using LagoVista.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -395,18 +394,6 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
         public string Details { get; set; }
-    }
-
-    /// <summary>
-    /// Compatibility bridge for pre-AGN-000040 producers. New code SHOULD use ClientDirective.
-    /// </summary>
-    public sealed class AgentClientDirective : ClientDirective
-    {
-        [JsonProperty("args", NullValueHandling = NullValueHandling.Ignore)]
-        public Dictionary<string, string> Args { get; set; } = new Dictionary<string, string>();
-
-        [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
-        public string Message { get; set; }
     }
 
     public sealed class SopAgentExecutionResponse
