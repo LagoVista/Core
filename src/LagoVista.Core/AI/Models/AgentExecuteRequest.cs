@@ -6,18 +6,22 @@ using Newtonsoft.Json;
 namespace LagoVista.Core.AI.Models
 {
     /// <summary>
-    /// AGN-034 � AgentExecuteRequest Streamlining
+    /// AGN-034 / AGN-000040 AgentExecuteRequest contract.
     ///
-    /// Two request scenarios (presence-based, no explicit discriminator):
+    /// Three request scenarios are selected by payload presence rather than an explicit discriminator:
     ///
     /// 1) User Turn Request:
     ///    - Requires: SessionId, TurnId
-    ///    - Must include at least one of: Instruction, InputArtifacts, ClipboardImages
-    ///    - Must NOT include: ToolResults
+    ///    - Must include at least one of: Instruction, InputArtifacts, ClipboardImages, GuidedSopInteraction
+    ///    - Must NOT include: ToolResults, ClientDirectiveResults
     ///
     /// 2) Tool Continuation Submission:
     ///    - Requires: SessionId, TurnId, ToolResults (non-empty)
-    ///    - Must NOT include: Instruction, InputArtifacts, ClipboardImages, RagScope, SolutionContextText, context hints, Streaming
+    ///    - Must NOT include normal user-turn inputs or ClientDirectiveResults
+    ///
+    /// 3) Client Directive Continuation Submission:
+    ///    - Requires: SessionId, TurnId, exactly one ClientDirectiveResult
+    ///    - Must NOT include normal user-turn inputs or ToolResults
     ///
     /// Mode/provider continuation/correlation/tracing are server-owned and MUST NOT appear here.
     /// </summary>
@@ -41,7 +45,7 @@ namespace LagoVista.Core.AI.Models
         public string ModeKey { get; set; }
 
         /// <summary>
-        /// If this is set or changed, a persona should be loaded. 
+        /// If this is set or changed, a persona should be loaded.
         /// </summary>
         public string AgentPersonaId { get; set; }
 
@@ -68,7 +72,6 @@ namespace LagoVista.Core.AI.Models
 
         public List<string> RequestedPromptKnowledgeContributorKeys { get; set; } = new List<string>();
 
-
         public string SessionType { get; set; }
         public string SessionTypeKey { get; set; }
         public string BoundEntityType { get; set; }
@@ -84,28 +87,28 @@ namespace LagoVista.Core.AI.Models
         /// <summary>
         /// Primary user input. UTF-8 text; Markdown canonical.
         /// Optional on User Turn Requests (files/images may convey intent).
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public string Instruction { get; set; }
 
         /// <summary>
         /// Files/artifacts supplied by the client for agent reasoning.
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public List<InputArtifact> InputArtifacts { get; set; } = new List<InputArtifact>();
 
         /// <summary>
         /// Images pasted from the clipboard (provenance-blind).
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public List<ClipboardImage> ClipboardImages { get; set; } = new List<ClipboardImage>();
 
         /// <summary>
         /// Platform-agnostic retrieval hint conditions.
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public RagScope RagScope { get; set; }
 
@@ -113,28 +116,28 @@ namespace LagoVista.Core.AI.Models
         /// Optional free-form solution/workspace context text.
         /// Session-latched (server stores/replaces when present; unchanged when absent).
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public string SolutionContextText { get; set; }
 
         /// <summary>
         /// Optional advisory workspace hint. Do not rely on for correctness.
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public string WorkspaceId { get; set; }
 
         /// <summary>
         /// Optional advisory repository hint. Do not rely on for correctness.
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public string Repo { get; set; }
 
         /// <summary>
         /// Optional advisory language hint (e.g., "csharp", "typescript").
         /// Allowed only on User Turn Requests.
-        /// Forbidden on Tool Continuation Submissions.
+        /// Forbidden on continuation submissions.
         /// </summary>
         public string Language { get; set; }
 
@@ -146,9 +149,15 @@ namespace LagoVista.Core.AI.Models
         /// <summary>
         /// Tool execution results submitted by the client for continuation.
         /// Required (non-empty) on Tool Continuation Submissions.
-        /// Forbidden on User Turn Requests.
+        /// Forbidden on User Turn Requests and Client Directive Continuation Submissions.
         /// </summary>
         public List<ToolResultSubmission> ToolResults { get; set; } = new List<ToolResultSubmission>();
+
+        /// <summary>
+        /// AGN-000040 result returned by the client for a result-bearing Client Directive.
+        /// Exactly one item is required on a Client Directive Continuation Submission.
+        /// </summary>
+        public List<ClientDirectiveResult> ClientDirectiveResults { get; set; } = new List<ClientDirectiveResult>();
 
         public SopAgentExecutionRequest SopExecution { get; set; }
 
@@ -157,16 +166,16 @@ namespace LagoVista.Core.AI.Models
         [JsonIgnore]
         public bool IsSopExecution => SopExecution != null;
 
-        /// <summary>
-        /// Convenience helper (not required by AGN-034). Use to route validation.
-        /// </summary>
         [JsonIgnore]
         public bool IsToolContinuation => ToolResults != null && ToolResults.Count > 0;
+
+        [JsonIgnore]
+        public bool IsClientDirectiveContinuation => ClientDirectiveResults != null && ClientDirectiveResults.Count > 0;
 
         public AgentAuthoringTurnContext Authoring { get; set; }
 
         /// <summary>
-        /// Minimal, opinionated validation per AGN-034.
+        /// Minimal, opinionated validation per AGN-034 and AGN-000040.
         /// Throws InvalidOperationException if contract rules are violated.
         /// </summary>
         public void Validate()
@@ -177,65 +186,85 @@ namespace LagoVista.Core.AI.Models
             if (String.IsNullOrWhiteSpace(TurnId))
                 throw new InvalidOperationException("TurnId is required.");
 
+            if (IsToolContinuation && IsClientDirectiveContinuation)
+                throw new InvalidOperationException("ToolResults and ClientDirectiveResults may not be submitted together.");
+
             if (IsToolContinuation)
             {
-                // Tool Continuation Submission rules
-                if (!String.IsNullOrWhiteSpace(Instruction))
-                    throw new InvalidOperationException("Instruction is forbidden on tool continuation submissions.");
-
-                if (InputArtifacts != null && InputArtifacts.Count > 0)
-                    throw new InvalidOperationException("InputArtifacts is forbidden on tool continuation submissions.");
-
-                if (ClipboardImages != null && ClipboardImages.Count > 0)
-                    throw new InvalidOperationException("ClipboardImages is forbidden on tool continuation submissions.");
-
-                if (RagScope != null)
-                    throw new InvalidOperationException("RagScope is forbidden on tool continuation submissions.");
-
-                if (!String.IsNullOrWhiteSpace(SolutionContextText))
-                    throw new InvalidOperationException("SolutionContextText is forbidden on tool continuation submissions.");
-
-                if (!String.IsNullOrWhiteSpace(WorkspaceId) || !String.IsNullOrWhiteSpace(Repo) || !String.IsNullOrWhiteSpace(Language))
-                    throw new InvalidOperationException("Workspace/environment hints are forbidden on tool continuation submissions.");
-
-                if (Streaming)
-                    throw new InvalidOperationException("Streaming is forbidden on tool continuation submissions.");
-
-                if (GuidedSopInteraction != null)
-                    throw new InvalidOperationException("GuidedSopInteraction is forbidden on tool continuation submissions.");
+                ValidateContinuationOnlyFields("tool continuation");
 
                 foreach (var tr in ToolResults)
                     tr.Validate();
+
+                return;
             }
-            else
+
+            if (IsClientDirectiveContinuation)
             {
-                // User Turn Request rules
-                if (ToolResults != null && ToolResults.Count > 0)
-                    throw new InvalidOperationException("ToolResults is forbidden on user turn requests.");
+                ValidateContinuationOnlyFields("client directive continuation");
 
-                var hasInstruction = !String.IsNullOrWhiteSpace(Instruction);
-                var hasArtifacts = InputArtifacts != null && InputArtifacts.Count > 0;
-                var hasClipboardImages = ClipboardImages != null && ClipboardImages.Count > 0;
-                var hasGuidedSopInteraction = GuidedSopInteraction != null;
+                if (ClientDirectiveResults.Count != 1)
+                    throw new InvalidOperationException("Client directive continuation submissions must include exactly one ClientDirectiveResult.");
 
-                if (!hasInstruction && !hasArtifacts && !hasClipboardImages && !hasGuidedSopInteraction)
-                    throw new InvalidOperationException("User turn requests must include at least one of: Instruction, InputArtifacts, ClipboardImages, GuidedSopInteraction.");
-
-                if (hasArtifacts)
-                {
-                    foreach (var a in InputArtifacts)
-                        a.Validate();
-                }
-
-                if (hasClipboardImages)
-                {
-                    foreach (var img in ClipboardImages)
-                        img.Validate();
-                }
-
-                RagScope?.Validate();
-                GuidedSopInteraction?.Validate();
+                ClientDirectiveResults[0].Validate();
+                return;
             }
+
+            if (ToolResults != null && ToolResults.Count > 0)
+                throw new InvalidOperationException("ToolResults is forbidden on user turn requests.");
+
+            if (ClientDirectiveResults != null && ClientDirectiveResults.Count > 0)
+                throw new InvalidOperationException("ClientDirectiveResults is forbidden on user turn requests.");
+
+            var hasInstruction = !String.IsNullOrWhiteSpace(Instruction);
+            var hasArtifacts = InputArtifacts != null && InputArtifacts.Count > 0;
+            var hasClipboardImages = ClipboardImages != null && ClipboardImages.Count > 0;
+            var hasGuidedSopInteraction = GuidedSopInteraction != null;
+
+            if (!hasInstruction && !hasArtifacts && !hasClipboardImages && !hasGuidedSopInteraction)
+                throw new InvalidOperationException("User turn requests must include at least one of: Instruction, InputArtifacts, ClipboardImages, GuidedSopInteraction.");
+
+            if (hasArtifacts)
+            {
+                foreach (var a in InputArtifacts)
+                    a.Validate();
+            }
+
+            if (hasClipboardImages)
+            {
+                foreach (var img in ClipboardImages)
+                    img.Validate();
+            }
+
+            RagScope?.Validate();
+            GuidedSopInteraction?.Validate();
+        }
+
+        private void ValidateContinuationOnlyFields(string continuationName)
+        {
+            if (!String.IsNullOrWhiteSpace(Instruction))
+                throw new InvalidOperationException($"Instruction is forbidden on {continuationName} submissions.");
+
+            if (InputArtifacts != null && InputArtifacts.Count > 0)
+                throw new InvalidOperationException($"InputArtifacts is forbidden on {continuationName} submissions.");
+
+            if (ClipboardImages != null && ClipboardImages.Count > 0)
+                throw new InvalidOperationException($"ClipboardImages is forbidden on {continuationName} submissions.");
+
+            if (RagScope != null)
+                throw new InvalidOperationException($"RagScope is forbidden on {continuationName} submissions.");
+
+            if (!String.IsNullOrWhiteSpace(SolutionContextText))
+                throw new InvalidOperationException($"SolutionContextText is forbidden on {continuationName} submissions.");
+
+            if (!String.IsNullOrWhiteSpace(WorkspaceId) || !String.IsNullOrWhiteSpace(Repo) || !String.IsNullOrWhiteSpace(Language))
+                throw new InvalidOperationException($"Workspace/environment hints are forbidden on {continuationName} submissions.");
+
+            if (Streaming)
+                throw new InvalidOperationException($"Streaming is forbidden on {continuationName} submissions.");
+
+            if (GuidedSopInteraction != null)
+                throw new InvalidOperationException($"GuidedSopInteraction is forbidden on {continuationName} submissions.");
         }
     }
 
