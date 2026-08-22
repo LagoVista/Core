@@ -49,9 +49,6 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("entityHeader", NullValueHandling = NullValueHandling.Ignore)]
         public EntityHeader EntityHeader { get; set; }
 
-        [JsonProperty("userTextResponse", NullValueHandling = NullValueHandling.Ignore)]
-        public string UserTextResponse { get; set; }
-
         public void Validate()
         {
             if (String.IsNullOrWhiteSpace(DirectiveId))
