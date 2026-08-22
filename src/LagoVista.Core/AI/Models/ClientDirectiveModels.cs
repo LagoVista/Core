@@ -10,7 +10,7 @@ namespace LagoVista.Core.AI.Models
     /// <summary>
     /// AGN-000040 outbound Client Directive delivered to a hosting client.
     /// </summary>
-    public sealed class ClientDirective
+    public class ClientDirective
     {
         [JsonProperty("directiveId")]
         public string DirectiveId { get; set; }
