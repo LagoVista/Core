@@ -398,9 +398,8 @@ namespace LagoVista.Core.AI.Models
     }
 
     /// <summary>
-    /// Compatibility bridge for pre-AGN-000040 producers. New code MUST use ClientDirective.
+    /// Compatibility bridge for pre-AGN-000040 producers. New code SHOULD use ClientDirective.
     /// </summary>
-    [Obsolete("Use ClientDirective. AgentClientDirective is retained only for migration compatibility.")]
     public sealed class AgentClientDirective : ClientDirective
     {
         [JsonProperty("args", NullValueHandling = NullValueHandling.Ignore)]
