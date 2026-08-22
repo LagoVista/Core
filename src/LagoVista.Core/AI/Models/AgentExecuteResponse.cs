@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 namespace LagoVista.Core.AI.Models
 {
     /// <summary>
-    /// AGN-033 � Model-agnostic response contract for agent execution APIs.
+    /// AGN-033 / AGN-000040 model-agnostic response contract for agent execution APIs.
     ///
     /// Notes:
     /// - This payload is typically wrapped by InvokeResult&lt;T&gt;. If invocation is not successful,
@@ -27,7 +27,7 @@ namespace LagoVista.Core.AI.Models
         public AgentExecuteResponseKind Kind { get; set; }
 
         /// <summary>
-        /// Identifies the session (the �room�) in which this turn exists.
+        /// Identifies the session (the room) in which this turn exists.
         /// Always present.
         /// </summary>
         [JsonProperty("sessionId")]
@@ -103,7 +103,6 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("totalSessionPromptTokens", NullValueHandling = NullValueHandling.Ignore)]
         public long TotalSessionPromptTokens { get; set; }
 
-
         [JsonProperty("totalSessionCompletionTokens", NullValueHandling = NullValueHandling.Ignore)]
         public long TotalSessionCompletionTokens { get; set; }
 
@@ -119,7 +118,6 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
 
-
         [JsonProperty("acpIntents", NullValueHandling = NullValueHandling.Ignore)]
         public List<AcpIntent> AcpIntents { get; set; } = new List<AcpIntent>();
 
@@ -132,12 +130,15 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("authoring")]
         public AgentAuthoringTurnResult Authoring { get; set; }
 
+        /// <summary>
+        /// AGN-000040 Client Directives emitted during this agent response.
+        /// Multiple independent fire-and-forget directives may be present together with at most one result-bearing directive.
+        /// </summary>
         [JsonProperty("clientDirectives")]
-        public List<AgentClientDirective> ClientDirectives { get; set; } = new List<AgentClientDirective>();
+        public List<ClientDirective> ClientDirectives { get; set; } = new List<ClientDirective>();
 
         [JsonProperty("vtmMeetingId")]
         public string VtmMeetingId { get; set; }
-
 
         [JsonProperty("sopExecution")]
         public SopAgentExecutionResponse SopExecution { get; set; }
@@ -146,7 +147,7 @@ namespace LagoVista.Core.AI.Models
         public GuidedSopExecutionWorkspace GuidedSopExecution { get; set; }
 
         [JsonProperty("vtmMeetingWorkItems")]
-        public List<VtmMeetingWorkItemSummary> VtmMeetingWorkItems { get; set; }  = new List<VtmMeetingWorkItemSummary>();
+        public List<VtmMeetingWorkItemSummary> VtmMeetingWorkItems { get; set; } = new List<VtmMeetingWorkItemSummary>();
 
         [JsonProperty("structuredOutputs")]
         public List<AgentStructuredOutput> StructuredOutputs { get; set; }
@@ -161,10 +162,9 @@ namespace LagoVista.Core.AI.Models
         [EnumMember(Value = "client_tool_continuation")]
         ClientToolContinuation,
 
-
         [EnumMember(Value = "error")]
         Error
-     }
+    }
 
     /// <summary>
     /// Tool call request emitted by the server for client execution.
@@ -179,6 +179,7 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("kind")]
         public string Kind { get; set; }
+
         /// <summary>
         /// Raw JSON string for tool arguments.
         /// </summary>
@@ -190,20 +191,25 @@ namespace LagoVista.Core.AI.Models
     {
         [JsonProperty("status")]
         public string Status { get; set; }
+
         [JsonProperty("summary")]
         public string Summary { get; set; }
-        
+
         [JsonProperty("pendingExecution")]
         public bool PendingExecution { get; set; }
+
         [JsonProperty("completed")]
         public bool Completed { get; set; }
-        
+
         [JsonProperty("essentialJobActivity")]
         public EntityHeader EssentialJobActivity { get; set; }
+
         [JsonProperty("virtualTeammember")]
         public EntityHeader VirtualTeammember { get; set; }
+
         [JsonProperty("standardOperatingProcedure")]
         public EntityHeader StandardOperatingProcedure { get; set; }
+
         [JsonProperty("outputArtifact")]
         public EntityHeader OutputArtifact { get; set; }
     }
@@ -229,7 +235,7 @@ namespace LagoVista.Core.AI.Models
         [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
     }
-   
+
     public sealed class ClientAcpCall
     {
         [JsonProperty("interactionId")]
@@ -239,10 +245,10 @@ namespace LagoVista.Core.AI.Models
         public string CommandId { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }   // e.g. "picker", "confirm" or "acp.command_picker"
+        public string Name { get; set; }
 
         [JsonProperty("argumentsJson")]
-        public string ArgumentsJson { get; set; } // JSON payload for UI rendering
+        public string ArgumentsJson { get; set; }
     }
 
     public sealed class ClientAcpCallResult
@@ -254,10 +260,10 @@ namespace LagoVista.Core.AI.Models
         public string CommandId { get; set; }
 
         [JsonProperty("executionMs")]
-        public int ExecutionMs { get; set; }    
+        public int ExecutionMs { get; set; }
 
         [JsonProperty("resultJson")]
-        public string ResultJson { get; set; } // JSON payload of selection/confirmation/etc.
+        public string ResultJson { get; set; }
 
         [JsonProperty("errorMessage", NullValueHandling = NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
@@ -308,12 +314,10 @@ namespace LagoVista.Core.AI.Models
 
         [JsonProperty("reasoningTokens")]
         public int ReasoningTokens { get; set; }
-   }
-
+    }
 
     public interface IUIIntentPayload
     {
-
     }
 
     public sealed class AcpIntent
@@ -322,18 +326,15 @@ namespace LagoVista.Core.AI.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public UiIntentKind Kind { get; set; }
 
-        // Correlation id so the client can post back a structured selection later
         [JsonProperty("intentId")]
         public string IntentId { get; set; }
 
-        // Display hints
         [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)]
         public string Title { get; set; }
 
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
 
-        // Generic payload so you can evolve without breaking schema
         [JsonProperty("payload", NullValueHandling = NullValueHandling.Ignore)]
         public IUIIntentPayload Payload { get; set; }
     }
@@ -390,25 +391,22 @@ namespace LagoVista.Core.AI.Models
     public sealed class NotificationIntentPayload : IUIIntentPayload
     {
         [JsonProperty("level")]
-        public string Level { get; set; } // "info" | "warning" | "error"
+        public string Level { get; set; }
 
         [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
         public string Details { get; set; }
     }
 
-
-    public sealed class AgentClientDirective
+    /// <summary>
+    /// Compatibility bridge for pre-AGN-000040 producers. New code MUST use ClientDirective.
+    /// </summary>
+    [Obsolete("Use ClientDirective. AgentClientDirective is retained only for migration compatibility.")]
+    public sealed class AgentClientDirective : ClientDirective
     {
-        [JsonProperty("action")]
-        public string Action { get; set; }
-
-        [JsonProperty("args")]
+        [JsonProperty("args", NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, string> Args { get; set; } = new Dictionary<string, string>();
 
-        [JsonProperty("payload")]
-        public JObject Payload { get; set; }
-
-        [JsonProperty("message")]
+        [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
     }
 
