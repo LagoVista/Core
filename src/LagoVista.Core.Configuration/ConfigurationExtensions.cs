@@ -19,6 +19,7 @@ namespace LagoVista
             var section = configuration.GetSection(sectionName);
             if (!section.Exists())
             {
+                Console.WriteLine($"[CONFIGURATION_ERROR] - Missing configuration section '{sectionName}'.");
                 throw new InvalidOperationException($"Missing configuration section '{sectionName}'.");
             }
 
