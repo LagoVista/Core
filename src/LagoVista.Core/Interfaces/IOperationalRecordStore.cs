@@ -12,9 +12,9 @@ namespace LagoVista.Core.Interfaces
     public interface IOperationalRecordStore<TRecord>
         where TRecord : class, IOperationalRecord
     {
-        Task<TRecord> GetAsync(string organizationId, string id, CancellationToken cancellationToken = default);
+        Task<TRecord> GetAsync(OperationalRecordKey key, CancellationToken cancellationToken = default);
         Task UpsertAsync(TRecord record, CancellationToken cancellationToken = default);
         Task UpsertBatchAsync(IEnumerable<TRecord> records, CancellationToken cancellationToken = default);
-        Task DeleteAsync(string organizationId, string id, CancellationToken cancellationToken = default);
+        Task DeleteAsync(OperationalRecordKey key, CancellationToken cancellationToken = default);
     }
 }
