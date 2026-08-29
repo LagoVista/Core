@@ -30,6 +30,7 @@ jobs:
     env:
       PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '3.0.3391.1320' }}
       PACKAGE_SOURCE: https://nuget.pkg.github.com/nuviot/index.json
+      NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
@@ -44,14 +45,14 @@ jobs:
         uses: NuGet/setup-nuget@v2
 
       - name: Add GitHub Packages source
-        if: ${{ secrets.NUGET_GITHUB_TOKEN != '' }}
+        if: ${{ env.NUGET_GITHUB_TOKEN != '' }}
         shell: pwsh
         run: |
           dotnet nuget remove source github 2>$null
           dotnet nuget add source "$env:PACKAGE_SOURCE" `
             --name github `
             --username "${{ github.actor }}" `
-            --password "${{ secrets.NUGET_GITHUB_TOKEN }}" `
+            --password "$env:NUGET_GITHUB_TOKEN" `
             --store-password-in-clear-text
 
       - name: Build and pack compatibility baseline
@@ -69,7 +70,7 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         shell: pwsh
         run: |
-          if ([string]::IsNullOrWhiteSpace("${{ secrets.NUGET_GITHUB_TOKEN }}")) {
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
             throw 'NUGET_GITHUB_TOKEN is required when publish=true.'
           }
 
@@ -78,7 +79,7 @@ jobs:
             ForEach-Object {
               dotnet nuget push $_.FullName `
                 --source github `
-                --api-key "${{ secrets.NUGET_GITHUB_TOKEN }}" `
+                --api-key "$env:NUGET_GITHUB_TOKEN" `
                 --skip-duplicate
 
               if ($LASTEXITCODE -ne 0) {
