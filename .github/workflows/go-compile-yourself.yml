@@ -56,7 +56,7 @@ jobs:
             --password "$env:NUGET_GITHUB_TOKEN" `
             --store-password-in-clear-text
 
-      - name: Build, test, and pack repository packages
+      - name: Build and pack repository packages
         shell: pwsh
         run: ./Build-GitHubPackages.ps1 -Version $env:PACKAGE_VERSION
 
