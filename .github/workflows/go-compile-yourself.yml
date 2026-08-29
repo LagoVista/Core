@@ -15,7 +15,7 @@ on:
         type: string
         default: 5.0.0
       publish:
-        description: Publish the package to the shared GitHub Packages feed
+        description: Publish repository packages to the shared GitHub Packages feed
         required: true
         type: boolean
         default: false
@@ -63,13 +63,13 @@ jobs:
       - name: Upload package build
         uses: actions/upload-artifact@v4
         with:
-          name: LagoVista.Core-${{ env.PACKAGE_VERSION }}
+          name: Core-package-set-${{ env.PACKAGE_VERSION }}
           path: |
-            artifacts/packages/LagoVista.Core.${{ env.PACKAGE_VERSION }}.nupkg
+            artifacts/packages/*.nupkg
             artifacts/package-catalog.json
           if-no-files-found: error
 
-      - name: Publish package
+      - name: Publish packages
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         shell: pwsh
         run: |
@@ -77,47 +77,53 @@ jobs:
             throw 'NUGET_GITHUB_TOKEN is required when publish=true.'
           }
 
-          $package = "artifacts/packages/LagoVista.Core.$env:PACKAGE_VERSION.nupkg"
-          dotnet nuget push $package `
-            --source nuviot `
-            --api-key "$env:NUGET_GITHUB_TOKEN" `
-            --skip-duplicate
-
-          if ($LASTEXITCODE -ne 0) {
-            throw "Failed to publish '$package'."
+          $packages = @(Get-ChildItem artifacts/packages -Filter '*.nupkg' -File | Where-Object { $_.Name -notlike '*.symbols.nupkg' } | Sort-Object Name)
+          if ($packages.Count -eq 0) {
+            throw 'No packages were produced for publishing.'
           }
 
-      - name: Verify published package restore
+          foreach ($package in $packages) {
+            Write-Host "Publishing $($package.Name)"
+            dotnet nuget push $package.FullName `
+              --source nuviot `
+              --api-key "$env:NUGET_GITHUB_TOKEN" `
+              --skip-duplicate
+
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to publish '$($package.Name)'."
+            }
+          }
+
+      - name: Verify published package restores
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         shell: pwsh
         run: |
           dotnet nuget locals all --clear
 
-          $smoke = Join-Path $env:RUNNER_TEMP 'lagovista-core-restore-smoke'
-          if (Test-Path $smoke) {
-            Remove-Item -Recurse -Force $smoke
-          }
+          $catalog = Get-Content artifacts/package-catalog.json -Raw | ConvertFrom-Json
+          foreach ($package in $catalog.packages) {
+            $safeName = ($package.id -replace '[^A-Za-z0-9_.-]', '_')
+            $smoke = Join-Path $env:RUNNER_TEMP "restore-$safeName"
+            if (Test-Path $smoke) {
+              Remove-Item -Recurse -Force $smoke
+            }
 
-          dotnet new classlib --framework net9.0 --output $smoke --force
-          if ($LASTEXITCODE -ne 0) {
-            throw "Failed to create restore smoke project with exit code $LASTEXITCODE."
-          }
+            dotnet new classlib --framework net9.0 --output $smoke --force | Out-Null
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to create restore project for $($package.id)."
+            }
 
-          $project = Join-Path $smoke 'lagovista-core-restore-smoke.csproj'
-          dotnet add $project package LagoVista.Core --version $env:PACKAGE_VERSION
-          if ($LASTEXITCODE -ne 0) {
-            throw "Failed to add LagoVista.Core $env:PACKAGE_VERSION from configured package sources."
-          }
+            $project = Get-ChildItem $smoke -Filter '*.csproj' -File | Select-Object -First 1
+            dotnet add $project.FullName package $package.id --version $package.version
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to restore $($package.id) $($package.version) from configured package sources."
+            }
 
-          dotnet restore $project --force --no-cache
-          if ($LASTEXITCODE -ne 0) {
-            throw "Fresh restore failed with exit code $LASTEXITCODE."
-          }
+            $assets = Join-Path $smoke 'obj/project.assets.json'
+            $expected = "$($package.id)/$($package.version)".ToLowerInvariant()
+            if (-not (Select-String -Path $assets -Pattern $expected -SimpleMatch -Quiet)) {
+              throw "Restore completed but $expected was not present in project.assets.json."
+            }
 
-          $assets = Join-Path $smoke 'obj/project.assets.json'
-          $expected = "lagovista.core/$($env:PACKAGE_VERSION)".ToLowerInvariant()
-          if (-not (Select-String -Path $assets -Pattern $expected -SimpleMatch -Quiet)) {
-            throw "Restore completed but $expected was not present in project.assets.json."
+            Write-Host "Verified $($package.id) $($package.version)"
           }
-
-          Write-Host "Fresh restore of LagoVista.Core $env:PACKAGE_VERSION from the shared package configuration succeeded."
