@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'feature/**'
-      - master
   pull_request:
     branches:
       - master
@@ -30,7 +29,7 @@ jobs:
     timeout-minutes: 30
 
     env:
-      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref == 'refs/heads/master' && '5.0.0' || format('5.0.0-feature.{0}', github.run_number) }}
+      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || format('5.0.0-feature.{0}', github.run_number) }}
       PACKAGE_SOURCE: https://nuget.pkg.github.com/nuviot/index.json
       NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
@@ -70,8 +69,26 @@ jobs:
             artifacts/package-catalog.json
           if-no-files-found: error
 
-      - name: Verify shared-feed restore
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Verify LagoVista.Core 5.0.0 restore' }}
+      - name: Publish package
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
+            throw 'NUGET_GITHUB_TOKEN is required when publish=true.'
+          }
+
+          $package = "artifacts/packages/LagoVista.Core.$env:PACKAGE_VERSION.nupkg"
+          dotnet nuget push $package `
+            --source nuviot `
+            --api-key "$env:NUGET_GITHUB_TOKEN" `
+            --skip-duplicate
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to publish '$package'."
+          }
+
+      - name: Verify published package restore
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         shell: pwsh
         run: |
           dotnet nuget locals all --clear
@@ -98,27 +115,9 @@ jobs:
           }
 
           $assets = Join-Path $smoke 'obj/project.assets.json'
-          $expected = 'lagovista.core/5.0.0'
+          $expected = "lagovista.core/$($env:PACKAGE_VERSION)".ToLowerInvariant()
           if (-not (Select-String -Path $assets -Pattern $expected -SimpleMatch -Quiet)) {
             throw "Restore completed but $expected was not present in project.assets.json."
           }
 
-          Write-Host 'Fresh restore of LagoVista.Core 5.0.0 from the shared package configuration succeeded.'
-
-      - name: Publish package
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Publish LagoVista.Core 5.0.0 canary') }}
-        shell: pwsh
-        run: |
-          if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
-            throw 'NUGET_GITHUB_TOKEN is required when publish=true.'
-          }
-
-          $package = "artifacts/packages/LagoVista.Core.$env:PACKAGE_VERSION.nupkg"
-          dotnet nuget push $package `
-            --source nuviot `
-            --api-key "$env:NUGET_GITHUB_TOKEN" `
-            --skip-duplicate
-
-          if ($LASTEXITCODE -ne 0) {
-            throw "Failed to publish '$package'."
-          }
+          Write-Host "Fresh restore of LagoVista.Core $env:PACKAGE_VERSION from the shared package configuration succeeded."
