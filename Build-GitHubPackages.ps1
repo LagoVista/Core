@@ -15,13 +15,11 @@ Set-StrictMode -Version Latest
 $repoRoot = $PSScriptRoot
 Set-Location $repoRoot
 
-$projectPath = Join-Path $repoRoot 'src/LagoVista.Core/LagoVista.Core.csproj'
-$nuspecPath = Join-Path $repoRoot 'src/LagoVista.Core/Package.nuspec'
+$solutionPath = Join-Path $repoRoot 'Core.sln'
 $outputPath = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $OutputDirectory))
 $catalogFullPath = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $CatalogPath))
 
-if (-not (Test-Path $projectPath)) { throw "Project not found: $projectPath" }
-if (-not (Test-Path $nuspecPath)) { throw "NuSpec not found: $nuspecPath" }
+if (-not (Test-Path $solutionPath)) { throw "Solution not found: $solutionPath" }
 
 if (Test-Path $outputPath) {
     Remove-Item -Recurse -Force $outputPath
@@ -29,60 +27,112 @@ if (Test-Path $outputPath) {
 New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path $catalogFullPath -Parent) | Out-Null
 
-Write-Host "Building LagoVista.Core package $Version"
-Write-Host "Output: $outputPath"
-
-[xml]$xml = Get-Content $nuspecPath -Raw
-$metadata = $xml.package.metadata
-if ($null -eq $metadata) {
-    throw "NuSpec '$nuspecPath' does not contain package/metadata."
+$nuspecFiles = @(Get-ChildItem -Path (Join-Path $repoRoot 'src') -Filter 'Package.nuspec' -File -Recurse | Sort-Object FullName)
+if ($nuspecFiles.Count -eq 0) {
+    throw 'No Package.nuspec files were found beneath src.'
 }
 
-if ($metadata.id -ne 'LagoVista.Core') {
-    throw "Expected package id 'LagoVista.Core' but found '$($metadata.id)'."
+$packages = @()
+$packageIds = @{}
+
+foreach ($nuspec in $nuspecFiles) {
+    [xml]$xml = Get-Content $nuspec.FullName -Raw
+    $metadata = $xml.package.metadata
+    if ($null -eq $metadata -or [string]::IsNullOrWhiteSpace([string]$metadata.id)) {
+        throw "NuSpec '$($nuspec.FullName)' does not contain a package id."
+    }
+
+    $packageId = [string]$metadata.id
+    if ($packageIds.ContainsKey($packageId)) {
+        throw "Duplicate package id '$packageId' found in '$($nuspec.FullName)' and '$($packageIds[$packageId])'."
+    }
+
+    $packageIds[$packageId] = $nuspec.FullName
+    $packages += [pscustomobject]@{
+        Id = $packageId
+        NuSpecPath = $nuspec.FullName
+        Xml = $xml
+    }
 }
 
-$internalDependencies = @($xml.SelectNodes('//dependency') | Where-Object {
-    $_.id -and $_.id.StartsWith('LagoVista.', [System.StringComparison]::OrdinalIgnoreCase)
-})
-if ($internalDependencies.Count -gt 0) {
-    $names = ($internalDependencies | ForEach-Object { $_.id }) -join ', '
-    throw "LagoVista.Core canary must not have internal LagoVista dependencies. Found: $names"
+Write-Host "Discovered $($packages.Count) repository packages:"
+$packages | Sort-Object Id | ForEach-Object { Write-Host "  $($_.Id)" }
+
+$xmlSettings = New-Object System.Xml.XmlWriterSettings
+$xmlSettings.Indent = $true
+$xmlSettings.Encoding = New-Object System.Text.UTF8Encoding($false)
+$xmlSettings.NewLineChars = "`r`n"
+$xmlSettings.NewLineHandling = [System.Xml.NewLineHandling]::Replace
+
+# Stamp only the build checkout. A dependency is repository-internal only when
+# its package id is another Package.nuspec discovered in this repository.
+foreach ($package in $packages) {
+    $metadata = $package.Xml.package.metadata
+    $metadata.version = $Version
+
+    foreach ($dependency in @($package.Xml.SelectNodes('//dependency'))) {
+        $dependencyId = [string]$dependency.id
+        if (-not [string]::IsNullOrWhiteSpace($dependencyId) -and $packageIds.ContainsKey($dependencyId)) {
+            $dependency.version = $Version
+        }
+    }
+
+    $writer = [System.Xml.XmlWriter]::Create($package.NuSpecPath, $xmlSettings)
+    try {
+        $package.Xml.Save($writer)
+    }
+    finally {
+        $writer.Dispose()
+    }
 }
 
-# Stamp only the build checkout. The committed NuSpec remains historical source metadata.
-$metadata.version = $Version
-$settings = New-Object System.Xml.XmlWriterSettings
-$settings.Indent = $true
-$settings.Encoding = New-Object System.Text.UTF8Encoding($false)
-$settings.NewLineChars = "`r`n"
-$settings.NewLineHandling = [System.Xml.NewLineHandling]::Replace
-
-$writer = [System.Xml.XmlWriter]::Create($nuspecPath, $settings)
-try {
-    $xml.Save($writer)
-}
-finally {
-    $writer.Dispose()
-}
-
-Write-Host 'Restoring LagoVista.Core...'
-dotnet restore $projectPath
+Write-Host "Restoring Core.sln for package set $Version..."
+dotnet restore $solutionPath
 if ($LASTEXITCODE -ne 0) { throw "dotnet restore failed with exit code $LASTEXITCODE." }
 
-Write-Host 'Building LagoVista.Core...'
-dotnet build $projectPath --configuration Release --no-restore
+Write-Host 'Building Core.sln...'
+dotnet build $solutionPath --configuration Release --no-restore
 if ($LASTEXITCODE -ne 0) { throw "dotnet build failed with exit code $LASTEXITCODE." }
 
-Write-Host "Packing LagoVista.Core $Version..."
-nuget pack $nuspecPath -Version $Version -OutputDirectory $outputPath -NonInteractive
-if ($LASTEXITCODE -ne 0) {
-    throw "nuget pack failed with exit code $LASTEXITCODE."
-}
+$catalogPackages = @()
 
-$packagePath = Join-Path $outputPath "LagoVista.Core.$Version.nupkg"
-if (-not (Test-Path $packagePath)) {
-    throw "Expected package was not produced: $packagePath"
+foreach ($package in ($packages | Sort-Object Id)) {
+    Write-Host "Packing $($package.Id) $Version..."
+    nuget pack $package.NuSpecPath -Version $Version -OutputDirectory $outputPath -NonInteractive
+    if ($LASTEXITCODE -ne 0) {
+        throw "nuget pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
+    }
+
+    $packageFile = "$($package.Id).$Version.nupkg"
+    $packagePath = Join-Path $outputPath $packageFile
+    if (-not (Test-Path $packagePath)) {
+        throw "Expected package was not produced: $packagePath"
+    }
+
+    $frameworks = @(
+        $package.Xml.SelectNodes('//dependencies/group') |
+            ForEach-Object { [string]$_.targetFramework } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Sort-Object -Unique
+    )
+
+    $dependencies = @()
+    foreach ($dependency in @($package.Xml.SelectNodes('//dependency'))) {
+        $dependencyId = [string]$dependency.id
+        $dependencies += [ordered]@{
+            id = $dependencyId
+            version = [string]$dependency.version
+            kind = if ($packageIds.ContainsKey($dependencyId)) { 'repository' } else { 'external' }
+        }
+    }
+
+    $catalogPackages += [ordered]@{
+        id = $package.Id
+        version = $Version
+        file = $packageFile
+        targetFrameworks = $frameworks
+        dependencies = $dependencies
+    }
 }
 
 $sourceRepository = if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { 'LagoVista/Core' }
@@ -97,18 +147,10 @@ $catalog = [ordered]@{
         commit = $sourceCommit
         ref = $sourceRef
     }
-    packages = @(
-        [ordered]@{
-            id = 'LagoVista.Core'
-            version = $Version
-            file = [System.IO.Path]::GetFileName($packagePath)
-            targetFrameworks = @('netstandard2.0')
-            internalDependencies = @()
-        }
-    )
+    packages = $catalogPackages
 }
 
-$catalog | ConvertTo-Json -Depth 8 | Set-Content -Path $catalogFullPath -Encoding utf8
+$catalog | ConvertTo-Json -Depth 10 | Set-Content -Path $catalogFullPath -Encoding utf8
 
-Write-Host "Created $packagePath"
+Write-Host "Created $($catalogPackages.Count) packages in $outputPath"
 Write-Host "Created $catalogFullPath"
