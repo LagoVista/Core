@@ -26,6 +26,7 @@ permissions:
 jobs:
   build-pack:
     runs-on: windows-latest
+    timeout-minutes: 30
 
     env:
       PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '3.0.3391.1320' }}
