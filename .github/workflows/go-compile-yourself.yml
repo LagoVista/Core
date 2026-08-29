@@ -1,35 +1,35 @@
-name: LagoVista.Core Package Canary
+name: Go Compile Yourself
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
+    branches:
+      - 'feature/**'
+  pull_request:
     branches:
       - master
   workflow_dispatch:
     inputs:
-      publish:
-        description: Publish LagoVista.Core to GitHub Packages
-        required: true
-        type: boolean
-        default: false
       version:
-        description: LagoVista.Core semantic version
+        description: Package version to build
         required: true
         type: string
         default: 5.0.0
+      publish:
+        description: Publish the package to the shared GitHub Packages feed
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
-  build-pack:
+  build-package:
     runs-on: windows-latest
     timeout-minutes: 30
 
     env:
-      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '5.0.0' }}
+      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || format('5.0.0-feature.{0}', github.run_number) }}
       PACKAGE_SOURCE: https://nuget.pkg.github.com/nuviot/index.json
       NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
@@ -45,29 +45,31 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v2
 
-      - name: Add GitHub Packages source
+      - name: Configure shared package feed
         if: ${{ env.NUGET_GITHUB_TOKEN != '' }}
         shell: pwsh
         run: |
-          dotnet nuget remove source github 2>$null
+          dotnet nuget remove source nuviot 2>$null
           dotnet nuget add source "$env:PACKAGE_SOURCE" `
-            --name github `
+            --name nuviot `
             --username "${{ github.actor }}" `
             --password "$env:NUGET_GITHUB_TOKEN" `
             --store-password-in-clear-text
 
-      - name: Build and pack LagoVista.Core
+      - name: Build and pack repository packages
         shell: pwsh
         run: ./Build-GitHubPackages.ps1 -Version $env:PACKAGE_VERSION
 
-      - name: Upload package artifact
+      - name: Upload package build
         uses: actions/upload-artifact@v4
         with:
           name: LagoVista.Core-${{ env.PACKAGE_VERSION }}
-          path: artifacts/packages/LagoVista.Core.${{ env.PACKAGE_VERSION }}.nupkg
+          path: |
+            artifacts/packages/LagoVista.Core.${{ env.PACKAGE_VERSION }}.nupkg
+            artifacts/package-catalog.json
           if-no-files-found: error
 
-      - name: Publish to GitHub Packages
+      - name: Publish package
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
         shell: pwsh
         run: |
@@ -77,7 +79,7 @@ jobs:
 
           $package = "artifacts/packages/LagoVista.Core.$env:PACKAGE_VERSION.nupkg"
           dotnet nuget push $package `
-            --source github `
+            --source nuviot `
             --api-key "$env:NUGET_GITHUB_TOKEN" `
             --skip-duplicate
 

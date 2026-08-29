@@ -3,7 +3,10 @@ param(
     [string]$Version = '5.0.0',
 
     [Parameter(Mandatory = $false)]
-    [string]$OutputDirectory = './artifacts/packages'
+    [string]$OutputDirectory = './artifacts/packages',
+
+    [Parameter(Mandatory = $false)]
+    [string]$CatalogPath = './artifacts/package-catalog.json'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -15,6 +18,7 @@ Set-Location $repoRoot
 $projectPath = Join-Path $repoRoot 'src/LagoVista.Core/LagoVista.Core.csproj'
 $nuspecPath = Join-Path $repoRoot 'src/LagoVista.Core/Package.nuspec'
 $outputPath = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $OutputDirectory))
+$catalogFullPath = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $CatalogPath))
 
 if (-not (Test-Path $projectPath)) { throw "Project not found: $projectPath" }
 if (-not (Test-Path $nuspecPath)) { throw "NuSpec not found: $nuspecPath" }
@@ -23,6 +27,7 @@ if (Test-Path $outputPath) {
     Remove-Item -Recurse -Force $outputPath
 }
 New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
+New-Item -ItemType Directory -Force -Path (Split-Path $catalogFullPath -Parent) | Out-Null
 
 Write-Host "Building LagoVista.Core package $Version"
 Write-Host "Output: $outputPath"
@@ -45,7 +50,7 @@ if ($internalDependencies.Count -gt 0) {
     throw "LagoVista.Core canary must not have internal LagoVista dependencies. Found: $names"
 }
 
-# Stamp only the CI checkout. The committed NuSpec remains historical source metadata.
+# Stamp only the build checkout. The committed NuSpec remains historical source metadata.
 $metadata.version = $Version
 $settings = New-Object System.Xml.XmlWriterSettings
 $settings.Indent = $true
@@ -80,4 +85,30 @@ if (-not (Test-Path $packagePath)) {
     throw "Expected package was not produced: $packagePath"
 }
 
+$sourceRepository = if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { 'LagoVista/Core' }
+$sourceCommit = if ($env:GITHUB_SHA) { $env:GITHUB_SHA } else { (git rev-parse HEAD).Trim() }
+$sourceRef = if ($env:GITHUB_REF_NAME) { $env:GITHUB_REF_NAME } else { (git branch --show-current).Trim() }
+
+$catalog = [ordered]@{
+    schemaVersion = 1
+    generatedUtc = [DateTime]::UtcNow.ToString('o')
+    source = [ordered]@{
+        repository = $sourceRepository
+        commit = $sourceCommit
+        ref = $sourceRef
+    }
+    packages = @(
+        [ordered]@{
+            id = 'LagoVista.Core'
+            version = $Version
+            file = [System.IO.Path]::GetFileName($packagePath)
+            targetFrameworks = @('netstandard2.0')
+            internalDependencies = @()
+        }
+    )
+}
+
+$catalog | ConvertTo-Json -Depth 8 | Set-Content -Path $catalogFullPath -Encoding utf8
+
 Write-Host "Created $packagePath"
+Write-Host "Created $catalogFullPath"
