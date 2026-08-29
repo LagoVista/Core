@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'feature/**'
+      - master
   pull_request:
     branches:
       - master
@@ -29,7 +30,7 @@ jobs:
     timeout-minutes: 30
 
     env:
-      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || format('5.0.0-feature.{0}', github.run_number) }}
+      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref == 'refs/heads/master' && '5.0.0' || format('5.0.0-feature.{0}', github.run_number) }}
       PACKAGE_SOURCE: https://nuget.pkg.github.com/nuviot/index.json
       NUGET_GITHUB_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
@@ -70,7 +71,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish package
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Publish LagoVista.Core 5.0.0 canary') }}
         shell: pwsh
         run: |
           if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
