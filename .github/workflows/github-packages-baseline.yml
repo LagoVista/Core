@@ -1,0 +1,87 @@
+name: GitHub Packages Baseline
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish packages to GitHub Packages
+        required: true
+        type: boolean
+        default: false
+      version:
+        description: Compatibility package version
+        required: true
+        type: string
+        default: 3.0.3391.1320
+
+permissions:
+  contents: read
+
+jobs:
+  build-pack:
+    runs-on: windows-latest
+
+    env:
+      PACKAGE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '3.0.3391.1320' }}
+      PACKAGE_SOURCE: https://nuget.pkg.github.com/nuviot/index.json
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Add GitHub Packages source
+        if: ${{ secrets.NUGET_GITHUB_TOKEN != '' }}
+        shell: pwsh
+        run: |
+          dotnet nuget remove source github 2>$null
+          dotnet nuget add source "$env:PACKAGE_SOURCE" `
+            --name github `
+            --username "${{ github.actor }}" `
+            --password "${{ secrets.NUGET_GITHUB_TOKEN }}" `
+            --store-password-in-clear-text
+
+      - name: Build and pack compatibility baseline
+        shell: pwsh
+        run: ./Build-GitHubPackages.ps1 -Version $env:PACKAGE_VERSION
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-packages-${{ env.PACKAGE_VERSION }}
+          path: artifacts/packages/*.nupkg
+          if-no-files-found: error
+
+      - name: Publish to GitHub Packages
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace("${{ secrets.NUGET_GITHUB_TOKEN }}")) {
+            throw 'NUGET_GITHUB_TOKEN is required when publish=true.'
+          }
+
+          Get-ChildItem artifacts/packages -Filter '*.nupkg' -File |
+            Where-Object { $_.Name -notlike '*.symbols.nupkg' } |
+            ForEach-Object {
+              dotnet nuget push $_.FullName `
+                --source github `
+                --api-key "${{ secrets.NUGET_GITHUB_TOKEN }}" `
+                --skip-duplicate
+
+              if ($LASTEXITCODE -ne 0) {
+                throw "Failed to publish '$($_.Name)'."
+              }
+            }
