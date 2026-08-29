@@ -70,6 +70,41 @@ jobs:
             artifacts/package-catalog.json
           if-no-files-found: error
 
+      - name: Verify shared-feed restore
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Verify LagoVista.Core 5.0.0 restore' }}
+        shell: pwsh
+        run: |
+          dotnet nuget locals all --clear
+
+          $smoke = Join-Path $env:RUNNER_TEMP 'lagovista-core-restore-smoke'
+          if (Test-Path $smoke) {
+            Remove-Item -Recurse -Force $smoke
+          }
+
+          dotnet new classlib --framework net9.0 --output $smoke --force
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to create restore smoke project with exit code $LASTEXITCODE."
+          }
+
+          $project = Join-Path $smoke 'lagovista-core-restore-smoke.csproj'
+          dotnet add $project package LagoVista.Core --version $env:PACKAGE_VERSION
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to add LagoVista.Core $env:PACKAGE_VERSION from configured package sources."
+          }
+
+          dotnet restore $project --force --no-cache
+          if ($LASTEXITCODE -ne 0) {
+            throw "Fresh restore failed with exit code $LASTEXITCODE."
+          }
+
+          $assets = Join-Path $smoke 'obj/project.assets.json'
+          $expected = 'lagovista.core/5.0.0'
+          if (-not (Select-String -Path $assets -Pattern $expected -SimpleMatch -Quiet)) {
+            throw "Restore completed but $expected was not present in project.assets.json."
+          }
+
+          Write-Host 'Fresh restore of LagoVista.Core 5.0.0 from the shared package configuration succeeded.'
+
       - name: Publish package
         if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Publish LagoVista.Core 5.0.0 canary') }}
         shell: pwsh
