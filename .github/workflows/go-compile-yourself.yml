@@ -71,7 +71,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish packages
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Publish Core TestBase 5.0.0') }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && startsWith(github.event.head_commit.message, 'Publish Core TestBase 5.0.0')) }}
         shell: pwsh
         run: |
           if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_TOKEN)) {
@@ -96,7 +96,7 @@ jobs:
           }
 
       - name: Verify published package restores
-        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && github.event.head_commit.message == 'Publish Core TestBase 5.0.0') }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && inputs.publish) || (github.event_name == 'push' && github.ref == 'refs/heads/master' && startsWith(github.event.head_commit.message, 'Publish Core TestBase 5.0.0')) }}
         shell: pwsh
         run: |
           dotnet nuget locals all --clear
