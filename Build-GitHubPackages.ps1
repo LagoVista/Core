@@ -27,9 +27,19 @@ if (Test-Path $outputPath) {
 New-Item -ItemType Directory -Force -Path $outputPath | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path $catalogFullPath -Parent) | Out-Null
 
-$nuspecFiles = @(Get-ChildItem -Path (Join-Path $repoRoot 'src') -Filter 'Package.nuspec' -File -Recurse | Sort-Object FullName)
+$packageRoots = @('src', 'tests')
+$nuspecFiles = @(
+    $packageRoots |
+        ForEach-Object {
+            $root = Join-Path $repoRoot $_
+            if (Test-Path $root) {
+                Get-ChildItem -Path $root -Filter 'Package.nuspec' -File -Recurse
+            }
+        } |
+        Sort-Object FullName
+)
 if ($nuspecFiles.Count -eq 0) {
-    throw 'No Package.nuspec files were found beneath src.'
+    throw 'No Package.nuspec files were found beneath src or tests.'
 }
 
 $packages = @()
