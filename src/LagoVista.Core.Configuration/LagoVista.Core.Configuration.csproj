@@ -7,6 +7,9 @@
   <ItemGroup>
     <ProjectReference Include="..\LagoVista.Core\LagoVista.Core.csproj" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Memory" Version="9.0.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.13" />
+    <PackageReference Include="System.Text.Json" Version="9.0.13" />
   </ItemGroup>
 
 </Project>
