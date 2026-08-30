@@ -35,6 +35,7 @@ if ([string]::IsNullOrWhiteSpace($env:NUGET_GITHUB_USERNAME) -or
 
 $catalogPath = Join-Path $repoRoot 'artifacts/package-catalog.json'
 $packagesPath = Join-Path $repoRoot 'artifacts/packages'
+$packageSource = 'https://nuget.pkg.github.com/nuviot/index.json'
 
 & (Join-Path $repoRoot 'Build-GitHubPackages.ps1') -Version $Version
 if ($LASTEXITCODE -ne 0) { throw "Build-GitHubPackages.ps1 failed with exit code $LASTEXITCODE." }
@@ -52,7 +53,7 @@ foreach ($package in @($catalog.packages)) {
 
     Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'publishing' -Message 'Uploading package to GitHub Packages'
     Write-Host "Publishing $($package.id) $($package.version)..."
-    dotnet nuget push $packagePath --source nuviot --api-key $env:NUGET_GITHUB_TOKEN --skip-duplicate
+    dotnet nuget push $packagePath --source $packageSource --api-key $env:NUGET_GITHUB_TOKEN --skip-duplicate
     if ($LASTEXITCODE -ne 0) {
         Write-PackageStatus -PackageId $package.id -PackageVersion $package.version -State 'failed' -Message "dotnet nuget push exited with code $LASTEXITCODE"
         throw "dotnet nuget push failed for '$($package.id)' with exit code $LASTEXITCODE."
@@ -67,7 +68,7 @@ $headers = @{
     'User-Agent' = 'softwarelogistics-build-server/0.1'
 }
 
-$serviceIndexUrl = 'https://nuget.pkg.github.com/nuviot/index.json'
+$serviceIndexUrl = $packageSource
 $serviceIndex = Invoke-RestMethod -Uri $serviceIndexUrl -Headers $headers -Method Get
 $packageBaseResource = @($serviceIndex.resources) |
     Where-Object { [string]$_.'@type' -like 'PackageBaseAddress/*' } |
