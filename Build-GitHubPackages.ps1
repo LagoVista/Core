@@ -57,10 +57,16 @@ foreach ($nuspec in $nuspecFiles) {
         throw "Duplicate package id '$packageId' found in '$($nuspec.FullName)' and '$($packageIds[$packageId])'."
     }
 
+    $projectFiles = @(Get-ChildItem -Path $nuspec.Directory.FullName -Filter '*.csproj' -File)
+    if ($projectFiles.Count -ne 1) {
+        throw "Expected exactly one project beside '$($nuspec.FullName)', found $($projectFiles.Count)."
+    }
+
     $packageIds[$packageId] = $nuspec.FullName
     $packages += [pscustomobject]@{
         Id = $packageId
         NuSpecPath = $nuspec.FullName
+        ProjectPath = $projectFiles[0].FullName
         Xml = $xml
     }
 }
@@ -87,6 +93,19 @@ foreach ($package in $packages) {
         }
     }
 
+    # NuSpec file paths were historically authored for Windows. Normalize the
+    # disposable checkout so packing works on the Linux build agent.
+    foreach ($file in @($package.Xml.SelectNodes('//files/file'))) {
+        if (-not [string]::IsNullOrWhiteSpace([string]$file.src)) {
+            $source = ([string]$file.src).Replace('\', '/')
+            $source = [regex]::Replace($source, '(^|/)release(/|$)', '$1Release$2', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            $file.src = $source
+        }
+        if (-not [string]::IsNullOrWhiteSpace([string]$file.target)) {
+            $file.target = ([string]$file.target).Replace('\', '/')
+        }
+    }
+
     $writer = [System.Xml.XmlWriter]::Create($package.NuSpecPath, $xmlSettings)
     try {
         $package.Xml.Save($writer)
@@ -108,9 +127,10 @@ $catalogPackages = @()
 
 foreach ($package in ($packages | Sort-Object Id)) {
     Write-Host "Packing $($package.Id) $Version..."
-    nuget pack $package.NuSpecPath -Version $Version -OutputDirectory $outputPath -NonInteractive
+    $packageDirectory = Split-Path $package.NuSpecPath -Parent
+    dotnet pack $package.ProjectPath --configuration Release --no-build --output $outputPath -p:NuspecFile=$($package.NuSpecPath) -p:NuspecBasePath=$packageDirectory -p:PackageVersion=$Version
     if ($LASTEXITCODE -ne 0) {
-        throw "nuget pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
+        throw "dotnet pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
     }
 
     $packageFile = "$($package.Id).$Version.nupkg"
