@@ -98,8 +98,16 @@ foreach ($package in $packages) {
     foreach ($file in @($package.Xml.SelectNodes('//files/file'))) {
         if (-not [string]::IsNullOrWhiteSpace([string]$file.src)) {
             $source = ([string]$file.src).Replace('\', '/')
-            $source = [regex]::Replace($source, '(^|/)release(/|$)', '$1Release$2', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-            $file.src = $source
+            $segments = @($source.Split('/'))
+            for ($i = 0; $i -lt $segments.Count; $i++) {
+                if ($segments[$i] -ieq 'release') {
+                    $segments[$i] = 'Release'
+                }
+                elseif ($segments[$i] -match '^(?i:net(?:standard)?\d)') {
+                    $segments[$i] = $segments[$i].ToLowerInvariant()
+                }
+            }
+            $file.src = [string]::Join('/', $segments)
         }
         if (-not [string]::IsNullOrWhiteSpace([string]$file.target)) {
             $file.target = ([string]$file.target).Replace('\', '/')
