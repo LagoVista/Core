@@ -128,7 +128,7 @@ $catalogPackages = @()
 foreach ($package in ($packages | Sort-Object Id)) {
     Write-Host "Packing $($package.Id) $Version..."
     $packageDirectory = Split-Path $package.NuSpecPath -Parent
-    dotnet pack $package.ProjectPath --configuration Release --no-build --output $outputPath -p:NuspecFile=$($package.NuSpecPath) -p:NuspecBasePath=$packageDirectory -p:PackageVersion=$Version
+    dotnet pack $package.ProjectPath --configuration Release --no-build --output $outputPath -p:IsPackable=true -p:NuspecFile=$($package.NuSpecPath) -p:NuspecBasePath=$packageDirectory -p:PackageVersion=$Version
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet pack failed for '$($package.Id)' with exit code $LASTEXITCODE."
     }
