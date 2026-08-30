@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		CreateLocalPackage.ps1 = CreateLocalPackage.ps1
 		LagoVista.Dependencies.nuspec = LagoVista.Dependencies.nuspec
-		nuget.config = nuget.config
 		README.md = README.md
 		UpdateNuspecVersion.ps1 = UpdateNuspecVersion.ps1
 		UploadResources.ps1 = UploadResources.ps1
