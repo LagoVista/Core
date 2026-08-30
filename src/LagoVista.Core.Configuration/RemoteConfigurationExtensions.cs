@@ -19,7 +19,7 @@ namespace LagoVista
             var values = new Dictionary<string, string>(resolvedConfiguration.Values, StringComparer.OrdinalIgnoreCase);
 
             return new ConfigurationBuilder()
-                .AddInMemoryCollection(values)
+                .Add(new DictionaryConfigurationSource(values))
                 .Build();
         }
 
@@ -39,6 +39,29 @@ namespace LagoVista
 
             services.AddSingleton(configuration.Map<T>());
             return services;
+        }
+
+        private sealed class DictionaryConfigurationSource : IConfigurationSource
+        {
+            private readonly IDictionary<string, string> _values;
+
+            public DictionaryConfigurationSource(IDictionary<string, string> values)
+            {
+                _values = values ?? throw new ArgumentNullException(nameof(values));
+            }
+
+            public IConfigurationProvider Build(IConfigurationBuilder builder)
+            {
+                return new DictionaryConfigurationProvider(_values);
+            }
+        }
+
+        private sealed class DictionaryConfigurationProvider : ConfigurationProvider
+        {
+            public DictionaryConfigurationProvider(IDictionary<string, string> values)
+            {
+                Data = new Dictionary<string, string>(values, StringComparer.OrdinalIgnoreCase);
+            }
         }
     }
 }
