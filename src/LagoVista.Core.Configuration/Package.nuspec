@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.Core.Configuration</id>
-    <version>3.0.3379.1123</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,13 +17,13 @@
     <dependencies>
       <group targetFramework="netstandard2.1">
         <dependency id="Microsoft.Extensions.Configuration" version="9.0.13" />
-        <dependency id="LagoVista.Core" version="3.0.3379.1123" />
+        <dependency id="LagoVista.Core" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Configuration.dll" target="lib\netstandard2.1\LagoVista.Core.Configuration.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Configuration.pdb" target="lib\netstandard2.1\LagoVista.Core.Configuration.pdb" />
+    <file src="bin/Release/netstandard2.1/LagoVista.Core.Configuration.dll" target="lib/netstandard2.1/LagoVista.Core.Configuration.dll" />
+    <file src="bin/Release/netstandard2.1/LagoVista.Core.Configuration.pdb" target="lib/netstandard2.1/LagoVista.Core.Configuration.pdb" />
   </files>
 </package>

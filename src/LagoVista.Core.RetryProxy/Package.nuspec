@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.Core.Retry</id>
-    <version>3.0.3379.1123</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -20,7 +20,7 @@
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Retry.dll" target="lib\netstandard2.1\LagoVista.Core.Retry.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Retry.pdb" target="lib\netstandard2.1\LagoVista.Core.Retry.pdb" />
+    <file src="bin/Release/netstandard2.1/LagoVista.Core.Retry.dll" target="lib/netstandard2.1/LagoVista.Core.Retry.dll" />
+    <file src="bin/Release/netstandard2.1/LagoVista.Core.Retry.pdb" target="lib/netstandard2.1/LagoVista.Core.Retry.pdb" />
   </files>
 </package>

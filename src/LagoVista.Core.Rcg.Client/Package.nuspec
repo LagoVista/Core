@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.Core.Rcg.Client</id>
-    <version>3.0.3379.1123</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,13 +16,13 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core.Configuration" version="3.0.3379.1123" />
+        <dependency id="LagoVista.Core.Configuration" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Rcg.Client.dll" target="lib\netstandard2.1\LagoVista.Core.Rcg.Client.dll" />
-    <file src="bin\release\netstandard2.1\LagoVista.Core.Rcg.Client.pdb" target="lib\netstandard2.1\LagoVista.Core.Rcg.Client.pdb" />
+    <file src="bin/Release/netstandard2.1/LagoVista.Core.Rcg.Client.dll" target="lib/netstandard2.1/LagoVista.Core.Rcg.Client.dll" />
+    <file src="bin/Release/netstandard2.1/LagoVista.Core.Rcg.Client.pdb" target="lib/netstandard2.1/LagoVista.Core.Rcg.Client.pdb" />
   </files>
 </package>

@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
-    <version>3.0.3379.1123</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,13 +17,13 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="System.Reflection.DispatchProxy" version="4.7.1" />
-        <dependency id="LagoVista.Core" version="3.0.3379.1123" />
+        <dependency id="LagoVista.Core" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\netstandard2.0\LagoVista.Core.Diagnostics.ConsoleProxy.dll" target="lib\netstandard2.0\LagoVista.Core.Diagnostics.ConsoleProxy.dll" />
-    <file src="bin\release\netstandard2.0\LagoVista.Core.Diagnostics.ConsoleProxy.pdb" target="lib\netstandard2.0\LagoVista.Core.Diagnostics.ConsoleProxy.pdb" />
+    <file src="bin/Release/netstandard2.0/LagoVista.Core.Diagnostics.ConsoleProxy.dll" target="lib/netstandard2.0/LagoVista.Core.Diagnostics.ConsoleProxy.dll" />
+    <file src="bin/Release/netstandard2.0/LagoVista.Core.Diagnostics.ConsoleProxy.pdb" target="lib/netstandard2.0/LagoVista.Core.Diagnostics.ConsoleProxy.pdb" />
   </files>
 </package>

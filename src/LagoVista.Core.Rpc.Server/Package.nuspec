@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc.Server</id>
-    <version>3.0.3379.1123</version>
+    <version>6.0.0</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,14 +17,14 @@
     <dependencies>
       <group targetFramework="net9.0">
         <dependency id="Microsoft.CSharp" version="4.7.0" />
-        <dependency id="LagoVista.Core.Rpc" version="3.0.3379.1123" />
-        <dependency id="LagoVista.Core" version="3.0.3379.1123" />
+        <dependency id="LagoVista.Core.Rpc" version="6.0.0" />
+        <dependency id="LagoVista.Core" version="6.0.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="LagoVistaIcon.png" target="LagoVistaIcon.png" />
-    <file src="bin\release\net9.0\LagoVista.Core.Rpc.Server.dll" target="lib\net9.0\LagoVista.Core.Rpc.Server.dll" />
-    <file src="bin\release\net9.0\LagoVista.Core.Rpc.Server.pdb" target="lib\net9.0\LagoVista.Core.Rpc.Server.pdb" />
+    <file src="bin/Release/net9.0/LagoVista.Core.Rpc.Server.dll" target="lib/net9.0/LagoVista.Core.Rpc.Server.dll" />
+    <file src="bin/Release/net9.0/LagoVista.Core.Rpc.Server.pdb" target="lib/net9.0/LagoVista.Core.Rpc.Server.pdb" />
   </files>
 </package>
