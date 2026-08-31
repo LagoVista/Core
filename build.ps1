@@ -4,7 +4,7 @@ param(
     [string]$BuildType = 'Stable',
 
     [ValidateSet('Local', 'Cloud', 'Both')]
-    [string]$PublishTarget = 'Local',
+    [string]$PublishTarget = 'Both',
 
     [string]$LocalRepositoryPath
 )
