@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Diagnostics.ConsoleProxy</id>
-    <version>6.0.2</version>
+    <version>6.0.3</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,7 +17,7 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="System.Reflection.DispatchProxy" version="4.7.1" />
-        <dependency id="LagoVista.Core" version="6.0.2" />
+        <dependency id="LagoVista.Core" version="6.0.3" />
       </group>
     </dependencies>
   </metadata>
