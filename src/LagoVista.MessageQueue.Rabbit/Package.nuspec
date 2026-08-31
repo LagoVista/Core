@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.MessageQueue.Rabbit</id>
-    <version>6.0.9</version>
+    <version>6.0.10</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,13 +16,13 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="RabbitMQ.Client" version="7.2.1" />
+        <dependency id="LagoVista.Core" version="6.0.10" />
+        <dependency id="LagoVista.Core.Configuration" version="6.0.10" />
         <dependency id="Microsoft.Extensions.Configuration.Abstractions" version="9.0.13" />
         <dependency id="Microsoft.Extensions.Configuration.Binder" version="9.0.13" />
         <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.13" />
         <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="9.0.13" />
-        <dependency id="LagoVista.Core.Configuration" version="6.0.9" />
-        <dependency id="LagoVista.Core" version="6.0.9" />
+        <dependency id="RabbitMQ.Client" version="7.2.1" />
       </group>
     </dependencies>
   </metadata>

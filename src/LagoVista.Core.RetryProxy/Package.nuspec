@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Retry</id>
-    <version>6.0.9</version>
+    <version>6.0.10</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

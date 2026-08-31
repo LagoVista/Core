@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core</id>
-    <version>6.0.9</version>
+    <version>6.0.10</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,9 +16,10 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
-        <dependency id="Newtonsoft.Json" version="13.0.3" />
         <dependency id="Microsoft.Extensions.DependencyInjection" version="9.0.13" />
+        <dependency id="NETStandard.Library" version="2.0.3" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" />
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
       </group>
     </dependencies>
   </metadata>
