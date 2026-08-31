@@ -80,7 +80,7 @@ namespace LagoVista.MessageQueue.Rabbit
 
             try
             {
-                _logger.Trace($"[RabbitSubscriber__{nameof(RabbitMqSubscriberHostedService<TMessage>)}] starting '{_serviceName}'.", _serviceName.ToKVP("serviceName"), route.QueueName.ToKVP("queueName"), route.DestinationName.ToKVP("destinationName"), route.RouteKey.ToKVP("routeKey"));
+                _logger.Trace($"[RabbitSubscriber__{nameof(RabbitMqSubscriberHostedService<TMessage>)}] starting '{_serviceName}'.", _connectionFactory.HostName.ToKVP("hostname"), _connectionFactory.UserName.ToKVP("userName"),  _serviceName.ToKVP("serviceName"), route.QueueName.ToKVP("queueName"), route.DestinationName.ToKVP("destinationName"), route.RouteKey.ToKVP("routeKey"));
 
                 await EnsureConnectedAsync(route, stoppingToken).ConfigureAwait(false);
 
