@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.MessageQueue.Rabbit</id>
-    <version>6.0.8</version>
+    <version>6.0.9</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -21,8 +21,8 @@
         <dependency id="Microsoft.Extensions.Configuration.Binder" version="9.0.13" />
         <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.13" />
         <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="9.0.13" />
-        <dependency id="LagoVista.Core.Configuration" version="6.0.8" />
-        <dependency id="LagoVista.Core" version="6.0.8" />
+        <dependency id="LagoVista.Core.Configuration" version="6.0.9" />
+        <dependency id="LagoVista.Core" version="6.0.9" />
       </group>
     </dependencies>
   </metadata>

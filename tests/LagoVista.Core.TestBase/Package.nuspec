@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.TestBase</id>
-    <version>6.0.8</version>
+    <version>6.0.9</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -24,7 +24,7 @@
         <dependency id="NUnit" version="4.4.0" />
         <dependency id="NUnit3TestAdapter" version="5.1.0" />
         <dependency id="coverlet.collector" version="6.0.4" />
-        <dependency id="LagoVista.Core" version="6.0.8" />
+        <dependency id="LagoVista.Core" version="6.0.9" />
       </group>
     </dependencies>
   </metadata>
