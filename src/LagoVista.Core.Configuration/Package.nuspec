@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Configuration</id>
-    <version>7.0.2</version>
+    <version>7.0.3</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,7 +16,7 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="LagoVista.Core" version="7.0.2" />
+        <dependency id="LagoVista.Core" version="7.0.3" />
         <dependency id="Microsoft.Extensions.Configuration" version="9.0.13" />
         <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.13" />
         <dependency id="System.Text.Json" version="9.0.13" />
