@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc</id>
-    <version>7.0.0</version>
+    <version>7.0.1</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,9 +16,9 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.Core" version="7.0.0" />
-        <dependency id="LagoVista.Core.Configuration" version="7.0.0" />
-        <dependency id="LagoVista.Core.Rcg.Client" version="7.0.0" />
+        <dependency id="LagoVista.Core" version="7.0.1" />
+        <dependency id="LagoVista.Core.Configuration" version="7.0.1" />
+        <dependency id="LagoVista.Core.Rcg.Client" version="7.0.1" />
       </group>
     </dependencies>
   </metadata>
