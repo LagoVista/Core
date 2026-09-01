@@ -1,0 +1,6 @@
+{
+  "workstreamId": "c6100ead-d49e-47a5-95f1-ee88fea1fff9",
+  "platformRepository": "nuviot/platform",
+  "platformBranch": "feature/data-migration-settings",
+  "workstreamKey": "data-migration-settings"
+}
