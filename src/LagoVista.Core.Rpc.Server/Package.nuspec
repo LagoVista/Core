@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.Rpc.Server</id>
-    <version>7.0.3</version>
+    <version>7.0.4-ws-l-2786e781</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,8 +16,8 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.Core" version="7.0.3" />
-        <dependency id="LagoVista.Core.Rpc" version="7.0.3" />
+        <dependency id="LagoVista.Core" version="7.0.4-ws-l-2786e781" />
+        <dependency id="LagoVista.Core.Rpc" version="7.0.4-ws-l-2786e781" />
         <dependency id="Microsoft.CSharp" version="4.7.0" />
       </group>
     </dependencies>
