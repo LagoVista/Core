@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>LagoVista.Core.TestBase</id>
-    <version>7.0.1</version>
+    <version>7.0.2</version>
     <authors>Software Logistics, LLC</authors>
     <owners>Software Logistics, LLC</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,7 +16,7 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.Core" version="7.0.1" />
+        <dependency id="LagoVista.Core" version="7.0.2" />
         <dependency id="Microsoft.NET.Test.Sdk" version="17.14.1" />
         <dependency id="Moq" version="4.20.72" />
         <dependency id="MSTest.TestAdapter" version="3.10.4" />
