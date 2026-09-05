@@ -1,13 +1,5 @@
 [CmdletBinding()]
-param(
-    [ValidateSet('Stable', 'Workstream')]
-    [string]$BuildType = 'Stable',
-
-    [ValidateSet('Local', 'Cloud', 'Both')]
-    [string]$PublishTarget = 'Both',
-
-    [string]$LocalRepositoryPath
-)
+param()
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -17,16 +9,7 @@ if (-not (Test-Path -LiteralPath $platformBuild -PathType Leaf)) {
     throw "V1 platform build entrypoint not found at expected sibling path: $platformBuild"
 }
 
-$arguments = @{
-    BuildType = $BuildType
-    SourceRoot = $PSScriptRoot
-    PublishTarget = $PublishTarget
-}
-if (-not [string]::IsNullOrWhiteSpace($LocalRepositoryPath)) {
-    $arguments.LocalRepositoryPath = $LocalRepositoryPath
-}
-
-& $platformBuild @arguments
+& $platformBuild -SourceRoot $PSScriptRoot
 if ($LASTEXITCODE -and $LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
