@@ -35,7 +35,7 @@ namespace LagoVista.Core.Models
         /// </summary>
         public string NoteHash { get; set; }
 
-        [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion_Responses, IsRequired: false, FieldType: FieldTypes.HtmlEditor, ResourceType: typeof(LagoVistaCommonStrings))]
+        [FormField(LabelResource: LagoVistaCommonStrings.Names.Discussion_Responses, IsRequired: false, FieldType: FieldTypes.ChildList, ResourceType: typeof(LagoVistaCommonStrings))]
         public List<DiscussionResponse> Responses { get; set; } = new List<DiscussionResponse>();
 
         public bool Handled { get; set; }
