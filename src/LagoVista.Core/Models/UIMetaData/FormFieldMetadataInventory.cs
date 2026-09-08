@@ -98,6 +98,12 @@ namespace LagoVista.Core.Models.UIMetaData
                           .ToList();
         }
 
+        /// <summary>
+        /// Returns the structural CLR family used by compatibility rules. Exact generic
+        /// element types remain available in ClrType for diagnostics, while collections
+        /// intentionally collapse to List or Array so the compatibility matrix describes
+        /// value shape rather than every domain model type carried by that collection.
+        /// </summary>
         public static string GetClrTypeFamily(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -109,13 +115,13 @@ namespace LagoVista.Core.Models.UIMetaData
             if (type == typeof(float) || type == typeof(double) || type == typeof(decimal)) return "Decimal";
             if (type == typeof(DateTime) || type == typeof(DateTimeOffset)) return "DateTime";
             if (type.GetTypeInfo().IsEnum) return "Enum";
-            if (type.IsArray) return $"Array<{GetClrTypeFamily(type.GetElementType())}>";
+            if (type.IsArray) return "Array";
 
             if (type.GetTypeInfo().IsGenericType)
             {
                 var genericDefinition = type.GetGenericTypeDefinition();
                 if (genericDefinition == typeof(List<>) || genericDefinition == typeof(IList<>) || genericDefinition == typeof(IEnumerable<>))
-                    return $"List<{GetClrTypeFamily(type.GenericTypeArguments[0])}>";
+                    return "List";
 
                 return genericDefinition.Name.Split('`')[0];
             }
