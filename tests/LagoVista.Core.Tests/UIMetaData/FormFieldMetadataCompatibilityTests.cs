@@ -38,6 +38,75 @@ namespace LagoVista.Core.Tests.UIMetaData
         }
 
         [TestMethod]
+        public void ShouldPreferExactClrTypeRuleOverFamilyRule()
+        {
+            var entries = new[]
+            {
+                new FormFieldMetadataInventoryEntry
+                {
+                    AssemblyName = "Sample",
+                    ModelType = "Sample.Workflow",
+                    PropertyName = "Transitions",
+                    ClrType = "List<Sample.StatusTransition>",
+                    ClrTypeFamily = "List",
+                    FieldType = FieldTypes.Text
+                }
+            };
+
+            var rules = new[]
+            {
+                new FormFieldCompatibilityRule
+                {
+                    ClrTypeFamily = "List",
+                    AllowedFieldTypes = new[] { FieldTypes.Text, FieldTypes.ChildList }
+                },
+                new FormFieldCompatibilityRule
+                {
+                    ClrType = "List<Sample.StatusTransition>",
+                    AllowedFieldTypes = new[] { FieldTypes.ChildList }
+                }
+            };
+
+            var issue = FormFieldMetadataCompatibility.Validate(entries, rules).Single();
+            Assert.AreEqual("exact", issue.MatchedRuleScope);
+            StringAssert.Contains(issue.Diagnostic, "Rule scope: exact");
+            StringAssert.Contains(issue.Diagnostic, "Allowed: ChildList");
+        }
+
+        [TestMethod]
+        public void ShouldAllowExactClrTypeException()
+        {
+            var entries = new[]
+            {
+                new FormFieldMetadataInventoryEntry
+                {
+                    AssemblyName = "Sample",
+                    ModelType = "Sample.Workflow",
+                    PropertyName = "Labels",
+                    ClrType = "List<Sample.Label>",
+                    ClrTypeFamily = "List",
+                    FieldType = FieldTypes.Text
+                }
+            };
+
+            var rules = new[]
+            {
+                new FormFieldCompatibilityRule
+                {
+                    ClrTypeFamily = "List",
+                    AllowedFieldTypes = new[] { FieldTypes.ChildList }
+                },
+                new FormFieldCompatibilityRule
+                {
+                    ClrType = "List<Sample.Label>",
+                    AllowedFieldTypes = new[] { FieldTypes.Text }
+                }
+            };
+
+            Assert.AreEqual(0, FormFieldMetadataCompatibility.Validate(entries, rules).Count);
+        }
+
+        [TestMethod]
         public void ShouldReportUnsupportedPairWithUsefulDiagnostic()
         {
             var entries = new[]
@@ -66,6 +135,7 @@ namespace LagoVista.Core.Tests.UIMetaData
             StringAssert.Contains(issue.Diagnostic, "FORM003");
             StringAssert.Contains(issue.Diagnostic, "Sample.Invoice.Total");
             StringAssert.Contains(issue.Diagnostic, "EntityHeaderPicker");
+            StringAssert.Contains(issue.Diagnostic, "Rule scope: family");
             StringAssert.Contains(issue.Diagnostic, "Decimal, Money, Percent");
         }
 
@@ -86,6 +156,7 @@ namespace LagoVista.Core.Tests.UIMetaData
             };
 
             var issue = FormFieldMetadataCompatibility.Validate(entries, new List<FormFieldCompatibilityRule>()).Single();
+            StringAssert.Contains(issue.Diagnostic, "Rule scope: none");
             StringAssert.Contains(issue.Diagnostic, "Allowed: <none configured>");
         }
     }
