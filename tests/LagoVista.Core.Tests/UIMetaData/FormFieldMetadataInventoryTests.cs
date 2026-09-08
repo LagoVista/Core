@@ -2,6 +2,7 @@ using LagoVista.Core.Attributes;
 using LagoVista.Core.Models.UIMetaData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LagoVista.Core.Tests.UIMetaData
@@ -23,6 +24,12 @@ namespace LagoVista.Core.Tests.UIMetaData
             [FormField(FieldType: FieldTypes.DateTime)]
             public DateTime CreatedUtc { get; set; }
 
+            [FormField(FieldType: FieldTypes.ChildList)]
+            public List<string> Tags { get; set; }
+
+            [FormField(FieldType: FieldTypes.ChildList)]
+            public int[] Samples { get; set; }
+
             public string NotAFormField { get; set; }
         }
 
@@ -31,7 +38,7 @@ namespace LagoVista.Core.Tests.UIMetaData
         {
             var entries = FormFieldMetadataInventory.ScanTypes(new[] { typeof(SampleFormModel) });
 
-            Assert.AreEqual(4, entries.Count);
+            Assert.AreEqual(6, entries.Count);
 
             var name = entries.Single(entry => entry.PropertyName == nameof(SampleFormModel.Name));
             Assert.AreEqual("String", name.ClrTypeFamily);
@@ -45,13 +52,28 @@ namespace LagoVista.Core.Tests.UIMetaData
         }
 
         [TestMethod]
+        public void ShouldNormalizeCollectionFamiliesWithoutLosingExactClrType()
+        {
+            var entries = FormFieldMetadataInventory.ScanTypes(new[] { typeof(SampleFormModel) });
+
+            var tags = entries.Single(entry => entry.PropertyName == nameof(SampleFormModel.Tags));
+            Assert.AreEqual("List", tags.ClrTypeFamily);
+            StringAssert.Contains(tags.ClrType, "List");
+            StringAssert.Contains(tags.ClrType, "System.String");
+
+            var samples = entries.Single(entry => entry.PropertyName == nameof(SampleFormModel.Samples));
+            Assert.AreEqual("Array", samples.ClrTypeFamily);
+            Assert.AreEqual("System.Int32[]", samples.ClrType);
+        }
+
+        [TestMethod]
         public void ShouldProduceDeterministicPairSummary()
         {
             var entries = FormFieldMetadataInventory.ScanTypes(new[] { typeof(SampleFormModel) });
             var pairs = FormFieldMetadataInventory.SummarizePairs(entries);
 
             CollectionAssert.AreEqual(
-                new[] { "DateTime/DateTime", "Decimal/Decimal", "Integer/Integer", "String/Text" },
+                new[] { "Array/ChildList", "DateTime/DateTime", "Decimal/Decimal", "Integer/Integer", "List/ChildList", "String/Text" },
                 pairs.Select(pair => pair.PairKey).ToArray());
         }
     }
