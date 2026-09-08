@@ -16,9 +16,9 @@
     <repository url="https://www.github.com/lagovista" type="git" branch="master"></repository>
     <dependencies>
       <group targetFramework="net9.0">
-        <dependency id="LagoVista.Core" version="7.0.4" />
-        <dependency id="LagoVista.Core.Configuration" version="7.0.4" />
-        <dependency id="LagoVista.Core.Rcg.Client" version="7.0.4" />
+        <dependency id="LagoVista.Core" version="7.0.5" />
+        <dependency id="LagoVista.Core.Configuration" version="7.0.5" />
+        <dependency id="LagoVista.Core.Rcg.Client" version="7.0.5" />
       </group>
     </dependencies>
   </metadata>
