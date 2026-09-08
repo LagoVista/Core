@@ -8,6 +8,7 @@ namespace LagoVista.Core.Models.UIMetaData
     public sealed class FormFieldCompatibilityRule
     {
         public string ClrTypeFamily { get; set; }
+        public string ClrType { get; set; }
         public IReadOnlyCollection<FieldTypes> AllowedFieldTypes { get; set; }
     }
 
@@ -20,6 +21,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public string ClrTypeFamily { get; set; }
         public FieldTypes FieldType { get; set; }
         public IReadOnlyCollection<FieldTypes> AllowedFieldTypes { get; set; }
+        public string MatchedRuleScope { get; set; }
 
         public string Diagnostic
         {
@@ -29,7 +31,8 @@ namespace LagoVista.Core.Models.UIMetaData
                     ? "<none configured>"
                     : String.Join(", ", AllowedFieldTypes.OrderBy(fieldType => fieldType.ToString()).Select(fieldType => fieldType.ToString()));
 
-                return $"FORM003 {ModelType}.{PropertyName}: CLR type {ClrType} ({ClrTypeFamily}) uses FieldType {FieldType}. Allowed: {allowed}.";
+                var scope = String.IsNullOrWhiteSpace(MatchedRuleScope) ? "none" : MatchedRuleScope;
+                return $"FORM003 {ModelType}.{PropertyName}: CLR type {ClrType} ({ClrTypeFamily}) uses FieldType {FieldType}. Rule scope: {scope}. Allowed: {allowed}.";
             }
         }
     }
@@ -43,19 +46,39 @@ namespace LagoVista.Core.Models.UIMetaData
             if (entries == null) throw new ArgumentNullException(nameof(entries));
             if (rules == null) throw new ArgumentNullException(nameof(rules));
 
-            var ruleLookup = rules.ToDictionary(
-                rule => rule.ClrTypeFamily,
-                rule => new HashSet<FieldTypes>(rule.AllowedFieldTypes ?? Array.Empty<FieldTypes>()),
-                StringComparer.Ordinal);
+            var materializedRules = rules.ToList();
+            var familyRuleLookup = materializedRules
+                .Where(rule => !String.IsNullOrWhiteSpace(rule.ClrTypeFamily) && String.IsNullOrWhiteSpace(rule.ClrType))
+                .ToDictionary(
+                    rule => rule.ClrTypeFamily,
+                    rule => new HashSet<FieldTypes>(rule.AllowedFieldTypes ?? Array.Empty<FieldTypes>()),
+                    StringComparer.Ordinal);
+
+            var exactRuleLookup = materializedRules
+                .Where(rule => !String.IsNullOrWhiteSpace(rule.ClrType))
+                .ToDictionary(
+                    rule => rule.ClrType,
+                    rule => new HashSet<FieldTypes>(rule.AllowedFieldTypes ?? Array.Empty<FieldTypes>()),
+                    StringComparer.Ordinal);
 
             var issues = new List<FormFieldCompatibilityIssue>();
             foreach (var entry in entries)
             {
                 HashSet<FieldTypes> allowed;
-                var hasRule = ruleLookup.TryGetValue(entry.ClrTypeFamily, out allowed);
-                if (hasRule && allowed.Contains(entry.FieldType)) continue;
+                string matchedRuleScope = null;
 
-                IReadOnlyCollection<FieldTypes> allowedFieldTypes = hasRule
+                if (exactRuleLookup.TryGetValue(entry.ClrType, out allowed))
+                {
+                    matchedRuleScope = "exact";
+                }
+                else if (familyRuleLookup.TryGetValue(entry.ClrTypeFamily, out allowed))
+                {
+                    matchedRuleScope = "family";
+                }
+
+                if (allowed != null && allowed.Contains(entry.FieldType)) continue;
+
+                IReadOnlyCollection<FieldTypes> allowedFieldTypes = allowed != null
                     ? (IReadOnlyCollection<FieldTypes>)allowed.OrderBy(fieldType => fieldType.ToString()).ToList()
                     : Array.Empty<FieldTypes>();
 
@@ -67,7 +90,8 @@ namespace LagoVista.Core.Models.UIMetaData
                     ClrType = entry.ClrType,
                     ClrTypeFamily = entry.ClrTypeFamily,
                     FieldType = entry.FieldType,
-                    AllowedFieldTypes = allowedFieldTypes
+                    AllowedFieldTypes = allowedFieldTypes,
+                    MatchedRuleScope = matchedRuleScope
                 });
             }
 
