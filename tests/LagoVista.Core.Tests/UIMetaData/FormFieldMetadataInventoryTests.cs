@@ -11,16 +11,16 @@ namespace LagoVista.Core.Tests.UIMetaData
     {
         private class SampleFormModel
         {
-            [FormField(FieldType = FieldTypes.Text)]
+            [FormField(FieldType: FieldTypes.Text)]
             public string Name { get; set; }
 
-            [FormField(FieldType = FieldTypes.Integer)]
+            [FormField(FieldType: FieldTypes.Integer)]
             public int RetryCount { get; set; }
 
-            [FormField(FieldType = FieldTypes.Decimal)]
+            [FormField(FieldType: FieldTypes.Decimal)]
             public decimal? Threshold { get; set; }
 
-            [FormField(FieldType = FieldTypes.DateTime)]
+            [FormField(FieldType: FieldTypes.DateTime)]
             public DateTime CreatedUtc { get; set; }
 
             public string NotAFormField { get; set; }
