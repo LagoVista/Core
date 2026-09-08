@@ -55,6 +55,10 @@ namespace LagoVista.Core.Models.UIMetaData
                 var hasRule = ruleLookup.TryGetValue(entry.ClrTypeFamily, out allowed);
                 if (hasRule && allowed.Contains(entry.FieldType)) continue;
 
+                IReadOnlyCollection<FieldTypes> allowedFieldTypes = hasRule
+                    ? (IReadOnlyCollection<FieldTypes>)allowed.OrderBy(fieldType => fieldType.ToString()).ToList()
+                    : Array.Empty<FieldTypes>();
+
                 issues.Add(new FormFieldCompatibilityIssue
                 {
                     AssemblyName = entry.AssemblyName,
@@ -63,9 +67,7 @@ namespace LagoVista.Core.Models.UIMetaData
                     ClrType = entry.ClrType,
                     ClrTypeFamily = entry.ClrTypeFamily,
                     FieldType = entry.FieldType,
-                    AllowedFieldTypes = hasRule
-                        ? allowed.OrderBy(fieldType => fieldType.ToString()).ToList()
-                        : Array.Empty<FieldTypes>()
+                    AllowedFieldTypes = allowedFieldTypes
                 });
             }
 
