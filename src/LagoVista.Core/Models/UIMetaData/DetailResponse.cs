@@ -41,6 +41,7 @@ namespace LagoVista.Core.Models.UIMetaData
         public List<string> FormFieldsBottom { get; set; }
         public List<string> FormFieldsTabs { get; set; }
         public List<string> FormMobileFields { get; set; }
+        public List<FormSectionResponse> FormSections { get; set; }
 
         public FormConditionals ConditionalFields { get; set; }
         public List<FormAdditionalAction> FormAdditionalActions { get; set; }
@@ -149,6 +150,32 @@ namespace LagoVista.Core.Models.UIMetaData
             if (model is IFormMobileFields)
             {
                 response.FormMobileFields = (model as IFormMobileFields).GetMobileFields().Select(fld => fld.CamelCase()).ToList();
+            }
+
+            if (model is IFormDescriptorSections sectionDescriptor)
+            {
+                response.FormSections = sectionDescriptor.GetFormSections().Select(section =>
+                {
+                    if (String.IsNullOrWhiteSpace(section.Key))
+                        throw new Exception("Building Metadata - form section key is required.");
+
+                    if (section.ResourceType == null)
+                        throw new Exception($"Building Metadata - resource type is required for form section '{section.Key}'.");
+
+                    if (String.IsNullOrWhiteSpace(section.TitleResource))
+                        throw new Exception($"Building Metadata - title resource is required for form section '{section.Key}'.");
+
+                    var titleProperty = section.ResourceType.GetTypeInfo().GetDeclaredProperty(section.TitleResource);
+                    if (titleProperty == null)
+                        throw new Exception($"Building Metadata - title resource '{section.TitleResource}' was not found for form section '{section.Key}'.");
+
+                    return new FormSectionResponse
+                    {
+                        Key = section.Key,
+                        Title = (string)titleProperty.GetValue(titleProperty.DeclaringType, null),
+                        Fields = (section.Fields ?? new List<string>()).Select(field => field.CamelCase()).ToList()
+                    };
+                }).ToList();
             }
 
             if (model is IEntityReadinessDescriptor readinessDescriptor)

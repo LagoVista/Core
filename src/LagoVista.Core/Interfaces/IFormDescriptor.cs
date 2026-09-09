@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using System.Collections.Generic;
 
 namespace LagoVista.Core.Interfaces
@@ -25,6 +26,11 @@ namespace LagoVista.Core.Interfaces
     public interface IFormDescriptorTabs
     {
         List<string> GetFormFieldsTabs();
+    }
+
+    public interface IFormDescriptorSections
+    {
+        List<FormSection> GetFormSections();
     }
 
     public interface IFormDescriptorAdvanced

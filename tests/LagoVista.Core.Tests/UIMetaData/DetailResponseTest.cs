@@ -3,6 +3,7 @@
 // IndexVersion: 2
 // --- END CODE INDEX META ---
 using LagoVista.Core.Models.UIMetaData;
+using LagoVista.Core.Tests.Resources.UIMetaData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,18 @@ namespace LagoVista.Core.Tests.UIMetaData
             var model1 = new Model1();
             var response = DetailResponse<Model1>.Create(model1);
             Assert.IsTrue(response.HasDiscussions);
+        }
+
+        [TestMethod]
+        public void DetailResponse_Should_Resolve_Form_Sections()
+        {
+            var response = DetailResponse<Model1>.Create(new Model1());
+
+            Assert.IsNotNull(response.FormSections);
+            Assert.AreEqual(1, response.FormSections.Count);
+            Assert.AreEqual("general", response.FormSections[0].Key);
+            Assert.AreEqual(MetaDataResources.Model1_Title, response.FormSections[0].Title);
+            CollectionAssert.AreEqual(new[] { "field1", "field2" }, response.FormSections[0].Fields);
         }
 
         [TestMethod]

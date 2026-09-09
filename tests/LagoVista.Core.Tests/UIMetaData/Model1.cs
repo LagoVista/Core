@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace LagoVista.Core.Tests.UIMetaData
 {
     [EntityDescription(Domains.MetaData1, MetaDataResources.Names.Model3_Title, MetaDataResources.Names.Model3_Help, MetaDataResources.Names.Model3_Description, EntityDescriptionAttribute.EntityTypes.BusinessObject, typeof(MetaDataResources))]
-    public class Model1 : EntityBase, IDiscussableEntity
+    public class Model1 : EntityBase, IDiscussableEntity, IFormDescriptorSections
     {
         public enum EnumValues
         {
@@ -42,5 +42,19 @@ namespace LagoVista.Core.Tests.UIMetaData
 
         [FormField(LabelResource: MetaDataResources.Names.Field5_Label, FieldType: FieldTypes.ChildView, ResourceType: typeof(MetaDataResources))]
         public Model2 Field5 { get; set; }
+
+        public List<FormSection> GetFormSections()
+        {
+            return new List<FormSection>
+            {
+                new FormSection
+                {
+                    Key = "general",
+                    ResourceType = typeof(MetaDataResources),
+                    TitleResource = MetaDataResources.Names.Model1_Title,
+                    Fields = new List<string> { nameof(Field1), nameof(Field2) }
+                }
+            };
+        }
     }
 }
