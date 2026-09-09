@@ -5,6 +5,7 @@
 using LagoVista.Core.Attributes;
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
+using LagoVista.Core.Models.UIMetaData;
 using LagoVista.Core.Tests.Resources.UIMetaData;
 using System;
 using System.Collections.Generic;
