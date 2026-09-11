@@ -40,6 +40,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string StatusKey { get; set; }
         public string LabelKey { get; set; }
         public string SearchText { get; set; }
+        public string SortField { get; set; }
+        public bool? SortDescending { get; set; }
 
         public double TimeBucketSize { get; set; }
         public string TimeBucket { get; set; }
@@ -69,6 +71,8 @@ namespace LagoVista.Core.Models.UIMetaData
 \tStatus Key       : {StatusKey}
 \tLabel Key        : {LabelKey}
 \tSearch Text      : {SearchText}
+\tSort Field       : {SortField}
+\tSort Descending  : {SortDescending}
 \tShow Drafts      : {ShowDrafts}
 \tShow Deleted     : {ShowDeleted}
 \tUrl              : {Url}";
