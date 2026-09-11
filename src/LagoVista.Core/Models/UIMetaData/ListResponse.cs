@@ -26,6 +26,8 @@ namespace LagoVista.Core.Models.UIMetaData
         string StatusKey { get; }
         string LabelKey { get; }
         string SearchText { get; }
+        string SortField { get; }
+        bool? SortDescending { get; }
 
         string Icon { get; set; }
         int PageSize { get; }
@@ -59,6 +61,8 @@ namespace LagoVista.Core.Models.UIMetaData
         public string StatusKey { get; set; }
         public string LabelKey { get; set; }
         public string SearchText { get; set; }
+        public string SortField { get; set; }
+        public bool? SortDescending { get; set; }
 
         public IEnumerable<TModel> Model { get; set; }
 
@@ -109,6 +113,8 @@ namespace LagoVista.Core.Models.UIMetaData
             response.StatusKey = request.StatusKey;
             response.LabelKey = request.LabelKey;
             response.SearchText = request.SearchText;
+            response.SortField = request.SortField;
+            response.SortDescending = request.SortDescending;
             response.HasMoreRecords = hasMoreRecords;
             response.NextPartitionKey = nextPartitionKey;
             response.NextRowKey = nextRowKey;
@@ -139,6 +145,8 @@ namespace LagoVista.Core.Models.UIMetaData
             response.StatusKey = request.StatusKey;
             response.LabelKey = request.LabelKey;
             response.SearchText = request.SearchText;
+            response.SortField = request.SortField;
+            response.SortDescending = request.SortDescending;
             response.HasMoreRecords = model.Count() == response.PageSize;
             return response;
         }
@@ -209,6 +217,8 @@ namespace LagoVista.Core.Models.UIMetaData
             response.StatusKey = request.StatusKey;
             response.LabelKey = request.LabelKey;
             response.SearchText = request.SearchText;
+            response.SortField = request.SortField;
+            response.SortDescending = request.SortDescending;
             response.GetListUrl = request.Url;
 
             if (bldr != null)
@@ -253,6 +263,8 @@ namespace LagoVista.Core.Models.UIMetaData
                 StatusKey = source.StatusKey,
                 LabelKey = source.LabelKey,
                 SearchText = source.SearchText,
+                SortField = source.SortField,
+                SortDescending = source.SortDescending,
 
                 Help = source.Help,
                 Title = source.Title,
