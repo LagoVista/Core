@@ -27,6 +27,19 @@ namespace LagoVista.Core.Tests.Validation
         }
 
         [TestMethod]
+        public void RegEx_Key_WithHyphen_Valid()
+        {
+            var regExModel = new Models.RegExModel()
+            {
+                Key = "abc-123",
+                RegExValue_2_20_lower_case = "ab"
+            };
+
+            var validationResult = Validator.Validate(regExModel);
+            Assert.IsTrue(validationResult.Successful);
+        }
+
+        [TestMethod]
         public void RegEx_ManualRegEx_Invalid()
         {
             var regExModel = new Models.RegExModel()

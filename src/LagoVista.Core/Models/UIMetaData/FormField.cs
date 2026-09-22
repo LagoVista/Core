@@ -519,7 +519,7 @@ namespace LagoVista.Core.Models.UIMetaData
             }
             else if (attr.FieldType == FieldTypes.Key)
             {
-                field.RegEx = @"^[a-z0-9]{2,128}$";
+                field.RegEx = @"^[a-z](?:[a-z0-9]|-(?!-)){1,126}[a-z0-9]$";
                 field.RegExMessage = ValidationResource.Common_Key_Validation;
             }
             else
