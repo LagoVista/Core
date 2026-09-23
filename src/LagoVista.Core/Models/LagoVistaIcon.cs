@@ -110,8 +110,6 @@ namespace LagoVista
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
             var isNullable = Nullable.GetUnderlyingType(objectType) != null;
 
             if (reader.TokenType == JsonToken.Null)
@@ -156,7 +154,6 @@ namespace LagoVista
             throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing LagoVistaIcon. Expected String or Object.");
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null)
