@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -109,6 +110,8 @@ namespace LagoVista
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
             var isNullable = Nullable.GetUnderlyingType(objectType) != null;
 
             if (reader.TokenType == JsonToken.Null)
@@ -119,22 +122,41 @@ namespace LagoVista
                 return new LagoVistaIcon("icon-fo-gears-2");
             }
 
-            if (reader.TokenType != JsonToken.String)
-                throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing LagoVistaIcon. Expected String.");
-
-            var value = reader.Value?.ToString();
-
-            if (String.IsNullOrWhiteSpace(value))
+            if (reader.TokenType == JsonToken.String)
             {
-                if (isNullable)
-                    return null;
+                var value = reader.Value?.ToString();
 
-                return new LagoVistaIcon("icon-fo-gears-2");
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    if (isNullable)
+                        return null;
+
+                    return new LagoVistaIcon("icon-fo-gears-2");
+                }
+
+                return new LagoVistaIcon(value);
             }
 
-            return new LagoVistaIcon(value);
+            if (reader.TokenType == JsonToken.StartObject)
+            {
+                var iconObject = JObject.Load(reader);
+                var value = iconObject["Value"]?.Value<string>() ?? iconObject["value"]?.Value<string>();
+
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    if (isNullable)
+                        return null;
+
+                    return new LagoVistaIcon("icon-fo-gears-2");
+                }
+
+                return new LagoVistaIcon(value);
+            }
+
+            throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing LagoVistaIcon. Expected String or Object.");
         }
 
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null)
