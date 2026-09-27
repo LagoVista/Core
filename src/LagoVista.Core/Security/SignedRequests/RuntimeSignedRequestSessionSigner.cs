@@ -41,7 +41,15 @@ namespace LagoVista.Core.Security
             {
                 var expected = Convert.FromBase64String(Sign(sessionSecret, sessionId, context));
                 var actual = Convert.FromBase64String(signature);
-                return expected.Length == actual.Length && CryptographicOperations.FixedTimeEquals(expected, actual);
+                if (expected.Length != actual.Length) return false;
+
+                var difference = 0;
+                for (var index = 0; index < expected.Length; index++)
+                {
+                    difference |= expected[index] ^ actual[index];
+                }
+
+                return difference == 0;
             }
             catch (FormatException)
             {
@@ -52,14 +60,22 @@ namespace LagoVista.Core.Security
         public static string CreateSecret()
         {
             var bytes = new byte[32];
-            RandomNumberGenerator.Fill(bytes);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
+
             return Convert.ToBase64String(bytes);
         }
 
         public static string CreateSessionId()
         {
             var bytes = new byte[16];
-            RandomNumberGenerator.Fill(bytes);
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
+
             return Convert.ToBase64String(bytes)
                 .TrimEnd('=')
                 .Replace('+', '-')
