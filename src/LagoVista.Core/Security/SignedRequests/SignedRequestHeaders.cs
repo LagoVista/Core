@@ -21,6 +21,10 @@ namespace LagoVista.Core.Security
         public const string User = "X-Nuviot-User";
         public const string InstanceId = "X-Nuviot-Instanceid";
         public const string Instance = "X-Nuviot-Instance";
+        public const string RuntimeSessionId = "X-Nuviot-Runtime-Session-Id";
+        public const string RuntimeSessionSignature = "X-Nuviot-Runtime-Session-Signature";
+        public const string RuntimeSessionSecret = "X-Nuviot-Runtime-Session-Secret";
+        public const string RuntimeSessionExpiresUtc = "X-Nuviot-Runtime-Session-Expires-Utc";
 
         public static Dictionary<string, string> Normalize(IReadOnlyDictionary<string, string> headers)
         {
