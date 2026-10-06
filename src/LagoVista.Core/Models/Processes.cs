@@ -29,6 +29,13 @@ namespace LagoVista.Core.Models
         public string ActivityType { get; set; }
         public string Name { get; set; }
         public Dictionary<string, string> Settings { get; set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Optional MCP binding for activities backed by a discovered tool capability.
+        /// The binding retains the discovered contract hash so designers/runtime can
+        /// detect server-side schema changes before execution.
+        /// </summary>
+        public McpToolBinding McpBinding { get; set; }
     }
 
     public class ProcessState
