@@ -54,7 +54,6 @@ namespace LagoVista.Core.Models
 
     public class ProcessDefinition : EntityBase
     {
-        public int Revision { get; set; } = 1;
         public string InitialStateId { get; set; }
         public List<ProcessState> States { get; set; } = new List<ProcessState>();
         public List<ProcessTransition> Transitions { get; set; } = new List<ProcessTransition>();
