@@ -4,4 +4,3 @@
 // --- END CODE INDEX META ---
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("LagoVista.Core.Rpc.Tests")]
