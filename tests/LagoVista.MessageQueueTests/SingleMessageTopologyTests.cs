@@ -7,6 +7,7 @@ using System;
 namespace LagoVista.MessageQueue.RabbitMQ.IntegrationTests
 {
     [TestFixture]
+    [Category("Integration")]
     public class SingleMessageTopologyTests
     {
         [Test]

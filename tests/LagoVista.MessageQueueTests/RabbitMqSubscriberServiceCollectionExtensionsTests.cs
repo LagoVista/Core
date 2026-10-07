@@ -13,6 +13,7 @@ using System.Linq;
 namespace LagoVista.MessageQueue.RabbitMQ.IntegrationTests
 {
     [TestFixture]
+    [Category("Integration")]
     public class RabbitMqSubscriberServiceCollectionExtensionsTests
     {
         [Test]
