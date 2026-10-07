@@ -14,6 +14,7 @@ using System.Transactions;
 namespace LagoVista.Core.Tests.PDF
 {
     [TestClass]
+    [TestCategory("Integration")]
     public class GenerationTests
     {
         public static string GenerateText(int wordCount, int numberLines = 1)
