@@ -66,6 +66,58 @@ namespace LagoVista.Core.Models
         public List<ProcessTransition> Transitions { get; set; } = new List<ProcessTransition>();
     }
 
+    public class ProcessRuntimeHistoryEntry
+    {
+        public string EventType { get; set; }
+        public string TimestampUtc { get; set; }
+        public string TransitionId { get; set; }
+        public string SourceStateId { get; set; }
+        public string TargetStateId { get; set; }
+        public ProcessInstanceStatus Status { get; set; }
+        public string Message { get; set; }
+        public string Failure { get; set; }
+    }
+
+    public class ProcessActivityExecutionHistoryEntry
+    {
+        public string ActivityId { get; set; }
+        public string ActivityType { get; set; }
+        public string Name { get; set; }
+        public string TransitionId { get; set; }
+        public string StateId { get; set; }
+        public string Status { get; set; }
+        public string StartedAtUtc { get; set; }
+        public string CompletedAtUtc { get; set; }
+        public long ElapsedMilliseconds { get; set; }
+        public long ModelActiveMilliseconds { get; set; }
+        public long ToolCommandMilliseconds { get; set; }
+        public int RetryCount { get; set; }
+        public int FailureCount { get; set; }
+        public int CallCount { get; set; }
+        public string Failure { get; set; }
+    }
+
+    public class ProcessRuntimeTelemetry
+    {
+        public long ElapsedMilliseconds { get; set; }
+        public long ModelActiveMilliseconds { get; set; }
+        public long ToolCommandMilliseconds { get; set; }
+        public long WaitingMilliseconds { get; set; }
+        public int RetryCount { get; set; }
+        public int FailureCount { get; set; }
+        public int CallCount { get; set; }
+    }
+
+    public class ProcessContinuationContext
+    {
+        public string CurrentStateId { get; set; }
+        public ProcessInstanceStatus Status { get; set; } = ProcessInstanceStatus.Running;
+        public string LastTransitionId { get; set; }
+        public string PausedAtUtc { get; set; }
+        public string LastUpdatedAtUtc { get; set; }
+        public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
+    }
+
     public class ProcessInstance : EntityBase
     {
         public string DefinitionId { get; set; }
@@ -74,5 +126,10 @@ namespace LagoVista.Core.Models
         public ProcessInstanceStatus Status { get; set; } = ProcessInstanceStatus.Running;
         public string StartedAtUtc { get; set; }
         public string UpdatedAtUtc { get; set; }
+
+        public List<ProcessRuntimeHistoryEntry> RuntimeHistory { get; set; } = new List<ProcessRuntimeHistoryEntry>();
+        public List<ProcessActivityExecutionHistoryEntry> ActivityHistory { get; set; } = new List<ProcessActivityExecutionHistoryEntry>();
+        public ProcessRuntimeTelemetry Telemetry { get; set; } = new ProcessRuntimeTelemetry();
+        public ProcessContinuationContext Continuation { get; set; } = new ProcessContinuationContext();
     }
 }

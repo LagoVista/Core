@@ -1,6 +1,8 @@
 using LagoVista.Core.Interfaces;
 using LagoVista.Core.Models;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,21 +42,44 @@ namespace LagoVista.Core.Managers
             var definition = await RequireDefinitionAsync(definitionId);
             ValidateDefinition(definition);
             var initial = definition.States.First(state => state.Id == definition.InitialStateId);
-            var now = DateTime.UtcNow.ToString("o");
+            var now = DateTime.UtcNow;
+            var nowText = now.ToString("o");
             var instance = new ProcessInstance
             {
                 DefinitionId = definition.Id.Value,
                 DefinitionRevision = definition.Revision,
                 CurrentStateId = initial.Id,
                 Status = initial.IsTerminal ? ProcessInstanceStatus.Completed : ProcessInstanceStatus.Running,
-                StartedAtUtc = now,
-                UpdatedAtUtc = now
+                StartedAtUtc = nowText,
+                UpdatedAtUtc = nowText
             };
+
+            NormalizeRuntime(instance);
+            instance.Continuation.CurrentStateId = instance.CurrentStateId;
+            instance.Continuation.Status = instance.Status;
+            instance.Continuation.LastUpdatedAtUtc = nowText;
+            instance.Telemetry.ElapsedMilliseconds = 0;
+            instance.RuntimeHistory.Add(new ProcessRuntimeHistoryEntry
+            {
+                EventType = "start",
+                TimestampUtc = nowText,
+                TargetStateId = instance.CurrentStateId,
+                Status = instance.Status
+            });
+
             await _instances.AddAsync(instance);
             return instance;
         }
 
-        public Task<ProcessInstance> GetInstanceAsync(string id) => _instances.GetAsync(id);
+        public async Task<ProcessInstance> GetInstanceAsync(string id)
+        {
+            var instance = await _instances.GetAsync(id);
+            if (instance == null)
+                return null;
+
+            NormalizeRuntime(instance);
+            return instance;
+        }
 
         public async Task<ProcessInstance> TransitionAsync(string instanceId, string transitionId)
         {
@@ -75,9 +100,27 @@ namespace LagoVista.Core.Managers
             var target = definition.States.FirstOrDefault(state => state.Id == transition.TargetStateId)
                 ?? throw new InvalidOperationException("The requested process transition targets an unknown state.");
 
+            var sourceStateId = instance.CurrentStateId;
+            var now = DateTime.UtcNow;
+            var nowText = now.ToString("o");
             instance.CurrentStateId = target.Id;
             instance.Status = target.IsTerminal ? ProcessInstanceStatus.Completed : ProcessInstanceStatus.Running;
-            instance.UpdatedAtUtc = DateTime.UtcNow.ToString("o");
+            instance.UpdatedAtUtc = nowText;
+            UpdateRuntime(instance, now);
+            instance.Continuation.CurrentStateId = instance.CurrentStateId;
+            instance.Continuation.Status = instance.Status;
+            instance.Continuation.LastTransitionId = transition.Id;
+            instance.Continuation.LastUpdatedAtUtc = nowText;
+            instance.RuntimeHistory.Add(new ProcessRuntimeHistoryEntry
+            {
+                EventType = "transition",
+                TimestampUtc = nowText,
+                TransitionId = transition.Id,
+                SourceStateId = sourceStateId,
+                TargetStateId = target.Id,
+                Status = instance.Status
+            });
+
             await _instances.UpdateAsync(instance);
             return instance;
         }
@@ -87,8 +130,26 @@ namespace LagoVista.Core.Managers
             var instance = await RequireInstanceAsync(instanceId);
             if (instance.Status != ProcessInstanceStatus.Running)
                 throw new InvalidOperationException("Only a running process instance can be paused.");
+
+            var sourceStateId = instance.CurrentStateId;
+            var now = DateTime.UtcNow;
+            var nowText = now.ToString("o");
             instance.Status = ProcessInstanceStatus.Paused;
-            instance.UpdatedAtUtc = DateTime.UtcNow.ToString("o");
+            instance.UpdatedAtUtc = nowText;
+            UpdateRuntime(instance, now);
+            instance.Continuation.CurrentStateId = instance.CurrentStateId;
+            instance.Continuation.Status = instance.Status;
+            instance.Continuation.PausedAtUtc = nowText;
+            instance.Continuation.LastUpdatedAtUtc = nowText;
+            instance.RuntimeHistory.Add(new ProcessRuntimeHistoryEntry
+            {
+                EventType = "pause",
+                TimestampUtc = nowText,
+                SourceStateId = sourceStateId,
+                TargetStateId = sourceStateId,
+                Status = instance.Status
+            });
+
             await _instances.UpdateAsync(instance);
             return instance;
         }
@@ -98,8 +159,29 @@ namespace LagoVista.Core.Managers
             var instance = await RequireInstanceAsync(instanceId);
             if (instance.Status != ProcessInstanceStatus.Paused)
                 throw new InvalidOperationException("Only a paused process instance can be resumed.");
+
+            var now = DateTime.UtcNow;
+            var nowText = now.ToString("o");
+            var pausedAt = ParseUtc(instance.Continuation.PausedAtUtc);
+            if (pausedAt.HasValue && now > pausedAt.Value)
+                instance.Telemetry.WaitingMilliseconds += (long)(now - pausedAt.Value).TotalMilliseconds;
+
             instance.Status = ProcessInstanceStatus.Running;
-            instance.UpdatedAtUtc = DateTime.UtcNow.ToString("o");
+            instance.UpdatedAtUtc = nowText;
+            UpdateRuntime(instance, now);
+            instance.Continuation.CurrentStateId = instance.CurrentStateId;
+            instance.Continuation.Status = instance.Status;
+            instance.Continuation.PausedAtUtc = null;
+            instance.Continuation.LastUpdatedAtUtc = nowText;
+            instance.RuntimeHistory.Add(new ProcessRuntimeHistoryEntry
+            {
+                EventType = "resume",
+                TimestampUtc = nowText,
+                SourceStateId = instance.CurrentStateId,
+                TargetStateId = instance.CurrentStateId,
+                Status = instance.Status
+            });
+
             await _instances.UpdateAsync(instance);
             return instance;
         }
@@ -113,7 +195,52 @@ namespace LagoVista.Core.Managers
         private async Task<ProcessInstance> RequireInstanceAsync(string id)
         {
             var instance = await _instances.GetAsync(id);
-            return instance ?? throw new InvalidOperationException("Process instance was not found.");
+            if (instance == null)
+                throw new InvalidOperationException("Process instance was not found.");
+
+            NormalizeRuntime(instance);
+            return instance;
+        }
+
+        private static void NormalizeRuntime(ProcessInstance instance)
+        {
+            if (instance.RuntimeHistory == null)
+                instance.RuntimeHistory = new List<ProcessRuntimeHistoryEntry>();
+            if (instance.ActivityHistory == null)
+                instance.ActivityHistory = new List<ProcessActivityExecutionHistoryEntry>();
+            if (instance.Telemetry == null)
+                instance.Telemetry = new ProcessRuntimeTelemetry();
+            if (instance.Continuation == null)
+                instance.Continuation = new ProcessContinuationContext();
+            if (instance.Continuation.Values == null)
+                instance.Continuation.Values = new Dictionary<string, string>();
+
+            instance.Continuation.CurrentStateId = instance.CurrentStateId;
+            instance.Continuation.Status = instance.Status;
+            if (String.IsNullOrWhiteSpace(instance.Continuation.LastUpdatedAtUtc))
+                instance.Continuation.LastUpdatedAtUtc = instance.UpdatedAtUtc;
+
+            var updatedAt = ParseUtc(instance.UpdatedAtUtc) ?? DateTime.UtcNow;
+            UpdateRuntime(instance, updatedAt);
+        }
+
+        private static void UpdateRuntime(ProcessInstance instance, DateTime now)
+        {
+            var startedAt = ParseUtc(instance.StartedAtUtc);
+            if (startedAt.HasValue && now >= startedAt.Value)
+                instance.Telemetry.ElapsedMilliseconds = (long)(now - startedAt.Value).TotalMilliseconds;
+        }
+
+        private static DateTime? ParseUtc(string value)
+        {
+            if (String.IsNullOrWhiteSpace(value))
+                return null;
+
+            DateTime parsed;
+            if (!DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out parsed))
+                return null;
+
+            return parsed.Kind == DateTimeKind.Utc ? parsed : parsed.ToUniversalTime();
         }
 
         private static void ValidateDefinition(ProcessDefinition definition)
