@@ -17,6 +17,14 @@ namespace LagoVista.Core.Tests.Configuration
         public void SetUp()
         {
             ConfigurationDiagnostics.Reset();
+            ConfigurationDiagnostics.Enabled = true;
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ConfigurationDiagnostics.Enabled = false;
+            ConfigurationDiagnostics.Reset();
         }
 
         [Test]
