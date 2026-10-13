@@ -12,6 +12,11 @@ namespace LagoVista.Core
 {
     public static class Startup
     {
+        /// <summary>
+        /// Observable API marker for F216 producer-to-consumer NuGet acceptance.
+        /// </summary>
+        public static string F216NuGetAcceptanceMarker() => "F216-Core-to-CloudStorage";
+
         public static void ConfigureServices(IServiceCollection services)
         {
             AutoMapper.Startup.ConfigureServices(services);
