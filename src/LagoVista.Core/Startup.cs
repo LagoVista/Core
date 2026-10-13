@@ -17,6 +17,9 @@ namespace LagoVista.Core
         /// </summary>
         public static string F216NuGetAcceptanceMarker() => "F216-Core-to-CloudStorage";
 
+        /// <summary>F218: proves consumption of this specific new Core NuGet package.</summary>
+        public static string F218CorePackageMarker() => "F218-Core";
+
         public static void ConfigureServices(IServiceCollection services)
         {
             AutoMapper.Startup.ConfigureServices(services);
