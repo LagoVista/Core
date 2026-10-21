@@ -10,6 +10,7 @@ using System.Collections.Generic;
 namespace LagoVista.MessageQueue.RabbitMQ.IntegrationTests
 {
     [TestFixture]
+    [Category("Integration")]
     public class RabbitMqPublisherServiceCollectionExtensionsTests
     {
         [Test]
