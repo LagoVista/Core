@@ -41,8 +41,8 @@ namespace LagoVista.Core.AsyncCoupler.Tests
         }
 
         [TestMethod]
-        public async Task Enqueue_Dequeue_Simple_Valid()        [TestCategory("Integration")]
-
+        [TestCategory("Integration")]
+        public async Task Enqueue_Dequeue_Simple_Valid()
         {
             var id = "C41DE0C9658143E1A4EB00ABFE638CAD";
 
@@ -72,8 +72,8 @@ namespace LagoVista.Core.AsyncCoupler.Tests
         }
 
         [TestMethod]
-        public async Task Enqueue_Dequeue_Simple_Valid2()        [TestCategory("Integration")]
-
+        [TestCategory("Integration")]
+        public async Task Enqueue_Dequeue_Simple_Valid2()
         {
             var id = "C41DE0C9658143E1A4EB00ABFE638CAD";
 
