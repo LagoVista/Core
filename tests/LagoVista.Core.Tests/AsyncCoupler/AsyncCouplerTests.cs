@@ -62,7 +62,7 @@ namespace LagoVista.Core.AsyncCoupler.Tests
             var delta = DateTime.Now - start;
 
             /* Just sanity check ot make sure that we waited for at least how long the process should be decoupled */
-            Assert.IsTrue(delta.TotalMilliseconds > delay);
+            Assert.IsTrue(delta.TotalMilliseconds >= delay);
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Successful);
             Assert.AreEqual(testModel.Id, result.Result.Id);
@@ -92,7 +92,7 @@ namespace LagoVista.Core.AsyncCoupler.Tests
             var delta = DateTime.Now - start;
 
             /* Just sanity check ot make sure that we waited for at least how long the process should be decoupled */
-            Assert.IsTrue(delta.TotalMilliseconds > delay);
+            Assert.IsTrue(delta.TotalMilliseconds >= delay);
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Successful);
             Assert.AreEqual(testModel.Id, result.Result.Id);
