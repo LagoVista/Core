@@ -18,6 +18,7 @@ using Testcontainers.RabbitMq;
 namespace LagoVista.MessageQueue.RabbitMQ.IntegrationTests
 {
     [TestFixture]
+    [Category("Integration")]
     public class RabbitMqSubscriberRegistrationIntegrationTests
     {
         private RabbitMqContainer _container;
