@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace LagoVista.MessageQueueTests
 {
+    [Category("Integration")]
     public class LiveIntegrationTest
     {
         [Ignore("Simple integration test for live.")]
