@@ -47,4 +47,14 @@ namespace LagoVista.MessageQueueTests
         }
 
     }
+
+    [TestFixture]
+    public class MessageQueueAssemblyCanaryTests
+    {
+        [Test]
+        public void RabbitMqPublisherSettings_Type_Should_Be_Available()
+        {
+            Assert.That(typeof(RabbitMqPublisherSettings).Assembly, Is.Not.Null);
+        }
+    }
 }
