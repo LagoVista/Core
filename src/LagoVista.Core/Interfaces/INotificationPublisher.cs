@@ -40,6 +40,8 @@ namespace LagoVista.Core.Interfaces
         EntityHealthBatch,
 
         WebSocketServer,
+
+        DevOps,
     }
 
     public enum NotificationVerbosity
