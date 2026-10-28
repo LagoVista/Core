@@ -23,6 +23,10 @@ namespace LagoVista.Core.Models
         [JsonProperty("dateStamp")]
         public String DateStamp { get; set; }
 
+        // Absent in legacy queue messages: consumers retain existing WebSocket delivery.
+        [JsonProperty("deliveryTargets", NullValueHandling = NullValueHandling.Ignore)]
+        public NotificationTargets? DeliveryTargets { get; set; }
+
         [JsonProperty("channel")]
         public EntityHeader<Channels> Channel { get; set; }
 
