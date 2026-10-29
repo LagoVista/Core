@@ -36,6 +36,14 @@ namespace LagoVista.Core.Models
         [JsonProperty("channelId")]
         public string ChannelId { get; set; }
 
+        // Optional presentation hints shared by all notification transports.
+        // Consumers choose their own assets; older messages remain unchanged.
+        [JsonProperty("iconKey", NullValueHandling = NullValueHandling.Ignore)]
+        public string IconKey { get; set; }
+
+        [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
+        public string State { get; set; }
+
         [JsonProperty("title")]
         public String Title { get; set; }
 
