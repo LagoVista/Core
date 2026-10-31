@@ -178,7 +178,7 @@ namespace LagoVista
                 if (isNullable)
                     return null;
 
-                return Guid.NewGuid().ToId().ToString().ToLower();
+                return default(LagoVistaKey);
             }
 
             if (reader.TokenType != JsonToken.String)
