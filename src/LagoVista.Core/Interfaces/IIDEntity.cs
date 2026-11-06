@@ -27,6 +27,9 @@ namespace LagoVista.Core.Interfaces
         string Purpose { get; set; }
         string PurposeSummary { get; set; }
 
+        int CoreDefinitionScore { get; set; }
+        UtcTimestamp? CoreDefinitionReviewedUtc { get; set; }
+        string CoreDefinitionSummary { get; set; }
     }
 
     public interface IEntityDefinitionReadiness : ICoreDefinitionEntity
