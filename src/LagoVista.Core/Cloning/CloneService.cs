@@ -29,6 +29,16 @@ namespace LagoVista.Core.Cloning
 
             cloned.Id = Guid.NewGuid().ToId();
             cloned.OwnerOrganization = org;
+
+            // Preserve the business context only when cloning within the same organization.
+            // A cross-organization clone must select its own business unit explicitly.
+            if (entity is IEntityBase sourceEntity && cloned is IEntityBase destinationEntity &&
+                entity.OwnerOrganization != null && org != null &&
+                String.Equals(entity.OwnerOrganization.Id, org.Id, StringComparison.OrdinalIgnoreCase))
+            {
+                destinationEntity.BusinessUnit = sourceEntity.BusinessUnit?.Clone();
+            }
+
             cloned.CreatedBy = user;
             cloned.LastUpdatedBy = user;
             cloned.CreationDate = UtcTimestamp.Now;

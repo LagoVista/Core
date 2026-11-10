@@ -16,6 +16,28 @@ namespace LagoVista.Core.Tests.CloneableTests
     public class CloneTests
     {
         [TestMethod]
+        public async Task Should_Preserve_Business_Unit_When_Cloning_Within_Organization()
+        {
+            var org = EntityHeader.Create(Guid.NewGuid().ToId(), "organization");
+            var user = EntityHeader.Create(Guid.NewGuid().ToId(), "user");
+            var businessUnit = EntityHeader.Create(Guid.NewGuid().ToId(), "division");
+            var source = new ParentModel()
+            {
+                OwnerOrganization = org,
+                BusinessUnit = businessUnit,
+                LastUpdatedBy = user,
+                CreatedBy = user,
+                Name = "original",
+                Key = "original"
+            };
+
+            var cloned = await source.CloneAsync(user, org, "clone", "clone");
+            Assert.IsNotNull(cloned.BusinessUnit);
+            Assert.AreEqual(businessUnit.Id, cloned.BusinessUnit.Id);
+            Assert.AreNotSame(businessUnit, cloned.BusinessUnit);
+        }
+
+        [TestMethod]
         public async Task Simple_Clone()
         {
             var original = new ParentModel();
@@ -25,6 +47,7 @@ namespace LagoVista.Core.Tests.CloneableTests
             original.CreationDate = UtcTimestamp.Now.AddDays(-5);
             original.LastUpdatedDate = original.CreationDate;
             original.IsPublic = false;
+            original.BusinessUnit = EntityHeader.Create(Guid.NewGuid().ToId(), "original business unit");
             original.Name = "orig name";
             original.Key = "key";
 
@@ -88,6 +111,7 @@ namespace LagoVista.Core.Tests.CloneableTests
 
             Assert.AreNotEqual(original.Child2.Id.Value, clone.Child2.LastUpdatedBy.Id);
             Assert.AreNotEqual(originalGrandChildId, clone.Child2.GrandChild.Id);
+            Assert.IsNull(clone.BusinessUnit, "A cross-organization clone must not retain a foreign business unit.");
         }
     }
 }

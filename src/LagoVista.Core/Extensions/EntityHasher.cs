@@ -17,6 +17,7 @@ namespace LagoVista
             {
                 "/id",
                 $"/{nameof(IEntityBase.OwnerOrganization)}",
+                $"/{nameof(IEntityBase.BusinessUnit)}",
                 $"/{nameof(IEntityBase.OwnerUser)}",
                 $"/{nameof(IEntityBase.CreatedBy)}",
                 $"/{nameof(IEntityBase.LastUpdatedBy)}",

@@ -21,6 +21,8 @@ namespace LagoVista.Core.Models
     public interface IEntityBase : INoSQLEntity, IDiscussableEntity, IOwnedEntity, IIconEntity, IKeyedEntity, IIDEntity, INamedEntity, IAuditableEntity, IEntityHeaderEntity, IRevisionedEntity, ISoftDeletable, ICategorized, IRatedEntity, ILabeledEntity, IDescriptionEntity, IAISessionTracker
     {
         bool ShouldVectorIndex { get; set; }
+        /// <summary>Optional business context within OwnerOrganization; null means organization-scoped.</summary>
+        EntityHeader BusinessUnit { get; set; }
         List<EntityReadinessCheckState> ReadinessChecks { get; set; }
         MasterEntityStatus MasterStatus { get; set; }
         List<EntityChecklistStatus> ChecklistStatus { get; set; }
@@ -99,6 +101,15 @@ namespace LagoVista.Core.Models
         [AiSchemaIgnore]
         [CloneOptions(false)]
         public EntityHeader OwnerOrganization { get; set; }
+
+        /// <summary>
+        /// Optional business scope within OwnerOrganization. Null means the entity is scoped to
+        /// the organization itself. This is classification metadata, not a tenant or access boundary.
+        /// </summary>
+        [AiSchemaIgnore]
+        [CloneOptions(false)]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public EntityHeader BusinessUnit { get; set; }
 
         [AiSchemaIgnore]
         [CloneOptions(false)]
