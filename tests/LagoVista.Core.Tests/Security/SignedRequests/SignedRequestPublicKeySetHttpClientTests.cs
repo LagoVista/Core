@@ -34,6 +34,12 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                 };
         }
 
+        private sealed class DiagnosticCollector : ISignedRequestKeyDiagnostics
+        {
+            public readonly List<string> Events = new List<string>();
+            public void Write(string stage, string details) => Events.Add(stage + " " + details);
+        }
+
         private sealed class RecordingHandler : HttpMessageHandler
         {
             public readonly List<string> Paths = new List<string>();
@@ -66,6 +72,28 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
                     Content = new StringContent(JsonConvert.SerializeObject(keys))
                 });
             }
+        }
+
+        [Test]
+        public async Task TrustedPeerRetrieval_ReportsPublicKeyBoundariesWithoutCredentials()
+        {
+            var handler = new RecordingHandler();
+            using var http = new HttpClient(handler);
+            var diagnostics = new DiagnosticCollector();
+            var client = new SignedRequestPublicKeySetHttpClient(
+                http, new TestConfig(), new TestLogger(), new Allowed(), diagnostics);
+
+            var result = await client.FetchAsync(CancellationToken.None);
+
+            Assert.That(result.Keys.Count, Is.EqualTo(3));
+            Assert.That(diagnostics.Events.Any(item => item.Contains("remote-key-set") &&
+                item.Contains("web/web-live")), Is.True);
+            Assert.That(diagnostics.Events.Any(item => item.Contains("remote-key-filter") &&
+                item.Contains("accepted=2") && item.Contains("rejected=1")), Is.True);
+            Assert.That(diagnostics.Events.Any(item => item.Contains("effective-key-set") &&
+                item.Contains("web/web-live/live")), Is.True);
+            Assert.That(diagnostics.Events.All(item => !item.Contains("receiver-only-credential") &&
+                !item.Contains("web-public")), Is.True);
         }
 
         [Test]
