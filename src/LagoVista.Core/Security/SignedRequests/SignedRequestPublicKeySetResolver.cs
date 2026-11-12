@@ -56,6 +56,13 @@ namespace LagoVista.Core.Security
                     continue;
                 }
 
+                // Bind the verified public key to the AppKey claimed by the signer.
+                // Matching KeyId alone would allow another caller's key to be used.
+                if (!String.Equals(key.AppKey, callerId, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 if (!String.Equals(key.KeyId, keyId, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;

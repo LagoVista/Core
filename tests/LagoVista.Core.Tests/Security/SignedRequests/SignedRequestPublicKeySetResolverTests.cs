@@ -36,6 +36,16 @@ namespace LagoVista.Core.Tests.Security.SignedRequests
         }
 
         [Test]
+        public void Resolve_RejectsPublicKeyRegisteredToAnotherApp()
+        {
+            var resolver = new SignedRequestPublicKeySetResolver(CreateKeySet());
+
+            Assert.That(resolver.Resolve("web", "api-live-202605", SignedRequestSignatureAlgorithms.RsaPssSha256), Is.Null);
+            Assert.That(resolver.Resolve("mcp", "api-live-202605", SignedRequestSignatureAlgorithms.RsaPssSha256), Is.Null);
+            Assert.That(resolver.Resolve("api", "api-live-202605", SignedRequestSignatureAlgorithms.RsaPssSha256), Is.Not.Null);
+        }
+
+        [Test]
         public void Resolve_ShouldReturnRevokedKeySoValidatorCanFailClosedWithStatusReason()
         {
             var resolver = new SignedRequestPublicKeySetResolver(CreateKeySet());
