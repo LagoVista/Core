@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace LagoVista.Core.Security
 {
+    public interface ISignedRequestKeyDiagnostics
+    {
+        void Write(string stage, string details);
+    }
+
     public class SignedRequestPublicKeySetHttpClient : ISignedRequestPublicKeySetClient
     {
         private readonly HttpClient _httpClient;
