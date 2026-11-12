@@ -73,14 +73,14 @@ namespace LagoVista.Core.Security
                 // environment. The special endpoint returns ONLY public keys.
                 var url = $"{_settings.PublicKeySetUrl.TrimEnd('/')}/api/config/{Uri.EscapeDataString(_settings.AppKey)}/{Uri.EscapeDataString(_settings.Environment)}/service-signing/trusted-public-keys/{Uri.EscapeDataString(environment)}";
                 var remote = await FetchSetAsync(url, cancellationToken).ConfigureAwait(false);
-                _diagnostics?.Write("remote-key-set", $"source={environment} returned={remote.Keys.Count} identities={String.Join(\",\", remote.Keys.Where(k => k != null).Select(k => k.AppKey + \"/\" + k.KeyId + \"/\" + k.Status))}");
+                _diagnostics?.Write("remote-key-set", $"source={environment} returned={remote.Keys.Count} identities={String.Join(",", remote.Keys.Where(k => k != null).Select(k => k.AppKey + "/" + k.KeyId + "/" + k.Status))}");
                 if (!String.Equals(remote.Environment, environment, StringComparison.OrdinalIgnoreCase))
                     throw new InvalidOperationException("Cross-environment public key set has an unexpected environment.");
 
                 var accepted = remote.Keys.Where(k => k != null &&
                     allowed.Any(c => String.Equals(c.AppKey, k.AppKey, StringComparison.Ordinal) &&
                     String.Equals(c.Environment, environment, StringComparison.OrdinalIgnoreCase))).ToList();
-                _diagnostics?.Write("remote-key-filter", $"source={environment} accepted={accepted.Count} rejected={remote.Keys.Count - accepted.Count} acceptedIds={String.Join(\",\", accepted.Select(k => k.KeyId))}");
+                _diagnostics?.Write("remote-key-filter", $"source={environment} accepted={accepted.Count} rejected={remote.Keys.Count - accepted.Count} acceptedIds={String.Join(",", accepted.Select(k => k.KeyId))}");
                 foreach (var key in accepted)
                 {
                     // Never accept an ambiguous key across environments. The global
@@ -95,7 +95,7 @@ namespace LagoVista.Core.Security
                 }
             }
 
-            _diagnostics?.Write("effective-key-set", $"receiver={_settings.AppKey}/{_settings.Environment} count={local.Keys.Count} identities={String.Join(\",\", local.Keys.Where(k => k != null).Select(k => k.AppKey + \"/\" + k.KeyId + \"/\" + k.SourceEnvironment))}");
+            _diagnostics?.Write("effective-key-set", $"receiver={_settings.AppKey}/{_settings.Environment} count={local.Keys.Count} identities={String.Join(",", local.Keys.Where(k => k != null).Select(k => k.AppKey + "/" + k.KeyId + "/" + k.SourceEnvironment))}");
             return local;
         }
 
