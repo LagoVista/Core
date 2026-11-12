@@ -5,6 +5,9 @@ namespace LagoVista.Core.Security
     public class SignedRequestPublicKeyEntry
     {
         public string AppKey { get; set; }
+        // Set by the receiving client from the authenticated key-set source.
+        // The signer never gets to select this value in its request.
+        public string SourceEnvironment { get; set; }
         public string KeyId { get; set; }
         public string Algorithm { get; set; }
         public string KeyMaterialFormat { get; set; }
