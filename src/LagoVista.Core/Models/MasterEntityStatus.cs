@@ -17,6 +17,17 @@ namespace LagoVista.Core.Models
 
         public UtcTimestamp? ImprovementStatusReconciledUtc { get; set; }
 
+        /// <summary>Non-blocking snapshot of the latest complete quality assessment.
+        /// Full criterion evidence and history live in GradingAssessmentRecord.</summary>
+        public decimal? QualityScore { get; set; }
+        public string QualityGrade { get; set; }
+        public string GradingSpecificationVersion { get; set; }
+        /// <summary>NotGraded, Partial, Graded or Stale; never controls production readiness.</summary>
+        public string GradingStatus { get; set; }
+        public UtcTimestamp? LastGradedUtc { get; set; }
+        /// <summary>Authoritative evaluated source fingerprint, for freshness reconciliation.</summary>
+        public string GradingSourceFingerprint { get; set; }
+
         public string NextReadinessStage { get; set; }
         public bool IsProductionReady { get; set; }
         public int TotalChecklistCount { get; set; }
