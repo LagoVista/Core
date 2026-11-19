@@ -17,6 +17,8 @@ namespace LagoVista.Core.Interfaces
         Task<GuidString36> RecordUsageAsync(BillingEventType eventType, GuidString36 subscriptionId, double quantity, string note, EntityHeader org, EntityHeader user);
         Task<GuidString36> RecordUsageAsync(BillingEventType eventType, double quantity, string note, EntityHeader org, EntityHeader user);
         Task<GuidString36> RecordUsageAsync(BillingEventType eventType, double quantity, BillingUsageContext ctx);
+        /// <summary>Record one logical usage event with a caller-stable key, safe to retry without another charge.</summary>
+        Task<GuidString36> RecordUsageAsync(BillingEventType eventType, double quantity, string note, EntityHeader org, EntityHeader user, string idempotencyKey);
 
     }
 
