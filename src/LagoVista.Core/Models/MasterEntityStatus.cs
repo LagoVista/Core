@@ -21,6 +21,11 @@ namespace LagoVista.Core.Models
         /// Full criterion evidence and history live in GradingAssessmentRecord.</summary>
         public decimal? QualityScore { get; set; }
         public string QualityGrade { get; set; }
+        /// <summary>Diagnostic quality acceptance, independent of GradingStatus,
+        /// improvement completion and IsProductionReady.</summary>
+        public string MasterQualityStatus { get; set; }
+        /// <summary>Version of the separately managed quality acceptance policy.</summary>
+        public string QualityStandardVersion { get; set; }
         public string GradingSpecificationVersion { get; set; }
         /// <summary>NotGraded, Partial, Graded or Stale; never controls production readiness.</summary>
         public string GradingStatus { get; set; }
@@ -48,6 +53,15 @@ namespace LagoVista.Core.Models
         public UtcTimestamp? LastChecklistFailureUtc { get; set; }
 
         public string LastChecklistFailureSummary { get; set; }
+    }
+
+    /// <summary>Three non-blocking master-quality determinations.
+    /// A score is never changed to make a standard pass or fail.</summary>
+    public static class MasterQualityStates
+    {
+        public const string MeetsStandard = "MeetsStandard";
+        public const string NeedsImprovement = "NeedsImprovement";
+        public const string NotYetEvaluated = "NotYetEvaluated";
     }
 
     public sealed class MasterEntityQualityCriterion
