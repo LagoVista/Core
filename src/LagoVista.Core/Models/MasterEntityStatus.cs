@@ -26,7 +26,13 @@ namespace LagoVista.Core.Models
         public string GradingStatus { get; set; }
         public UtcTimestamp? LastGradedUtc { get; set; }
         /// <summary>Authoritative evaluated source fingerprint, for freshness reconciliation.</summary>
+        // Retained only for backward compatibility with earlier assessments.
+        // No longer a grading prerequisite or a gate.
         public string GradingSourceFingerprint { get; set; }
+        /// <summary>Compact field/criterion grade projection. Detailed findings and
+        /// evidence are stored only in GradingAssessmentRecord.</summary>
+        public List<MasterEntityQualityCriterion> QualityCriteria { get; set; } =
+            new List<MasterEntityQualityCriterion>();
 
         public string NextReadinessStage { get; set; }
         public bool IsProductionReady { get; set; }
@@ -42,6 +48,21 @@ namespace LagoVista.Core.Models
         public UtcTimestamp? LastChecklistFailureUtc { get; set; }
 
         public string LastChecklistFailureSummary { get; set; }
+    }
+
+    public sealed class MasterEntityQualityCriterion
+    {
+        public string CriterionKey { get; set; }
+        public decimal? Score { get; set; }
+        public int GradedFields { get; set; }
+        public int TotalFields { get; set; }
+        public List<MasterEntityQualityField> Fields { get; set; } = new List<MasterEntityQualityField>();
+    }
+
+    public sealed class MasterEntityQualityField
+    {
+        public string FieldKey { get; set; }
+        public decimal? Score { get; set; }
     }
 
     public sealed class EntityBlockingWorkItem
